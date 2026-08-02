@@ -68,10 +68,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -125,45 +133,90 @@ public class FEStatePane extends JPanel {
                                 new EvaluationFunctionForwarding(new SimpleEvaluationFunction()),
                                 new SimpleOptEvaluationFunction()};
 
-    public static Class AIs[] = {PassiveAI.class,
-                   MouseController.class,
-                   RandomAI.class,
-                   RandomBiasedAI.class,
-                   WorkerRush.class,
-                   LightRush.class,
-                   HeavyRush.class,
-                   RangedRush.class,
-                   WorkerDefense.class,
-                   LightDefense.class,
-                   HeavyDefense.class,
-                   RangedDefense.class,
-                   POWorkerRush.class,
-                   POLightRush.class,
-                   POHeavyRush.class,
-                   PORangedRush.class,
-                   WorkerRushPlusPlus.class,
-                   CRush_V1.class,
-                   CRush_V2.class,
-                   PortfolioAI.class,
-                   PGSAI.class,
-                   IDRTMinimax.class,
-                   IDRTMinimaxRandomized.class,
-                   IDABCD.class,
-                   MonteCarlo.class,
-                   LSI.class,
-                   UCT.class,
-                   UCTUnitActions.class,
-                   UCTFirstPlayUrgency.class,
-                   DownsamplingUCT.class, 
-                   NaiveMCTS.class,
-                   BS3_NaiveMCTS.class,
-                   MLPSMCTS.class,
-                   AHTNAI.class,
-                   InformedNaiveMCTS.class,
-                   PuppetSearchMCTS.class,
-                   SCV.class
-                  };
+    public static Class<?>[] AIs = discoverAIs();
 
+    private static Class<?>[] discoverAIs() {
+        List<Class<?>> discoveredAIs = new ArrayList<>();
+        Set<String> seenClassNames = new LinkedHashSet<>();
+
+        addAIClass(MouseController.class, discoveredAIs, seenClassNames);
+
+        String classPath = System.getProperty("java.class.path");
+        if (classPath != null && !classPath.isEmpty()) {
+            for (String entry : classPath.split(File.pathSeparator)) {
+                if (entry == null || entry.isEmpty()) continue;
+
+                File path = new File(entry);
+                if (!path.exists()) continue;
+
+                if (path.isDirectory()) {
+                    scanDirectoryForAIs(path, path, discoveredAIs, seenClassNames);
+                } else if (entry.endsWith(".jar")) {
+                    scanJarForAIs(path, discoveredAIs, seenClassNames);
+                }
+            }
+        }
+
+        Collections.sort(discoveredAIs, (a, b) -> a.getName().compareTo(b.getName()));
+        return discoveredAIs.toArray(new Class<?>[0]);
+    }
+
+    private static void scanDirectoryForAIs(File root, File directory, List<Class<?>> discoveredAIs, Set<String> seenClassNames) {
+        File[] children = directory.listFiles();
+        if (children == null) return;
+
+        for (File child : children) {
+            if (child.isDirectory()) {
+                scanDirectoryForAIs(root, child, discoveredAIs, seenClassNames);
+            } else if (child.isFile() && child.getName().endsWith(".class")) {
+                String relativePath = child.getAbsolutePath().substring(root.getAbsolutePath().length() + 1)
+                        .replace(File.separatorChar, '.');
+                String className = relativePath.substring(0, relativePath.length() - 6);
+
+                if (!className.startsWith("ai.")) continue;
+                if (className.startsWith("ai.core.")) continue;
+
+                try {
+                    Class<?> clazz = Class.forName(className, false, FEStatePane.class.getClassLoader());
+                    addAIClass(clazz, discoveredAIs, seenClassNames);
+                } catch (ClassNotFoundException | NoClassDefFoundError ex) {
+                    // Ignore classes that cannot be loaded from the current runtime.
+                }
+            }
+        }
+    }
+
+    private static void scanJarForAIs(File jarFile, List<Class<?>> discoveredAIs, Set<String> seenClassNames) {
+        try (ZipInputStream zip = new ZipInputStream(jarFile.toURI().toURL().openStream())) {
+            ZipEntry entry;
+            while ((entry = zip.getNextEntry()) != null) {
+                String name = entry.getName();
+                if (!name.endsWith(".class")) continue;
+                if (!name.startsWith("ai/")) continue;
+                if (name.startsWith("ai/core/")) continue;
+
+                String className = name.substring(0, name.length() - 6).replace('/', '.');
+                try {
+                    Class<?> clazz = Class.forName(className, false, FEStatePane.class.getClassLoader());
+                    addAIClass(clazz, discoveredAIs, seenClassNames);
+                } catch (ClassNotFoundException | NoClassDefFoundError ex) {
+                    // Ignore classes that cannot be loaded from the current runtime.
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void addAIClass(Class<?> clazz, List<Class<?>> discoveredAIs, Set<String> seenClassNames) {
+        if (clazz == null) return;
+        if (Modifier.isAbstract(clazz.getModifiers())) return;
+        if (!AI.class.isAssignableFrom(clazz)) return;
+        if (seenClassNames.contains(clazz.getName())) return;
+
+        seenClassNames.add(clazz.getName());
+        discoveredAIs.add(clazz);
+    }
     
     Class PlayoutAIs[] = {
                    RandomAI.class,
@@ -882,10 +935,13 @@ public class FEStatePane extends JPanel {
         if (AIs[idx]==MouseController.class) {
             return new MouseController(null);
         } else {
-            Constructor cons = AIs[idx].getConstructor(UnitTypeTable.class);
-            AI AI_instance = (AI)cons.newInstance(utt);
-
-            return AI_instance;
+            try {
+                Constructor cons = AIs[idx].getConstructor(UnitTypeTable.class);
+                return (AI)cons.newInstance(utt);
+            } catch (NoSuchMethodException ex) {
+                Constructor cons = AIs[idx].getConstructor();
+                return (AI)cons.newInstance();
+            }
         }
     }
 
