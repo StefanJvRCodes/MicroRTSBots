@@ -1,0 +1,95 @@
+# =====================================================================
+# symreg.params  --  ECJ smoke test for MICRORTSBOTS (Phase 3b, step 1)
+#
+# Run with:
+#   java -cp "out;lib/*" ec.Evolve -file config/symreg.params          (PowerShell)
+#   java -cp "out:lib/*" ec.Evolve -file config/symreg.params          (bash)
+#
+# Purpose: prove ECJ evolves in this build setup. Nothing microRTS here.
+#
+# HOW ECJ PARAMS WORK: a .params file is a flat key=value database with single
+# inheritance via parent.N. Anything we do not set is inherited. The '@class path'
+# form below resolves a params file from the CLASSPATH relative to that class's
+# package -- which is how we reach koza.params inside lib/ecj-27.jar without
+# unpacking the jar.
+# =====================================================================
+
+parent.0 = @ec.gp.koza.GPKozaDefaults koza.params
+
+# ---------------------------------------------------------------------
+# Top-level run setup
+# ---------------------------------------------------------------------
+# Random seed: fix it for reproducibility (the proposal commits to archiving seeds).
+# Use 'time' instead for a fresh seed per run.
+seed.0 = 4242
+
+# Single-threaded so behaviour is deterministic given the seed. Later, microRTS
+# fitness evaluation is embarrassingly parallel -- raise both of these to your
+# core count, and expect the run to stop being bit-for-bit reproducible.
+evalthreads = 1
+breedthreads = 1
+
+state = ec.simple.SimpleEvolutionState
+# NOTE: must be the GP initializer, not ec.simple.SimpleInitializer -- GPInitializer is
+# what builds the node/tree constraint tables. Setting the simple one here throws a
+# ClassCastException at "Initializing Generation 0". (koza.params already sets this;
+# it is spelled out only because overriding it by accident is a classic first-run bug.)
+init = ec.gp.GPInitializer
+finish = ec.simple.SimpleFinisher
+breed = ec.simple.SimpleBreeder
+eval = ec.simple.SimpleEvaluator
+exch = ec.simple.SimpleExchanger
+
+generations = 50
+quit-on-run-complete = true
+checkpoint = false
+checkpoint-prefix = ec
+checkpoint-modulo = 1
+
+# ---------------------------------------------------------------------
+# Population
+# ---------------------------------------------------------------------
+pop.subpop.0.size = 500
+pop.subpop.0.duplicate-retries = 100
+pop.subpop.0.species = ec.gp.GPSpecies
+pop.subpop.0.species.ind = ec.gp.GPIndividual
+pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
+pop.subpop.0.species.ind.numtrees = 1
+pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
+pop.subpop.0.species.ind.tree.0.tc = tc0
+
+# ---------------------------------------------------------------------
+# Function set  --  the GP's entire vocabulary
+# ---------------------------------------------------------------------
+# 'nc0' = arity 0 (terminal), 'nc1' = arity 1, 'nc2' = arity 2. These node
+# constraints come from koza.params. Whatever is not listed here CANNOT be
+# evolved -- which is exactly why the microRTS terminal set (gp.Features) is a
+# supervisor-level design decision, not an implementation detail.
+gp.fs.size = 1
+gp.fs.0.name = f0
+gp.fs.0.size = 6
+gp.fs.0.func.0 = gp.symreg.X
+gp.fs.0.func.0.nc = nc0
+gp.fs.0.func.1 = gp.symreg.SymRegERC
+gp.fs.0.func.1.nc = nc0
+gp.fs.0.func.2 = gp.symreg.Add
+gp.fs.0.func.2.nc = nc2
+gp.fs.0.func.3 = gp.symreg.Sub
+gp.fs.0.func.3.nc = nc2
+gp.fs.0.func.4 = gp.symreg.Mul
+gp.fs.0.func.4.nc = nc2
+gp.fs.0.func.5 = gp.symreg.Div
+gp.fs.0.func.5.nc = nc2
+
+# ---------------------------------------------------------------------
+# The problem (the fitness function)
+# ---------------------------------------------------------------------
+eval.problem = gp.symreg.SymRegProblem
+eval.problem.data = gp.symreg.SymRegData
+eval.problem.size = 20
+
+# ---------------------------------------------------------------------
+# Statistics
+# ---------------------------------------------------------------------
+stat = ec.simple.SimpleStatistics
+stat.file = $results/symreg.stat

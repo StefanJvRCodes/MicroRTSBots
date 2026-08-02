@@ -1,0 +1,192 @@
+# =====================================================================
+# microrts.params -- evolve a microRTS scorer  (Phase 3b)
+#
+#   .\evolve.ps1 config/microrts.params
+#   java -cp "out;lib/*" ec.Evolve -file config/microrts.params
+#
+# START SMALL. The defaults below are sized to finish in minutes, not hours, so you
+# can watch the loop work before committing to a real run. Scale up only after you
+# have seen fitness go down.
+# =====================================================================
+
+parent.0 = @ec.gp.koza.GPKozaDefaults koza.params
+
+seed.0 = 4242
+
+# Fitness evaluation is a full game, so this is the parameter that decides whether a
+# run takes 20 minutes or 6 hours. ECJ clones the Problem per eval thread, so raising
+# this is safe for OUR state -- but shared statics anywhere in Features are not.
+# Set to your physical core count once a single-threaded run has been verified.
+evalthreads = 1
+breedthreads = 1
+
+state = ec.simple.SimpleEvolutionState
+init = ec.gp.GPInitializer
+finish = ec.simple.SimpleFinisher
+breed = ec.simple.SimpleBreeder
+eval = ec.simple.SimpleEvaluator
+exch = ec.simple.SimpleExchanger
+
+generations = 20
+quit-on-run-complete = false
+checkpoint = false
+checkpoint-prefix = ec
+checkpoint-modulo = 1
+
+# ---------------------------------------------------------------------
+# Population
+# ---------------------------------------------------------------------
+pop.subpop.0.size = 100
+pop.subpop.0.duplicate-retries = 100
+pop.subpop.0.species = ec.gp.GPSpecies
+pop.subpop.0.species.ind = ec.gp.GPIndividual
+pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
+pop.subpop.0.species.ind.numtrees = 1
+pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
+pop.subpop.0.species.ind.tree.0.tc = tc0
+
+# Depth cap. Koza's default is 17, which is generous; the G1 100 ms budget is the real
+# constraint and Chimera used only ~5 ms, so there is headroom. Lower this to 8 if
+# per-cycle time starts creeping toward the gate.
+gp.koza.xover.maxdepth = 12
+gp.koza.mutate.maxdepth = 12
+
+# ---------------------------------------------------------------------
+# Function set
+# ---------------------------------------------------------------------
+# nc0 = terminal, nc2 = arity 2, nc4 = arity 4 (defined below for if>).
+#
+# TERMINALS: each FeatureNode binds by name to a static method in gp.Features. The
+# names below are the terminal set as documented in PROJECT_CONTEXT section 6 -- edit
+# this list to match whatever Features.java actually exposes after the supervisor
+# review. Adding a terminal is three lines here, no new Java file.
+#
+# SUFFICIENCY: whatever is not listed here, evolution cannot use. This list IS the
+# GP's vocabulary.
+
+gp.fs.size = 1
+gp.fs.0.name = f0
+gp.fs.0.size = 25
+
+# -- functions --
+gp.fs.0.func.0 = gp.nodes.Add
+gp.fs.0.func.0.nc = nc2
+gp.fs.0.func.1 = gp.nodes.Sub
+gp.fs.0.func.1.nc = nc2
+gp.fs.0.func.2 = gp.nodes.Mul
+gp.fs.0.func.2.nc = nc2
+gp.fs.0.func.3 = gp.nodes.Div
+gp.fs.0.func.3.nc = nc2
+gp.fs.0.func.4 = gp.nodes.Min
+gp.fs.0.func.4.nc = nc2
+gp.fs.0.func.5 = gp.nodes.Max
+gp.fs.0.func.5.nc = nc2
+gp.fs.0.func.6 = gp.nodes.IfGreater
+gp.fs.0.func.6.nc = nc4
+
+# -- ephemeral random constants (the evolved scoring weights) --
+gp.fs.0.func.7 = gp.nodes.ScoreERC
+gp.fs.0.func.7.nc = nc0
+gp.fs.0.func.7.range = 10.0
+
+# -- terminals: action type --
+gp.fs.0.func.8 = gp.nodes.FeatureNode
+gp.fs.0.func.8.nc = nc0
+gp.fs.0.func.8.feature = aIsMove
+gp.fs.0.func.9 = gp.nodes.FeatureNode
+gp.fs.0.func.9.nc = nc0
+gp.fs.0.func.9.feature = aIsHarvest
+gp.fs.0.func.10 = gp.nodes.FeatureNode
+gp.fs.0.func.10.nc = nc0
+gp.fs.0.func.10.feature = aIsReturn
+gp.fs.0.func.11 = gp.nodes.FeatureNode
+gp.fs.0.func.11.nc = nc0
+gp.fs.0.func.11.feature = aIsProduce
+gp.fs.0.func.12 = gp.nodes.FeatureNode
+gp.fs.0.func.12.nc = nc0
+gp.fs.0.func.12.feature = aIsAttack
+
+# -- terminals: produce target --
+gp.fs.0.func.13 = gp.nodes.FeatureNode
+gp.fs.0.func.13.nc = nc0
+gp.fs.0.func.13.feature = aProducesWorker
+gp.fs.0.func.14 = gp.nodes.FeatureNode
+gp.fs.0.func.14.nc = nc0
+gp.fs.0.func.14.feature = aProducesCombat
+gp.fs.0.func.15 = gp.nodes.FeatureNode
+gp.fs.0.func.15.nc = nc0
+gp.fs.0.func.15.feature = aProducesBuilding
+
+# -- terminals: acting unit --
+gp.fs.0.func.16 = gp.nodes.FeatureNode
+gp.fs.0.func.16.nc = nc0
+gp.fs.0.func.16.feature = uIsWorker
+gp.fs.0.func.17 = gp.nodes.FeatureNode
+gp.fs.0.func.17.nc = nc0
+gp.fs.0.func.17.feature = uIsBase
+gp.fs.0.func.18 = gp.nodes.FeatureNode
+gp.fs.0.func.18.nc = nc0
+gp.fs.0.func.18.feature = uIsCombat
+gp.fs.0.func.19 = gp.nodes.FeatureNode
+gp.fs.0.func.19.nc = nc0
+gp.fs.0.func.19.feature = uCarrying
+
+# -- terminals: economy and army --
+gp.fs.0.func.20 = gp.nodes.FeatureNode
+gp.fs.0.func.20.nc = nc0
+gp.fs.0.func.20.feature = myResources
+gp.fs.0.func.21 = gp.nodes.FeatureNode
+gp.fs.0.func.21.nc = nc0
+gp.fs.0.func.21.feature = myWorkerCount
+gp.fs.0.func.22 = gp.nodes.FeatureNode
+gp.fs.0.func.22.nc = nc0
+gp.fs.0.func.22.feature = enemyUnitCount
+
+# -- terminals: spatial --
+gp.fs.0.func.23 = gp.nodes.FeatureNode
+gp.fs.0.func.23.nc = nc0
+gp.fs.0.func.23.feature = distNearestEnemy
+gp.fs.0.func.24 = gp.nodes.FeatureNode
+gp.fs.0.func.24.nc = nc0
+gp.fs.0.func.24.feature = distNearestResource
+
+# Arity-4 node constraint for if>. koza.params defines nc0..nc3 only.
+gp.nc.size = 5
+gp.nc.4 = ec.gp.GPNodeConstraints
+gp.nc.4.name = nc4
+gp.nc.4.returns = nil
+gp.nc.4.size = 4
+gp.nc.4.child.0 = nil
+gp.nc.4.child.1 = nil
+gp.nc.4.child.2 = nil
+gp.nc.4.child.3 = nil
+
+# ---------------------------------------------------------------------
+# The problem: what games get played
+# ---------------------------------------------------------------------
+eval.problem = gp.MicroRTSProblem
+eval.problem.data = gp.ScoreData
+
+# TRAINING opponents and maps only. Everything else stays held out for the report.
+eval.problem.opponents = WorkerRush
+eval.problem.maps = maps/8x8/basesWorkers8x8.xml
+eval.problem.swap-sides = true
+
+# 3000 is enough for a decided 8x8 game; lower it to speed up early runs.
+eval.problem.max-cycles = 3000
+
+# Fitness shaping (see the comment block in MicroRTSProblem).
+eval.problem.speed-weight = 0.5
+eval.problem.margin-weight = 0.25
+
+# ---------------------------------------------------------------------
+# Statistics + end-of-run benchmark
+# ---------------------------------------------------------------------
+stat = gp.BenchmarkStatistics
+stat.file = $results/microrts.stat
+
+# 'all' runs the full 18-bot scripted panel. Narrow it while iterating.
+stat.bench-opponents = all
+stat.bench-maps = maps/8x8/basesWorkers8x8.xml
+stat.bench-games = 10
+stat.bench-max-cycles = 3000

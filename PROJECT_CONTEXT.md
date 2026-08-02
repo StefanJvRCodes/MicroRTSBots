@@ -337,5 +337,25 @@ maps to `scoreAction()`. Then the ordinary-GP bot is Chimera with `scoreAction` 
 
 ---
 
+Session update (2026-08-02): ECJ wired, Phase 3b implemented and run.
+
+ECJ v27 added as lib/ecj-27.jar. No prebuilt jar exists — the GitHub v27 release ships source only and the project is Maven-based, so it was built from source with plain javac (572 files, 0 errors) after excluding four optional packages that need external libraries we don't use: ec/gp/push + ec/app/push (pshecj), ec/display + ec/app/gui (JFreeChart/iText), ec/eda/cmaes + ec/eda/amalgam (EJML). Critically, the 161 .params resources under src/main/resources must be copied into the jar — koza.params, simple.params and ec.params are loaded off the classpath at runtime. Full rebuild recipe is in ECJ_NOTES.md.
+
+Two ECJ gotchas worth not rediscovering: parent params inherit from inside the jar via parent.0 = @ec.gp.koza.GPKozaDefaults koza.params (the class is GPKozaDefaults, not GPDefaults; a wrong name reports itself as a misleading parse error), and init must be ec.gp.GPInitializer, never ec.simple.SimpleInitializer, or setup throws a ClassCastException at "Initializing Generation 0".
+
+Smoke test (config/symreg.params, src/gp/symreg/) confirms ECJ evolves in this setup: Koza quartic recovered perfectly at generation 6, 3500 evaluations, ~0.6 s. Seed 4242 reproduced bit-for-bit across two machines and two JDK 21 patch versions (21.0.9 and 21.0.11) — the reproducibility commitment holds. Evolved solution was the Horner form, not the literal target expression.
+
+Phase 3b implemented: gp.ScoreData (GPData carrying score + unit/action/state/player), gp.nodes.* (function set + - * /prot min max if>, ScoreERC with ±10 range, and FeatureNode — one class that binds to any gp.Features method by name via reflection, so adding a terminal is three lines of params, not a new file), bots.EvolvedBot (Chimera's exact loop with scoreAction replaced by tree evaluation; scores[] and the G2 adapter hook intact), eval.Panel (opponent factory + headless runner), gp.MicroRTSProblem (fitness), gp.BenchmarkStatistics (end-of-run W/T/L table vs the 18 scripted bots). Config in config/microrts.params.
+
+Two fitness findings, both discovered only by running it — these are results, not bugs to hide. (1) Penalising cycles-used on a loss pays evolution to lose faster; a bot suiciding at cycle 100 outscores one surviving to 1400. Speed is now a reward on wins only, full penalty on draws (the turtle case), and rewards survival among losses. (2) Scoring the final game state is worthless in microRTS: you lose when you have no units, so every losing final state is identical, the margin term sat at its worst value for the whole population, and the fitness landscape was exactly flat — every individual scoring 2.75 in every generation. Fitness now samples SimpleSqrtEvaluationFunction3 every 50 cycles during play and uses the mean. A monotone gradient appeared immediately.
+
+Cost is far lower than assumed: ~190 games/second on 8x8 vs scripted bots. 6,000 evaluations (12,000 games) plus a 180-game benchmark ran in 34 seconds. Populations of 500 and 100+ generations are affordable; the earlier "hours per run" estimate was wrong.
+
+Current behaviour: survival, not victory. Small runs (pop 200 × 30 gens) produce bots that draw against PassiveAI, RandomAI, HeavyDefense and RangedDefense but win nothing — a draw scores 1.5 against a loss's 2.0+, so "don't die" is the reachable local optimum. Next test is a curriculum starting on PassiveAI where a win is actually reachable. Worst per-cycle decision time 32 ms against the 100 ms G1 gate (headroom, but mean tree size grew 19 → 77 in four generations, so bloat is real here in a way it wasn't in symbolic regression; ec.parsimony.* is available if needed).
+
+Not done: evolved trees are not persisted — the benchmark runs in-process on the best-of-run individual, deliberately sidestepping ECJ individual serialization. printIndividual plus a loader is needed before any result goes in the write-up. The FeatureNode ↔ Features.java binding is the one piece never verified against the real Features.java (a stand-in was used); a mismatch fails loudly at startup listing available methods. src/gp/symreg/ is throwaway and should be deleted once 3b is stable.
+
+I'd left off mid-answer on your UI question — the short version is that the engine already ships the renderer (gui.PhysicalGameStatePanel.newVisualizer(gs, dx, dy) returning a PhysicalGameStateJFrame, then setStateCloning(gs) + repaint() per cycle), so a watch mode is roughly 40 lines wrapping Panel.play. And the competition bots load as ai.coac.CoacAI(UnitTypeTable) and mayariBot.mayari(UnitTypeTable) with lib/bots/* on the classpath. Say the word and I'll write both.
+
 *Keep this file current: when a decision is made, a file is added, or a milestone is hit, update the
 relevant section so the next session starts from truth.*
