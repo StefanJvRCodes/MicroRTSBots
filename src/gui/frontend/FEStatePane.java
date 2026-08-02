@@ -114,6 +114,7 @@ import ai.evaluation.SimpleOptEvaluationFunction;
 import ai.mcts.believestatemcts.BS3_NaiveMCTS;
 import ai.mcts.uct.DownsamplingUCT;
 import ai.scv.SCV;
+import tournaments.LoadTournamentAIs;
 
 /**
  *
@@ -134,6 +135,7 @@ public class FEStatePane extends JPanel {
                                 new SimpleOptEvaluationFunction()};
 
     public static Class<?>[] AIs = discoverAIs();
+    public static Class<?>[] jarBotClasses = discoverJarBots();
 
     private static Class<?>[] discoverAIs() {
         List<Class<?>> discoveredAIs = new ArrayList<>();
@@ -158,7 +160,44 @@ public class FEStatePane extends JPanel {
         }
 
         Collections.sort(discoveredAIs, (a, b) -> a.getName().compareTo(b.getName()));
-        return discoveredAIs.toArray(new Class<?>[0]);
+        Class<?>[] result = new Class<?>[discoveredAIs.size()];
+        for (int i = 0; i < discoveredAIs.size(); i++) {
+            result[i] = discoveredAIs.get(i);
+        }
+        return result;
+    }
+
+    private static Class<?>[] discoverJarBots() {
+        List<Class<?>> discoveredJarBots = new ArrayList<>();
+        File jarBotsDir = new File("lib/bots");
+        
+        if (!jarBotsDir.exists() || !jarBotsDir.isDirectory()) {
+            return new Class<?>[0];
+        }
+        
+        File[] jarFiles = jarBotsDir.listFiles((dir, name) -> name.endsWith(".jar"));
+        if (jarFiles == null || jarFiles.length == 0) {
+            return new Class<?>[0];
+        }
+        
+        for (File jarFile : jarFiles) {
+            try {
+                List<Class> classes = LoadTournamentAIs.loadTournamentAIsFromJAR(jarFile.getAbsolutePath());
+                for (Class c : classes) {
+                    discoveredJarBots.add(c);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to load AI classes from jar: " + jarFile.getName());
+                e.printStackTrace();
+            }
+        }
+        
+        Collections.sort(discoveredJarBots, (a, b) -> a.getSimpleName().compareTo(b.getSimpleName()));
+        Class<?>[] result = new Class<?>[discoveredJarBots.size()];
+        for (int i = 0; i < discoveredJarBots.size(); i++) {
+            result[i] = discoveredJarBots.get(i);
+        }
+        return result;
     }
 
     private static void scanDirectoryForAIs(File root, File directory, List<Class<?>> discoveredAIs, Set<String> seenClassNames) {
@@ -761,9 +800,13 @@ public class FEStatePane extends JPanel {
                 l1.setAlignmentX(Component.CENTER_ALIGNMENT);
                 l1.setAlignmentY(Component.TOP_ALIGNMENT);
                 ptmp.add(l1);
-                String AINames[] = new String[AIs.length];
+                String AINames[] = new String[AIs.length + jarBotClasses.length];
                 for(int i = 0;i<AIs.length;i++) {
                     AINames[i] = AIs[i].getSimpleName();
+                }
+                // Add jar bot names
+                for(int i = 0;i<jarBotClasses.length;i++) {
+                    AINames[AIs.length + i] = jarBotClasses[i].getSimpleName();
                 }
                 aiComboBox[player] = new JComboBox(AINames);
                 aiComboBox[player].setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -931,6 +974,28 @@ public class FEStatePane extends JPanel {
     }
     
     public AI createAIInternal(int idx, int player, UnitTypeTable utt) throws Exception {
+        
+        // Check if this is a jar bot
+        if (idx >= AIs.length) {
+            int jarBotIdx = idx - AIs.length;
+            if (jarBotIdx >= 0 && jarBotIdx < jarBotClasses.length) {
+                Class<?> botClass = jarBotClasses[jarBotIdx];
+                try {
+                    // Try constructor with UnitTypeTable
+                    Constructor cons = botClass.getConstructor(UnitTypeTable.class);
+                    return (AI)cons.newInstance(utt);
+                } catch (NoSuchMethodException ex) {
+                    // Try constructor with no arguments
+                    try {
+                        Constructor cons = botClass.getConstructor();
+                        return (AI)cons.newInstance();
+                    } catch (NoSuchMethodException ex2) {
+                        throw new Exception("Could not find suitable constructor for " + botClass.getName());
+                    }
+                }
+            }
+            throw new Exception("Invalid AI index: " + idx);
+        }
 
         if (AIs[idx]==MouseController.class) {
             return new MouseController(null);
@@ -951,7 +1016,24 @@ public class FEStatePane extends JPanel {
         jPanel.removeAll();
         components.clear();
         
-        AI AIInstance = createAIInternal(aiComboBox[player].getSelectedIndex(), 0, currentUtt);
+        int selectedIdx = aiComboBox[player].getSelectedIndex();
+        
+        // Check if it's a jar bot
+        if (selectedIdx >= AIs.length) {
+            JLabel l = new JLabel("(External JAR bot - no parameters)");
+            l.setAlignmentX(Component.CENTER_ALIGNMENT);
+            l.setAlignmentY(Component.TOP_ALIGNMENT);
+            jPanel.add(l);
+            jPanel.revalidate();
+            jPanel.repaint();
+            return;
+        }
+        
+        AI AIInstance = createAIInternal(selectedIdx, 0, currentUtt);
+        if (AIInstance == null) {
+            return;
+        }
+        
         List<ParameterSpecification> parameters = AIInstance.getParameters();
         for(ParameterSpecification p:parameters) {
             if (p.type == int.class ||
