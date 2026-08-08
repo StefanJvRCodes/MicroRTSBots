@@ -560,27 +560,34 @@ public class GP {
         Tree[] newPopulation = new Tree[populationSize];
         int filled = 0;
 
-        while (filled < populationSize) {
-            String operator = selectOperatorByRate();
+        int crossoverChildren = (int) ((double) crossoverRate / 100 * populationSize);
+        int mutationChildren = (int) ((double) mutationRate / 100 * populationSize);
+        int reproductionChildren = (int) ((double) reproductionRate / 100 * populationSize);
 
-            if ("crossover".equals(operator) && filled <= populationSize - 2) {
-                Tree parent1 = population[selectTournamentWinnerIndex()];
-                Tree parent2 = population[selectTournamentWinnerIndex()];
+        for (int K = 0; K < crossoverChildren && filled < populationSize; K += 2) {
+            Tree parent1 = population[selectTournamentWinnerIndex()];
+            Tree parent2 = population[selectTournamentWinnerIndex()];
 
-                Tree child1 = crossover(parent1, parent2);
-                Tree child2 = crossover(parent2, parent1);
+            newPopulation[filled++] = crossover(parent1, parent2);
 
-                newPopulation[filled++] = child1;
-                newPopulation[filled++] = child2;
-                continue;
+            if (filled < populationSize) {
+                newPopulation[filled++] = crossover(parent2, parent1);
             }
+        }
 
+        for (int K = 0; K < mutationChildren && filled < populationSize; K++) {
             Tree parent = population[selectTournamentWinnerIndex()];
-            if ("mutation".equals(operator)) {
-                newPopulation[filled++] = mutate(parent);
-            } else {
-                newPopulation[filled++] = cloneTree(parent);
-            }
+            newPopulation[filled++] = mutate(parent);
+        }
+
+        for (int K = 0; K < reproductionChildren && filled < populationSize; K++) {
+            Tree parent = population[selectTournamentWinnerIndex()];
+            newPopulation[filled++] = cloneTree(parent);
+        }
+
+        while (filled < populationSize) {
+            Tree parent = population[selectTournamentWinnerIndex()];
+            newPopulation[filled++] = cloneTree(parent);
         }
 
         population = newPopulation;
@@ -622,6 +629,14 @@ public class GP {
         return "reproduction";
     }
 
+    private void simplifyZeroSubtrees(Tree tree) {
+        if (tree == null || tree.head == null) {
+            return;
+        }
+        tree.head.simplifyZeroSubtrees();
+        tree.head = tree.head.getHead();
+    }
+
     public double sanitizeFitness(double fitness) {
         if (!Double.isFinite(fitness) || fitness < 0.0) {
             return NON_FINITE_PENALTY;
@@ -642,6 +657,7 @@ public class GP {
         if (clone.head != null) {
             clone.head.parent = null;
         }
+        simplifyZeroSubtrees(clone);
         return clone;
     }
 
@@ -664,6 +680,7 @@ public class GP {
             if (childTree.head != null) {
                 childTree.head.parent = null;
             }
+            simplifyZeroSubtrees(childTree);
             return childTree;
         }
 
@@ -671,6 +688,7 @@ public class GP {
         if (childTree.head != null) {
             childTree.head = childTree.head.getHead();
         }
+        simplifyZeroSubtrees(childTree);
         return childTree;
     }
 
@@ -691,11 +709,13 @@ public class GP {
         if (targetInChild == child.head) {
             child.head = donorCopy;
             child.head.parent = null;
+            simplifyZeroSubtrees(child);
             return child;
         }
 
         child.head.replaceSubtree(targetInChild, donorCopy);
         child.head = child.head.getHead();
+        simplifyZeroSubtrees(child);
         return child;
     }
 
@@ -710,7 +730,8 @@ public class GP {
             for (int i = 0; i < functionNode.numChildren; i++) {
                 functionNode.setChild(i, generateRandomSubtree(maxAllowedDepth - 1));
             }
-            return functionNode;
+                functionNode.simplifyZeroSubtrees();
+                return functionNode;
         }
 
         return new Node(random, terminals.toArray(new String[0][]));

@@ -297,7 +297,7 @@ public class Node {
     }
 
 
-
+    
     public Node replaceSubtree(Node target, Node replacement) {
         if (target == this) {
             if (replacement != null) replacement.parent = this.parent;
@@ -396,8 +396,4 @@ public class Node {
             }
         }
     }   
-
-
-
-    
 }
