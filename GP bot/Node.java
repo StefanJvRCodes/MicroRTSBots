@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import rts.units.UnitType;
+
 /**
  * A node in a Modi program tree.
  *
@@ -56,8 +58,31 @@ public class Node {
     // ---- Modi-specific fields ----
     public boolean isModi;
     public int outputCellIndex;       // which OutputVector cell this node updates, valid only if isModi
-
+    
     public Random random;
+    public double[] features= new double[9];
+
+    
+
+    
+
+    public double encodeUnitType(UnitType type) {
+        switch(type) {
+            case WORKER: return 0.0;
+            case MELEE_TROOP: return 0.33;
+            case RANGED_TROOP: return 0.66;
+            case BUILDING: return 1.0;
+            default: return 0.5;
+        }
+    }
+
+
+
+
+
+
+
+
 
     /** Construct a random TERMINAL or FUNCTION node. */
     public Node(Random random, String[] functions, String[] terminals, int[] featureIndices, NodeType type) {
@@ -340,4 +365,5 @@ public class Node {
         sb.append(")");
         return sb.toString();
     }
+
 }
