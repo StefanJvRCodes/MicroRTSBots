@@ -2,6 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Vector;
 
+import Node.NodeType;
+import java.lang.classfile.components.ClassPrinter;
+
+import java.util.Random;
 
 //TODO: decide terminal set
 //TODO: decide function set
@@ -20,6 +24,8 @@ public class GP {
     public int crossoverRate = -1;
     public int reproductionRate = -1;
     public int generations = -1;
+
+    public Random random;
 
 
     //outputs
@@ -89,6 +95,11 @@ public class GP {
             }
 
 
+            random = new Random(seed);
+
+
+
+
         }
         catch (Exception e) {
             System.out.println("Error reading parameters file: " + e.getMessage());
@@ -105,5 +116,54 @@ public class GP {
         //select and breed
         //goto start
     }
+
+
+
+    public Node crossover(Node parent1, Node parent2) {
+        if (parent1 == null || parent2 == null) {
+            throw new IllegalArgumentException("Parents cannot be null");
+        }
+
+        Node child = parent1.deepCopy();
+        Node targetInChild = child.getRandomNode(random);
+        if (targetInChild == null) return child;
+
+        Node donor;
+        if (targetInChild.type == Node.NodeType.ACTION_HEAD) {
+            Node donorNode = parent2.getRandomNodeFromActionSubtree(targetInChild);
+            donor = (donorNode == null) ? null : donorNode.getActionHead();
+        } else {
+            Node actionHead = targetInChild.getActionHead();
+            donor = (actionHead == null) ? null
+                    : parent2.getRandomNodeFromActionSubtree(actionHead);
+        }
+        if (donor == null) return child;
+
+        Node donorCopy = donor.deepCopy();
+        child = child.replaceSubtree(targetInChild, donorCopy);
+        return child;
+    }
+
+
+    public Node mutate(Node parent) {
+        if (parent == null) {
+            throw new IllegalArgumentException("Parent cannot be null");
+        }
+
+        Node child = parent.deepCopy();
+        Node targetInChild = child.getRandomNode(random);
+        if (targetInChild == null) return child;
+
+        Node newSubtree;
+        if (targetInChild.type == Node.NodeType.ACTION_HEAD) {
+            newSubtree = Node.generateRandomActionSubtree(random, maxDepth, targetInChild.actionType);
+        } else {
+            newSubtree = Node.generateRandomSubtree(random, maxDepth);
+        }
+
+        child = child.replaceSubtree(targetInChild, newSubtree);
+        return child;
+    }
+
 
 }
