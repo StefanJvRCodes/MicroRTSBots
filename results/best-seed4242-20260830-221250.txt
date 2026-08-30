@@ -1,0 +1,43 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed4242-20260830-221250
+generations       : 100
+population        : 500
+training maps     : maps/8x8/basesWorkers8x8.xml
+training opponents: PassiveAI, RandomBiasedAI
+repeats           : 3  (stochastic opponents only)
+cycle cap         : 3000
+win bonus         : 0.5
+eval range        : [0.1, 0.9]
+fitness           : Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+tree              : 1 tree(s), 165 nodes, depth 12
+worst cycle (ms)  : 6   (G1 gate 100)
+
+Evolved scoring function
+------------------------
+(max (min (/ (* (max distNearestEnemy aIsHarvest) (min -0.2085 aIsProduce)) (min aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount aIsProduce myWorkerCount) myResources) (* distNearestResource uCarrying)) (* (if> aIsHarvest distNearestResource aIsReturn aProducesCombat) (min (min (* (- (+ aProducesCombat distNearestResource) (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce myWorkerCount) (min uIsCombat aIsAttack))) (max (- (/ enemyUnitCount myResources) (if> (+ (min uCarrying aProducesCombat) (max uIsWorker aProducesBuilding)) (max (if> uIsBase uIsCombat aProducesBuilding aProducesCombat) (min aProducesCombat aProducesBuilding)) (/ (min myResources uCarrying) (/ aProducesBuilding aProducesWorker)) (* (max distNearestEnemy aIsHarvest) (min -0.2085 aIsProduce)))) (* (if> aIsHarvest distNearestResource aIsReturn aProducesCombat) (min distNearestResource (min (min aProducesCombat aProducesBuilding) (if> enemyUnitCount distNearestEnemy uIsBase aIsMove)))))) (min (+ uIsCombat myResources) (* (/ enemyUnitCount (+ uIsCombat myResources)) (- aProducesWorker aProducesBuilding))))))) (/ (min (- uCarrying aProducesBuilding) (max (+ aIsReturn aIsAttack) (/ (min (- uCarrying aProducesBuilding) (/ myWorkerCount aIsReturn)) (* (min (- distNearestResource myWorkerCount) enemyUnitCount) (* (max distNearestEnemy aProducesCombat) (if> enemyUnitCount distNearestEnemy uIsBase aIsMove)))))) (* (min (- distNearestResource myWorkerCount) (- myResources aIsReturn)) (* (if> enemyUnitCount distNearestEnemy uIsBase aIsMove) (if> enemyUnitCount distNearestEnemy uIsBase aIsMove)))))
+
+
+Benchmark
+---------
+vs WorkerRush            :   0W   5T   5L /  10 games  (win rate 0%)
+vs LightRush             :   0W   5T   5L /  10 games  (win rate 0%)
+vs HeavyRush             :   0W   5T   5L /  10 games  (win rate 0%)
+vs RangedRush            :   0W   0T  10L /  10 games  (win rate 0%)
+vs WorkerRushPlusPlus    :   0W   5T   5L /  10 games  (win rate 0%)
+vs EconomyRush           :   0W   0T  10L /  10 games  (win rate 0%)
+vs EconomyRushBurster    :   0W  10T   0L /  10 games  (win rate 0%)
+vs EconomyMilitaryRush   :   0W   5T   5L /  10 games  (win rate 0%)
+vs EMRDeterministico     :   0W   5T   5L /  10 games  (win rate 0%)
+vs SimpleEconomyRush     :   0W   0T  10L /  10 games  (win rate 0%)
+vs LightDefense          :   0W   5T   5L /  10 games  (win rate 0%)
+vs HeavyDefense          :   0W   5T   5L /  10 games  (win rate 0%)
+vs RangedDefense         :   0W  10T   0L /  10 games  (win rate 0%)
+vs WorkerDefense         :   0W   5T   5L /  10 games  (win rate 0%)
+vs RandomAI              :   4W   6T   0L /  10 games  (win rate 40%)
+vs RandomBiasedAI        :   3W   7T   0L /  10 games  (win rate 30%)   [TRAINING]
+vs RandomBiasedSingleUnitAI:   4W   6T   0L /  10 games  (win rate 40%)
+vs PassiveAI             :   0W  10T   0L /  10 games  (win rate 0%)   [TRAINING]
+
+NOTE: rows marked [TRAINING] are training performance, not a result.

@@ -1,0 +1,3677 @@
+
+Generation: 0
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4873762482803412 Adjusted=0.40203005101916306 Hits=1
+Tree 0:
+ (/ 5.9879 enemyUnitCount)
+
+Generation: 1
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4845185080589727 Adjusted=0.402492473594511 Hits=1
+Tree 0:
+ (* (if> uIsCombat distNearestEnemy distNearestResource
+     -2.6938) uCarrying)
+
+Generation: 2
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4969320288704089 Adjusted=0.40049147851749556 Hits=0
+Tree 0:
+ (max (min (if> (max -9.2799 uCarrying) uCarrying
+     aIsMove uCarrying) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest enemyUnitCount aIsReturn
+         aProducesCombat) (max uIsBase distNearestEnemy))))
+     (/ (min (/ (min uIsWorker uCarrying) (max
+         enemyUnitCount -4.0860)) (max (/ distNearestEnemy
+         aIsAttack) (- uCarrying aProducesCombat)))
+         (* (min (if> enemyUnitCount distNearestResource
+             -8.7398 aProducesWorker) (min myResources
+             uCarrying)) (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 3
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4437952998252437 Adjusted=0.4091995757875098 Hits=1
+Tree 0:
+ (* (if> uIsCombat distNearestEnemy distNearestResource
+     -2.6938) uCarrying)
+
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4268023861416925 Adjusted=0.4120648659777663 Hits=0
+Tree 0:
+ (max (+ aIsReturn aIsAttack) (* uIsCombat
+     uIsCombat))
+
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4268023861416925 Adjusted=0.4120648659777663 Hits=0
+Tree 0:
+ (max (+ aIsReturn aIsAttack) (* uIsCombat
+     uIsCombat))
+
+Generation: 6
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.5366316058983405 Adjusted=0.39422358283115894 Hits=0
+Tree 0:
+ (max 1.2190 aIsMove)
+
+Generation: 7
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4264488176955648 Adjusted=0.4121249097476184 Hits=1
+Tree 0:
+ (min (- (/ myResources uCarrying) (- aIsProduce
+     (max distNearestEnemy aIsHarvest))) (max
+     (* distNearestResource uCarrying) (if> uIsBase
+     -0.6195 distNearestResource distNearestEnemy)))
+
+Generation: 8
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4264488176955648 Adjusted=0.4121249097476184 Hits=1
+Tree 0:
+ (min (- (/ myResources uCarrying) (- aIsProduce
+     (max distNearestEnemy aIsHarvest))) (max
+     (* distNearestResource uCarrying) (if> uIsBase
+     -0.6195 distNearestResource distNearestEnemy)))
+
+Generation: 9
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.4264488176955648 Adjusted=0.4121249097476184 Hits=1
+Tree 0:
+ (min (- (/ myResources uCarrying) (- aIsProduce
+     (max distNearestEnemy aIsHarvest))) (max
+     (* distNearestResource uCarrying) (if> uIsBase
+     -0.6195 distNearestResource distNearestEnemy)))
+
+Generation: 10
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.170009281905368 Adjusted=0.4608275219550923 Hits=2
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+     myWorkerCount) (min uIsCombat aIsAttack)))
+     (max (- (/ enemyUnitCount myResources) (*
+         distNearestResource uCarrying)) (* (if> aIsHarvest
+         distNearestResource aIsReturn aProducesCombat)
+         (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+             uIsCombat)) (min (+ uIsCombat myResources)
+             (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 11
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=1.024496448726083 Adjusted=0.49394998970200776 Hits=2
+Tree 0:
+ (max (min (* (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) (/ (/ aIsProduce
+     myWorkerCount) (min uIsCombat aIsAttack)))
+     (max (- (/ enemyUnitCount myResources) (*
+         distNearestResource uCarrying)) (* (if> aIsHarvest
+         distNearestResource aIsReturn aProducesCombat)
+         (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+             uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+             (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))
+
+Generation: 12
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.8555385554581882 Adjusted=0.5389270931926661 Hits=3
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+     myWorkerCount) (min uIsCombat aIsAttack)))
+     (max (- (/ enemyUnitCount myResources) (*
+         distNearestResource uCarrying)) (* (if> aIsHarvest
+         distNearestResource aIsReturn aProducesCombat)
+         (min (max (+ aIsReturn aIsAttack) (max distNearestEnemy
+             aProducesCombat)) (min (+ uIsCombat myResources)
+             (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 13
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.9974557402171196 Adjusted=0.5006368751336147 Hits=2
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (min aIsHarvest enemyUnitCount)) (/ (min
+     (- aProducesWorker aProducesBuilding) (*
+     uIsWorker distNearestResource)) (min uIsCombat
+     aIsAttack))) (max (- (/ enemyUnitCount myResources)
+     (* distNearestResource uCarrying)) (* (if>
+     aIsHarvest distNearestResource aIsReturn
+     aProducesCombat) (/ (min aProducesCombat
+     aIsReturn) (min aIsProduce uIsWorker)))))
+     (/ (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (* (min (- distNearestResource myWorkerCount)
+             (- myResources aIsReturn)) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 14
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.8407423292876532 Adjusted=0.543259088515115 Hits=3
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+     myWorkerCount) (min uIsCombat aIsAttack)))
+     (max (- (/ enemyUnitCount myResources) (if>
+         (+ (min uCarrying aProducesCombat) (max uIsWorker
+             aProducesBuilding)) (max (if> uIsBase uIsCombat
+         aProducesBuilding aProducesCombat) (min aProducesCombat
+         aProducesBuilding)) (/ (min myResources uCarrying)
+         (/ aProducesBuilding aProducesWorker)) (-
+         (/ enemyUnitCount myResources) (* distNearestResource
+         uCarrying)))) (* (if> aIsHarvest distNearestResource
+         aIsReturn (+ uIsCombat myResources)) (min
+         (max (+ aIsReturn aIsAttack) (* uIsCombat
+             uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ (/ myWorkerCount
+     aIsReturn) aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 15
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.8416136162883292 Adjusted=0.5430020668588696 Hits=3
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (* enemyUnitCount uIsBase)) (/ (/ aIsProduce
+     myWorkerCount) (min uIsCombat aIsAttack)))
+     (max (- (/ enemyUnitCount myResources) (if>
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (max (if> uIsBase uIsCombat aProducesBuilding
+         aProducesCombat) (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (- aProducesCombat aProducesBuilding)
+         (min -0.2085 aIsProduce)))) (* (if> aIsHarvest
+         distNearestResource aIsReturn aProducesCombat)
+         (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+             uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+             (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 16
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.815516608397787 Adjusted=0.5508074095133235 Hits=3
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (* uIsCombat uIsCombat)) (min (+ uIsCombat
+         myResources) (- myResources aIsReturn)))))
+     (/ (max distNearestEnemy aProducesCombat)
+         (min uIsCombat aIsAttack))) (max (/ enemyUnitCount
+     myResources) (* (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat) (min (max (+ aIsReturn
+     aIsAttack) (* uIsCombat uIsCombat)) (min
+     (+ uIsCombat myResources) uCarrying)))))
+     (/ (min (- uCarrying aProducesBuilding) (/
+         myWorkerCount aIsReturn)) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 17
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.815516608397787 Adjusted=0.5508074095133235 Hits=3
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (* uIsCombat uIsCombat)) (min (+ uIsCombat
+         myResources) (- myResources aIsReturn)))))
+     (/ (max distNearestEnemy aProducesCombat)
+         (min uIsCombat aIsAttack))) (max (/ enemyUnitCount
+     myResources) (* (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat) (min (max (+ aIsReturn
+     aIsAttack) (* uIsCombat uIsCombat)) (min
+     (+ uIsCombat myResources) uCarrying)))))
+     (/ (min (- uCarrying aProducesBuilding) (/
+         myWorkerCount aIsReturn)) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 18
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.71903650679936 Adjusted=0.5817212118792522 Hits=4
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (* enemyUnitCount uIsBase)) (/ (/ aIsProduce
+     myWorkerCount) (min uIsCombat aIsAttack)))
+     (max (- (/ enemyUnitCount myResources) (if>
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (max (if> uIsBase uIsCombat aProducesBuilding
+         aProducesCombat) (if> aIsHarvest distNearestResource
+         aIsReturn aProducesCombat)) (/ (min myResources
+         uCarrying) (/ aProducesBuilding aProducesWorker))
+         (* (- aProducesCombat aProducesBuilding)
+             (min -0.2085 aIsProduce)))) (* (if> aIsHarvest
+         distNearestResource aIsReturn aProducesCombat)
+         (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+             uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+             (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 19
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.8140924341386806 Adjusted=0.5512398272444113 Hits=3
+Tree 0:
+ (max (min (* (- (+ aProducesCombat distNearestResource)
+     (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+     myWorkerCount) (min uIsCombat aIsAttack)))
+     (max (- (/ enemyUnitCount myResources) (if>
+         (+ (min uCarrying aProducesCombat) (max uIsWorker
+             aProducesBuilding)) (max (if> uIsBase uIsCombat
+         aProducesBuilding aProducesCombat) (min aProducesCombat
+         aProducesBuilding)) (/ (min myResources uCarrying)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)) (* (max distNearestEnemy aIsHarvest)
+         (min -0.2085 aIsProduce)))) (* (if> aIsHarvest
+         distNearestResource aIsReturn (- (/ enemyUnitCount
+         myResources) (* distNearestResource uCarrying)))
+         (min (max (+ aIsReturn aIsAttack) (+ aProducesWorker
+             uIsWorker)) (min (* (- (+ aProducesCombat
+             distNearestResource) (min aIsHarvest enemyUnitCount))
+             (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+                 aIsAttack))) (- myResources aIsReturn))))))
+     (/ (min (- (/ enemyUnitCount myResources)
+         (* distNearestResource uCarrying)) (- myResources
+         aIsReturn)) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 20
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7368616134518136 Adjusted=0.5757511089283702 Hits=4
+Tree 0:
+ (max (min (max distNearestEnemy aProducesCombat)
+     (max (- (/ enemyUnitCount (- myResources
+         aIsReturn)) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (- (/ enemyUnitCount myResources)
+         (* distNearestResource uCarrying)))) (* (if>
+         aIsHarvest distNearestResource aIsReturn
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove))) (min (max (+ aIsReturn aIsAttack)
+         (* uIsCombat uIsCombat)) (+ aIsReturn aIsAttack)))))
+     (/ (min (- uCarrying aProducesBuilding) (/
+         (/ myWorkerCount aIsReturn) aIsReturn)) (*
+         (min (- distNearestResource myWorkerCount)
+             (- myResources aIsReturn)) (* (max distNearestEnemy
+         aProducesCombat) (if> enemyUnitCount distNearestEnemy
+         uIsBase aIsMove)))))
+
+Generation: 21
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 22
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 23
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 24
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 25
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 26
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 27
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 28
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 29
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6432979771246513 Adjusted=0.6085323623106642 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (if>
+     uIsBase uIsCombat aProducesBuilding aProducesCombat))
+     (max (- (/ enemyUnitCount myResources) (*
+         distNearestResource uCarrying)) (* (if> aIsHarvest
+         distNearestResource aIsReturn aProducesCombat)
+         (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+             uIsCombat)) (min (+ uIsCombat myResources)
+             (* (- myResources uCarrying) (min (- (- (/
+                 enemyUnitCount myResources) (* distNearestResource
+                 uCarrying)) (* distNearestResource uCarrying))
+                 (min uIsBase (- myResources aIsReturn)))))))))
+     (/ (min (- uCarrying aProducesBuilding) (/
+         myWorkerCount aIsReturn)) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 30
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.7141829523319998 Adjusted=0.5833683030388239 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ enemyUnitCount
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (max (+ aIsReturn aIsAttack)
+         (+ aProducesWorker uIsWorker)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (min (+ uIsCombat myResources)
+         (* (- myResources uCarrying) (- aProducesWorker
+             aProducesBuilding))))))) (/ (min (- uCarrying
+     aProducesBuilding) (max (min (* (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     (/ (/ aIsProduce myWorkerCount) (- aProducesWorker
+         (if> aProducesBuilding -4.6763 enemyUnitCount
+             aProducesBuilding)))) (max (- (/ enemyUnitCount
+     myResources) (if> aIsHarvest distNearestResource
+     aIsReturn aProducesCombat)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (max (+ aIsReturn aIsAttack) (* uIsCombat
+         uIsCombat)) (min (min aProducesCombat aProducesBuilding)
+         (- myResources aIsReturn)))))) (/ (min (-
+     uCarrying aProducesBuilding) (/ myWorkerCount
+     aIsReturn)) (* (min (- distNearestResource
+     myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+     aProducesCombat) (if> enemyUnitCount distNearestEnemy
+     uIsBase aIsMove)))))) (* (min (- distNearestResource
+     myWorkerCount) (- myResources aIsReturn))
+     (* (max distNearestEnemy aProducesCombat)
+         (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove)))))
+
+Generation: 31
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6178294555563478 Adjusted=0.6181121233548778 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 32
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6178294555563478 Adjusted=0.6181121233548778 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 33
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6178294555563478 Adjusted=0.6181121233548778 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 34
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6543499505985527 Adjusted=0.6044670292631826 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (min (- distNearestResource myWorkerCount)
+         enemyUnitCount) (min (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (max distNearestEnemy (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat))) (/ (min myResources
+         uCarrying) (/ aProducesBuilding aProducesWorker))
+         (* (max distNearestEnemy aIsHarvest) (min
+             -0.2085 aIsProduce)))) (* (min (- distNearestResource
+         myWorkerCount) enemyUnitCount) (* (max distNearestEnemy
+         aProducesCombat) (if> enemyUnitCount distNearestEnemy
+         uIsBase aIsMove)))) (min (min myResources
+         uCarrying) (* (/ enemyUnitCount (+ uIsCombat
+         myResources)) (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- distNearestResource
+         myWorkerCount) enemyUnitCount) (* (min (-
+         distNearestResource myWorkerCount) enemyUnitCount)
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (max distNearestEnemy aProducesCombat)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))
+
+Generation: 35
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6501990188968677 Adjusted=0.6059875133536828 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (+ aProducesWorker uIsWorker))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (- myResources aIsReturn) (/ (max (- (/ enemyUnitCount
+         myResources) (if> (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (max (if>
+         uIsBase uIsCombat aProducesBuilding aProducesCombat)
+         (min aProducesCombat aProducesBuilding))
+         (/ (min myResources uCarrying) (/ aProducesBuilding
+             aProducesWorker)) (* (max distNearestEnemy
+         aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min (+ (min uCarrying aProducesCombat)
+         (max uIsWorker aProducesBuilding)) (min (min
+         aProducesCombat aProducesBuilding) (- myResources
+         aIsReturn))))) (- distNearestResource myWorkerCount))))
+         (* (min (- distNearestResource myWorkerCount)
+             (- myResources aIsReturn)) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 36
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 37
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 38
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 39
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 40
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 41
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 42
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 43
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 44
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 45
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 46
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 47
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 48
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 49
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 50
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 51
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 52
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 53
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 54
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 55
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 56
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 57
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 58
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 59
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 60
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 61
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 62
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 63
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 64
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 65
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6219447203756621 Adjusted=0.6165438238661968 Hits=4
+Tree 0:
+ (max (min (/ (* enemyUnitCount uIsBase) (min
+     aIsProduce uIsWorker)) (max (- (/ (if> aIsReturn
+     enemyUnitCount aIsProduce myWorkerCount)
+     myResources) (* distNearestResource uCarrying))
+     (* (if> aIsHarvest distNearestResource aIsReturn
+         aProducesCombat) (min (min (* (- (+ aProducesCombat
+         distNearestResource) (min aIsHarvest enemyUnitCount))
+         (/ (/ aIsProduce myWorkerCount) (min uIsCombat
+             aIsAttack))) (max (- (/ enemyUnitCount myResources)
+         (if> (+ (min uCarrying aProducesCombat) (max
+             uIsWorker aProducesBuilding)) (max (if> uIsBase
+             uIsCombat aProducesBuilding aProducesCombat)
+             (min aProducesCombat aProducesBuilding))
+             (/ (min myResources uCarrying) (/ aProducesBuilding
+                 aProducesWorker)) (* (max distNearestEnemy
+             aIsHarvest) (min -0.2085 aIsProduce)))) (*
+         (if> aIsHarvest distNearestResource aIsReturn
+             aProducesCombat) (min distNearestResource
+         (min (min aProducesCombat aProducesBuilding)
+             (if> enemyUnitCount distNearestEnemy uIsBase
+                 aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 66
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 67
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 68
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 69
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 70
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 71
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 72
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 73
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 74
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 75
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 76
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 77
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 78
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 79
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 80
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 81
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 82
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 83
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 84
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 85
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 86
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 87
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 88
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 89
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 90
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 91
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 92
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 93
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 94
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 95
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 96
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 97
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 98
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Generation: 99
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))
+
+Best Individual of Run:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5945191970809051 Adjusted=0.627148297637749 Hits=4
+Tree 0:
+ (max (min (/ (* (max distNearestEnemy aIsHarvest)
+     (min -0.2085 aIsProduce)) (min aIsProduce
+     uIsWorker)) (max (- (/ (if> aIsReturn enemyUnitCount
+     aIsProduce myWorkerCount) myResources) (*
+     distNearestResource uCarrying)) (* (if> aIsHarvest
+     distNearestResource aIsReturn aProducesCombat)
+     (min (min (* (- (+ aProducesCombat distNearestResource)
+         (min aIsHarvest enemyUnitCount)) (/ (/ aIsProduce
+         myWorkerCount) (min uIsCombat aIsAttack)))
+         (max (- (/ enemyUnitCount myResources) (if>
+             (+ (min uCarrying aProducesCombat) (max uIsWorker
+                 aProducesBuilding)) (max (if> uIsBase uIsCombat
+             aProducesBuilding aProducesCombat) (min aProducesCombat
+             aProducesBuilding)) (/ (min myResources uCarrying)
+             (/ aProducesBuilding aProducesWorker)) (*
+             (max distNearestEnemy aIsHarvest) (min -0.2085
+             aIsProduce)))) (* (if> aIsHarvest distNearestResource
+             aIsReturn aProducesCombat) (min distNearestResource
+             (min (min aProducesCombat aProducesBuilding)
+                 (if> enemyUnitCount distNearestEnemy uIsBase
+                     aIsMove)))))) (min (+ uIsCombat myResources)
+         (* (/ enemyUnitCount (+ uIsCombat myResources))
+             (- aProducesWorker aProducesBuilding)))))))
+     (/ (min (- uCarrying aProducesBuilding) (max
+         (+ aIsReturn aIsAttack) (/ (min (- uCarrying
+         aProducesBuilding) (/ myWorkerCount aIsReturn))
+         (* (min (- distNearestResource myWorkerCount)
+             enemyUnitCount) (* (max distNearestEnemy
+             aProducesCombat) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))) (* (min (- distNearestResource
+         myWorkerCount) (- myResources aIsReturn))
+         (* (if> enemyUnitCount distNearestEnemy uIsBase
+             aIsMove) (if> enemyUnitCount distNearestEnemy
+             uIsBase aIsMove)))))

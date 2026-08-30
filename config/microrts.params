@@ -4,9 +4,8 @@
 #   .\evolve.ps1 config/microrts.params
 #   java -cp "out;lib/*" ec.Evolve -file config/microrts.params
 #
-# START SMALL. The defaults below are sized to finish in minutes, not hours, so you
-# can watch the loop work before committing to a real run. Scale up only after you
-# have seen fitness go down.
+# CURRICULUM STAGE 1 of 3. This run trains against PassiveAI only. See the
+# "TRAINING opponents" block near the bottom for what to change and when.
 # =====================================================================
 
 parent.0 = @ec.gp.koza.GPKozaDefaults koza.params
@@ -27,7 +26,11 @@ breed = ec.simple.SimpleBreeder
 eval = ec.simple.SimpleEvaluator
 exch = ec.simple.SimpleExchanger
 
-generations = 20
+# 20 generations was not enough to observe anything: the earlier runs went flat from
+# generation 9 and there was no way to tell a converged population from a hard problem.
+# At the measured ~190 games/second, 100 generations x 500 individuals x 2 games is
+# roughly nine minutes of wall clock.
+generations = 100
 quit-on-run-complete = false
 checkpoint = false
 checkpoint-prefix = ec
@@ -36,7 +39,10 @@ checkpoint-modulo = 1
 # ---------------------------------------------------------------------
 # Population
 # ---------------------------------------------------------------------
-pop.subpop.0.size = 100
+# 100 was too small. Eleven identical best-of-generation lines in a row is an exhausted
+# gene pool, not a difficult search -- with no diversity left there is nothing for
+# crossover to recombine. 500 is affordable here and is the standard Koza-style size.
+pop.subpop.0.size = 500
 pop.subpop.0.duplicate-retries = 100
 pop.subpop.0.species = ec.gp.GPSpecies
 pop.subpop.0.species.ind = ec.gp.GPIndividual
@@ -46,8 +52,10 @@ pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
 pop.subpop.0.species.ind.tree.0.tc = tc0
 
 # Depth cap. Koza's default is 17, which is generous; the G1 100 ms budget is the real
-# constraint and Chimera used only ~5 ms, so there is headroom. Lower this to 8 if
-# per-cycle time starts creeping toward the gate.
+# constraint and the last run peaked at 4 ms, so there is considerable headroom. Lower
+# this to 8 if per-cycle time starts creeping toward the gate. Note that mean tree size
+# grew 19 -> 77 in four generations in an earlier run, so bloat is real here even while
+# the time budget stays green -- ec.parsimony.* is available if it becomes a problem.
 gp.koza.xover.maxdepth = 12
 gp.koza.mutate.maxdepth = 12
 
@@ -56,13 +64,18 @@ gp.koza.mutate.maxdepth = 12
 # ---------------------------------------------------------------------
 # nc0 = terminal, nc2 = arity 2, nc4 = arity 4 (defined below for if>).
 #
-# TERMINALS: each FeatureNode binds by name to a static method in gp.Features. The
-# names below are the terminal set as documented in PROJECT_CONTEXT section 6 -- edit
-# this list to match whatever Features.java actually exposes after the supervisor
-# review. Adding a terminal is three lines here, no new Java file.
+# TERMINALS: each FeatureNode binds by name to a static method in gp.Features.
+# FeatureNode resolves parameters BY TYPE, so argument order in Features.java does not
+# matter -- (GameState, Unit, int) and (Unit, GameState, int) both bind.
 #
 # SUFFICIENCY: whatever is not listed here, evolution cannot use. This list IS the
 # GP's vocabulary.
+#
+# NOT LISTED, DELIBERATELY: Features.movesToward(Unit, UnitAction, int, int) takes
+# target coordinates rather than a player id, so its two ints cannot be resolved from
+# ScoreData and it cannot be a terminal. Exposing it would mean writing an arity-2
+# FUNCTION whose children supply tx and ty. Worth raising at the terminal-set review,
+# since "move toward a point the tree chooses" is a genuinely different capability.
 
 gp.fs.size = 1
 gp.fs.0.name = f0
@@ -168,16 +181,53 @@ eval.problem = gp.MicroRTSProblem
 eval.problem.data = gp.ScoreData
 
 # TRAINING opponents and maps only. Everything else stays held out for the report.
-eval.problem.opponents = WorkerRush
+#
+# CURRICULUM. This was WorkerRush, and that was the single biggest thing wrong with the
+# earlier runs. No randomly generated tree beats WorkerRush, so the entire population
+# lived in the loss band from generation 0 onward: the win band was unreachable, and
+# the only gradient available was "lose slightly less badly". Best-of-run sat at 2.37
+# for eleven straight generations.
+#
+# PassiveAI does nothing at all, so a win is genuinely reachable -- Chimera beats it,
+# which proves wins exist in the search space and that a draw here is a fitness problem
+# rather than an action-space one.
+#
+# Advance one stage at a time, only once the previous stage produces wins (Hits > 0 and
+# best-of-run below 1.0):
+#   stage 1  PassiveAI
+#   stage 2  PassiveAI, RandomBiasedAI
+#   stage 3  PassiveAI, RandomBiasedAI, WorkerRush
+# Expect a stage-1 bot to be good at beating PassiveAI and still poor against
+# WorkerRush. That is the point of a curriculum, not a failure of it.
+eval.problem.opponents = PassiveAI, RandomBiasedAI
 eval.problem.maps = maps/8x8/basesWorkers8x8.xml
 eval.problem.swap-sides = true
 
 # 3000 is enough for a decided 8x8 game; lower it to speed up early runs.
 eval.problem.max-cycles = 3000
 
-# Fitness shaping (see the comment block in MicroRTSProblem).
+# ---------------------------------------------------------------------
+# Fitness shaping (see the comment block in MicroRTSProblem)
+# ---------------------------------------------------------------------
+# Bands: win 0-1, draw 1-2, loss 2-3. These two now only split the LOSS band between
+# "survived longer" and "played better"; they are normalised to sum to 1 and no longer
+# set band width.
 eval.problem.speed-weight = 0.5
 eval.problem.margin-weight = 0.25
+
+# Range of SimpleSqrtEvaluationFunction3 means, used to map quality onto 0..1.
+# Measured against WorkerRush: observed [0.27, 0.46] while mapping from [0.0, 1.0],
+# meaning the quality term was using under a fifth of its range and near-identical
+# individuals were scoring near-identically. Widened slightly so early outliers do not
+# clamp.
+#
+# RECALIBRATE FOR THIS OPPONENT. PassiveAI games will report a different range -- the
+# calibration line prints after the first 200 games of every run. Copy the reported
+# numbers back here and rerun once.
+eval.problem.eval-lo = 0.10
+eval.problem.eval-hi = 0.90
+eval.problem.calibrate-eval = true
+eval.problem.repeats = 3
 
 # ---------------------------------------------------------------------
 # Statistics + end-of-run benchmark
@@ -185,7 +235,8 @@ eval.problem.margin-weight = 0.25
 stat = gp.BenchmarkStatistics
 stat.file = $results/microrts.stat
 
-# 'all' runs the full 18-bot scripted panel. Narrow it while iterating.
+# 'all' runs the full 18-bot scripted panel -- deliberately much wider than the training
+# opponent above, so the benchmark shows what generalises rather than what was fitted.
 stat.bench-opponents = all
 stat.bench-maps = maps/8x8/basesWorkers8x8.xml
 stat.bench-games = 10
