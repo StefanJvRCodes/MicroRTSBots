@@ -5,33 +5,6 @@ import java.util.Random;
 
 import rts.units.UnitType;
 
-/**
- * A node in a Modi program tree.
- *
- * A Modi program is a SINGLE tree (there is no such thing as a per-action
- * "action subtree" or "action head" — that idea doesn't exist in Modi and
- * was the main flaw in the previous version of this class). Instead, any
- * FUNCTION node can be marked as a Modi node. When a Modi node is evaluated
- * it does two things:
- *
- *   1. Adds its own computed value into a pre-assigned cell of the shared,
- *      virtual {@link OutputVector} (the cell corresponds to one class /
- *      action).
- *   2. Passes the value of its RIGHT-MOST child up to its parent (instead of
- *      its own computed value), so the tree stays connected and evaluable
- *      top-to-bottom exactly like a standard GP tree.
- *
- * Rules for how Modi nodes are chosen (from the paper):
- *   - Leaf (TERMINAL) nodes are never Modi — a Modi node needs at least one
- *     child to route a value through.
- *   - The root is always Modi, so no part of the tree is ever "wasted".
- *   - Every other FUNCTION node becomes Modi independently with probability
- *     modiRate (µ).
- *   - Which output cell a Modi node writes to is assigned uniformly at
- *     random. It's entirely possible — and fine — for some cells to never
- *     get a Modi node assigned to them; those classes/actions simply stay
- *     at 0 contribution from the tree.
- */
 public class Node {
 
     public enum NodeType { FUNCTION, TERMINAL }
@@ -41,23 +14,22 @@ public class Node {
             "+", 2,
             "-", 2,
             "*", 2,
-            "%", 2,      // protected division
+            "/", 2,      // protected division
             "if>0", 3    // condition, then-branch, else-branch
     );
 
-    // ---- structural fields ----
     public NodeType type;
-    public String value;              // function symbol, e.g. "+", "if>0"
-    public double numValue;           // random-constant value, only used by non-feature TERMINALs
-    public boolean isFeatureTerminal; // true if this TERMINAL reads from the input feature vector
-    public int featureIndex;          // index into the feature vector, only used if isFeatureTerminal
+    public String value;
+    public double numValue;
+    public boolean isFeatureTerminal;
+    public int featureIndex;
 
     public Node[] children;
     public Node parent;
 
-    // ---- Modi-specific fields ----
+
     public boolean isModi;
-    public int outputCellIndex;       // which OutputVector cell this node updates, valid only if isModi
+    public int outputCellIndex;
     
     public Random random;
     public double[] features= new double[9];
@@ -67,25 +39,21 @@ public class Node {
     
 
     public double encodeUnitType(UnitType type) {
-        switch(type) {
-            case WORKER: return 0.0;
-            case MELEE_TROOP: return 0.33;
-            case RANGED_TROOP: return 0.66;
-            case BUILDING: return 1.0;
+        switch(type.name) {
+            case "Worker": return 0.0;
+            case "Light": return 0.33;
+            case "Heavy": return 0.66;
+            case "Ranged": return 0.5;
+            case "Base": return 1.0;
+            case "Barracks": return 0.9;
+            case "Resource": return 0.5;
             default: return 0.5;
         }
     }
 
 
 
-
-
-
-
-
-
-    /** Construct a random TERMINAL or FUNCTION node. */
-    public Node(Random random, String[] functions, String[] terminals, int[] featureIndices, NodeType type) {
+    public Node(Random random, String[] functions, String[] terminals, int[] featureIndices, NodeType type, double modiRate, int numOutputCells) {
         this.random = random;
         this.parent = null;
         this.type = type;
@@ -112,6 +80,10 @@ public class Node {
             this.value = functions[random.nextInt(functions.length)];
             int arity = FUNCTION_ARITY.getOrDefault(this.value, 2);
             this.children = new Node[arity];
+            this.isModi = random.nextDouble() < modiRate;
+            if (this.isModi) {
+                this.outputCellIndex = random.nextInt(numOutputCells);
+            }
         }
     }
 
@@ -228,7 +200,11 @@ public class Node {
      */
     public double evaluate(double[] features, OutputVector output) {
         if (type == NodeType.TERMINAL) {
-            return isFeatureTerminal ? features[featureIndex] : numValue;
+            if (isFeatureTerminal) {
+                return features[featureIndex];
+            } else {
+                return numValue;
+            }
         }
 
         double[] childValues = new double[children.length];
@@ -240,18 +216,19 @@ public class Node {
 
         if (isModi) {
             output.add(outputCellIndex, computed);
-            // Modi nodes pass their RIGHT child's value upward, not their own computed value.
             return childValues[childValues.length - 1];
         }
         return computed;
     }
+
 
     private double applyFunction(double[] c) {
         switch (value) {
             case "+": return c[0] + c[1];
             case "-": return c[0] - c[1];
             case "*": return c[0] * c[1];
-            case "%": return Math.abs(c[1]) < 1e-9 ? 1.0 : c[0] / c[1]; // protected division
+            case "/": return Math.abs(c[1]) < 1e-9 ? 1.0 : c[0] / c[1];
+
             case "if>0": return c[0] > 0 ? c[1] : c[2];
             default: throw new IllegalStateException("Unknown function symbol: " + value);
         }
@@ -310,14 +287,14 @@ public class Node {
         }
     }
 
-    /** Picks a uniformly random node from this subtree (root included). */
+
     public Node getRandomNode(Random rnd) {
         List<Node> list = new ArrayList<>();
         collectNodes(list);
         return list.get(rnd.nextInt(list.size()));
     }
 
-    /** Finds the parent of {@code target} within this subtree, or null if not found. */
+
     public Node findParentOf(Node target) {
         if (children != null) {
             for (Node c : children) {
@@ -331,11 +308,7 @@ public class Node {
         return null;
     }
 
-    /**
-     * Replaces {@code target} with {@code replacement} among this node's
-     * direct children. Returns true if the swap happened. To replace the
-     * root itself, just assign your tree variable to the replacement.
-     */
+
     public boolean replaceChild(Node target, Node replacement) {
         if (children == null) return false;
         for (int i = 0; i < children.length; i++) {

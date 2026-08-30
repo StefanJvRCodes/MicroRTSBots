@@ -7,9 +7,6 @@ import java.lang.classfile.components.ClassPrinter;
 
 import java.util.Random;
 
-//TODO: decide terminal set
-//TODO: decide function set
-//TODO: get winrates
 
 
 public class GP {
@@ -25,13 +22,15 @@ public class GP {
     public int reproductionRate = -1;
     public int generations = -1;
     public double modiRate = -1.0;
-    public int numOutputCells = 3; //TODO: Figure out how many actions you want
+    public int numOutputCells = 8; //TODO: Figure out how many actions you want
     public int currSeed;
     public Random random;
+    public int growProbability = -1;
+    public int fullProbability = -1;
 
 
     //outputs
-    public Node[] population;
+    public Tree[] population;
     public double[] winRates;
     public Vector<Double>[] actionDistributions;
 
@@ -84,6 +83,12 @@ public class GP {
                         case "modi rate":
                             modiRate = Double.parseDouble(value);
                             break;
+                        case "grow probability":
+                            growProbability = Integer.parseInt(value);
+                            break;
+                        case "full probability":
+                            fullProbability = Integer.parseInt(value);
+                            break;
                         default:
                             System.out.println("Unknown parameter: " + parameter);
                     }
@@ -92,6 +97,9 @@ public class GP {
                     }
                     if (functionProbability + terminalProbability != 100) {
                         throw new IllegalArgumentException("Function and terminal probabilities must sum to 100.");
+                    }
+                    if (growProbability + fullProbability != 100) {
+                        throw new IllegalArgumentException("Grow and full probabilities must sum to 100.");
                     }
                 }
             }
@@ -115,11 +123,71 @@ public class GP {
 
     public void run(){
         //TODO: implement GP algorithm
-        //initialize population
+        for (int K = 0; K < (fullProbability/100)*populationSize; K++) {
+            population[i] = Node.generateGrow(random, functions, terminals, featureIndices, maxDepth);
+        }
+
+        for (int K = 0; K < (growProbability/100)*populationSize; K++) {
+            population[i] = Node.generateFull(random, functions, terminals, featureIndices, maxDepth);
+        }
+
+
         //Start
-        //evaluate population
-        //select and breed
-        //goto start
+        int currGenerations = 0;
+        while (currGenerations < generations) {
+            //evaluate population
+            for (int K = 0; K < populationSize; K++) {
+                startTournament(population[K]);//gets winrates etc
+            }
+            //select and breed
+            //goto start
+        }
+    }
+
+
+    public void generateNewPopulation() {
+        if (population == null || population.length == 0) {
+            return;
+        }
+
+        Tree[] newPopulation = new Tree[populationSize];
+        int filled = 0;
+
+        int crossoverChildren = (int) ((double) crossoverRate / 100 * populationSize);
+        int mutationChildren = (int) ((double) mutationRate / 100 * populationSize);
+        int reproductionChildren = (int) ((double) reproductionRate / 100 * populationSize);
+
+        for (int K = 0; K < crossoverChildren && filled < populationSize; K += 2) {
+            Tree parent1 = population[selectTournamentWinnerIndex()];
+            Tree parent2 = population[selectTournamentWinnerIndex()];
+            Tree newTree = new Tree();
+            newTree.root = crossover(parent1.root, parent2.root);
+            newPopulation[filled++] = newTree;
+
+        }
+
+        for (int K = 0; K < mutationChildren && filled < populationSize; K++) {
+            Tree parent = population[selectTournamentWinnerIndex()];
+            Tree newTree = new Tree();
+            newTree.root = mutate(parent.root);
+            newPopulation[filled++] = newTree;
+        }
+
+        for (int K = 0; K < reproductionChildren && filled < populationSize; K++) {
+            Tree parent = population[selectTournamentWinnerIndex()];
+            Tree newTree = new Tree();
+            newTree.root = parent.root.deepCopy();
+            newPopulation[filled++] = newTree;
+        }
+
+        while (filled < populationSize) {
+            Tree parent = population[selectTournamentWinnerIndex()];
+            Tree newTree = new Tree();
+            newTree.root = parent.root.deepCopy();
+            newPopulation[filled++] = newTree;
+        }
+
+        population = newPopulation;
     }
 
 
@@ -177,6 +245,8 @@ public class GP {
         if (isRoot) {
             // Root must end up as a FUNCTION node (rule 1/2 as above) — force
             // "full" growth and at least depth 2 so it can't hand back a terminal.
+
+            //Choose between grow and full based on parameter probability
             replacement = Node.generateGrow(random, functions, terminals, featureIndices,
                     Math.max(2, remainingDepth));
             Node.configureModiNodes(replacement, modiRate, numOutputCells, random); // forces its root Modi too
@@ -238,4 +308,39 @@ public class GP {
     
     */
 
+    public int selectTournamentWinnerIndex() {
+        int drawCount = Math.max(1, Math.min(tournamentSize, populationSize));
+        int bestIndex = random.nextInt(populationSize);
+        double bestWinRate = population[bestIndex].winRate;
+
+        for (int i = 1; i < drawCount; i++) {
+            int candidateIndex = random.nextInt(populationSize);
+            double candidateWinRate = population[candidateIndex].winRate;
+            if (isBetterEvaluation(candidateWinRate, bestWinRate)) {
+                bestWinRate = candidateWinRate;
+                bestIndex = candidateIndex;
+            }
+        }
+        return bestIndex;
+    }
+
+
+    public boolean isBetterEvaluation(double candidate, double currentBest) {
+        boolean candidateFinite = Double.isFinite(candidate);
+        boolean currentFinite = Double.isFinite(currentBest);
+
+        if (candidateFinite && !currentFinite) {
+            return true;
+        }
+        if (!candidateFinite && currentFinite) {
+            return false;
+        }
+        return candidate < currentBest;
+    }
+
+
+
+
+    //TODO: implement MicroRTS tournament
+    //TODO: implement tournament selection
 }
