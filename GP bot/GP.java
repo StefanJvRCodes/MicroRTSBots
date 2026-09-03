@@ -32,6 +32,9 @@ public class GP {
         "maps/basesWorkers32x32A.xml",
         "maps/NoWhereToRun9x8.xml"
     );
+    public static final String HIGHEST_WINRATE_CSV_FILE = "highest_winrate_per_generation.csv";
+    public static final String AVERAGE_WINRATE_CSV_FILE = "average_winrate_per_generation.csv";
+    public static final String STD_WINRATE_CSV_FILE = "std_winrate_per_generation.csv";
 
     //GP parameters
     public int seed = -1;
@@ -65,6 +68,10 @@ public class GP {
 
 
     GP(){
+        resetHighestWinrateCsv();
+        resetAverageWinrateCsv();
+        resetStdWinrateCsv();
+        
         String fileName = "parameters.txt";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -119,16 +126,16 @@ public class GP {
                         default:
                             System.out.println("Unknown parameter: " + parameter);
                     }
-                    if (mutationRate + crossoverRate + reproductionRate != 100) {
-                        throw new IllegalArgumentException("Mutation, crossover, and reproduction rates must sum to 100.");
-                    }
-                    if (functionProbability + terminalProbability != 100) {
-                        throw new IllegalArgumentException("Function and terminal probabilities must sum to 100.");
-                    }
-                    if (growProbability + fullProbability != 100) {
-                        throw new IllegalArgumentException("Grow and full probabilities must sum to 100.");
-                    }
                 }
+            }
+            if (mutationRate + crossoverRate + reproductionRate != 100) {
+                throw new IllegalArgumentException("Mutation, crossover, and reproduction rates must sum to 100.");
+            }
+            if (functionProbability + terminalProbability != 100) {
+                throw new IllegalArgumentException("Function and terminal probabilities must sum to 100.");
+            }
+            if (growProbability + fullProbability != 100) {
+                throw new IllegalArgumentException("Grow and full probabilities must sum to 100.");
             }
             if (seed == -1 || populationSize == -1 || maxDepth == -1 || functionProbability == -1 || terminalProbability == -1 || tournamentSize == -1 || mutationRate == -1 || crossoverRate == -1 || reproductionRate == -1 || generations == -1) {
                 throw new IllegalArgumentException("One or more parameters are missing in the parameters file.");
@@ -209,7 +216,7 @@ public class GP {
         int mutationChildren = (int) ((double) mutationRate / 100 * populationSize);
         int reproductionChildren = (int) ((double) reproductionRate / 100 * populationSize);
 
-        for (int K = 0; K < crossoverChildren && filled < populationSize; K += 2) {
+        for (int K = 0; K < crossoverChildren && filled < populationSize; K++) {
             Tree parent1 = population[selectTournamentWinnerIndex()];
             Tree parent2 = population[selectTournamentWinnerIndex()];
             Tree newTree = crossover(parent1, parent2);
@@ -402,6 +409,90 @@ public class GP {
         return candidate > currentBest;
     }
 
+    public void resetHighestWinrateCsv() {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(HIGHEST_WINRATE_CSV_FILE, false))) {
+            writer.print("");
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Failed to initialize " + HIGHEST_WINRATE_CSV_FILE, e);
+        }
+    }
+
+    public void resetAverageWinrateCsv() {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(AVERAGE_WINRATE_CSV_FILE, false))) {
+            writer.print("");
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Failed to initialize " + AVERAGE_WINRATE_CSV_FILE, e);
+        }
+    }
+
+    public void resetStdWinrateCsv() {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(STD_WINRATE_CSV_FILE, false))) {
+            writer.print("");
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Failed to initialize " + STD_WINRATE_CSV_FILE, e);
+        }
+    }
+
+    public void appendHighestWinrateCsv(double highestWinrate) {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(HIGHEST_WINRATE_CSV_FILE, true))) {
+            writer.printf("%.8f%n", highestWinrate);
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Failed to append to " + HIGHEST_WINRATE_CSV_FILE, e);
+        }
+    }
+
+    public void appendAverageWinrateCsv(double averageWinrate) {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(AVERAGE_WINRATE_CSV_FILE, true))) {
+            writer.printf("%.8f%n", averageWinrate);
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Failed to append to " + AVERAGE_WINRATE_CSV_FILE, e);
+        }
+    }
+
+    public void appendStdWinrateCsv(double stdWinrate) {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(STD_WINRATE_CSV_FILE, true))) {
+            writer.printf("%.8f%n", stdWinrate);
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Failed to append to " + STD_WINRATE_CSV_FILE, e);
+        }
+    }
+
+    public double getAverage(double[] values) {
+        if (values == null || values.length == 0) {
+            return 0.0;
+        }
+        double total = 0.0;
+        for (int i = 0; i < values.length; i++) {
+            total += values[i];
+        }
+        return total / values.length;
+    }
+
+    public double getStandardDeviation(double[] values) {
+        if (values == null || values.length == 0) {
+            return 0.0;
+        }
+        double average = getAverage(values);
+        double sumSquaredDifferences = 0.0;
+        for (int i = 0; i < values.length; i++) {
+            sumSquaredDifferences += Math.pow(values[i] - average, 2);
+        }
+        return Math.sqrt(sumSquaredDifferences / values.length);
+    }
+
+    public double getHighestWinrate(double[] values) {
+        if (values == null || values.length == 0) {
+            return 0.0;
+        }
+        double highest = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] > highest) {
+                highest = values[i];
+            }
+        }
+        return highest;
+    }
+
 
 
 
@@ -429,6 +520,13 @@ public class GP {
             for (int i = 0; i < population.length && i < evaluatedWinRates.length; i++) {
                 population[i].winRate = evaluatedWinRates[i];
             }
+
+            double highestWinrate = getHighestWinrate(evaluatedWinRates);
+            double averageWinrate = getAverage(evaluatedWinRates);
+            double stdWinrate = getStandardDeviation(evaluatedWinRates);
+            appendHighestWinrateCsv(highestWinrate);
+            appendAverageWinrateCsv(averageWinrate);
+            appendStdWinrateCsv(stdWinrate);
 
             if (individual == null) {
                 return Double.NaN;
