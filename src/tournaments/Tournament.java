@@ -4,15 +4,6 @@ import ai.core.AI;
 import ai.core.AIWithComputationBudget;
 import ai.core.ContinuingAI;
 import ai.core.InterruptibleAI;
-import rts.GameState;
-import rts.PartiallyObservableGameState;
-import rts.PhysicalGameState;
-import rts.PlayerAction;
-import rts.Trace;
-import rts.TraceEntry;
-import rts.units.UnitTypeTable;
-import util.XMLWriter;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,6 +13,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import rts.GameState;
+import rts.PartiallyObservableGameState;
+import rts.PhysicalGameState;
+import rts.PlayerAction;
+import rts.Trace;
+import rts.TraceEntry;
+import rts.units.UnitTypeTable;
+import util.XMLWriter;
 
 /**
  * @author douglasrizzo
@@ -335,5 +334,34 @@ class Tournament {
         out.flush();
         if (progress != null) progress.write(this.getClass().getName()+": tournament ended\n");
         progress.flush();
+    }
+
+    public double[] getAverageWinRates() {
+        double[] winRates = new double[AIs.size()];
+        for (int ai1_idx = 0; ai1_idx < AIs.size(); ai1_idx++) {
+            double winsForAI = 0.0;
+            double gamesForAI = 0.0;
+            for (int ai2_idx = 0; ai2_idx < opponentAIs.size(); ai2_idx++) {
+                winsForAI += wins[ai1_idx][ai2_idx] + (ties[ai1_idx][ai2_idx] * 0.5);
+                gamesForAI += wins[ai1_idx][ai2_idx] + ties[ai1_idx][ai2_idx]
+                        + AIcrashes[ai1_idx][ai2_idx] + opponentAIcrashes[ai1_idx][ai2_idx]
+                        + AItimeout[ai1_idx][ai2_idx] + opponentAItimeout[ai1_idx][ai2_idx];
+            }
+            winRates[ai1_idx] = gamesForAI > 0.0 ? winsForAI / gamesForAI : Double.NaN;
+        }
+        return winRates;
+    }
+
+    public double getMeanWinRate() {
+        double[] winRates = getAverageWinRates();
+        double total = 0.0;
+        int count = 0;
+        for (double winRate : winRates) {
+            if (Double.isFinite(winRate)) {
+                total += winRate;
+                count++;
+            }
+        }
+        return count == 0 ? Double.NaN : total / count;
     }
 }

@@ -1,15 +1,38 @@
+import ai.core.AI;
+import ai.core.AIWithComputationBudget;
+import ai.core.ParameterSpecification;
+import ai.custom.GPTournamentEvaluator;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Vector;
-
-import Node.NodeType;
-import java.lang.classfile.components.ClassPrinter;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
+import rts.GameState;
+import rts.PlayerAction;
+import rts.UnitAction;
+import rts.units.Unit;
+import rts.units.UnitType;
+import rts.units.UnitTypeTable;
 
 
 
 public class GP {
+    private static final String[] DEFAULT_FUNCTIONS = {"if>0", "+", "-", "*", "/"};
+    private static final int[] DEFAULT_FEATURE_INDICES = {
+        Node.FEATURE_ENEMY_FAR_AWAY,
+        Node.FEATURE_ENEMY_IN_RANGE,
+        Node.FEATURE_NUM_ENEMIES,
+        Node.FEATURE_ENEMY_TYPE,
+        Node.FEATURE_NUM_ALLIES_NEAR,
+        Node.FEATURE_MY_UNIT_TYPE,
+        Node.FEATURE_NUM_RESOURCES
+    };
+    private static final List<String> DEFAULT_TOURNAMENT_MAPS = java.util.Arrays.asList(
+        "maps/basesWorkers32x32A.xml",
+        "maps/NoWhereToRun9x8.xml"
+    );
+
     //GP parameters
     public int seed = -1;
     public int populationSize = -1;
@@ -22,11 +45,15 @@ public class GP {
     public int reproductionRate = -1;
     public int generations = -1;
     public double modiRate = -1.0;
-    public int numOutputCells = 8; //TODO: Figure out how many actions you want
+    public int numOutputCells = 7;
     public int currSeed;
     public Random random;
     public int growProbability = -1;
     public int fullProbability = -1;
+    public String[] functions = DEFAULT_FUNCTIONS;
+    public String[] terminals = new String[0];
+    public int[] featureIndices = DEFAULT_FEATURE_INDICES;
+    public UnitTypeTable utt = new UnitTypeTable();
 
 
     //outputs
@@ -122,25 +149,50 @@ public class GP {
 
 
     public void run(){
-        //TODO: implement GP algorithm
-        for (int K = 0; K < (fullProbability/100)*populationSize; K++) {
-            population[i] = Node.generateGrow(random, functions, terminals, featureIndices, maxDepth);
+        if (random == null) {
+            random = new Random(seed);
         }
 
-        for (int K = 0; K < (growProbability/100)*populationSize; K++) {
-            population[i] = Node.generateFull(random, functions, terminals, featureIndices, maxDepth);
-        }
+        initializePopulation();
 
-
-        //Start
-        int currGenerations = 0;
-        while (currGenerations < generations) {
-            //evaluate population
-            for (int K = 0; K < populationSize; K++) {
-                startTournament(population[K]);//gets winrates etc
+        for (int currGeneration = 0; currGeneration < generations; currGeneration++) {
+            startTournament(population[0]);
+            if (currGeneration < generations - 1) {
+                generateNewPopulation();
             }
-            //select and breed
-            //goto start
+        }
+    }
+
+    private void initializePopulation() {
+        population = new Tree[populationSize];
+
+        int fullCount = (int) Math.round((fullProbability / 100.0) * populationSize);
+        fullCount = Math.max(0, Math.min(populationSize, fullCount));
+        int growCount = populationSize - fullCount;
+
+        int filled = 0;
+        for (int i = 0; i < fullCount && filled < populationSize; i++) {
+            Tree tree = new Tree(random, functions, terminals, featureIndices, modiRate, numOutputCells,
+                    functionProbability, terminalProbability, maxDepth, fullProbability, growProbability);
+            tree.full();
+            population[filled++] = tree;
+        }
+        for (int i = 0; i < growCount && filled < populationSize; i++) {
+            Tree tree = new Tree(random, functions, terminals, featureIndices, modiRate, numOutputCells,
+                    functionProbability, terminalProbability, maxDepth, fullProbability, growProbability);
+            tree.grow();
+            population[filled++] = tree;
+        }
+
+        while (filled < populationSize) {
+            Tree tree = new Tree(random, functions, terminals, featureIndices, modiRate, numOutputCells,
+                    functionProbability, terminalProbability, maxDepth, fullProbability, growProbability);
+            if (random.nextBoolean()) {
+                tree.full();
+            } else {
+                tree.grow();
+            }
+            population[filled++] = tree;
         }
     }
 
@@ -160,16 +212,14 @@ public class GP {
         for (int K = 0; K < crossoverChildren && filled < populationSize; K += 2) {
             Tree parent1 = population[selectTournamentWinnerIndex()];
             Tree parent2 = population[selectTournamentWinnerIndex()];
-            Tree newTree = new Tree();
-            newTree.root = crossover(parent1.root, parent2.root);
+            Tree newTree = crossover(parent1, parent2);
             newPopulation[filled++] = newTree;
 
         }
 
         for (int K = 0; K < mutationChildren && filled < populationSize; K++) {
             Tree parent = population[selectTournamentWinnerIndex()];
-            Tree newTree = new Tree();
-            newTree.root = mutate(parent.root);
+            Tree newTree = mutate(parent);
             newPopulation[filled++] = newTree;
         }
 
@@ -192,11 +242,15 @@ public class GP {
 
 
 
-    public Node crossover(Node parent1, Node parent2) {
+    public Tree crossover(Tree parent1, Tree parent2) {
     
-        Node child = parent1.deepCopy();
-        if (child == null || parent2 == null) {
-            return child;
+        if (parent1 == null || parent2 == null) {
+            throw new IllegalArgumentException("Parents cannot be null");
+        }
+
+        Node child = parent1.root.deepCopy();
+        if (child == null || parent2.root == null) {
+            return new Tree(child);
         }
 
     
@@ -204,86 +258,96 @@ public class GP {
         boolean isRoot = (targetInChild == child);
 
         if (!isRoot) {
-            Node donor = parent2.getRandomNode(random);
+            Node donor = parent2.root.getRandomNode(random);
             Node donorCopy = donor.deepCopy();
             Node parentOfTarget = child.findParentOf(targetInChild);
             parentOfTarget.replaceChild(targetInChild, donorCopy);
-            return child;
+            return new Tree(child);
         }
 
         for (int attempt = 0; attempt < 10; attempt++) {
-            Node donor = parent2.getRandomNode(random);
+            Node donor = parent2.root.getRandomNode(random);
             if (donor.type == Node.NodeType.FUNCTION) {
                 Node donorCopy = donor.deepCopy();
                 if (donorCopy.isModi){
-                    return donorCopy;
+                    return new Tree(donorCopy);
                 }
                 donorCopy.isModi = true;
                 if (donorCopy.outputCellIndex < 0) {
                     donorCopy.outputCellIndex = random.nextInt(numOutputCells);
                 }
-                return donorCopy;
+                return new Tree(donorCopy);
             }
         }
-        return child;
+        return new Tree(child);
     }
 
 
     //TODO: double check mutation
-    public Node mutate(Node parent) {
+    public Tree mutate(Tree parent) {
         if (parent == null) {
             throw new IllegalArgumentException("Parent cannot be null");
         }
 
-        Node child = parent.deepCopy();
+        Node child = parent.root.deepCopy();
         Node target = child.getRandomNode(random);
         boolean isRoot = (target == child);
 
         int remainingDepth = Math.max(1, maxDepth - target.getDepth() + 1);
 
-        Node replacement;
         if (isRoot) {
-            // Root must end up as a FUNCTION node (rule 1/2 as above) — force
-            // "full" growth and at least depth 2 so it can't hand back a terminal.
-
-            //Choose between grow and full based on parameter probability
-            replacement = Node.generateGrow(random, functions, terminals, featureIndices,
-                    Math.max(2, remainingDepth));
-            Node.configureModiNodes(replacement, modiRate, numOutputCells, random); // forces its root Modi too
-            return replacement;
+            // Generate a completely new tree
+            Node replacementRoot = generateSubtree(maxDepth);
+            return new Tree(replacementRoot);
         }
 
-        replacement = random.nextBoolean()
-                ? Node.generateFull(random, functions, terminals, featureIndices, remainingDepth)
-                : Node.generateGrow(random, functions, terminals, featureIndices, remainingDepth);
-
-        // This is a plain subtree, not a whole tree, so don't use
-        // configureModiNodes here — it always forces its own root to be Modi,
-        // which is only correct for the actual tree root. Roll Modi status for
-        // the new subtree's nodes the ordinary (non-forced) way instead.
-        rollModiForSubtree(replacement, modiRate, numOutputCells, random);
-
+        // Replace non-root node with a randomly generated subtree
+        Node replacementNode = generateSubtree(remainingDepth);
         Node parentOfTarget = child.findParentOf(target);
-        parentOfTarget.replaceChild(target, replacement);
-        return child;
+        
+        if (parentOfTarget != null) {
+            parentOfTarget.replaceChild(target, replacementNode);
+        }
+        
+        return new Tree(child);
     }
 
-    // Assigns Modi status to every node in a freshly generated subtree using
-    // the plain probability µ, with no forced-root exception (unlike
-    // Node.configureModiNodes, which is only for the whole tree's root).
-    private void rollModiForSubtree(Node node, double modiRate, int numOutputCells, Random random) {
-        if (node.type == Node.NodeType.TERMINAL) {
-            node.isModi = false;
-            return;
+    /**
+     * Generates a random subtree with the specified maximum depth.
+     * The tree can be more shallow depending on the functionProbability.
+     * Arity is automatically determined by Node.FUNCTION_ARITY.
+     */
+    private Node generateSubtree(int maxDepth) {
+        if (maxDepth <= 0) {
+            return createTerminalNode();
         }
-        node.isModi = random.nextDouble() < modiRate;
-        node.outputCellIndex = node.isModi ? random.nextInt(numOutputCells) : -1;
-        if (node.children != null) {
-            for (Node c : node.children) {
-                if (c != null) rollModiForSubtree(c, modiRate, numOutputCells, random);
-            }
+        
+        boolean chooseFunction = random.nextInt(100) < functionProbability;
+        
+        if (!chooseFunction) {
+            return createTerminalNode();
         }
+        
+        // Create a function node - constructor handles arity based on chosen function
+        String[] availableFunctions = {"if>0", "+", "-", "*", "/"};
+        Node node = new Node(random, availableFunctions, new String[]{}, new int[]{0,1,2,3,4,5,6,7}, Node.NodeType.FUNCTION, modiRate, numOutputCells);
+        
+        // Recursively generate children to fill the children array
+        // The constructor has already set node.children array with correct arity
+        for (int i = 0; i < node.children.length; i++) {
+            node.setChild(i, generateSubtree(maxDepth - 1));
+        }
+        
+        return node;
     }
+    
+    /**
+     * Creates a terminal node (leaf node with constant or feature).
+     */
+    private Node createTerminalNode() {
+        return new Node(random, new String[]{}, new String[]{}, new int[]{0,1,2,3,4,5,6,7}, Node.NodeType.TERMINAL, modiRate, numOutputCells);
+    }
+
 
 
 
@@ -335,12 +399,323 @@ public class GP {
         if (!candidateFinite && currentFinite) {
             return false;
         }
-        return candidate < currentBest;
+        return candidate > currentBest;
     }
 
 
 
 
-    //TODO: implement MicroRTS tournament
-    //TODO: implement tournament selection
+    public double startTournament(Tree individual) {
+        if (population == null || population.length == 0) {
+            return Double.NaN;
+        }
+
+        try {
+            List<AI> bots = new ArrayList<>();
+            for (Tree tree : population) {
+                bots.add(new TreeBotAI(tree, utt));
+            }
+
+            double[] evaluatedWinRates = GPTournamentEvaluator.evaluateRoundRobinWinRates(
+                    bots,
+                    DEFAULT_TOURNAMENT_MAPS,
+                    utt,
+                    1,
+                    2000,
+                    100,
+                    100);
+
+            winRates = evaluatedWinRates;
+            for (int i = 0; i < population.length && i < evaluatedWinRates.length; i++) {
+                population[i].winRate = evaluatedWinRates[i];
+            }
+
+            if (individual == null) {
+                return Double.NaN;
+            }
+            for (int i = 0; i < population.length; i++) {
+                if (population[i] == individual) {
+                    individual.winRate = evaluatedWinRates[i];
+                    return evaluatedWinRates[i];
+                }
+            }
+            return Double.NaN;
+        } catch (Exception e) {
+            throw new RuntimeException("Tournament evaluation failed", e);
+        }
+    }
+
+    private static double[] extractFeatures(Unit unit, GameState gs, int player) {
+        Unit closestEnemy = findClosestEnemy(unit, gs);
+        int enemyDistance = closestEnemy == null ? Integer.MAX_VALUE : manhattanDistance(unit, closestEnemy);
+        int attackRange = Math.max(1, unit.getType().attackRange);
+
+        int enemyCount = countUnitsNear(unit, gs, player, true, unit.getType().sightRadius);
+        int allyCount = countUnitsNear(unit, gs, player, false, unit.getType().sightRadius);
+        int resources = gs.getPlayer(player).getResources();
+
+        double enemyFarAway = (closestEnemy == null || enemyDistance > attackRange) ? 1.0 : 0.0;
+        double enemyInRange = (closestEnemy != null && enemyDistance <= attackRange) ? 1.0 : 0.0;
+        double numEnemies = Math.min(enemyCount, 10) / 10.0;
+        double enemyType = encodeUnitType(closestEnemy == null ? null : closestEnemy.getType());
+        double numAlliesNear = Math.min(allyCount, 5) / 5.0;
+        double myUnitType = encodeUnitType(unit.getType());
+        double numResources = Math.min(resources, 200) / 200.0;
+
+        return new double[] {
+                enemyFarAway,
+                enemyInRange,
+                numEnemies,
+                enemyType,
+                numAlliesNear,
+                myUnitType,
+                numResources
+        };
+    }
+
+    private static Unit findClosestEnemy(Unit unit, GameState gs) {
+        Unit closest = null;
+        int bestDistance = Integer.MAX_VALUE;
+        for (Unit other : gs.getUnits()) {
+            if (other.getPlayer() < 0 || other.getPlayer() == unit.getPlayer()) {
+                continue;
+            }
+            int d = manhattanDistance(unit, other);
+            if (d < bestDistance) {
+                bestDistance = d;
+                closest = other;
+            }
+        }
+        return closest;
+    }
+
+    private static Unit findClosestResource(Unit unit, GameState gs) {
+        Unit closest = null;
+        int bestDistance = Integer.MAX_VALUE;
+        for (Unit other : gs.getUnits()) {
+            if (!other.getType().isResource) {
+                continue;
+            }
+            int d = manhattanDistance(unit, other);
+            if (d < bestDistance) {
+                bestDistance = d;
+                closest = other;
+            }
+        }
+        return closest;
+    }
+
+    private static int countUnitsNear(Unit unit, GameState gs, int player, boolean enemies, int radius) {
+        int count = 0;
+        for (Unit other : gs.getUnits()) {
+            if (other == unit || other.getPlayer() < 0) {
+                continue;
+            }
+            boolean isEnemy = other.getPlayer() != player;
+            if (isEnemy != enemies) {
+                continue;
+            }
+            if (manhattanDistance(unit, other) <= radius) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int manhattanDistance(Unit a, Unit b) {
+        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
+    }
+
+    private static double encodeUnitType(UnitType type) {
+        if (type == null) {
+            return 0.0;
+        }
+        if ("Worker".equals(type.name)) return 0.0;
+        if ("Light".equals(type.name)) return 0.25;
+        if ("Heavy".equals(type.name)) return 0.50;
+        if ("Ranged".equals(type.name)) return 0.75;
+        if ("Base".equals(type.name)) return 0.85;
+        if ("Barracks".equals(type.name)) return 0.95;
+        if ("Resource".equals(type.name)) return 1.0;
+        return 0.5;
+    }
+
+    private static final class TreeBotAI extends AIWithComputationBudget implements Cloneable {
+        private final Tree tree;
+        private final UnitTypeTable utt;
+
+        private TreeBotAI(Tree tree, UnitTypeTable utt) {
+            super(-1, -1);
+            this.tree = tree;
+            this.utt = utt;
+        }
+
+        @Override
+        public void reset() {
+        }
+
+        @Override
+        public AI clone() {
+            return new TreeBotAI(tree == null || tree.root == null ? null : new Tree(tree.root.deepCopy()), utt);
+        }
+
+        @Override
+        public PlayerAction getAction(int player, GameState gs) {
+            PlayerAction pa = new PlayerAction();
+            for (Unit unit : gs.getUnits()) {
+                if (unit.getPlayer() != player) {
+                    continue;
+                }
+                if (gs.getUnitAction(unit) != null) {
+                    continue;
+                }
+                UnitAction chosen = chooseAction(unit, gs, player);
+                if (chosen != null) {
+                    pa.addUnitAction(unit, chosen);
+                }
+            }
+            pa.fillWithNones(gs, player, 10);
+            return pa;
+        }
+
+        private UnitAction chooseAction(Unit unit, GameState gs, int player) {
+            List<UnitAction> legalActions = unit.getUnitActions(gs);
+            if (legalActions.isEmpty() || tree == null || tree.root == null) {
+                return legalActions.isEmpty() ? null : legalActions.get(0);
+            }
+
+            tree.evaluate(extractFeatures(unit, gs, player));
+            int bestIndex = 0;
+            for (int i = 1; i < tree.outputVector.length; i++) {
+                if (tree.outputVector[i] > tree.outputVector[bestIndex]) {
+                    bestIndex = i;
+                }
+            }
+
+            UnitAction action = mapOutputToAction(bestIndex, unit, gs, legalActions);
+            return action != null ? action : legalActions.get(0);
+        }
+
+        private UnitAction mapOutputToAction(int outputIndex, Unit unit, GameState gs, List<UnitAction> legalActions) {
+            switch (outputIndex) {
+                case 0:
+                    return chooseMoveTowardTarget(unit, legalActions, findClosestEnemy(unit, gs));
+                case 1:
+                    return chooseAttackAction(unit, legalActions, findClosestEnemy(unit, gs));
+                case 2:
+                    return chooseMoveTowardTarget(unit, legalActions, findClosestResource(unit, gs));
+                case 3:
+                    return chooseByType(legalActions, UnitAction.TYPE_HARVEST);
+                case 4:
+                    return chooseByType(legalActions, UnitAction.TYPE_RETURN);
+                case 5:
+                    return chooseProduceAction(unit, gs, legalActions, true);
+                case 6:
+                    return chooseProduceAction(unit, gs, legalActions, false);
+                default:
+                    return null;
+            }
+        }
+
+        private UnitAction chooseByType(List<UnitAction> legalActions, int type) {
+            for (UnitAction action : legalActions) {
+                if (action.getType() == type) {
+                    return action;
+                }
+            }
+            return null;
+        }
+
+        private UnitAction chooseAttackAction(Unit unit, List<UnitAction> legalActions, Unit closestEnemy) {
+            if (closestEnemy != null) {
+                for (UnitAction action : legalActions) {
+                    if (action.getType() == UnitAction.TYPE_ATTACK_LOCATION
+                            && action.getLocationX() == closestEnemy.getX()
+                            && action.getLocationY() == closestEnemy.getY()) {
+                        return action;
+                    }
+                }
+            }
+            return chooseByType(legalActions, UnitAction.TYPE_ATTACK_LOCATION);
+        }
+
+        private UnitAction chooseMoveTowardTarget(Unit unit, List<UnitAction> legalActions, Unit target) {
+            if (target == null) {
+                return chooseByType(legalActions, UnitAction.TYPE_MOVE);
+            }
+
+            UnitAction bestMove = null;
+            int bestDistance = Integer.MAX_VALUE;
+            for (UnitAction action : legalActions) {
+                if (action.getType() != UnitAction.TYPE_MOVE) {
+                    continue;
+                }
+                int nextX = unit.getX() + UnitAction.DIRECTION_OFFSET_X[action.getDirection()];
+                int nextY = unit.getY() + UnitAction.DIRECTION_OFFSET_Y[action.getDirection()];
+                int distance = Math.abs(nextX - target.getX()) + Math.abs(nextY - target.getY());
+                if (distance < bestDistance) {
+                    bestDistance = distance;
+                    bestMove = action;
+                }
+            }
+            return bestMove;
+        }
+
+        private UnitAction chooseProduceAction(Unit unit, GameState gs, List<UnitAction> legalActions, boolean wantWorker) {
+            Unit target = wantWorker ? findClosestResource(unit, gs) : findClosestEnemy(unit, gs);
+            UnitAction bestAction = null;
+            int bestDistance = Integer.MAX_VALUE;
+
+            for (UnitAction action : legalActions) {
+                if (action.getType() != UnitAction.TYPE_PRODUCE) {
+                    continue;
+                }
+                UnitType producedType = action.getUnitType();
+                if (!matchesProduceGoal(producedType, wantWorker)) {
+                    continue;
+                }
+                if (target == null) {
+                    return action;
+                }
+                int nextX = unit.getX() + UnitAction.DIRECTION_OFFSET_X[action.getDirection()];
+                int nextY = unit.getY() + UnitAction.DIRECTION_OFFSET_Y[action.getDirection()];
+                int distance = Math.abs(nextX - target.getX()) + Math.abs(nextY - target.getY());
+                if (distance < bestDistance) {
+                    bestDistance = distance;
+                    bestAction = action;
+                }
+            }
+
+            if (bestAction != null) {
+                return bestAction;
+            }
+
+            for (UnitAction action : legalActions) {
+                if (action.getType() == UnitAction.TYPE_PRODUCE && matchesProduceGoal(action.getUnitType(), wantWorker)) {
+                    return action;
+                }
+            }
+            return null;
+        }
+
+        private boolean matchesProduceGoal(UnitType producedType, boolean wantWorker) {
+            if (producedType == null) {
+                return false;
+            }
+            if (wantWorker) {
+                return "Worker".equals(producedType.name);
+            }
+            return !"Worker".equals(producedType.name) && !producedType.isResource && !producedType.isStockpile;
+        }
+
+        @Override
+        public List<ParameterSpecification> getParameters() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public String toString() {
+            return "TreeBotAI{" + tree + "}";
+        }
+    }
 }

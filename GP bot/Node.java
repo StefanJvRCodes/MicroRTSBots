@@ -3,11 +3,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import rts.units.UnitType;
-
 public class Node {
 
     public enum NodeType { FUNCTION, TERMINAL }
+
+    public static final int FEATURE_ENEMY_FAR_AWAY = 0;
+    public static final int FEATURE_ENEMY_IN_RANGE = 1;
+    public static final int FEATURE_NUM_ENEMIES = 2;
+    public static final int FEATURE_ENEMY_TYPE = 3;
+    public static final int FEATURE_NUM_ALLIES_NEAR = 4;
+    public static final int FEATURE_MY_UNIT_TYPE = 5;
+    public static final int FEATURE_NUM_RESOURCES = 6;
+
+    public static final String[] FEATURE_NAMES = {
+        "enemyFarAway",
+        "enemyInRange",
+        "numEnemies",
+        "enemyType",
+        "numAlliesNear",
+        "myUnitType",
+        "numResources"
+    };
+
+    public static final int[] DEFAULT_FEATURE_INDICES = {
+        FEATURE_ENEMY_FAR_AWAY,
+        FEATURE_ENEMY_IN_RANGE,
+        FEATURE_NUM_ENEMIES,
+        FEATURE_ENEMY_TYPE,
+        FEATURE_NUM_ALLIES_NEAR,
+        FEATURE_MY_UNIT_TYPE,
+        FEATURE_NUM_RESOURCES
+    };
 
     /** Arity of each supported function symbol. */
     public static final Map<String, Integer> FUNCTION_ARITY = Map.of(
@@ -27,30 +53,26 @@ public class Node {
     public Node[] children;
     public Node parent;
 
-
     public boolean isModi;
     public int outputCellIndex;
     
     public Random random;
-    public double[] features= new double[9];
+    public double[] features= new double[FEATURE_NAMES.length];
 
     
 
     
 
-    public double encodeUnitType(UnitType type) {
-        switch(type.name) {
-            case "Worker": return 0.0;
-            case "Light": return 0.33;
-            case "Heavy": return 0.66;
-            case "Ranged": return 0.5;
-            case "Base": return 1.0;
-            case "Barracks": return 0.9;
-            case "Resource": return 0.5;
-            default: return 0.5;
-        }
+    public Node(NodeType type, double[] outputVector, Random random) {
+        this.type = type;
+        this.parent = null;
+        this.isModi = false;
+        this.outputCellIndex = -1;
+        this.value = null;
+        this.children = null;
+        this.featureIndex = -1;
+        this.random = random;
     }
-
 
 
     public Node(Random random, String[] functions, String[] terminals, int[] featureIndices, NodeType type, double modiRate, int numOutputCells) {
@@ -59,15 +81,18 @@ public class Node {
         this.type = type;
         this.isModi = false;
         this.outputCellIndex = -1;
+        this.featureIndex = -1;
 
         if (type == NodeType.TERMINAL) {
             this.children = null;
-            boolean useFeature = featureIndices != null && featureIndices.length > 0
-                    && (terminals == null || terminals.length == 0 || random.nextBoolean());
+            int[] usableFeatureIndices = (featureIndices != null && featureIndices.length > 0)
+                    ? featureIndices
+                    : DEFAULT_FEATURE_INDICES;
+            boolean useFeature = usableFeatureIndices.length > 0 && random.nextBoolean();
             if (useFeature) {
                 this.isFeatureTerminal = true;
-                this.featureIndex = featureIndices[random.nextInt(featureIndices.length)];
-                this.value = "F" + featureIndex;
+                this.featureIndex = usableFeatureIndices[random.nextInt(usableFeatureIndices.length)];
+                this.value = FEATURE_NAMES[Math.max(0, Math.min(featureIndex, FEATURE_NAMES.length - 1))];
             } else {
                 this.isFeatureTerminal = false;
                 this.numValue = random.nextDouble() * 20.0 - 10.0; // random constant in [-10, 10]
@@ -80,10 +105,10 @@ public class Node {
             this.value = functions[random.nextInt(functions.length)];
             int arity = FUNCTION_ARITY.getOrDefault(this.value, 2);
             this.children = new Node[arity];
-            this.isModi = random.nextDouble() < modiRate;
-            if (this.isModi) {
-                this.outputCellIndex = random.nextInt(numOutputCells);
-            }
+            // this.isModi = random.nextDouble() < modiRate;
+            // if (this.isModi) {
+            //     this.outputCellIndex = random.nextInt(numOutputCells);
+            // }
         }
     }
 
@@ -117,20 +142,7 @@ public class Node {
      * the paper's three rules, and uniformly assigns each Modi node an
      * output-vector cell index in [0, numOutputCells).
      */
-    public static void configureModiNodes(Node root, double modiRate, int numOutputCells, Random random) {
-        if (root.type == NodeType.TERMINAL) {
-            throw new IllegalArgumentException("Root cannot be a terminal — a Modi tree needs at least one function node");
-        }
-        // Rule 2: root is always Modi.
-        root.isModi = true;
-        root.outputCellIndex = random.nextInt(numOutputCells);
-
-        if (root.children != null) {
-            for (Node c : root.children) {
-                if (c != null) configureModiRecursive(c, modiRate, numOutputCells, random);
-            }
-        }
-    }
+    
 
     private static void configureModiRecursive(Node node, double modiRate, int numOutputCells, Random random) {
         // Rule 1: leaves are never Modi.
@@ -149,45 +161,9 @@ public class Node {
         }
     }
 
-    // ---------------------------------------------------------------
-    // Random tree generation (grow / full)
-    // ---------------------------------------------------------------
 
-    public static Node generateGrow(Random random, String[] functions, String[] terminals,
-                                     int[] featureIndices, int maxDepth) {
-        boolean makeTerminal = maxDepth <= 1 || random.nextDouble() < 0.3;
-        if (makeTerminal) {
-            return new Node(random, functions, terminals, featureIndices, NodeType.TERMINAL);
-        }
-        Node node = new Node(random, functions, terminals, featureIndices, NodeType.FUNCTION);
-        for (int i = 0; i < node.children.length; i++) {
-            node.setChild(i, generateGrow(random, functions, terminals, featureIndices, maxDepth - 1));
-        }
-        return node;
-    }
 
-    public static Node generateFull(Random random, String[] functions, String[] terminals,
-                                     int[] featureIndices, int maxDepth) {
-        if (maxDepth <= 1) {
-            return new Node(random, functions, terminals, featureIndices, NodeType.TERMINAL);
-        }
-        Node node = new Node(random, functions, terminals, featureIndices, NodeType.FUNCTION);
-        for (int i = 0; i < node.children.length; i++) {
-            node.setChild(i, generateFull(random, functions, terminals, featureIndices, maxDepth - 1));
-        }
-        return node;
-    }
 
-    /** Convenience: generate a tree, then assign its Modi nodes in one call. */
-    public static Node generateModiProgram(Random random, String[] functions, String[] terminals,
-                                            int[] featureIndices, int maxDepth, double modiRate,
-                                            int numOutputCells, boolean full) {
-        Node root = full
-                ? generateFull(random, functions, terminals, featureIndices, maxDepth)
-                : generateGrow(random, functions, terminals, featureIndices, maxDepth);
-        configureModiNodes(root, modiRate, numOutputCells, random);
-        return root;
-    }
 
     // ---------------------------------------------------------------
     // Evaluation
@@ -198,7 +174,7 @@ public class Node {
      * shared {@code output} vector along the way. Call this on the root
      * with a freshly-reset OutputVector to evaluate one input pattern.
      */
-    public double evaluate(double[] features, OutputVector output) {
+    public double evaluate(double[] features, double[] output) {
         if (type == NodeType.TERMINAL) {
             if (isFeatureTerminal) {
                 return features[featureIndex];
@@ -215,7 +191,7 @@ public class Node {
         double computed = applyFunction(childValues);
 
         if (isModi) {
-            output.add(outputCellIndex, computed);
+            output[outputCellIndex] = computed;
             return childValues[childValues.length - 1];
         }
         return computed;
@@ -320,10 +296,19 @@ public class Node {
         return false;
     }
 
+
+    public Node getRoot() {
+        Node current = this;
+        while (current.parent != null) {
+            current = current.parent;
+        }
+        return current;
+    }
+
     @Override
     public String toString() {
         if (type == NodeType.TERMINAL) {
-            return value;
+            return isFeatureTerminal ? value + "[F" + featureIndex + "]" : value;
         }
         StringBuilder sb = new StringBuilder();
         sb.append("(").append(value);
