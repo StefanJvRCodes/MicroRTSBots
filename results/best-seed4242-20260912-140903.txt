@@ -1,0 +1,29 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed4242-20260912-140903
+generations       : 10
+population        : 100
+training maps     : maps/8x8/basesWorkers8x8.xml
+training opponents: PassiveAI, RandomBiasedAI, WorkerRush
+repeats           : 3  (stochastic opponents only)
+cycle cap         : 3000
+win bonus         : 0.5
+eval range        : [0.05, 1.0]
+fitness           : Fitness: Standardized=0.3585519192031949 Adjusted=0.7360778678127448 Hits=8
+tree              : 1 tree(s), 55 nodes, depth 9
+worst cycle (ms)  : 2   (G1 gate 100)
+
+Evolved scoring function
+------------------------
+(- (- (min (+ uIsCombat movesTowardEnemy) (if> movesTowardEnemy aIsMove aIsMove aProducesCombat)) (+ (- uIsWorker movesTowardEnemy) (if> enemyUnitCount aProducesBuilding uIsWorker distNearestEnemy))) (min (min (* movesTowardEnemy aProducesWorker) (max uIsWorker (/ uCarrying movesTowardEnemyBase))) (- (max (+ (/ aIsReturn aProducesCombat) (min 9.3389 -8.5439)) (* (/ uIsBase (- (max uCarrying uIsWorker) (- aIsAttack aProducesBuilding))) (/ movesTowardEnemy distNearestResource))) (+ 6.8511 aProducesCombat))))
+
+
+Benchmark
+---------
+vs Coac                  :  10W   0T  10L /  20 games  (win rate 50%)
+vs mayari                :  10W   0T  10L /  20 games  (win rate 50%)
+vs WorkerRush            :   0W   0T  20L /  20 games  (win rate 0%)   [TRAINING]
+vs WorkerRushPlusPlus    :   0W   0T  20L /  20 games  (win rate 0%)
+
+NOTE: rows marked [TRAINING] are training performance, not a result.

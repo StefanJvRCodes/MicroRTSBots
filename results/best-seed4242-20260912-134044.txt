@@ -1,0 +1,43 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed4242-20260912-134044
+generations       : 100
+population        : 500
+training maps     : maps/8x8/basesWorkers8x8.xml
+training opponents: PassiveAI, RandomBiasedAI
+repeats           : 3  (stochastic opponents only)
+cycle cap         : 3000
+win bonus         : 0.5
+eval range        : [0.1, 0.9]
+fitness           : Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+tree              : 1 tree(s), 9 nodes, depth 3
+worst cycle (ms)  : 2   (G1 gate 100)
+
+Evolved scoring function
+------------------------
+(/ (+ uIsBase myResources) (if> aIsHarvest movesTowardEnemy -4.3664 movesTowardEnemyBase))
+
+
+Benchmark
+---------
+vs WorkerRush            :   0W   0T  10L /  10 games  (win rate 0%)
+vs LightRush             :  10W   0T   0L /  10 games  (win rate 100%)
+vs HeavyRush             :  10W   0T   0L /  10 games  (win rate 100%)
+vs RangedRush            :  10W   0T   0L /  10 games  (win rate 100%)
+vs WorkerRushPlusPlus    :   0W   0T  10L /  10 games  (win rate 0%)
+vs EconomyRush           :  10W   0T   0L /  10 games  (win rate 100%)
+vs EconomyRushBurster    :  10W   0T   0L /  10 games  (win rate 100%)
+vs EconomyMilitaryRush   :  10W   0T   0L /  10 games  (win rate 100%)
+vs EMRDeterministico     :  10W   0T   0L /  10 games  (win rate 100%)
+vs SimpleEconomyRush     :  10W   0T   0L /  10 games  (win rate 100%)
+vs LightDefense          :  10W   0T   0L /  10 games  (win rate 100%)
+vs HeavyDefense          :  10W   0T   0L /  10 games  (win rate 100%)
+vs RangedDefense         :  10W   0T   0L /  10 games  (win rate 100%)
+vs WorkerDefense         :   0W  10T   0L /  10 games  (win rate 0%)
+vs RandomAI              :  10W   0T   0L /  10 games  (win rate 100%)
+vs RandomBiasedAI        :  10W   0T   0L /  10 games  (win rate 100%)   [TRAINING]
+vs RandomBiasedSingleUnitAI:  10W   0T   0L /  10 games  (win rate 100%)
+vs PassiveAI             :  10W   0T   0L /  10 games  (win rate 100%)   [TRAINING]
+
+NOTE: rows marked [TRAINING] are training performance, not a result.

@@ -37,6 +37,30 @@ import java.util.List;
  * how a run recording Hits=1 could benchmark as 10T against the opponent it had beaten.
  * SimpleStatistics tracks best_of_run across generations; use it.
  *
+ * ------------------------------------------------------------------------------------
+ * A FAILURE IS NOT A LOSS. This is the change that matters most in this file.
+ *
+ * The previous version wrapped opponent CONSTRUCTION and the game in one try block with
+ * a bare `catch (Exception e) { l++; }`. So an opponent that could not be built at all --
+ * missing jar, class not on the classpath, unexpected constructor -- was recorded as
+ * "0W 0T 10L", which is indistinguishable from a real benchmark result and would have
+ * gone into the write-up as one. That is a live hazard right now: run.sh does not put
+ * lib/bots/* on the classpath, run-watch.sh does, and whatever launches ECJ is a third
+ * case. Adding Coac and mayari to the panel under the old code would have produced a
+ * clean-looking 0-0-10 against both, with no error anywhere.
+ *
+ * Now: each opponent is PROBED once before its games. A probe failure produces an ERROR
+ * row carrying the reason, and no games are played or counted. A failure during an
+ * individual game is counted separately as an error, never folded into losses. Any row
+ * with errors is flagged in the console output, in the .txt and in a status column in
+ * the CSV, so a downstream reader cannot mistake it for a measurement.
+ *
+ * The probe catches Throwable, not Exception, deliberately: a class that resolves but
+ * whose dependencies are missing raises NoClassDefFoundError, which is an Error, and
+ * under the old code would have escaped finalStatistics entirely and destroyed the
+ * archive write at the end of a multi-hour run.
+ * ------------------------------------------------------------------------------------
+ *
  * PRINTING THE TREE. Two ECJ methods have misleading names and neither does what is
  * wanted here:
  *
@@ -119,12 +143,31 @@ public class BenchmarkStatistics extends SimpleStatistics {
                 + "   games per opponent: " + gamesPer + "   cycle cap: " + maxCycles);
 
         long worstCycleMs = 0;
+        int brokenOpponents = 0;
         List<String> csv = new ArrayList<>();
         List<String> table = new ArrayList<>();
-        csv.add("opponent,wins,draws,losses,games,win_rate,trained_against");
+        csv.add("opponent,status,wins,draws,losses,errors,games,win_rate,trained_against,note");
 
         for (String opponent : benchOpponents) {
-            int w = 0, t = 0, l = 0;
+            boolean trained = wasTrainedAgainst(problem, opponent);
+
+            // PROBE FIRST. If the opponent cannot even be built, say so -- do not play
+            // zero games and report ten losses.
+            String probeFailure = probe(opponent, utt);
+            if (probeFailure != null) {
+                brokenOpponents++;
+                String line = String.format("vs %-22s: ERROR -- could not construct (%s)",
+                        opponent, probeFailure);
+                state.output.message(line);
+                table.add(line);
+                csv.add(String.format("%s,ERROR,0,0,0,0,0,,%s,%s",
+                        opponent, trained ? "yes" : "no", csvSafe(probeFailure)));
+                continue;
+            }
+
+            int w = 0, t = 0, l = 0, err = 0;
+            String firstError = null;
+
             for (String map : benchMaps) {
                 for (int g = 0; g < gamesPer; g++) {
                     try {
@@ -137,27 +180,69 @@ public class BenchmarkStatistics extends SimpleStatistics {
                         else if (r.drew()) t++;
                         else l++;
                         worstCycleMs = Math.max(worstCycleMs, ours.worstCycleMillis);
-                    } catch (Exception e) {
-                        l++;
+                    } catch (Throwable e) {
+                        // A game that could not be played is not a game that was lost.
+                        err++;
+                        if (firstError == null) firstError = String.valueOf(e);
                     }
                 }
             }
-            int n = w + t + l;
-            double rate = (n == 0) ? 0.0 : 100.0 * w / n;
-            boolean trained = wasTrainedAgainst(problem, opponent);
-            String line = String.format("vs %-22s: %3dW %3dT %3dL / %3d games  (win rate %.0f%%)%s",
-                    opponent, w, t, l, n, rate, trained ? "   [TRAINING]" : "");
+
+            int played = w + t + l;
+            double rate = (played == 0) ? 0.0 : 100.0 * w / played;
+            String status = (err == 0) ? "OK" : (played == 0 ? "ERROR" : "PARTIAL");
+            if (err > 0) brokenOpponents++;
+
+            String line = String.format(
+                    "vs %-22s: %3dW %3dT %3dL / %3d games  (win rate %.0f%%)%s%s",
+                    opponent, w, t, l, played, rate,
+                    err > 0 ? String.format("   [%d ERRORS -- %s]", err, status) : "",
+                    trained ? "   [TRAINING]" : "");
             state.output.message(line);
             table.add(line);
-            csv.add(String.format("%s,%d,%d,%d,%d,%.1f,%s",
-                    opponent, w, t, l, n, rate, trained ? "yes" : "no"));
+            csv.add(String.format("%s,%s,%d,%d,%d,%d,%d,%.1f,%s,%s",
+                    opponent, status, w, t, l, err, played, rate,
+                    trained ? "yes" : "no", csvSafe(firstError)));
         }
 
         state.output.message("");
+        if (brokenOpponents > 0) {
+            state.output.warning(brokenOpponents + " opponent(s) could not be played and are "
+                    + "marked ERROR or PARTIAL above. Those rows are NOT results. If these are "
+                    + "competition bots, check that lib/bots/* is on the classpath of whatever "
+                    + "launches ECJ -- run.sh does not add it.");
+        }
         state.output.message("Worst per-cycle decision time: " + worstCycleMs
                 + " ms   (G1 gate is 100 ms)");
 
-        writeArtifacts(state, gpBest, problem, stamp, table, csv, worstCycleMs);
+        writeArtifacts(state, gpBest, problem, stamp, table, csv, worstCycleMs, brokenOpponents);
+    }
+
+    /**
+     * Can this opponent be constructed at all? Returns null on success, else the reason.
+     *
+     * Throwable, not Exception: a class that resolves but whose dependency jars are
+     * absent raises NoClassDefFoundError, which would otherwise escape finalStatistics
+     * and take the archive write down with it at the end of a multi-hour run.
+     */
+    private static String probe(String opponent, UnitTypeTable utt) {
+        try {
+            Panel.make(opponent, utt);
+            return null;
+        } catch (Throwable e) {
+            String msg = e.getMessage();
+            return (msg == null || msg.isEmpty()) ? e.toString() : firstLine(msg);
+        }
+    }
+
+    private static String firstLine(String s) {
+        int nl = s.indexOf('\n');
+        return nl < 0 ? s : s.substring(0, nl);
+    }
+
+    /** Commas and quotes would break the CSV; this is not user input, so stripping is fine. */
+    private static String csvSafe(String s) {
+        return (s == null) ? "" : s.replace(',', ';').replace('"', '\'').trim();
     }
 
     /**
@@ -232,7 +317,7 @@ public class BenchmarkStatistics extends SimpleStatistics {
     private void writeArtifacts(final EvolutionState state, final GPIndividual best,
                                 final MicroRTSProblem problem, final String stamp,
                                 final List<String> table, final List<String> csv,
-                                final long worstCycleMs) {
+                                final long worstCycleMs, final int brokenOpponents) {
         try {
             Path dir = Paths.get(resultsDir);
             Files.createDirectories(dir);
@@ -263,6 +348,12 @@ public class BenchmarkStatistics extends SimpleStatistics {
             txt.append("\nBenchmark\n---------\n");
             for (String line : table) txt.append(line).append('\n');
             txt.append("\nNOTE: rows marked [TRAINING] are training performance, not a result.\n");
+            if (brokenOpponents > 0) {
+                txt.append("WARNING: ").append(brokenOpponents).append(" opponent(s) could not be ")
+                   .append("played (ERROR or PARTIAL above). Those rows are NOT measurements -- ")
+                   .append("do not read them as losses. Usual cause: lib/bots/* missing from the ")
+                   .append("classpath of whatever launched ECJ.\n");
+            }
 
             write(dir.resolve("best-" + stamp + ".txt"), txt.toString());
             write(dir.resolve("best-" + stamp + ".ind"), reloadableForm(state, best));

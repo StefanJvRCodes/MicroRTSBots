@@ -1,0 +1,158 @@
+
+Generation: 0
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (/ (+ uIsBase myResources) (if> aIsHarvest
+     movesTowardEnemy -4.3664 movesTowardEnemyBase))
+
+Generation: 1
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (if> (* (* (* aIsProduce movesTowardEnemy)
+     movesTowardMyBase) (min aProducesWorker enemyUnitCount))
+     (/ (* movesTowardResource uIsWorker) (if>
+         aIsProduce aProducesBuilding enemyUnitCount
+         aIsMove)) (max (/ aIsMove myWorkerCount)
+     (+ aIsMove movesTowardEnemyBase)) (max (+
+     myWorkerCount movesTowardEnemyBase) (- uIsCombat
+     uIsBase)))
+
+Generation: 2
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=7
+Tree 0:
+ (if> (* (* (* aIsProduce movesTowardEnemy)
+     movesTowardMyBase) (min aProducesWorker enemyUnitCount))
+     (/ (+ uIsCombat myWorkerCount) (if> aIsProduce
+         aProducesBuilding enemyUnitCount aIsMove))
+     (max (/ aIsMove myWorkerCount) (+ aIsMove
+         movesTowardEnemyBase)) (max (+ myWorkerCount
+     movesTowardEnemyBase) (- uIsCombat uIsBase)))
+
+Generation: 3
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (if> aIsHarvest movesTowardEnemy -4.3664
+     movesTowardEnemyBase)
+
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=7
+Tree 0:
+ (/ (max movesTowardMyBase (max movesTowardEnemy
+     aIsAttack)) (if> aIsHarvest movesTowardEnemy
+     -4.3664 movesTowardEnemyBase))
+
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (if> (* (* uIsWorker movesTowardMyBase) (*
+     (+ movesTowardEnemy uIsCombat) (- movesTowardEnemyBase
+     movesTowardMyBase))) (max movesTowardEnemyBase
+     movesTowardEnemy) (* movesTowardEnemy aProducesWorker)
+     (max (+ myWorkerCount movesTowardEnemyBase)
+         (if> movesTowardMyBase movesTowardMyBase
+             aProducesBuilding movesTowardEnemyBase)))
+
+Generation: 6
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (if> (if> (if> enemyUnitCount aProducesBuilding
+     uIsWorker distNearestEnemy) (+ distNearestEnemy
+     movesTowardResource) (max (+ myWorkerCount
+     movesTowardEnemyBase) (- uIsCombat uIsBase))
+     (* uIsBase aIsAttack)) (min (max 1.7082 distNearestEnemy)
+     uIsCombat) (if> (* (* (max movesTowardMyBase
+     aIsHarvest) (* movesTowardEnemy aProducesWorker))
+     (if> enemyUnitCount aProducesBuilding uIsWorker
+         distNearestEnemy)) (if> aIsHarvest movesTowardEnemy
+     -4.3664 movesTowardEnemyBase) (max (/ aIsMove
+     myWorkerCount) (+ aIsMove movesTowardEnemyBase))
+     (max (+ myWorkerCount movesTowardEnemyBase)
+         (- uIsCombat uIsBase))) (max (max movesTowardEnemyBase
+     movesTowardEnemy) (/ aIsReturn movesTowardMyBase)))
+
+Generation: 7
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (- (- (min (if> uIsCombat myResources uIsBase
+     aIsHarvest) (if> (/ distNearestResource movesTowardResource)
+     (if> aProducesCombat myWorkerCount myResources
+         aIsReturn) (if> aProducesCombat uCarrying
+     aProducesWorker aProducesWorker) (min (max
+     (/ (max (/ aIsReturn movesTowardMyBase) (max
+         movesTowardEnemy aIsAttack)) (if> movesTowardMyBase
+         movesTowardMyBase aProducesBuilding movesTowardEnemyBase))
+     (if> aIsMove myResources movesTowardEnemy
+         distNearestResource)) (- uIsCombat uIsBase))))
+     (+ (- uIsWorker movesTowardEnemy) (if> enemyUnitCount
+         aProducesBuilding uIsWorker distNearestEnemy)))
+     (min (min (* movesTowardEnemy aProducesWorker)
+         (/ movesTowardMyBase distNearestEnemy)) movesTowardEnemy))
+
+Generation: 8
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (if> (if> (if> aIsHarvest movesTowardEnemy
+     movesTowardEnemy movesTowardEnemyBase) (min
+     (max 1.7082 distNearestEnemy) uIsCombat)
+     (if> enemyUnitCount aProducesBuilding uIsWorker
+         distNearestEnemy) (max (max movesTowardEnemyBase
+     movesTowardEnemy) (/ aIsReturn movesTowardMyBase)))
+     (min distNearestEnemy (max aIsReturn movesTowardMyBase))
+     (/ (max (/ (max (/ aIsReturn movesTowardMyBase)
+         (max movesTowardEnemy aIsAttack)) movesTowardMyBase)
+         (max movesTowardEnemy aIsAttack)) (if> movesTowardMyBase
+         movesTowardMyBase aProducesBuilding movesTowardEnemyBase))
+     (max (max movesTowardEnemyBase movesTowardEnemy)
+         (+ aProducesBuilding aIsHarvest)))
+
+Generation: 9
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (if> (if> (+ myResources aProducesBuilding)
+     (/ (max movesTowardMyBase (max movesTowardEnemyBase
+         movesTowardEnemy)) (if> aIsHarvest movesTowardEnemy
+         -4.3664 movesTowardEnemyBase)) (+ aProducesBuilding
+     uCarrying) (* uIsBase aIsAttack)) (min (max
+     1.7082 distNearestEnemy) enemyUnitCount)
+     (max (max movesTowardEnemyBase movesTowardEnemy)
+         (+ aProducesBuilding aIsHarvest)) (max (max
+     movesTowardEnemyBase movesTowardEnemy) (+
+     aProducesBuilding aIsHarvest)))
+
+Best Individual of Run:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=8
+Tree 0:
+ (/ (+ uIsBase myResources) (if> aIsHarvest
+     movesTowardEnemy -4.3664 movesTowardEnemyBase))

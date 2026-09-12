@@ -1,0 +1,43 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed4242-20260912-135703
+generations       : 100
+population        : 500
+training maps     : maps/8x8/basesWorkers8x8.xml
+training opponents: PassiveAI, RandomBiasedAI, WorkerRush
+repeats           : 3  (stochastic opponents only)
+cycle cap         : 3000
+win bonus         : 0.5
+eval range        : [0.05, 1.0]
+fitness           : Fitness: Standardized=0.17894216242219974 Adjusted=0.8482180312776721 Hits=9
+tree              : 1 tree(s), 105 nodes, depth 12
+worst cycle (ms)  : 2   (G1 gate 100)
+
+Evolved scoring function
+------------------------
+(- (- (min (max (min (max (max movesTowardEnemy uCarrying) (+ movesTowardEnemy uIsWorker)) (max (max (+ movesTowardEnemy uIsWorker) (+ movesTowardEnemy uIsWorker)) (min (max (* (max (/ movesTowardEnemy uIsWorker) (+ movesTowardEnemy uIsWorker)) aProducesCombat) (+ movesTowardEnemy (max (+ movesTowardEnemy uIsWorker) (+ movesTowardEnemy uIsWorker)))) (- movesTowardEnemyBase movesTowardMyBase)))) (+ movesTowardEnemy uIsWorker)) (max (min (max (max (+ (if> aIsProduce aProducesWorker aProducesCombat myWorkerCount) (- movesTowardEnemyBase movesTowardMyBase)) (+ movesTowardEnemy (max (+ (if> aIsProduce aProducesWorker aProducesCombat myWorkerCount) (- movesTowardEnemyBase movesTowardMyBase)) (+ movesTowardEnemy uIsWorker)))) (+ movesTowardEnemy uIsWorker)) (max (- movesTowardEnemy aProducesCombat) (min (max (* (max (max movesTowardEnemy uCarrying) (+ movesTowardEnemy uIsWorker)) aProducesCombat) movesTowardMyBase) (- movesTowardEnemyBase movesTowardMyBase)))) (- movesTowardEnemyBase movesTowardMyBase))) (max movesTowardResource myResources)) (max movesTowardResource myResources))
+
+
+Benchmark
+---------
+vs WorkerRush            :   5W   0T   5L /  10 games  (win rate 50%)   [TRAINING]
+vs LightRush             :  10W   0T   0L /  10 games  (win rate 100%)
+vs HeavyRush             :  10W   0T   0L /  10 games  (win rate 100%)
+vs RangedRush            :  10W   0T   0L /  10 games  (win rate 100%)
+vs WorkerRushPlusPlus    :   0W   5T   5L /  10 games  (win rate 0%)
+vs EconomyRush           :  10W   0T   0L /  10 games  (win rate 100%)
+vs EconomyRushBurster    :  10W   0T   0L /  10 games  (win rate 100%)
+vs EconomyMilitaryRush   :  10W   0T   0L /  10 games  (win rate 100%)
+vs EMRDeterministico     :  10W   0T   0L /  10 games  (win rate 100%)
+vs SimpleEconomyRush     :  10W   0T   0L /  10 games  (win rate 100%)
+vs LightDefense          :  10W   0T   0L /  10 games  (win rate 100%)
+vs HeavyDefense          :  10W   0T   0L /  10 games  (win rate 100%)
+vs RangedDefense         :  10W   0T   0L /  10 games  (win rate 100%)
+vs WorkerDefense         :   0W   5T   5L /  10 games  (win rate 0%)
+vs RandomAI              :  10W   0T   0L /  10 games  (win rate 100%)
+vs RandomBiasedAI        :  10W   0T   0L /  10 games  (win rate 100%)   [TRAINING]
+vs RandomBiasedSingleUnitAI:  10W   0T   0L /  10 games  (win rate 100%)
+vs PassiveAI             :  10W   0T   0L /  10 games  (win rate 100%)   [TRAINING]
+
+NOTE: rows marked [TRAINING] are training performance, not a result.

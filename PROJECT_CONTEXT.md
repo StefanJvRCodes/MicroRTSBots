@@ -388,3 +388,92 @@ COST. The 190 games/second figure in the earlier notes no longer holds: this run
 Next session, in order: (1) set evalthreads to the core count and confirm no shared-static problems in Features; (2) add the seven missing terminals, distEnemyBase first, and rerun stage 2 to test the sufficiency hypothesis directly — if PassiveAI wins come back, the anomaly was vocabulary, not pressure; (3) turn on ec.parsimony.* — the best tree is 165 nodes at depth 12, pinned against the maxdepth cap, so bloat is now binding in a way it was not at M0; (4) write the loader that reads a .ind back, which is needed before any evolved bot can be re-benchmarked out-of-process or frozen for the Phase 5 adapter; (5) verify the Coac/mayari reflection path, still never exercised; (6) finish the half-done src/gp/nodes/ folder move and delete src/gp/symreg/. Stage 3 of the curriculum (adding WorkerRush) should wait until stage 2 produces wins against both training opponents.
 *Keep this file current: when a decision is made, a file is added, or a milestone is hit, update the
 relevant section so the next session starts from truth.*
+
+# PROJECT_CONTEXT.md additions — 2026-09-12
+
+This file contains two separate pieces. Paste each into the place named below, then delete
+this file.
+
+---
+
+## PIECE 1 — REPLACES the "Current status" paragraph at the end of section 1
+
+Find the existing line beginning "**Current status:** M0 done. Chimera beats RandomBiased
+4–0..." and replace the whole paragraph with this:
+
+**Current status:** M1 met. The evolved bot beats 13 of the 18 scripted panel bots 10–0,
+splits WorkerRush by side (wins as one player, loses as the other), and draws-or-loses to
+WorkerRushPlusPlus and WorkerDefense. Worst per-cycle decision time 2 ms against the 100 ms
+G1 gate; G2 satisfied by design. Training is at curriculum stage 3 (PassiveAI +
+RandomBiasedAI + WorkerRush) with evalthreads at 8 and a multiplicative win reward. The
+breakthrough was a terminal-set fix: every terminal in the old function set returned the
+same value for all four MOVE directions, so movement was never under evolutionary control —
+the four `movesToward*` terminals closed that gap. Evolved programs can now be saved,
+reloaded (`gp.IndividualLoader`, `evolved:<path.ind>`) and reduced to a readable form
+without changing behaviour (`gp.Pruner`); the current best is 17 nodes after pruning from
+105. The open blocker is the **train/eval map split**: with two deterministic players on a
+fixed map there are only two distinct games, so `bench-games=10` is n=2 and the Phase 6
+statistical plan cannot run until more maps are in play.
+
+---
+
+## PIECE 2 — APPEND to the end of the file, above the "Keep this file current" line
+
+Session update (2026-09-12): first bot produced by evolution rather than by the initial population; evolved program reduced to 17 readable nodes; three infrastructure pieces added.
+
+TERMINAL-SET SUFFICIENCY, RESOLVED — AND THE 2026-08-30 HYPOTHESIS WAS RIGHT IN KIND BUT WRONG IN DETAIL. The carried-forward plan was to add distEnemyBase and rerun, on the theory that the GP could not navigate to a stationary target. The theory was correct; the proposed fix would not have worked, and would have produced a null result that looked like a refutation. distEnemyBase(GameState, Unit, int) takes no UnitAction, so it returns the same value for every candidate action of a unit — and under argmax any term constant across a unit's actions cannot change the choice. Checking the whole function set on that criterion showed that EVERY one of the 25 entries was constant across the four MOVE directions. The evolved tree scored all four moves identically and EvolvedBot's argmax fell through to getUnitActions() list order. Movement direction had never been under evolutionary control at any point in the project. That is the full explanation of the 2026-08-30 anomaly: the bot won reactively because aIsAttack IS action-discriminating and ATTACK_LOCATION only becomes legal when a target is already in range, so it could learn "attack what comes to me" perfectly well while being unable to go anywhere. Stage 1's transient PassiveAI wins were a fixed tie-break direction tracing the map perimeter until it blundered into the enemy base, not navigation.
+
+The fix needed no new node class. movesToward(Unit, UnitAction, int, int) has read action direction since M0 but takes target COORDINATES, so its two ints are unresolvable from ScoreData and FeatureNode correctly rejects it. Four wrappers that pick the target from the state — movesTowardEnemy, movesTowardEnemyBase, movesTowardMyBase, movesTowardResource — leave one int (the player id) and bind by type with FeatureNode unchanged. Function set is now 29 entries. The other seven missing terminals (distEnemyBase, myUnitCount, myBarracksCount, uIsBarracks, uHpFrac, aIsNone, mapArea) were deliberately held back so the direction terminals could be tested alone; mapArea should stay out while training on a single map, since it is a literal constant and only dilutes the terminal draw.
+
+Result was immediate and large: from 4W-6T-0L against two random opponents to 13 of 18 panel bots beaten, including 10W-0T-0L against PassiveAI, which had been unbeatable. The general principle is worth keeping: whatever is not a terminal, evolution cannot use — and under argmax, whatever is constant across a unit's candidate actions is effectively not a terminal either.
+
+THE WIN BONUS SATURATED AND ONE ENTIRE RUN PRODUCED NOTHING. The first stage-2 run with direction terminals reported Standardized=0.0 Hits=8 on every one of 100 generations, and benchmarked at 13 of 18. That benchmark was real but was found by RANDOM SEARCH in generation 0; there was no selection pressure at any point and it must be reported that way. Cause: fitness was Math.max(0.0, mean - winBonus * winFrac). A win scores near zero by construction (win band 0.0–1.0, a fast win ~0.1), so subtracting 0.5 from an all-winning individual gives a negative number that the max() clamps to 0.0. Every all-winning individual scored exactly 0.0, a bot winning in 200 cycles was indistinguishable from one winning in 2900, hits saturated, and betterThan() never fired so best_of_run froze on the first winner seen. The 9-node depth-3 best-of-run was not parsimony working, it was the absence of any selection.
+
+This is the same failure a third time, and the pattern is now explicit in MicroRTSProblem's header. At the BOTTOM: every losing final state is identical, so the margin term was constant — fixed by sampling quality during play. In the MIDDLE: 0.25 of shaping room against a 1.0 gap between bands, so draws were unrankable — fixed by bands. At the TOP: a subtracted reward larger than the entire win band, so wins were unrankable. Any term that can saturate will saturate exactly where the population ends up, which is precisely where the gradient is needed. Fix is multiplicative rather than subtractive: fitness x (1 - winBonus * winFraction), which is proportional and cannot saturate. win-bonus is now clamped to [0.0, 1.0) and stated explicitly in the params rather than left to a default, since its MEANING changed.
+
+STAGE 3 AND THE FIRST REAL EVOLUTIONARY RESULT. Curriculum advanced to PassiveAI + RandomBiasedAI + WorkerRush (10 games per individual). WorkerRush was the single worst choice of training opponent at the start of the project and is the right one now, for the opposite reason: the bot already saturates every other opponent at a win, so WorkerRush is the only remaining source of gradient. Best-of-generation moved 0.3612 (gen 0) → 0.2728 (gen 2) → 0.1996 with Hits=9 at gen 17, the predicted cliff where one WorkerRush game converts from a ~2.1 loss to a ~0.22 win, then refined to 0.1789 by gen 78. Tree grew 11 → 105 nodes, depth pinned at the maxdepth cap of 12 — bloat is back now that selection exists. Run converged by gen 17 and coasted for 82 generations; parsimony pressure (ec.parsimony.DoubleTournamentSelection) is prepared and commented out in the params. M1 is properly met.
+
+Panel: 13 of 18 beaten 10-0, WorkerRush 5W-0T-5L, WorkerRushPlusPlus and WorkerDefense 0W-5T-5L. Worst per-cycle time 2 ms against the 100 ms G1 gate. Note a regression: WorkerDefense was 0W-10T before and is 0W-5T-5L now — training on WorkerRush bought the WorkerRush side-win and cost half the WorkerDefense draws.
+
+BENCHMARK SAMPLE SIZE IS NOT WHAT IT LOOKS LIKE — THIS BLOCKS PHASE 6. Against a deterministic opponent, on a fixed map, with a deterministic bot, there are only as many distinct games as (maps x sides) — two on a single map. bench-games=10 replays those two five times each. "5W-0T-5L / 10 games (win rate 50%)" is therefore NOT a coin flip: it means the bot wins every game as one player and loses every game as the other. Training Hits=9/10 confirms it independently (PassiveAI 2/2, RandomBiasedAI 6/6, WorkerRush 1/2). Phase 6 plans Mann-Whitney U at alpha=0.05; run on these counts it would compute significance from duplicate rows. More games do not help — only more MAPS do, since the map is the only available source of independent variation between two deterministic players. This makes the Phase-2 map-split deliverable a blocker for the evaluation methodology rather than housekeeping. BenchmarkStatistics now reports distinct-game counts per row and warns.
+
+REPRODUCIBILITY CLAIM NARROWED. Two runs at identical seed.0=4242 and evalthreads=1 produced different populations. The only nondeterminism in that configuration is the opponent, so ai.RandomBiasedAI seeds its own RNG independently of ECJ's seed. Runs against deterministic opponents only remain bit-for-bit reproducible; any run including a stochastic opponent is reproducible only in distribution and must be reported across several seeds. Worth raising with Pillay/Nyathi before the write-up commits to a phrasing.
+
+THREADING. evalthreads raised to 8. Features holds no static mutable state and Panel loads a fresh PhysicalGameState per game, so neither blocks it; the real hazard was that GPProblem.clone() is shallow for everything except GPData and ADFStack, leaving one shared UnitTypeTable and EvaluationFunction across all threads. MicroRTSProblem.clone() now hands each clone its own. The calibration accumulator moved to a synchronized static so one range report covers a whole generation instead of N partial ones. ECJ GOTCHA: it allocates max(evalthreads, breedthreads) RNGs and fatals on the first undefined seed, so seed.0 through seed.7 are now listed. breedthreads stays 1 so breeding is on one stream regardless of eval thread count. Second ECJ gotcha, learned the hard way: a leading $ on a path parameter means "relative to the working directory" and WITHOUT it the path resolves relative to the directory holding the params file — so stat.file = $results/... was always correct, and a -p override that drops the $ sends the log to config/results/ and fails. PowerShell also needs single quotes around any -p value containing a $.
+
+THREE NEW TOOLS.
+
+gp.IndividualLoader reads a saved .ind back into a playable bot, reachable from any runner as "evolved:<path.ind>" or "evolved:<path.ind>@<path.params>" through the single factory. This unblocked re-benchmarking archived individuals, watching one play, and freezing a policy for the Phase 5 adapter. A .ind is NOT self-describing: its node names only mean something relative to a function set, so loading needs a set-up EvolutionState, and an individual archived under a 29-entry set cannot be read by a params file listing 25. BenchmarkStatistics therefore now also writes best-<stamp>.params — the GATHERED parameter set via ParameterDatabase.list(), not a file copy, so it captures -p overrides and koza defaults inherited from inside the jar. Older archived .ind files predate this and may already be unreadable. The loader verifies the round trip by re-printing and comparing, because ECJ's read path is far less exercised than its write path and an ERC with a missing encode()/decode() would load cleanly, report the right fitness, and play with different constants. CAVEAT: the tree tested contains no ERCs at all, so that check has never actually exercised ScoreERC. The first individual containing a constant is the real test.
+
+gp.Pruner reduces a finished tree without changing how it plays. This is a MEASUREMENT, explicitly not parsimony pressure: parsimony changes the search and produces different bots, which would confound the Phase 4 ordinary-GP vs SBGP comparison unless applied uniformly. Phase 1 applies only identities true for all inputs (max(x,x)→x, min(x,x)→x, if>(a,a,t,e)→e). Phase 2 greedily replaces nodes with their children, accepting only when the candidate picks the SAME UnitAction at EVERY decision point of traced games — including the resource-consistency fallback, since raw argmax would miss divergences that appear only when an unaffordable top choice is skipped. Trace opponents default to the TRAINING set: pruning is guided by the games it traces, so tracing against held-out bots would let them shape the artefact later evaluated on them.
+
+Two bugs in it worth not repeating. (1) Restoring a rejected candidate with a CLONE rather than the original object detaches the original — and everything under it — from the tree while the scan's node list still points at it. The scan then edits orphaned subtrees, the live tree never changes, every candidate therefore plays identically and is accepted, and the loop never terminates. Symptom was a round counter in the thousands with the node count barely moving; rounds can never legitimately exceed the node count, since every real acceptance removes at least one node. assertProgress() now fails loudly on any acceptance that does not shrink the tree. (2) Verification compared W/T/L tables for original vs pruned, which is exact for a deterministic opponent and MEANINGLESS for a stochastic one — RandomBiasedAI seeds from the clock, so the two runs are different games. The first verification run flagged exactly that one row as DIFFERS, which was the verifier's bug, not a divergence. Stochastic opponents are now checked by decision equivalence over sampled games, which is the stronger property anyway: matching outcomes can hide divergent play, matching decisions cannot. Final verification: all 18 panel rows equivalent.
+
+WHAT THE EVOLVED BOT ACTUALLY IS. 105 nodes → 17, depth 12 → 6, 84% of the tree doing nothing, verified equivalent across the panel:
+
+    score = min(movesTowardEnemy + uIsWorker,
+                max(movesTowardEnemy, movesTowardEnemyBase - movesTowardMyBase))
+            - 2 x max(movesTowardResource, myResources)
+
+Three readings, all of which matter more than the win rate.
+
+(1) EVERY NON-MOVE ACTION SCORES IDENTICALLY. All movesToward* terms return 0 for non-MOVE actions, so harvest, return, produce, attack and NONE all collapse to the same value and the choice among them is decided by getUnitActions() list order. The bot has no deliberate policy about anything except movement. The direction-blindness problem was solved for moves and remains fully present everywhere else — the GP still cannot discriminate between producing a worker and producing a Light, or between attacking one target and another. This is the next sufficiency gap and it is bigger than the one just closed.
+
+(2) COMBAT UNITS ARE PURE CHASERS. For a non-worker the expression reduces exactly to movesTowardEnemy, since min(x, max(x,y)) = x. Only workers weigh the enemy-base direction. aProducesCombat survived to the 105-node tree but not to the 17-node one: the bot never deliberately builds an army, and wins 13 of 18 by running everything at the enemy on an 8x8 map. Whether that survives a 16x16 map is an open question and a good one.
+
+(3) THE RESOURCE TERM IS LIVE BUT NARROW. myResources is constant across a unit's actions, so max(movesTowardResource, myResources) cancels under argmax while the stockpile is non-zero. At exactly zero it falls through and the bot subtracts 2 from any move TOWARD a resource — broke workers walk away from resources. Pruning against real games kept the term, so this is real behaviour and not bloat. It is also a good illustration of why naive algebraic simplification is unsafe here: "myResources is constant, delete it" is the obvious rewrite and it is wrong.
+
+NEXT, IN ORDER. (1) Fix the train/eval MAP split; it has stopped being housekeeping and is now the blocker for Phase 6 statistics, for separating the WorkerRush side asymmetry from map-specific geometry, and for answering whether this bot only works on 8x8. (2) Watch the pruned bot against WorkerRush from both sides — the loader now makes the asymmetry observable, and at 17 nodes the whole scoring function fits in your head while watching. (3) Add terminals that discriminate among non-MOVE actions — produce-target and attack-target properties — which is the sufficiency gap the pruned tree just exposed. (4) Turn on parsimony pressure, uniformly, when setting up the Phase 4 comparison and not before. (5) Re-benchmark against Coac and mayari properly; the 1W-1L over two games is still the least trustworthy number in the archive. (6) Delete or quarantine the pre-snapshot .ind files in results/, which have no params beside them and may no longer be readable. (7) Finish the half-done src/gp/nodes/ folder move and delete src/gp/symreg/, both still outstanding from August.
+
+---
+
+## ALSO WORTH FIXING when you next open the file
+
+- **§4 folder tree** is missing `src/gp/IndividualLoader.java`, `src/gp/Pruner.java`, and the
+  `best-*.params` artifact in `results/`.
+- **§6 important files** should gain short entries for the loader and the pruner.
+- **§10 workplan table**: 3b is no longer "next up" (done), M1 is no longer pending (met),
+  and Phase 2 should be flagged as blocking Phase 6 because of the map split.
+- **§11 TODO backlog**: ECJ is confirmed, the function set is defined, persistence is done.
+  Add the map split, the non-MOVE sufficiency gap, and the RandomBiasedAI reproducibility
+  caveat.

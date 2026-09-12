@@ -7,20 +7,26 @@ import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.units.UnitTypeTable;
 
-import java.lang.reflect.Constructor;
-
 /**
- * Opponent construction and headless game running, shared by the GP fitness evaluator
- * and the end-of-run benchmark so that both measure the same thing the same way.
+ * Headless game running, shared by the GP fitness evaluator and the end-of-run benchmark
+ * so that both measure the same thing the same way.
+ *
+ * BOT CONSTRUCTION MOVED OUT. make() used to resolve and construct bots itself, in
+ * parallel with eval.Bots doing the same job differently -- Bots gave WorkerRush an
+ * explicit BFSPathFinding while this class took the (UnitTypeTable) constructor and the
+ * engine's default pathfinder. Two factories meant "WorkerRush" could mean two different
+ * bots depending on which entry point you came in through. There is now one factory,
+ * eval.Bots, and make() below is a thin delegate kept so existing call sites compile
+ * unchanged.
+ *
+ * THREADING: nothing in this class is static and mutable. PACKAGES and the old resolve()
+ * are gone to Bots; FULL_PANEL is an immutable name list; play() loads a fresh
+ * PhysicalGameState per game rather than caching a parsed map. Safe to call concurrently
+ * from every ECJ eval thread.
  */
 public final class Panel {
 
-    /** Packages searched when a bot is named without one. */
-    private static final String[] PACKAGES = {
-        "ai.abstraction.", "ai.", "ai.mcts.naivemcts.", "ai.montecarlo.", "ai.abstraction.cRush.",
-    };
-
-    /** The scripted bots your teammate benchmarked against, in the same order. */
+    /** The scripted bots the benchmark runs, in a fixed order. */
     public static final String[] FULL_PANEL = {
         "WorkerRush", "LightRush", "HeavyRush", "RangedRush", "WorkerRushPlusPlus",
         "EconomyRush", "EconomyRushBurster", "EconomyMilitaryRush", "EMRDeterministico",
@@ -31,31 +37,11 @@ public final class Panel {
     private Panel() {}
 
     /**
-     * Build a bot by (simple or fully-qualified) class name. Tries a UnitTypeTable
-     * constructor first, then a no-arg one.
+     * Build a bot by name. Delegates to the single factory; see eval.Bots for resolution
+     * order and for why the (UnitTypeTable) constructor is canonical.
      */
     public static AI make(String name, UnitTypeTable utt) {
-        Class<?> c = resolve(name);
-        if (c == null) throw new IllegalArgumentException("Unknown bot: " + name);
-        try {
-            for (Constructor<?> ctor : c.getConstructors()) {
-                Class<?>[] p = ctor.getParameterTypes();
-                if (p.length == 1 && p[0] == UnitTypeTable.class) return (AI) ctor.newInstance(utt);
-            }
-            return (AI) c.getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Could not construct " + name + ": " + e, e);
-        }
-    }
-
-    private static Class<?> resolve(String name) {
-        if (name.contains(".")) {
-            try { return Class.forName(name); } catch (ClassNotFoundException e) { return null; }
-        }
-        for (String pkg : PACKAGES) {
-            try { return Class.forName(pkg + name); } catch (ClassNotFoundException ignored) { }
-        }
-        return null;
+        return Bots.make(name, utt);
     }
 
     /** Map an evaluation function's output onto [0,1], 1 being dominant for {@code player}. */
@@ -79,6 +65,13 @@ public final class Panel {
          * normalised to [0,1]. Sampled rather than taken at the end because the final
          * state of a loss is always "we have no units" -- identical for a bot that
          * fought well and one that never moved. This is the dense quality signal.
+         *
+         * NOTE FOR THE FITNESS CODE: this value is ALREADY normalised and clamped to
+         * [0,1] here, with 0.5 meaning an even game. MicroRTSProblem's eval-lo/eval-hi
+         * are therefore not converting an unbounded score onto a scale -- they are
+         * stretching the narrow band that real games occupy across the full range, which
+         * is contrast enhancement. The observed [0.27, 0.46] means our bots were behind
+         * for most of most games, not that the scale was arbitrary.
          */
         public double meanEval = 0.5;
 

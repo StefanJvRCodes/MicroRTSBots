@@ -1,0 +1,43 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed4242-20260912-133512
+generations       : 10
+population        : 100
+training maps     : maps/8x8/basesWorkers8x8.xml
+training opponents: PassiveAI
+repeats           : 3  (stochastic opponents only)
+cycle cap         : 3000
+win bonus         : 0.5
+eval range        : [0.1, 0.9]
+fitness           : Fitness: Standardized=0.0 Adjusted=1.0 Hits=2
+tree              : 1 tree(s), 9 nodes, depth 3
+worst cycle (ms)  : 0   (G1 gate 100)
+
+Evolved scoring function
+------------------------
+(/ (+ uIsBase myResources) (if> aIsHarvest movesTowardEnemy -4.3664 movesTowardEnemyBase))
+
+
+Benchmark
+---------
+vs WorkerRush            :   0W   0T   0L /   0 games  (win rate 0%)
+vs LightRush             :   0W   0T   0L /   0 games  (win rate 0%)
+vs HeavyRush             :   0W   0T   0L /   0 games  (win rate 0%)
+vs RangedRush            :   0W   0T   0L /   0 games  (win rate 0%)
+vs WorkerRushPlusPlus    :   0W   0T   0L /   0 games  (win rate 0%)
+vs EconomyRush           :   0W   0T   0L /   0 games  (win rate 0%)
+vs EconomyRushBurster    :   0W   0T   0L /   0 games  (win rate 0%)
+vs EconomyMilitaryRush   :   0W   0T   0L /   0 games  (win rate 0%)
+vs EMRDeterministico     :   0W   0T   0L /   0 games  (win rate 0%)
+vs SimpleEconomyRush     :   0W   0T   0L /   0 games  (win rate 0%)
+vs LightDefense          :   0W   0T   0L /   0 games  (win rate 0%)
+vs HeavyDefense          :   0W   0T   0L /   0 games  (win rate 0%)
+vs RangedDefense         :   0W   0T   0L /   0 games  (win rate 0%)
+vs WorkerDefense         :   0W   0T   0L /   0 games  (win rate 0%)
+vs RandomAI              :   0W   0T   0L /   0 games  (win rate 0%)
+vs RandomBiasedAI        :   0W   0T   0L /   0 games  (win rate 0%)
+vs RandomBiasedSingleUnitAI:   0W   0T   0L /   0 games  (win rate 0%)
+vs PassiveAI             :   0W   0T   0L /   0 games  (win rate 0%)   [TRAINING]
+
+NOTE: rows marked [TRAINING] are training performance, not a result.
