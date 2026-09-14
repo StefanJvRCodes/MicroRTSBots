@@ -31,7 +31,7 @@ public final class GPNodes {
     private static final double[] RESOURCES = {0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.75, 1.0};
     private static final double[] HP = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
     private static final double[] MILITARY = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0};
-    private static final double[] ENEMY_WORKERS = {1.0/12, 2.0/12, 3.0/12, 4.0/12, 5.0/12, 6.0/12, 8.0/12, 10.0/12, 1.0};
+    private static final double[] ENEMY_WORKERS = {0.08, 0.17, 0.25, 0.33, 0.42, 0.5, 0.67, 0.83, 1.0};
     private static final int[] OWN_WORKERS = {2, 3, 4, 5, 6, 8};
     private static final int[] GAME_CYCLES = {50, 100, 200, 400, 800, 1200, 2000};
     private static final int[] WORKER_RANKS = {1, 2, 3};

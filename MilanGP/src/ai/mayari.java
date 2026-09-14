@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Iterator;
 import java.util.List;
 import rts.GameState;
@@ -53,6 +54,7 @@ public class mayari extends AIWithComputationBudget {
     AStarPathFinding _astarPath;
     
     int NoDirection = 100; //this is a hack
+    Random _rnd;
     long _startCycleMilli;
     long _latestTsMilli;
     
@@ -187,7 +189,17 @@ public class mayari extends AIWithComputationBudget {
     }
 
     public mayari(UnitTypeTable utt) {
+        this(utt, new Random());
+    }
+
+    /** Seeded so that the same seed replays the same game against the same opponent. */
+    public mayari(UnitTypeTable utt, long seed) {
+        this(utt, new Random(seed));
+    }
+
+    private mayari(UnitTypeTable utt, Random rnd) {
         super(-1, -1);
+        _rnd = rnd;
         _utt = utt;
         restartPathFind(); //FloodFillPathFinding(); //AStarPathFinding();
         _memHarvesters = new ArrayList<>();
@@ -458,7 +470,7 @@ public class mayari extends AIWithComputationBudget {
     boolean tryMoveAway(Unit a, Unit b) {
         int startDist = distance(toPos(a), toPos(b));
         List<Integer> dirsRand = new ArrayList<>( _dirs ) ;
-        Collections.shuffle(dirsRand) ;
+        Collections.shuffle(dirsRand, _rnd);
 
         for (int dir : dirsRand) {
             Pos newPos = futurePos(a.getX(), a.getY(), dir);
@@ -478,7 +490,7 @@ public class mayari extends AIWithComputationBudget {
     boolean moveInDirection(Unit a, Unit b) {
         int startDist = distance(toPos(a), toPos(b));
         List<Integer> dirsRand = new ArrayList<>( _dirs );
-        Collections.shuffle(dirsRand);
+        Collections.shuffle(dirsRand, _rnd);
         for (int dir : dirsRand) {
             Pos newPos = futurePos(a.getX(), a.getY(), dir);
             if (distance(newPos, toPos(b)) >= startDist)

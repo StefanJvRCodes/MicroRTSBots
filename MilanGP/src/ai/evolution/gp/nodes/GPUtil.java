@@ -104,10 +104,15 @@ public final class GPUtil {
 
     // ---- constant perturbation (used by PerturbableTerminal implementations)
 
-    /** {@code value} nudged by up to {@code maxDelta} either way, clamped to {@code [min, max]}. */
+    /**
+     * {@code value} nudged by up to {@code maxDelta} either way, rounded to two decimals and clamped
+     * to {@code [min, max]}. Rounding keeps printed trees readable and lets the duplicate check in
+     * GPPopulation recognise trees that differ only in noise on a constant.
+     */
     public static double perturb(double value, double maxDelta, double min, double max, Random rnd) {
         double moved = value + (rnd.nextDouble() * 2 - 1) * maxDelta;
-        return Math.max(min, Math.min(max, moved));
+        double rounded = Math.round(moved * 100) / 100.0;
+        return Math.max(min, Math.min(max, rounded));
     }
 
     /** {@code value} moved one {@code step} up or down, clamped to {@code [min, max]}. */

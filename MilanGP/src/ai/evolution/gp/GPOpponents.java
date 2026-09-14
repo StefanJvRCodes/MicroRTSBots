@@ -23,7 +23,7 @@ import ai.core.AI;
 import mayariBot.mayari;
 import rts.units.UnitTypeTable;
 
-/** Opponent name (as used in GPConfig.opponents) to a fresh AI instance. Only EconomyMilitaryRush uses the seed. */
+/** Opponent name (as used in GPConfig.opponents) to a fresh AI instance. Only EconomyMilitaryRush and mayariBot take the seed. */
 public class GPOpponents {
     private GPOpponents() {}
 
@@ -47,7 +47,7 @@ public class GPOpponents {
             case "RandomBiasedAI": return new RandomBiasedAI(utt);
             case "RandomBiasedSingleUnitAI": return new RandomBiasedSingleUnitAI(utt);
             case "PassiveAI": return new PassiveAI(utt);
-            case "mayariBot": return new mayari(utt);
+            case "mayariBot": return new mayari(utt, seed);
             default: throw new IllegalArgumentException("Unknown GP opponent: " + name);
         }
     }
