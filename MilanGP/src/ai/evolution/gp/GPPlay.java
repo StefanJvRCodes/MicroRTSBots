@@ -4,8 +4,6 @@ import rts.PhysicalGameState;
 import rts.units.UnitTypeTable;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Entry point for {@code make play} and {@code make holdout}: benchmarks a saved bot file against a
@@ -17,10 +15,7 @@ public class GPPlay {
         GPConfig cfg = GPConfig.fromArgs(args);
         String[] mapPaths = cfg.playHoldout ? cfg.holdoutMaps : new String[]{cfg.playMap};
         String[] opponents = cfg.playHoldout ? cfg.holdoutOpponents : cfg.playOpponents;
-        if (cfg.playHoldout) {
-            assertDisjoint(cfg.maps, mapPaths, "map");
-            assertDisjoint(cfg.opponents, opponents, "opponent");
-        }
+        // GPConfig.validate() already guarantees the holdout sets are disjoint from the training ones.
 
         UnitTypeTable utt = new UnitTypeTable(cfg.unitTypeTableVersion, cfg.conflictPolicy);
         int totalWins = 0, totalTies = 0, totalLosses = 0;
@@ -35,7 +30,7 @@ public class GPPlay {
                 for (int i = 0; i < cfg.playIterations; i++) {
                     long seed = cfg.evaluationSeed + 2L * i;
                     for (int side = 0; side < 2; side++) {
-                        StructuredGPAI bot = new StructuredGPAI(utt, cfg.playBotFile);
+                        GPTreeAI bot = new GPTreeAI(utt, cfg.playBotFile);
                         GPMatch.GameResult r = side == 0
                                 ? GPMatch.playOneGame(bot, GPOpponents.build(opponent, utt, seed), map, utt, cfg, 0, cfg.playVisualize)
                                 : GPMatch.playOneGame(GPOpponents.build(opponent, utt, seed + 1), bot, map, utt, cfg, 1, cfg.playVisualize);
@@ -76,12 +71,4 @@ public class GPPlay {
         return new double[]{Math.max(0, centre - radius), Math.min(1, centre + radius)};
     }
 
-    private static void assertDisjoint(String[] training, String[] holdout, String label) {
-        Set<String> used = new HashSet<>(Arrays.asList(training));
-        for (String value : holdout) {
-            if (used.contains(value)) {
-                throw new IllegalArgumentException("Holdout " + label + " also appears in training: " + value);
-            }
-        }
-    }
 }

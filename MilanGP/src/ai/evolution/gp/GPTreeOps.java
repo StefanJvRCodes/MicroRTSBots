@@ -93,8 +93,19 @@ public final class GPTreeOps {
      * if none does, an unchanged copy of {@code a} is returned.
      */
     public static ActionNode crossover(ActionNode a, ActionNode b, Random rnd, int maxDepth) {
+        return crossover(a, b, rnd, maxDepth, 0, Integer.MAX_VALUE);
+    }
+
+    /**
+     * As above, but only nodes at levels {@code minLevel..maxLevel} may be replaced, which is how
+     * {@link GPStructure} keeps a global area intact or confines the search to it. A tree with no
+     * node in that band comes back unchanged.
+     */
+    public static ActionNode crossover(ActionNode a, ActionNode b, Random rnd, int maxDepth,
+                                       int minLevel, int maxLevel) {
         ActionNode child = a.copy();
-        List<NodeRef> targets = collect(child);
+        List<NodeRef> targets = inBand(collect(child), minLevel, maxLevel);
+        if (targets.isEmpty()) return child;
         Collections.shuffle(targets, rnd);
         List<NodeRef> donorNodes = collect(b);
 
@@ -123,8 +134,19 @@ public final class GPTreeOps {
      */
     public static ActionNode mutate(ActionNode root, Random rnd, int maxDepth,
                                     double terminalProbability, double ercPerturbRate) {
+        return mutate(root, rnd, maxDepth, terminalProbability, ercPerturbRate, 0, Integer.MAX_VALUE);
+    }
+
+    /**
+     * As above, but only a node at a level in {@code minLevel..maxLevel} is changed. A tree with no
+     * node in that band comes back unchanged.
+     */
+    public static ActionNode mutate(ActionNode root, Random rnd, int maxDepth,
+                                    double terminalProbability, double ercPerturbRate,
+                                    int minLevel, int maxLevel) {
         ActionNode copy = root.copy();
-        List<NodeRef> nodes = collect(copy);
+        List<NodeRef> nodes = inBand(collect(copy), minLevel, maxLevel);
+        if (nodes.isEmpty()) return copy;
         NodeRef pick = nodes.get(rnd.nextInt(nodes.size()));
         int remainingDepth = Math.max(0, maxDepth - pick.depth());
 
@@ -139,6 +161,16 @@ public final class GPTreeOps {
         if (pick.parent() == null) return (ActionNode) fresh;
         pick.parent().setChild(pick.index(), fresh);
         return copy;
+    }
+
+    /** The nodes whose depth falls in {@code minLevel..maxLevel}, in walk order. */
+    private static List<NodeRef> inBand(List<NodeRef> nodes, int minLevel, int maxLevel) {
+        if (minLevel <= 0 && maxLevel == Integer.MAX_VALUE) return nodes;
+        List<NodeRef> band = new ArrayList<>();
+        for (NodeRef ref : nodes) {
+            if (ref.depth() >= minLevel && ref.depth() <= maxLevel) band.add(ref);
+        }
+        return band;
     }
 
     // ------------------------------------------------------------------ simplification

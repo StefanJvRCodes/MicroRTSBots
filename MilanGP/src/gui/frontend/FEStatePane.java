@@ -103,7 +103,7 @@ import util.Pair;
 import util.XMLWriter;
 import ai.core.InterruptibleAI;
 import ai.evaluation.SimpleOptEvaluationFunction;
-import ai.evolution.gp.StructuredGPAIFromFile;
+import ai.evolution.gp.GPTreeAIFromFile;
 import ai.mcts.believestatemcts.BS3_NaiveMCTS;
 import ai.mcts.uct.DownsamplingUCT;
 import ai.scv.SCV;
@@ -163,7 +163,7 @@ public class FEStatePane extends JPanel {
                    InformedNaiveMCTS.class,
                    PuppetSearchMCTS.class,
                    SCV.class,
-                   StructuredGPAIFromFile.class
+                   GPTreeAIFromFile.class
                   };
 
     

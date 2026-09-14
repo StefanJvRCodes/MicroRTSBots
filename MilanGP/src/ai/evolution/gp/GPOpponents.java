@@ -19,7 +19,10 @@ import ai.abstraction.WorkerDefense;
 import ai.abstraction.WorkerRush;
 import ai.abstraction.WorkerRushPlusPlus;
 import ai.abstraction.pathfinding.AStarPathFinding;
+import ai.coac.CoacAI;
 import ai.core.AI;
+import ai.evaluation.SimpleSqrtEvaluationFunction3;
+import ai.mcts.naivemcts.NaiveMCTS;
 import mayariBot.mayari;
 import rts.units.UnitTypeTable;
 
@@ -47,7 +50,17 @@ public class GPOpponents {
             case "RandomBiasedAI": return new RandomBiasedAI(utt);
             case "RandomBiasedSingleUnitAI": return new RandomBiasedSingleUnitAI(utt);
             case "PassiveAI": return new PassiveAI(utt);
+            // The held-out evaluation panel.
             case "mayariBot": return new mayari(utt, seed);
+            case "Coacai": return new CoacAI(utt);
+            /*
+             * Budgeted by playouts rather than the 100 ms wall clock, so a training generation does
+             * not take hours. Its playout policy is an unseeded RandomBiasedAI, so it plays a
+             * different game every evaluation: keep it out of `opponents` unless you are willing to
+             * lose the repeatable fitness that elitism depends on.
+             */
+            case "NaiveMCTS": return new NaiveMCTS(-1, 200, 100, 10, 0.3f, 0.0f, 0.4f,
+                    new RandomBiasedAI(), new SimpleSqrtEvaluationFunction3(), true);
             default: throw new IllegalArgumentException("Unknown GP opponent: " + name);
         }
     }

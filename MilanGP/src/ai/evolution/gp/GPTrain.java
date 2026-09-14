@@ -43,7 +43,8 @@ public class GPTrain {
         Path metricsPath = runDir.resolve("metrics.jsonl");
         System.out.println("Training | " + cases.size() + " cases (" + cfg.maps.length + " maps x "
                 + cfg.opponents.length + " opponents) | population " + cfg.populationSize
-                + " | " + cfg.threads + " threads | " + runDir);
+                + " | " + cfg.threads + " threads | "
+                + (cfg.structureBased ? "structure-based GP" : "ordinary GP") + " | " + runDir);
 
         try (GPPopulation population = openPopulation(cfg, utt)) {
             double bestCombatSoFar = Double.NEGATIVE_INFINITY;
@@ -55,12 +56,15 @@ public class GPTrain {
                 population.evaluate(maps, cases);
                 GPIndividual best = population.getBest();
 
+                GPStructure structure = population.getStructureSearch();
                 System.out.printf("Generation %d | combat %.4f | win rate %.4f | worst case %.3f | size %d"
-                                + " | mean combat %.4f | %ds%n",
+                                + " | mean combat %.4f | %ds%s%n",
                         gen, best.combatScore, best.winRate, best.worstCase, best.size(),
-                        population.meanCombatScore(), (System.currentTimeMillis() - started) / 1000);
+                        population.meanCombatScore(), (System.currentTimeMillis() - started) / 1000,
+                        structure == null ? "" : " | " + structure.describe());
                 System.out.println("  weakest: " + weakestCases(best, cfg));
-                appendMetrics(metricsPath, gen, best, population.meanCombatScore());
+                appendMetrics(metricsPath, gen, best, population.meanCombatScore(), structure,
+                        System.currentTimeMillis() - started);
 
                 if (best.combatScore > bestCombatSoFar + cfg.stagnationImprovementThreshold) {
                     bestCombatSoFar = best.combatScore;
@@ -73,6 +77,7 @@ public class GPTrain {
                     break;
                 }
 
+                if (population.getStructureSearch() != null) population.getStructureSearch().afterGeneration(best);
                 population.nextGeneration();
                 if (cfg.checkpointInterval > 0 && population.getGeneration() % cfg.checkpointInterval == 0) {
                     GPCheckpoint.save(runDir.resolve("checkpoint-" + population.getGeneration() + ".properties"),
@@ -100,11 +105,14 @@ public class GPTrain {
     private static GPPopulation openPopulation(GPConfig cfg, UnitTypeTable utt) throws IOException {
         if (!cfg.resumeCheckpoint.isEmpty()) {
             GPPopulation population = GPCheckpoint.load(Paths.get(cfg.resumeCheckpoint), cfg, utt);
+            // The structure phase and its memory are not checkpointed, so a resumed run starts exploring again.
+            if (cfg.structureBased) population.useStructureSearch(new GPStructure(cfg));
             System.out.println("Resumed from " + cfg.resumeCheckpoint + " at generation " + population.getGeneration());
             return population;
         }
         GPPopulation population = new GPPopulation(cfg, utt, new Random(cfg.randomSeed));
         population.initialize();
+        if (cfg.structureBased) population.useStructureSearch(new GPStructure(cfg));
         return population;
     }
 
@@ -120,10 +128,15 @@ public class GPTrain {
         return String.join(", ", parts);
     }
 
-    private static void appendMetrics(Path path, int generation, GPIndividual best, double meanCombat) throws IOException {
+    private static void appendMetrics(Path path, int generation, GPIndividual best, double meanCombat,
+                                      GPStructure structure, long millis) throws IOException {
+        String phase = structure == null ? ""
+                : String.format(",\"phase\":\"%s\",\"areasExplored\":%d",
+                        structure.phase().name().toLowerCase(), structure.areasExplored());
         String json = String.format("{\"generation\":%d,\"bestCombat\":%.6f,\"winRate\":%.6f,\"worstCase\":%.4f,"
-                        + "\"bestSize\":%d,\"meanCombat\":%.6f}%n",
-                generation, best.combatScore, best.winRate, best.worstCase, best.size(), meanCombat);
+                        + "\"bestSize\":%d,\"meanCombat\":%.6f,\"seconds\":%.1f%s}%n",
+                generation, best.combatScore, best.winRate, best.worstCase, best.size(), meanCombat,
+                millis / 1000.0, phase);
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             writer.write(json);

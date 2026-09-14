@@ -12,12 +12,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
 
-/**
- * Every tunable value, as a plain public field. The field name is the setting name everywhere:
- * on the command line ({@code --populationSize=500} or {@code --population-size=500}), in a
- * properties file ({@code --config=my.properties}), in the run manifest and in checkpoints.
- * {@code --help} prints the current values in properties format.
- */
 public class GPConfig {
 
     // ---- evolution
@@ -25,75 +19,61 @@ public class GPConfig {
     public int generations = 200;
     public int tournamentSize = 3;
     public int eliteSize = 5;
-    /** Per offspring: crossover with this probability, else mutation with mutationRate, else a plain copy. */
     public double crossoverRate = 0.6;
     public double mutationRate = 0.3;
-    /** When mutation lands on a parameterised terminal, nudge its constant with this probability instead of replacing the node. */
     public double ercPerturbRate = 0.5;
-    /** How many times to redraw an offspring whose text already exists in the next generation. */
     public int maxDuplicateRetries = 5;
     public int minInitDepth = 2;
     public int maxInitDepth = 6;
-    /** Hard cap on tree depth after crossover and mutation. */
     public int maxDepth = 10;
-    /** Probability that a "grow" tree stops at a terminal before reaching its depth budget. */
     public double terminalProbability = 0.35;
-    /** Share of the initial population wrapped as (If (CanHarvest) (HarvestResources) random). */
     public double harvestSeedFraction = 0.5;
+
+    // ---- structure-based GP (Scheepers and Pillay, doi:10.1007/s10710-025-09528-3)
+    public boolean structureBased = true;
+    public int globalAreaDepth = 4;
+    public int globalAreaGenerations = 10;
+    public int globalAreaWindow = 10;
+    public int globalSimilarityThreshold = 6;
 
     // ---- what to play against
     public String[] maps = {
-            "maps/12x12/melee12x12Mixed12.xml",
-            "maps/8x8/melee8x8Mixed6.xml",
-//            "maps/16x16/basesWorkers16x16noResources.xml",
-//            "maps/8x8/basesWorkersBarracks8x8.xml",
-//            "maps/24x24/basesWorkers24x24.xml",
-//            "maps/16x16/basesWorkers16x16C.xml",
-//            "maps/BroodWar/(4)BloodBath.scmA.xml",
+            "maps/8x8/basesWorkers8x8A.xml",
+            "maps/12x12/basesWorkers12x12A.xml",
     };
     public String[] opponents = {
-//            "WorkerRush", "WorkerRushPlusPlus", "LightRush", "HeavyRush", "RangedRush",
-//            "SimpleEconomyRush", "EconomyRush", "EconomyRushBurster", "EconomyMilitaryRush", "EMRDeterministico",
-//            "WorkerDefense", "LightDefense", "HeavyDefense", "RangedDefense",
-            "mayariBot",
+            "WorkerRush", "LightRush", "HeavyRush", "RangedRush", "mayariBot", "EconomyRushBurster"
     };
 
     // ---- one game
     public int maxCycles = 10000;
-    /** A game also ends when neither side has issued an action for this many cycles. */
     public int maxInactiveCycles = 300;
     public int unitTypeTableVersion = 2;
     public int conflictPolicy = 1;
 
     // ---- scoring
-    /** A timed-out draw scores 0.5 + drawMarginWeight * materialMargin. */
     public double drawMarginWeight = 0.25;
-    /** A loss scores lossMarginWeight * (1 + materialMargin) / 2. Must stay <= 0.5 - drawMarginWeight so a loss never beats a draw. */
     public double lossMarginWeight = 0.2;
-    /** Added to every matchup score before the harmonic mean. Too small and one lost matchup swamps every other signal. */
     public double harmonicMeanEpsilon = 0.1;
 
     // ---- stopping
-    /** Stop when the best combat score has not improved by stagnationImprovementThreshold for this many generations. 0 disables. */
     public int stagnationPatience = 100;
     public double stagnationImprovementThreshold = 0.005;
 
     // ---- run bookkeeping
     public long randomSeed = 42;
-    /** Seeds the stochastic opponents. Fixed per matchup so evaluation is repeatable. */
     public long evaluationSeed = 4242;
     public int threads = Runtime.getRuntime().availableProcessors();
     public String runId = "gp-" + System.currentTimeMillis();
     public String outputDirectory = "runs";
-    /** If set, the final best.txt is also copied here. */
     public String publishBotFile = "";
     public int checkpointInterval = 10;
     public String resumeCheckpoint = "";
     public int weakestCasesToLog = 5;
 
     // ---- GPPlay (benchmarking a saved bot)
-    public String playBotFile = "./models/best_v2.txt";
-    public String playMap = "maps/8x8/basesWorkers8x8Obstacle.xml";
+    public String playBotFile = "./models/best_v3.txt";
+    public String playMap = "maps/12x12/basesWorkers12x12A.xml";
     public String[] playOpponents = {
             "WorkerRush", "LightRush", "HeavyRush", "RangedRush", "WorkerRushPlusPlus",
             "EconomyRush", "EconomyRushBurster", "EconomyMilitaryRush", "EMRDeterministico", "SimpleEconomyRush",
@@ -104,25 +84,17 @@ public class GPConfig {
     public int playIterations = 10;
     public boolean playVisualize = false;
     public int playVisualDelayMillis = 50;
-    /** Play on holdoutMaps against holdoutOpponents instead; both must be disjoint from the training sets. */
     public boolean playHoldout = false;
     public String[] holdoutMaps = {
-            "maps/12x12/melee12x12Mixed12.xml",
-            "maps/8x8/melee8x8Mixed6.xml",
-            "maps/16x16/basesWorkers16x16noResources.xml",
             "maps/8x8/basesWorkersBarracks8x8.xml",
-            "maps/24x24/basesWorkers24x24.xml",
+            "maps/10x10/basesWorkers10x10.xml",
             "maps/16x16/basesWorkers16x16C.xml",
-            "maps/BroodWar/(4)BloodBath.scmA.xml",
+            "maps/24x24/basesWorkers24x24.xml",
     };
-    public String[] holdoutOpponents = {"RandomAI", "RandomBiasedAI", "RandomBiasedSingleUnitAI"};
+    public String[] holdoutOpponents = {"Coacai"};
 
     // ------------------------------------------------------------------ loading
 
-    /**
-     * Applies {@code --config=file} arguments first (in order), then every {@code --name=value}
-     * override, then validates. {@code --help} prints the resulting values and exits.
-     */
     public static GPConfig fromArgs(String[] args) throws IOException {
         GPConfig cfg = new GPConfig();
         boolean help = false;
@@ -145,7 +117,6 @@ public class GPConfig {
         return cfg;
     }
 
-    /** Sets one field by name. Accepts camelCase or kebab-case; lists are comma-separated. */
     public void set(String name, String value) {
         Field field = findField(name);
         try {
@@ -168,7 +139,6 @@ public class GPConfig {
         for (String key : new TreeMap<>(p).keySet().toArray(new String[0])) set(key, p.getProperty(key));
     }
 
-    /** Every setting as name=value, lists comma-joined. Written to the run manifest and checkpoints. */
     public Properties toProperties() {
         Properties p = new Properties();
         try {
@@ -196,6 +166,31 @@ public class GPConfig {
             throw new IllegalArgumentException("need 1 <= minInitDepth <= maxInitDepth <= maxDepth");
         }
         if (eliteSize > populationSize) throw new IllegalArgumentException("eliteSize exceeds populationSize");
+        requireDisjoint(maps, holdoutMaps, "map");
+        requireDisjoint(opponents, holdoutOpponents, "opponent");
+        if (structureBased) {
+            if (globalAreaDepth < 1 || globalAreaDepth >= maxDepth) {
+                throw new IllegalArgumentException("need 1 <= globalAreaDepth < maxDepth, "
+                        + "otherwise the exploit phase has no level left to search");
+            }
+            if (globalAreaGenerations < 1 || globalAreaWindow < 1) {
+                throw new IllegalArgumentException("globalAreaGenerations and globalAreaWindow must be >= 1");
+            }
+            if (globalSimilarityThreshold < 1) {
+                throw new IllegalArgumentException("globalSimilarityThreshold must be >= 1");
+            }
+        }
+    }
+
+    private static void requireDisjoint(String[] training, String[] holdout, String label) {
+        for (String candidate : holdout) {
+            for (String used : training) {
+                if (used.equals(candidate)) {
+                    throw new IllegalArgumentException("Holdout " + label + " also appears in training: "
+                            + candidate + " (training and evaluation sets must be disjoint)");
+                }
+            }
+        }
     }
 
     // ------------------------------------------------------------------ helpers

@@ -26,6 +26,8 @@ public class GPPopulation implements AutoCloseable {
     private final ExecutorService pool;
     private List<GPIndividual> individuals = new ArrayList<>();
     private int generation = 0;
+    /** Null for ordinary GP; set to run the structure-based variant. */
+    private GPStructure structure;
 
     public GPPopulation(GPConfig cfg, UnitTypeTable utt, Random rnd) {
         this.cfg = cfg;
@@ -104,21 +106,30 @@ public class GPPopulation implements AutoCloseable {
         return individuals.stream().mapToDouble(i -> i.combatScore).average().orElse(0);
     }
 
-    /** Elites are copied through unchanged; every other slot is filled by one genetic operator. */
+    /**
+     * Elites are copied through unchanged; every other slot is filled by one genetic operator.
+     * Under structure-based GP the operators are confined to a band of tree levels and an offspring
+     * the phase rejects is redrawn, and the generation that seeds a new global area keeps only the
+     * best tree and breeds everything from it.
+     */
     public void nextGeneration() {
         List<GPIndividual> ranked = new ArrayList<>(individuals);
         ranked.sort(RANKING.reversed());
+        GPIndividual best = ranked.get(0);
+        boolean seeding = structure != null && structure.seeding();
 
         List<GPIndividual> next = new ArrayList<>(cfg.populationSize);
         Set<String> seen = new HashSet<>();
-        for (GPIndividual elite : ranked) {
-            if (next.size() >= cfg.eliteSize) break;
-            if (seen.add(elite.toSExpression())) next.add(elite.copy());
+        int eliteBudget = seeding ? 1 : cfg.eliteSize;
+        for (GPIndividual elite : seeding ? List.of(best) : ranked) {
+            if (next.size() >= eliteBudget) break;
+            if (accepted(elite) && seen.add(elite.toSExpression())) next.add(elite.copy());
         }
         while (next.size() < cfg.populationSize) {
-            GPIndividual offspring = produceOffspring();
-            for (int retry = 0; retry < cfg.maxDuplicateRetries && !seen.add(offspring.toSExpression()); retry++) {
-                offspring = produceOffspring();
+            GPIndividual offspring = produceOffspring(best);
+            for (int retry = 0; retry < cfg.maxDuplicateRetries
+                    && !(accepted(offspring) && seen.add(offspring.toSExpression())); retry++) {
+                offspring = produceOffspring(best);
             }
             next.add(offspring);
         }
@@ -126,15 +137,24 @@ public class GPPopulation implements AutoCloseable {
         generation++;
     }
 
-    private GPIndividual produceOffspring() {
+    /** Whether the structure phase, if any, allows this tree into the next generation. */
+    private boolean accepted(GPIndividual individual) {
+        return structure == null || structure.accepts(individual.root);
+    }
+
+    private GPIndividual produceOffspring(GPIndividual best) {
         double r = rnd.nextDouble();
-        GPIndividual parent = tournamentSelect();
+        boolean seeding = structure != null && structure.seeding();
+        GPIndividual parent = seeding ? best : tournamentSelect();
+        int minLevel = structure == null ? 0 : structure.minLevel();
+        int maxLevel = structure == null ? Integer.MAX_VALUE : structure.maxLevel();
         if (r < cfg.crossoverRate) {
-            return new GPIndividual(GPTreeOps.crossover(parent.root, tournamentSelect().root, rnd, cfg.maxDepth));
+            return new GPIndividual(GPTreeOps.crossover(parent.root, tournamentSelect().root, rnd,
+                    cfg.maxDepth, minLevel, maxLevel));
         }
         if (r < cfg.crossoverRate + cfg.mutationRate) {
             return new GPIndividual(GPTreeOps.mutate(parent.root, rnd, cfg.maxDepth,
-                    cfg.terminalProbability, cfg.ercPerturbRate));
+                    cfg.terminalProbability, cfg.ercPerturbRate, minLevel, maxLevel));
         }
         return parent.copy();
     }
@@ -151,6 +171,11 @@ public class GPPopulation implements AutoCloseable {
     // ---- state access for GPTrain and GPCheckpoint
 
     public List<GPIndividual> getIndividuals() { return individuals; }
+
+    /** Switches this population to structure-based GP. Null, the default, leaves it as ordinary GP. */
+    public void useStructureSearch(GPStructure search) { structure = search; }
+
+    public GPStructure getStructureSearch() { return structure; }
 
     public int getGeneration() { return generation; }
 

@@ -42,10 +42,10 @@ public final class GPMatch {
         for (EvaluationCase c : cases) {
             PhysicalGameState map = maps.get(c.mapIndex());
             long seed = mixSeed(cfg.evaluationSeed, c.opponentName(), c.mapIndex());
-            GameResult asP0 = playOneGame(new StructuredGPAI(utt, individual.root),
+            GameResult asP0 = playOneGame(new GPTreeAI(utt, individual.root),
                     GPOpponents.build(c.opponentName(), utt, seed), map, utt, cfg, 0, false);
             GameResult asP1 = playOneGame(GPOpponents.build(c.opponentName(), utt, seed ^ 0x9E3779B97F4A7C15L),
-                    new StructuredGPAI(utt, individual.root), map, utt, cfg, 1, false);
+                    new GPTreeAI(utt, individual.root), map, utt, cfg, 1, false);
             results.add(new MatchupResult(c,
                     (shapedScore(asP0, cfg) + shapedScore(asP1, cfg)) / 2,
                     (asP0.score() + asP1.score()) / 2,

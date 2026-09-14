@@ -41,6 +41,8 @@ public final class GPNodes {
             constant(CanHarvest.NAME, new CanHarvest()),
             constant(CanAttack.NAME, new CanAttack()),
             constant(IsMilitary.NAME, new IsMilitary()),
+            constant(StrongerThanNearestEnemy.NAME, new StrongerThanNearestEnemy()),
+            withString(IsUnitType.NAME, IsUnitType::new, IsUnitType.TYPES),
             constant(IsCarryingResources.NAME, new IsCarryingResources()),
             constant(OwnHasBarracks.NAME, new OwnHasBarracks()),
             constant(EnemyHasBarracks.NAME, new EnemyHasBarracks()),
@@ -76,8 +78,7 @@ public final class GPNodes {
             constant(MoveToOwnBase.NAME, new MoveToOwnBase()),
             constant(MoveToNearestEnemy.NAME, new MoveToNearestEnemy()),
             constant(MoveToNearestResource.NAME, new MoveToNearestResource()),
-            new Spec(TechAndTrain.NAME, p -> new TechAndTrain(p.get(0)),
-                    r -> new TechAndTrain(TechAndTrain.TYPES[r.nextInt(TechAndTrain.TYPES.length)])));
+            withString(TechAndTrain.NAME, TechAndTrain::new, TechAndTrain.TYPES));
 
     private static final Map<String, Spec> BY_NAME = new HashMap<>();
     static {
@@ -123,6 +124,11 @@ public final class GPNodes {
 
     private static Spec withInt(String name, Function<Integer, GPNode> make, int[] values) {
         return new Spec(name, p -> make.apply(Integer.parseInt(p.get(0))),
+                r -> make.apply(values[r.nextInt(values.length)]));
+    }
+
+    private static Spec withString(String name, Function<String, GPNode> make, String[] values) {
+        return new Spec(name, p -> make.apply(p.get(0)),
                 r -> make.apply(values[r.nextInt(values.length)]));
     }
 }

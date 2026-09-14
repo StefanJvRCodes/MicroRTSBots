@@ -449,7 +449,7 @@ public class GPTrainingTest {
         PhysicalGameState pgs = oneCellState(utt);
         Player player = pgs.getPlayer(0);
         Unit worker = pgs.getUnits().get(0);
-        StructuredGPAI ai = new StructuredGPAI(utt, new Idle());
+        GPTreeAI ai = new GPTreeAI(utt, new Idle());
         List<Integer> reserved = new ArrayList<>();
 
         assertFalse(ai.buildIfNotAlreadyBuilding(worker, utt.getUnitType("Base"),
@@ -463,7 +463,7 @@ public class GPTrainingTest {
         UnitTypeTable utt = new UnitTypeTable();
         PhysicalGameState pgs = adaptiveWorkerState(utt);
         GameState gs = new GameState(pgs, utt);
-        StructuredGPAI ai = new StructuredGPAI(utt, new Idle());
+        GPTreeAI ai = new GPTreeAI(utt, new Idle());
         GPTurnContext context = new GPTurnContext(ai, gs, 0, utt);
         Unit closestWorker = pgs.getUnitAt(2, 0);
         Unit fartherWorker = pgs.getUnitAt(0, 0);

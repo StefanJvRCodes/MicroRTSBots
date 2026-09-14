@@ -23,26 +23,30 @@ import java.util.List;
 /**
  * Adapts an evolved tree to the microRTS AI interface. Every idle unit the player owns is run
  * through the same tree; the tree tells units apart itself via conditions such as CanHarvest.
+ *
+ * <p>This is only the adapter, and it is the same for both variants. Whether the tree it carries was
+ * evolved by ordinary GP or by structure-based GP is a property of the run that produced it, recorded
+ * as {@code structureBased} in that run's manifest. See {@link GPStructure} for the variant itself.
  */
-public class StructuredGPAI extends AbstractionLayerAI {
+public class GPTreeAI extends AbstractionLayerAI {
     protected UnitTypeTable utt;
     protected ActionNode root;
 
-    public StructuredGPAI(UnitTypeTable utt, ActionNode root) {
+    public GPTreeAI(UnitTypeTable utt, ActionNode root) {
         this(utt, new AStarPathFinding(), root);
     }
 
-    public StructuredGPAI(UnitTypeTable utt, PathFinding pf, ActionNode root) {
+    public GPTreeAI(UnitTypeTable utt, PathFinding pf, ActionNode root) {
         super(pf);
         this.utt = utt;
         this.root = root;
     }
 
-    public StructuredGPAI(UnitTypeTable utt, String sExpressionFilePath) throws IOException {
+    public GPTreeAI(UnitTypeTable utt, String sExpressionFilePath) throws IOException {
         this(utt, new AStarPathFinding(), sExpressionFilePath);
     }
 
-    public StructuredGPAI(UnitTypeTable utt, PathFinding pf, String sExpressionFilePath) throws IOException {
+    public GPTreeAI(UnitTypeTable utt, PathFinding pf, String sExpressionFilePath) throws IOException {
         super(pf);
         this.utt = utt;
         String expression = new String(Files.readAllBytes(Paths.get(sExpressionFilePath)));
@@ -57,7 +61,7 @@ public class StructuredGPAI extends AbstractionLayerAI {
 
     @Override
     public AI clone() {
-        return new StructuredGPAI(utt, pf, root);
+        return new GPTreeAI(utt, pf, root);
     }
 
     @Override
