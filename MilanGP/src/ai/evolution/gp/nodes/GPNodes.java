@@ -61,23 +61,29 @@ public final class GPNodes {
             constant(AttackNearestEnemy.NAME, new AttackNearestEnemy()),
             constant(AttackWeakestEnemy.NAME, new AttackWeakestEnemy()),
             constant(AttackEnemyBase.NAME, new AttackEnemyBase()),
-            constant(TrainWorker.NAME, new TrainWorker()),
-            constant(TrainMilitary.NAME, new TrainMilitary()),
-            constant(TrainLight.NAME, new TrainLight()),
-            constant(TrainHeavy.NAME, new TrainHeavy()),
-            constant(TrainRanged.NAME, new TrainRanged()),
+            withString(Train.NAME, Train::new, Train.TYPES),
+            withString(TrainOrSave.NAME, TrainOrSave::new, TrainOrSave.TYPES),
             constant(BuildBase.NAME, new BuildBase()),
             constant(BuildBarracks.NAME, new BuildBarracks()),
             constant(MoveToEnemyBase.NAME, new MoveToEnemyBase()),
             constant(MoveToOwnBase.NAME, new MoveToOwnBase()),
             constant(MoveToNearestEnemy.NAME, new MoveToNearestEnemy()),
-            constant(MoveToNearestResource.NAME, new MoveToNearestResource()),
-            withString(TechAndTrain.NAME, TechAndTrain::new, TechAndTrain.TYPES));
+            constant(MoveToNearestResource.NAME, new MoveToNearestResource()));
 
     private static final Map<String, Spec> BY_NAME = new HashMap<>();
     static {
         for (Spec s : CONDITIONS) BY_NAME.put(s.name(), s);
         for (Spec s : ACTIONS) BY_NAME.put(s.name(), s);
+        legacyTrain("TrainWorker", "Worker");
+        legacyTrain("TrainLight", "Light");
+        legacyTrain("TrainHeavy", "Heavy");
+        legacyTrain("TrainRanged", "Ranged");
+        legacyTrain("TrainMilitary", "Cheapest");
+        BY_NAME.put("TechAndTrain", BY_NAME.get(TrainOrSave.NAME));
+    }
+
+    private static void legacyTrain(String legacyName, String type) {
+        BY_NAME.put(legacyName, new Spec(legacyName, p -> new Train(type), r -> new Train(type)));
     }
 
     public static GPNode build(String name, List<GPNode> children, List<String> params) {
@@ -107,17 +113,17 @@ public final class GPNodes {
     }
 
     private static Spec withDouble(String name, Function<Double, GPNode> make, double[] values) {
-        return new Spec(name, p -> make.apply(Double.parseDouble(p.get(0))),
+        return new Spec(name, p -> make.apply(Double.parseDouble(p.getFirst())),
                 r -> make.apply(values[r.nextInt(values.length)]));
     }
 
     private static Spec withInt(String name, Function<Integer, GPNode> make, int[] values) {
-        return new Spec(name, p -> make.apply(Integer.parseInt(p.get(0))),
+        return new Spec(name, p -> make.apply(Integer.parseInt(p.getFirst())),
                 r -> make.apply(values[r.nextInt(values.length)]));
     }
 
     private static Spec withString(String name, Function<String, GPNode> make, String[] values) {
-        return new Spec(name, p -> make.apply(p.get(0)),
+        return new Spec(name, p -> make.apply(p.getFirst()),
                 r -> make.apply(values[r.nextInt(values.length)]));
     }
 }

@@ -7,16 +7,6 @@ import rts.units.UnitType;
 final class Actions {
     private Actions() {}
 
-    static void train(GPTurnContext ctx, String typeName) {
-        Unit u = ctx.unit;
-        UnitType type = ctx.utt.getUnitType(typeName);
-        if (type != null && u.getType().produces.contains(type) && ctx.player.getResources() >= type.cost) {
-            ctx.ai.train(u, type);
-        } else {
-            ctx.ai.idle(u);
-        }
-    }
-
     static void build(GPTurnContext ctx, String typeName) {
         Unit u = ctx.unit;
         UnitType type = ctx.utt.getUnitType(typeName);

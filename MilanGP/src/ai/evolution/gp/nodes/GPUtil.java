@@ -91,11 +91,11 @@ public final class GPUtil {
     public static double perturb(double value, double maxDelta, double min, double max, Random rnd) {
         double moved = value + (rnd.nextDouble() * 2 - 1) * maxDelta;
         double rounded = Math.round(moved * 100) / 100.0;
-        return Math.max(min, Math.min(max, rounded));
+        return Math.clamp(rounded, min, max);
     }
 
     public static int perturb(int value, int step, int min, int max, Random rnd) {
         int moved = value + (rnd.nextBoolean() ? step : -step);
-        return Math.max(min, Math.min(max, moved));
+        return Math.clamp(moved, min, max);
     }
 }

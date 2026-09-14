@@ -41,7 +41,7 @@ public final class GPSExpression {
         StringBuilder current = new StringBuilder();
         for (char c : s.toCharArray()) {
             if (c == '(' || c == ')' || Character.isWhitespace(c)) {
-                if (current.length() > 0) {
+                if (!current.isEmpty()) {
                     tokens.add(current.toString());
                     current.setLength(0);
                 }
@@ -50,7 +50,7 @@ public final class GPSExpression {
                 current.append(c);
             }
         }
-        if (current.length() > 0) tokens.add(current.toString());
+        if (!current.isEmpty()) tokens.add(current.toString());
         return tokens;
     }
 
