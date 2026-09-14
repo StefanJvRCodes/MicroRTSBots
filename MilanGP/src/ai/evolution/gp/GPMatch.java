@@ -15,7 +15,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class GPMatch {
-    private GPMatch() {}
+    private GPMatch() {
+    }
 
     public record EvaluationCase(int mapIndex, String opponentName) {
         public String describe(String[] mapPaths) {
@@ -23,10 +24,12 @@ public final class GPMatch {
         }
     }
 
-    public record GameResult(double score, double margin, int cycles, boolean endedByLimit, boolean crashed) {}
+    public record GameResult(double score, double margin, int cycles, boolean endedByLimit, boolean crashed) {
+    }
 
     public record MatchupResult(EvaluationCase evaluationCase, double score, double rawScore, double margin,
-                                double asPlayer0, double asPlayer1, int limitedGames) {}
+                                double asPlayer0, double asPlayer1, int limitedGames) {
+    }
 
     public static List<MatchupResult> evaluate(GPIndividual individual, UnitTypeTable utt,
                                                List<PhysicalGameState> maps, List<EvaluationCase> cases,

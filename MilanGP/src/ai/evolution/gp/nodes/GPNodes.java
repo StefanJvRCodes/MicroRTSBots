@@ -14,9 +14,11 @@ import java.util.Random;
 import java.util.function.Function;
 
 public final class GPNodes {
-    private GPNodes() {}
+    private GPNodes() {
+    }
 
-    private record Spec(String name, Function<List<String>, GPNode> parse, Function<Random, GPNode> random) {}
+    private record Spec(String name, Function<List<String>, GPNode> parse, Function<Random, GPNode> random) {
+    }
 
     private static final double[] ENEMY_RANGE = {0.02, 0.04, 0.06, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5};
     private static final double[] ENEMY_BASE_RANGE = {0.05, 0.1, 0.15, 0.25, 0.35, 0.5, 0.65, 0.8, 1.0};
@@ -71,6 +73,7 @@ public final class GPNodes {
             constant(MoveToNearestResource.NAME, new MoveToNearestResource()));
 
     private static final Map<String, Spec> BY_NAME = new HashMap<>();
+
     static {
         for (Spec s : CONDITIONS) BY_NAME.put(s.name(), s);
         for (Spec s : ACTIONS) BY_NAME.put(s.name(), s);
@@ -90,9 +93,12 @@ public final class GPNodes {
         switch (name) {
             case IfThenElse.NAME:
                 return new IfThenElse((BoolNode) children.get(0), (ActionNode) children.get(1), (ActionNode) children.get(2));
-            case And.NAME: return new And((BoolNode) children.get(0), (BoolNode) children.get(1));
-            case Or.NAME: return new Or((BoolNode) children.get(0), (BoolNode) children.get(1));
-            case Not.NAME: return new Not((BoolNode) children.get(0));
+            case And.NAME:
+                return new And((BoolNode) children.get(0), (BoolNode) children.get(1));
+            case Or.NAME:
+                return new Or((BoolNode) children.get(0), (BoolNode) children.get(1));
+            case Not.NAME:
+                return new Not((BoolNode) children.get(0));
             default:
                 Spec spec = BY_NAME.get(name);
                 if (spec == null) throw new IllegalArgumentException("Unknown GP node name: " + name);

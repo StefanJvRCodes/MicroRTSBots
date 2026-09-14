@@ -22,7 +22,8 @@ import java.util.Properties;
 import java.util.Random;
 
 public final class GPCheckpoint {
-    private GPCheckpoint() {}
+    private GPCheckpoint() {
+    }
 
     public static void save(Path path, GPPopulation population, GPConfig cfg) throws IOException {
         Properties p = new Properties();

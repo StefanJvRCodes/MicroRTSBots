@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,6 +29,13 @@ public class GPPopulation implements AutoCloseable {
     private int generation = 0;
     private GPStructure structure;
 
+    /** Every genotype ever scored in this run, keyed by canonical form. Evaluation is deterministic, so a
+     *  revisited tree costs a lookup instead of a full round of games. */
+    private final Map<String, List<GPMatch.MatchupResult>> archive = new ConcurrentHashMap<>();
+    private int reusedEvaluations;
+    private GPIndividual bestEver;
+    private int bestEverGeneration;
+
     public GPPopulation(GPConfig cfg, UnitTypeTable utt, Random rnd) {
         this.cfg = cfg;
         this.utt = utt;
@@ -36,23 +45,41 @@ public class GPPopulation implements AutoCloseable {
 
     public void initialize() {
         individuals = new ArrayList<>();
-        for (int i = 0; i < cfg.populationSize; i++) {
-            boolean full = i % 2 == 0;
-            int depth = cfg.minInitDepth + rnd.nextInt(cfg.maxInitDepth - cfg.minInitDepth + 1);
-            ActionNode root = GPTreeOps.grow(depth, full, cfg.terminalProbability, rnd);
-            if (rnd.nextDouble() < cfg.harvestSeedFraction) {
-                root = new IfThenElse(new CanHarvest(), new HarvestResources(), root);
+        Set<String> seen = new HashSet<>();
+        while (individuals.size() < cfg.populationSize) {
+            GPIndividual candidate = null;
+            for (int attempt = 0; attempt < cfg.maxDuplicateRetries; attempt++) {
+                candidate = randomIndividual(individuals.size() % 2 == 0);
+                if (seen.add(candidate.canonical())) break;
             }
-            individuals.add(new GPIndividual(root));
+            individuals.add(candidate);
         }
     }
 
+    private GPIndividual randomIndividual(boolean full) {
+        int depth = cfg.minInitDepth + rnd.nextInt(cfg.maxInitDepth - cfg.minInitDepth + 1);
+        ActionNode root = GPTreeOps.grow(depth, full, cfg.terminalProbability, rnd);
+        if (rnd.nextDouble() < cfg.harvestSeedFraction) {
+            root = new IfThenElse(new CanHarvest(), new HarvestResources(), root);
+        }
+        return new GPIndividual(root);
+    }
+
     public void evaluate(List<PhysicalGameState> maps, List<GPMatch.EvaluationCase> cases) throws Exception {
+        reusedEvaluations = 0;
         List<Future<?>> futures = new ArrayList<>();
         for (GPIndividual ind : individuals) {
+            List<GPMatch.MatchupResult> known = archive.get(ind.canonical());
+            if (known != null) {
+                ind.matchups = known;
+                score(ind);
+                reusedEvaluations++;
+                continue;
+            }
             futures.add(pool.submit(() -> {
                 ind.matchups = GPMatch.evaluate(ind, utt, maps, cases, cfg);
                 score(ind);
+                archive.put(ind.canonical(), List.copyOf(ind.matchups));
                 return null;
             }));
         }
@@ -62,6 +89,11 @@ public class GPPopulation implements AutoCloseable {
             } catch (ExecutionException e) {
                 throw e.getCause() instanceof Exception cause ? cause : e;
             }
+        }
+        GPIndividual best = getBest();
+        if (bestEver == null || RANKING.compare(best, bestEver) > 0) {
+            bestEver = best;
+            bestEverGeneration = generation;
         }
     }
 
@@ -89,6 +121,24 @@ public class GPPopulation implements AutoCloseable {
         return individuals.stream().max(RANKING).orElseThrow();
     }
 
+    /** The best individual of any generation, which is not always in the current population: the structure
+     *  search retires whole areas, and an elite is dropped when a retired area no longer accepts it. */
+    public GPIndividual getBestEver() {
+        return bestEver == null ? getBest() : bestEver;
+    }
+
+    public int getBestEverGeneration() { return bestEverGeneration; }
+
+    public int reusedEvaluations() { return reusedEvaluations; }
+
+    public int archiveSize() { return archive.size(); }
+
+    public int distinctIndividuals() {
+        Set<String> distinct = new HashSet<>();
+        for (GPIndividual ind : individuals) distinct.add(ind.canonical());
+        return distinct.size();
+    }
+
     public double meanCombatScore() {
         return individuals.stream().mapToDouble(i -> i.combatScore).average().orElse(0);
     }
@@ -104,18 +154,30 @@ public class GPPopulation implements AutoCloseable {
         int eliteBudget = seeding ? 1 : cfg.eliteSize;
         for (GPIndividual elite : seeding ? List.of(best) : ranked) {
             if (next.size() >= eliteBudget) break;
-            if (accepted(elite) && seen.add(elite.toSExpression())) next.add(elite.copy());
+            if (accepted(elite) && seen.add(elite.canonical())) next.add(elite.copy());
         }
         while (next.size() < cfg.populationSize) {
-            GPIndividual offspring = produceOffspring(best);
-            for (int retry = 0; retry < cfg.maxDuplicateRetries
-                    && !(accepted(offspring) && seen.add(offspring.toSExpression())); retry++) {
-                offspring = produceOffspring(best);
-            }
-            next.add(offspring);
+            next.add(offspring(best, seen));
         }
         individuals = next;
         generation++;
+    }
+
+    /**
+     * A unique, structurally acceptable offspring, or the closest miss once retries run out. A duplicate that
+     * respects the structure constraint beats a novel tree that breaks it, and the miss is still registered so
+     * it cannot be handed out twice.
+     */
+    private GPIndividual offspring(GPIndividual best, Set<String> seen) {
+        GPIndividual fallback = null;
+        for (int attempt = 0; attempt < cfg.maxDuplicateRetries; attempt++) {
+            GPIndividual candidate = produceOffspring(best);
+            boolean valid = accepted(candidate);
+            if (valid && seen.add(candidate.canonical())) return candidate;
+            if (valid || fallback == null) fallback = candidate;
+        }
+        seen.add(fallback.canonical());
+        return fallback;
     }
 
     private boolean accepted(GPIndividual individual) {

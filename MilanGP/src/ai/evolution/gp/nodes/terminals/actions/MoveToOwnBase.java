@@ -9,12 +9,18 @@ public class MoveToOwnBase extends ActionTerminal {
     public static final String NAME = "MoveToOwnBase";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public void exec(GPTurnContext ctx) {
         Unit u = ctx.unit;
         Unit target = u.getType().canMove ? GPUtil.nearestOwnBase(ctx.pgs, u, ctx.playerID) : null;
-        if (target != null) ctx.ai.move(u, target.getX(), target.getY()); else ctx.ai.idle(u);
+        if (target != null) {
+            ctx.ai.move(u, target.getX(), target.getY());
+        } else {
+            ctx.ai.idle(u);
+        }
     }
 }

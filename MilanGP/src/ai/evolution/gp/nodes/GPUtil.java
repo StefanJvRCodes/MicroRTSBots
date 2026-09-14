@@ -7,7 +7,8 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 public final class GPUtil {
-    private GPUtil() {}
+    private GPUtil() {
+    }
 
     public static boolean isEnemyOf(Unit u, int player) {
         return u.getPlayer() >= 0 && u.getPlayer() != player;

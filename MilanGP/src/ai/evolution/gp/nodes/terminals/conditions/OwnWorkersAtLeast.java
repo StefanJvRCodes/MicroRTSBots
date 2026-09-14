@@ -21,10 +21,14 @@ public class OwnWorkersAtLeast extends BoolTerminal implements PerturbableTermin
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(String.valueOf(count)); }
+    public List<String> getParams() {
+        return Collections.singletonList(String.valueOf(count));
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

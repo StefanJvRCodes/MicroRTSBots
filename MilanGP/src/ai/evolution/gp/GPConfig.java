@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 public class GPConfig {
 
-    public int populationSize = 1000;
+    public int populationSize = 1500;
     public int generations = 200;
     public int tournamentSize = 3;
     public int eliteSize = 5;
@@ -42,7 +42,7 @@ public class GPConfig {
             "WorkerRush", "LightRush", "HeavyRush", "RangedRush", "mayariBot", "EconomyRushBurster"
     };
 
-    public int maxCycles = 10000;
+    public int maxCycles = 100000;
     public int maxInactiveCycles = 300;
     public int unitTypeTableVersion = 2;
     public int conflictPolicy = 1;
@@ -89,7 +89,10 @@ public class GPConfig {
         GPConfig cfg = new GPConfig();
         boolean help = false;
         for (String arg : args) {
-            if (arg.equals("--help") || arg.equals("-h")) { help = true; continue; }
+            if (arg.equals("--help") || arg.equals("-h")) {
+                help = true;
+                continue;
+            }
             String[] kv = splitArg(arg);
             if (kv[0].equals("config")) cfg.applyProperties(loadProperties(kv[1]));
         }
@@ -201,7 +204,10 @@ public class GPConfig {
         StringBuilder sb = new StringBuilder();
         boolean upper = false;
         for (char c : name.trim().toCharArray()) {
-            if (c == '-' || c == '_') { upper = true; continue; }
+            if (c == '-' || c == '_') {
+                upper = true;
+                continue;
+            }
             sb.append(upper ? Character.toUpperCase(c) : c);
             upper = false;
         }

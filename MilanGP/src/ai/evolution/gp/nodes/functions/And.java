@@ -26,10 +26,14 @@ public class And extends BoolNode {
     public String getName() { return NAME; }
 
     @Override
-    public List<String> getParams() { return Collections.emptyList(); }
+    public List<String> getParams() {
+        return Collections.emptyList();
+    }
 
     @Override
-    public List<GPNode> getChildren() { return Arrays.asList(left, right); }
+    public List<GPNode> getChildren() {
+        return Arrays.asList(left, right);
+    }
 
     @Override
     public void setChild(int index, GPNode child) {
@@ -37,5 +41,7 @@ public class And extends BoolNode {
     }
 
     @Override
-    public BoolNode copy() { return new And(left.copy(), right.copy()); }
+    public BoolNode copy() {
+        return new And(left.copy(), right.copy());
+    }
 }

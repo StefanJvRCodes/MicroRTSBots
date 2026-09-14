@@ -22,28 +22,48 @@ public class IfThenElse extends ActionNode {
 
     @Override
     public void exec(GPTurnContext ctx) {
-        if (condition.eval(ctx)) thenBranch.exec(ctx); else elseBranch.exec(ctx);
-    }
 
-    @Override
-    public String getName() { return NAME; }
-
-    @Override
-    public List<String> getParams() { return Collections.emptyList(); }
-
-    @Override
-    public List<GPNode> getChildren() { return Arrays.asList(condition, thenBranch, elseBranch); }
-
-    @Override
-    public void setChild(int index, GPNode child) {
-        switch (index) {
-            case 0: condition = (BoolNode) child; break;
-            case 1: thenBranch = (ActionNode) child; break;
-            case 2: elseBranch = (ActionNode) child; break;
-            default: throw new IndexOutOfBoundsException(String.valueOf(index));
+        if (condition.eval(ctx)) {
+            thenBranch.exec(ctx);
+        } else {
+            elseBranch.exec(ctx);
         }
     }
 
     @Override
-    public ActionNode copy() { return new IfThenElse(condition.copy(), thenBranch.copy(), elseBranch.copy()); }
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public List<String> getParams() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<GPNode> getChildren() {
+        return Arrays.asList(condition, thenBranch, elseBranch);
+    }
+
+    @Override
+    public void setChild(int index, GPNode child) {
+        switch (index) {
+            case 0:
+                condition = (BoolNode) child;
+                break;
+            case 1:
+                thenBranch = (ActionNode) child;
+                break;
+            case 2:
+                elseBranch = (ActionNode) child;
+                break;
+            default:
+                throw new IndexOutOfBoundsException(String.valueOf(index));
+        }
+    }
+
+    @Override
+    public ActionNode copy() {
+        return new IfThenElse(condition.copy(), thenBranch.copy(), elseBranch.copy());
+    }
 }

@@ -17,4 +17,21 @@ final class Actions {
             ctx.ai.idle(u);
         }
     }
+
+    static void attack(GPTurnContext ctx, Unit target) {
+        Unit u = ctx.unit;
+        if (diagonalStandoff(u, target)) {
+            ctx.ai.idle(u);
+        } else  {
+            ctx.ai.attack(u, target);
+        }
+    }
+
+    private static boolean diagonalStandoff(Unit u, Unit target) {
+        return u.getAttackRange() <= 1
+                && target.getType().canMove
+                && Math.abs(target.getX() - u.getX()) == 1
+                && Math.abs(target.getY() - u.getY()) == 1
+                && u.getID() > target.getID();
+    }
 }

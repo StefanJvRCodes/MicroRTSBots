@@ -21,10 +21,14 @@ public class WorkerAttackRankAtMost extends BoolTerminal implements PerturbableT
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(String.valueOf(maxRank)); }
+    public List<String> getParams() {
+        return Collections.singletonList(String.valueOf(maxRank));
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

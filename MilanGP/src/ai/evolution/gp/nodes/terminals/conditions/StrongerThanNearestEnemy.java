@@ -8,7 +8,9 @@ public class StrongerThanNearestEnemy extends BoolTerminal {
     public static final String NAME = "StrongerThanNearestEnemy";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

@@ -7,7 +7,9 @@ public class IsCarryingResources extends BoolTerminal {
     public static final String NAME = "IsCarryingResources";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

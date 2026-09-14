@@ -7,7 +7,9 @@ public class CanAttack extends BoolTerminal {
     public static final String NAME = "CanAttack";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

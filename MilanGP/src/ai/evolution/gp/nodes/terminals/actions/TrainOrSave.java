@@ -22,17 +22,24 @@ public class TrainOrSave extends ActionTerminal implements PerturbableTerminal {
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(militaryType); }
+    public List<String> getParams() {
+        return Collections.singletonList(militaryType);
+    }
 
     @Override
     public void exec(GPTurnContext ctx) {
         Unit u = ctx.unit;
         UnitType wanted = producibleMilitaryType(ctx, u);
-        if (wanted != null && ctx.player.getResources() >= wanted.cost) ctx.ai.train(u, wanted);
-        else ctx.ai.idle(u);
+        if (wanted != null && ctx.player.getResources() >= wanted.cost) {
+            ctx.ai.train(u, wanted);
+        } else {
+            ctx.ai.idle(u);
+        }
     }
 
     private UnitType producibleMilitaryType(GPTurnContext ctx, Unit u) {

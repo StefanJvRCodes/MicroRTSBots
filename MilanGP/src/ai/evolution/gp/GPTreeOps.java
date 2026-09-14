@@ -20,9 +20,11 @@ import java.util.Map;
 import java.util.Random;
 
 public final class GPTreeOps {
-    private GPTreeOps() {}
+    private GPTreeOps() {
+    }
 
-    public record NodeRef(GPNode parent, int index, GPNode node, int depth) {}
+    public record NodeRef(GPNode parent, int index, GPNode node, int depth) {
+    }
 
     public static List<NodeRef> collect(GPNode root) {
         List<NodeRef> out = new ArrayList<>();
@@ -140,7 +142,7 @@ public final class GPTreeOps {
         return (ActionNode) reduce(root.copy(), new HashMap<>());
     }
 
-    private enum Truth { TRUE, FALSE, UNKNOWN }
+    private enum Truth {TRUE, FALSE, UNKNOWN}
 
     private static GPNode reduce(GPNode node, Map<String, Boolean> known) {
         if (node instanceof IfThenElse) {
@@ -227,9 +229,15 @@ public final class GPTreeOps {
         return node;
     }
 
-    private static boolean isTrue(GPNode n) { return n instanceof True; }
+    private static boolean isTrue(GPNode n) {
+        return n instanceof True;
+    }
 
-    private static boolean isFalse(GPNode n) { return n instanceof Not && isTrue(n.getChildren().getFirst()); }
+    private static boolean isFalse(GPNode n) {
+        return n instanceof Not && isTrue(n.getChildren().getFirst());
+    }
 
-    private static boolean same(GPNode a, GPNode b) { return GPSExpression.write(a).equals(GPSExpression.write(b)); }
+    private static boolean same(GPNode a, GPNode b) {
+        return GPSExpression.write(a).equals(GPSExpression.write(b));
+    }
 }

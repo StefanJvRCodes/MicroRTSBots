@@ -20,10 +20,14 @@ public class IsUnitType extends BoolTerminal implements PerturbableTerminal {
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(unitType); }
+    public List<String> getParams() {
+        return Collections.singletonList(unitType);
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

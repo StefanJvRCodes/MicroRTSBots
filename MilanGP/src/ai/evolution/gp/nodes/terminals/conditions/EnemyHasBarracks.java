@@ -8,7 +8,9 @@ public class EnemyHasBarracks extends BoolTerminal {
     public static final String NAME = "EnemyHasBarracks";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

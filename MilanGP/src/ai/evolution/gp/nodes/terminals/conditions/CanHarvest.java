@@ -7,7 +7,9 @@ public class CanHarvest extends BoolTerminal {
     public static final String NAME = "CanHarvest";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

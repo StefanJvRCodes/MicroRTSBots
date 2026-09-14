@@ -22,10 +22,14 @@ public class EnemyBaseInRange extends BoolTerminal implements PerturbableTermina
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(String.valueOf(rangeFraction)); }
+    public List<String> getParams() {
+        return Collections.singletonList(String.valueOf(rangeFraction));
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

@@ -9,7 +9,9 @@ public class EnemyInSightRange extends BoolTerminal {
     public static final String NAME = "EnemyInSightRange";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

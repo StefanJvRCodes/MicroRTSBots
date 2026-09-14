@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class GPSExpression {
-    private GPSExpression() {}
+    private GPSExpression() {
+    }
 
     public static String write(GPNode node) {
         StringBuilder sb = new StringBuilder();

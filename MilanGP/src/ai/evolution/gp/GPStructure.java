@@ -8,7 +8,7 @@ import java.util.List;
 
 public class GPStructure {
 
-    public enum Phase { EXPLORE, EXPLOIT }
+    public enum Phase {EXPLORE, EXPLOIT}
 
     private static final double NO_CHANGE = 1e-9;
 

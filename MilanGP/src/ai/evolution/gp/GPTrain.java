@@ -52,14 +52,16 @@ public class GPTrain {
                 GPIndividual best = population.getBest();
 
                 GPStructure structure = population.getStructureSearch();
+                int distinct = population.distinctIndividuals();
                 System.out.printf("Generation %d | combat %.4f | win rate %.4f | worst case %.3f | size %d"
-                                + " | mean combat %.4f | %ds%s%n",
+                                + " | mean combat %.4f | distinct %d/%d | reused %d | %ds%s%n",
                         gen, best.combatScore, best.winRate, best.worstCase, best.size(),
-                        population.meanCombatScore(), (System.currentTimeMillis() - started) / 1000,
+                        population.meanCombatScore(), distinct, cfg.populationSize,
+                        population.reusedEvaluations(), (System.currentTimeMillis() - started) / 1000,
                         structure == null ? "" : " | " + structure.describe());
                 System.out.println("  weakest: " + weakestCases(best, cfg));
-                appendMetrics(metricsPath, gen, best, population.meanCombatScore(), structure,
-                        System.currentTimeMillis() - started);
+                appendMetrics(metricsPath, gen, best, population.meanCombatScore(), distinct, population,
+                        structure, System.currentTimeMillis() - started);
 
                 if (best.combatScore > bestCombatSoFar + cfg.stagnationImprovementThreshold) {
                     bestCombatSoFar = best.combatScore;
@@ -80,11 +82,13 @@ public class GPTrain {
                 }
             }
 
-            GPIndividual best = population.getBest();
+            GPIndividual best = population.getBestEver();
             ActionNode reduced = GPTreeOps.reduce(best.root);
             String expression = GPSExpression.write(reduced);
-            System.out.printf("Final | win rate %.4f | worst case %.3f | size %d -> %d after reduce()%n",
-                    best.winRate, best.worstCase, best.size(), GPTreeOps.size(reduced));
+            System.out.printf("Final | win rate %.4f | worst case %.3f | size %d -> %d after reduce()"
+                            + " | best of generation %d | %d genotypes evaluated%n",
+                    best.winRate, best.worstCase, best.size(), GPTreeOps.size(reduced),
+                    population.getBestEverGeneration(), population.archiveSize());
             System.out.println(expression);
 
             Path bestPath = runDir.resolve("best.txt");
@@ -123,14 +127,16 @@ public class GPTrain {
     }
 
     private static void appendMetrics(Path path, int generation, GPIndividual best, double meanCombat,
-                                      GPStructure structure, long millis) throws IOException {
+                                      int distinct, GPPopulation population, GPStructure structure,
+                                      long millis) throws IOException {
         String phase = structure == null ? ""
                 : String.format(",\"phase\":\"%s\",\"areasExplored\":%d",
-                        structure.phase().name().toLowerCase(), structure.areasExplored());
+                structure.phase().name().toLowerCase(), structure.areasExplored());
         String json = String.format("{\"generation\":%d,\"bestCombat\":%.6f,\"winRate\":%.6f,\"worstCase\":%.4f,"
-                        + "\"bestSize\":%d,\"meanCombat\":%.6f,\"seconds\":%.1f%s}%n",
+                        + "\"bestSize\":%d,\"meanCombat\":%.6f,\"distinct\":%d,\"reused\":%d,"
+                        + "\"archive\":%d,\"seconds\":%.1f%s}%n",
                 generation, best.combatScore, best.winRate, best.worstCase, best.size(), meanCombat,
-                millis / 1000.0, phase);
+                distinct, population.reusedEvaluations(), population.archiveSize(), millis / 1000.0, phase);
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             writer.write(json);

@@ -21,10 +21,14 @@ public class GameTimeAtLeast extends BoolTerminal implements PerturbableTerminal
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(String.valueOf(cycle)); }
+    public List<String> getParams() {
+        return Collections.singletonList(String.valueOf(cycle));
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

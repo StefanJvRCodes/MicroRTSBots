@@ -22,10 +22,14 @@ public class Train extends ActionTerminal implements PerturbableTerminal {
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(type); }
+    public List<String> getParams() {
+        return Collections.singletonList(type);
+    }
 
     @Override
     public void exec(GPTurnContext ctx) {

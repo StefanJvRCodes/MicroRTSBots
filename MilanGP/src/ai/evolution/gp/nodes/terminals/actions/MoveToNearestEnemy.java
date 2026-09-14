@@ -9,12 +9,18 @@ public class MoveToNearestEnemy extends ActionTerminal {
     public static final String NAME = "MoveToNearestEnemy";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public void exec(GPTurnContext ctx) {
         Unit u = ctx.unit;
         Unit target = u.getType().canMove ? ctx.nearestEnemy(u) : null;
-        if (target != null) ctx.ai.move(u, target.getX(), target.getY()); else ctx.ai.idle(u);
+        if (target != null) {
+            ctx.ai.move(u, target.getX(), target.getY());
+        } else {
+            ctx.ai.idle(u);
+        }
     }
 }

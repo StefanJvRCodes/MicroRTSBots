@@ -22,10 +22,14 @@ public class ResourcesAtLeast extends BoolTerminal implements PerturbableTermina
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.singletonList(String.valueOf(fraction)); }
+    public List<String> getParams() {
+        return Collections.singletonList(String.valueOf(fraction));
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

@@ -7,7 +7,9 @@ public class True extends BoolTerminal {
     public static final String NAME = "True";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public boolean eval(GPTurnContext ctx) {

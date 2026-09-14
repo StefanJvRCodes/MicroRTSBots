@@ -8,6 +8,7 @@ import java.util.List;
 public class GPIndividual {
     public final ActionNode root;
     private int size = -1;
+    private String canonical;
 
     public List<GPMatch.MatchupResult> matchups;
     public double combatScore;
@@ -30,5 +31,10 @@ public class GPIndividual {
 
     public String toSExpression() {
         return GPSExpression.write(root);
+    }
+
+    public String canonical() {
+        if (canonical == null) canonical = GPSExpression.write(GPTreeOps.reduce(root));
+        return canonical;
     }
 }

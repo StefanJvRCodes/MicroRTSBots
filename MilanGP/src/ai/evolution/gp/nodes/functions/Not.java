@@ -21,17 +21,27 @@ public class Not extends BoolNode {
     }
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
-    public List<String> getParams() { return Collections.emptyList(); }
+    public List<String> getParams() {
+        return Collections.emptyList();
+    }
 
     @Override
-    public List<GPNode> getChildren() { return Collections.singletonList(child); }
+    public List<GPNode> getChildren() {
+        return Collections.singletonList(child);
+    }
 
     @Override
-    public void setChild(int index, GPNode newChild) { this.child = (BoolNode) newChild; }
+    public void setChild(int index, GPNode newChild) {
+        this.child = (BoolNode) newChild;
+    }
 
     @Override
-    public BoolNode copy() { return new Not(child.copy()); }
+    public BoolNode copy() {
+        return new Not(child.copy());
+    }
 }

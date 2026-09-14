@@ -23,19 +23,31 @@ public class Or extends BoolNode {
     }
 
     @Override
-    public String getName() { return NAME; }
-
-    @Override
-    public List<String> getParams() { return Collections.emptyList(); }
-
-    @Override
-    public List<GPNode> getChildren() { return Arrays.asList(left, right); }
-
-    @Override
-    public void setChild(int index, GPNode child) {
-        if (index == 0) left = (BoolNode) child; else right = (BoolNode) child;
+    public String getName() {
+        return NAME;
     }
 
     @Override
-    public BoolNode copy() { return new Or(left.copy(), right.copy()); }
+    public List<String> getParams() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<GPNode> getChildren() {
+        return Arrays.asList(left, right);
+    }
+
+    @Override
+    public void setChild(int index, GPNode child) {
+        if (index == 0) {
+            left = (BoolNode) child;
+        } else {
+            right = (BoolNode) child;
+        }
+    }
+
+    @Override
+    public BoolNode copy() {
+        return new Or(left.copy(), right.copy());
+    }
 }

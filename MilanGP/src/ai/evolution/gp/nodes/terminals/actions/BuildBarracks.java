@@ -7,7 +7,9 @@ public class BuildBarracks extends ActionTerminal {
     public static final String NAME = "BuildBarracks";
 
     @Override
-    public String getName() { return NAME; }
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public void exec(GPTurnContext ctx) {

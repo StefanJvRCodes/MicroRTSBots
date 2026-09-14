@@ -27,7 +27,8 @@ import mayariBot.mayari;
 import rts.units.UnitTypeTable;
 
 public class GPOpponents {
-    private GPOpponents() {}
+    private GPOpponents() {
+    }
 
     public static AI build(String name, UnitTypeTable utt, long seed) {
         return switch (name) {
