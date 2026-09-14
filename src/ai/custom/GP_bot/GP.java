@@ -1,13 +1,16 @@
+package ai.custom.GP_bot;
+
 import ai.core.AI;
 import ai.core.AIWithComputationBudget;
 import ai.core.ParameterSpecification;
-import ai.custom.GPTournamentEvaluator;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 import rts.GameState;
 import rts.PlayerAction;
@@ -20,6 +23,16 @@ import rts.units.UnitTypeTable;
 
 
 public class GP {
+    /** Controls which matches contribute to fitness each generation. */
+    public enum TournamentMode {
+        /** Population plays only itself, round-robin (the original behavior). */
+        SELF,
+        /** Population plays only the fixed roster loaded from {@code opponentsFolder}. */
+        OPPONENTS,
+        /** Population plays both; scores are blended by {@code fixedOpponentWeight}. */
+        BOTH
+    }
+
     private static final List<String> DEFAULT_TOURNAMENT_MAPS = java.util.Arrays.asList(
         "maps/basesWorkers32x32A.xml",
         "maps/NoWhereToRun9x8.xml"
@@ -52,6 +65,22 @@ public class GP {
     public String[] terminals = new String[0];
     public int[] featureIndices = Node.DEFAULT_FEATURE_INDICES;
     public UnitTypeTable utt = new UnitTypeTable();
+
+    // Fixed opponents (e.g. past microRTS competition winners) loaded from
+    // JARs in this folder, in addition to self-play. Both optional: if the
+    // folder doesn't exist or has no usable bots in it, GP just falls back
+    // to self-play only - see GPOpponentLoader for how bots are discovered.
+    public String opponentsFolder = "opponents";
+    // How much weight fixed-opponent win rate gets versus self-play win
+    // rate when both are available: 0.0 = self-play only, 1.0 = fixed
+    // opponents only, 0.5 = equal blend. Only consulted when tournamentMode
+    // is BOTH.
+    public double fixedOpponentWeight = 0.5;
+    // Which matches count toward fitness. Defaults to BOTH, matching the
+    // original self-play-plus-opponents-if-present behavior.
+    public TournamentMode tournamentMode = TournamentMode.BOTH;
+    private List<AI> fixedOpponents;
+    private boolean fixedOpponentsLoaded = false;
 
 
     //outputs
@@ -133,6 +162,28 @@ public class GP {
                             break;
                         case "full probability":
                             fullProbability = Integer.parseInt(value);
+                            break;
+                        case "opponents folder":
+                            opponentsFolder = value;
+                            break;
+                        case "fixed opponent weight":
+                            fixedOpponentWeight = Double.parseDouble(value);
+                            break;
+                        case "tournament mode":
+                            switch (value.toLowerCase()) {
+                                case "self":
+                                    tournamentMode = TournamentMode.SELF;
+                                    break;
+                                case "opponents":
+                                    tournamentMode = TournamentMode.OPPONENTS;
+                                    break;
+                                case "both":
+                                    tournamentMode = TournamentMode.BOTH;
+                                    break;
+                                default:
+                                    throw new IllegalArgumentException(
+                                            "Unknown tournament mode \"" + value + "\" - expected self, opponents, or both.");
+                            }
                             break;
                         default:
                             System.out.println("Unknown parameter: " + parameter);
@@ -471,6 +522,107 @@ public class GP {
 
 
 
+    /**
+     * Loads the fixed-opponent roster from {@link #opponentsFolder} the
+     * first time it's needed and caches it for the rest of the run (the
+     * folder is scanned and every bot instantiated once, not every
+     * generation). Returns an empty list - never null - if the folder is
+     * missing or empty, so callers don't need a null check.
+     */
+    private List<AI> loadFixedOpponentsIfNeeded() {
+        if (!fixedOpponentsLoaded) {
+            fixedOpponents = GPOpponentLoader.loadOpponentsFromFolder(opponentsFolder, utt, DEFAULT_TOURNAMENT_MAPS);
+            fixedOpponentsLoaded = true;
+        }
+        return fixedOpponents;
+    }
+
+    /**
+     * Combines self-play and fixed-opponent win rates per individual. If
+     * either side is NaN for a given individual (no games of that kind were
+     * played), falls back entirely to the other side rather than producing
+     * a NaN that would make that individual look artificially bad in
+     * tournament selection.
+     */
+    private double[] blendWinRates(double[] selfPlay, double[] fixedOpponent, double weight) {
+        double[] blended = new double[selfPlay.length];
+        for (int i = 0; i < selfPlay.length; i++) {
+            boolean selfFinite = Double.isFinite(selfPlay[i]);
+            boolean fixedFinite = Double.isFinite(fixedOpponent[i]);
+            if (selfFinite && fixedFinite) {
+                blended[i] = weight * fixedOpponent[i] + (1.0 - weight) * selfPlay[i];
+            } else if (fixedFinite) {
+                blended[i] = fixedOpponent[i];
+            } else {
+                blended[i] = selfPlay[i];
+            }
+        }
+        return blended;
+    }
+
+    /**
+     * Plays the population against each currently-loaded fixed opponent one
+     * at a time - rather than one combined round robin - so a bot that
+     * passes {@link GPOpponentLoader}'s load-time smoke test but still
+     * crashes mid-game (e.g. only later in a real game than the smoke test
+     * reaches, or only on a specific map) can be isolated to exactly the
+     * opponent responsible instead of taking down the whole generation.
+     * That opponent is then permanently removed from {@link #fixedOpponents}
+     * - this generation and every one after it - rather than letting the
+     * crash propagate and kill the GP run. Win rates from opponents that did
+     * complete successfully are averaged together.
+     *
+     * <p>Returns an all-NaN array (same convention as
+     * {@link GPTournamentEvaluator#evaluateFixedOpponentsWinRates} with an
+     * empty opponents list) if every opponent crashed this generation, or
+     * none were loaded to begin with - callers already handle that the same
+     * way they'd handle "no opponents configured".
+     */
+    private double[] evaluateFixedOpponentsWithRecovery(List<AI> bots) {
+        List<AI> opponents = loadFixedOpponentsIfNeeded();
+
+        double[] sum = null;
+        int succeeded = 0;
+        List<AI> crashed = new ArrayList<>();
+
+        for (AI opponent : new ArrayList<>(opponents)) {
+            double[] result;
+            try {
+                result = GPTournamentEvaluator.evaluateFixedOpponentsWinRates(
+                        bots, java.util.Collections.singletonList(opponent),
+                        DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100);
+            } catch (Exception e) {
+                System.out.println("[GP] Fixed opponent \"" + opponent + "\" crashed mid-tournament - permanently "
+                        + "removing it from the opponent roster: " + e);
+                crashed.add(opponent);
+                continue;
+            }
+
+            if (sum == null) {
+                sum = result;
+            } else {
+                for (int i = 0; i < sum.length; i++) {
+                    sum[i] += result[i];
+                }
+            }
+            succeeded++;
+        }
+
+        opponents.removeAll(crashed);
+
+        if (succeeded == 0) {
+            double[] undefined = new double[bots.size()];
+            java.util.Arrays.fill(undefined, Double.NaN);
+            return undefined;
+        }
+
+        double[] averaged = new double[sum.length];
+        for (int i = 0; i < sum.length; i++) {
+            averaged[i] = sum[i] / succeeded;
+        }
+        return averaged;
+    }
+
     public double startTournament(Tree individual) {
         if (population == null || population.length == 0) {
             return Double.NaN;
@@ -482,14 +634,41 @@ public class GP {
                 bots.add(new TreeBotAI(tree, utt, numOutputCells));
             }
 
-            double[] evaluatedWinRates = GPTournamentEvaluator.evaluateRoundRobinWinRates(
-                    bots,
-                    DEFAULT_TOURNAMENT_MAPS,
-                    utt,
-                    1,
-                    2000,
-                    100,
-                    100);
+            double[] evaluatedWinRates;
+            switch (tournamentMode) {
+                case SELF: {
+                    evaluatedWinRates = GPTournamentEvaluator.evaluateRoundRobinWinRates(
+                            bots, DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100);
+                    break;
+                }
+                case OPPONENTS: {
+                    List<AI> opponents = loadFixedOpponentsIfNeeded();
+                    if (opponents.isEmpty()) {
+                        throw new IllegalStateException("tournamentMode is OPPONENTS but no opponents were loaded from \""
+                                + opponentsFolder + "\" - add bot JARs to that folder, or switch tournamentMode to SELF/BOTH.");
+                    }
+                    evaluatedWinRates = evaluateFixedOpponentsWithRecovery(bots);
+                    if (opponents.isEmpty()) {
+                        throw new IllegalStateException("tournamentMode is OPPONENTS but every fixed opponent has now "
+                                + "crashed and been removed - add different/working bot JARs to \"" + opponentsFolder
+                                + "\", or switch tournamentMode to SELF/BOTH.");
+                    }
+                    break;
+                }
+                case BOTH:
+                default: {
+                    double[] selfPlayWinRates = GPTournamentEvaluator.evaluateRoundRobinWinRates(
+                            bots, DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100);
+                    List<AI> opponents = loadFixedOpponentsIfNeeded();
+                    if (opponents.isEmpty()) {
+                        evaluatedWinRates = selfPlayWinRates;
+                    } else {
+                        double[] fixedOpponentWinRates = evaluateFixedOpponentsWithRecovery(bots);
+                        evaluatedWinRates = blendWinRates(selfPlayWinRates, fixedOpponentWinRates, fixedOpponentWeight);
+                    }
+                    break;
+                }
+            }
 
             winRates = evaluatedWinRates;
             for (int i = 0; i < population.length && i < evaluatedWinRates.length; i++) {
@@ -644,6 +823,13 @@ public class GP {
         @Override
         public PlayerAction getAction(int player, GameState gs) {
             PlayerAction pa = new PlayerAction();
+            int remainingResources = gs.getPlayer(player).getResources() - reservedForInProgressProduce(gs, player);
+            // Cells already claimed by ANY unit's (any player's) in-progress
+            // MOVE or PRODUCE action, plus cells claimed by actions we choose
+            // for our own units earlier in this same call. See
+            // collectReservedPositions() for why this can't just be read off
+            // gs.getUnitAt(...).
+            Set<Long> reservedPositions = collectReservedPositions(gs);
             for (Unit unit : gs.getUnits()) {
                 if (unit.getPlayer() != player) {
                     continue;
@@ -651,19 +837,74 @@ public class GP {
                 if (gs.getUnitAction(unit) != null) {
                     continue;
                 }
-                UnitAction chosen = chooseAction(unit, gs, player);
+                UnitAction chosen = chooseAction(unit, gs, player, remainingResources, reservedPositions);
                 if (chosen != null) {
                     pa.addUnitAction(unit, chosen);
+                    if (chosen.getType() == UnitAction.TYPE_PRODUCE && chosen.getUnitType() != null) {
+                        remainingResources -= Math.max(0, chosen.getUnitType().cost);
+                    }
+                    if (chosen.getType() == UnitAction.TYPE_MOVE || chosen.getType() == UnitAction.TYPE_PRODUCE) {
+                        reservedPositions.add(destinationKey(unit, chosen));
+                    }
                 }
             }
             pa.fillWithNones(gs, player, 10);
             return pa;
         }
 
-        private UnitAction chooseAction(Unit unit, GameState gs, int player) {
+        /**
+         * Resources already committed to this player's units that are mid-way
+         * through a PRODUCE action issued on a previous decision cycle. microRTS
+         * only deducts a produce action's cost (and spawns the unit) when the
+         * action completes, not when it's issued, so
+         * gs.getPlayer(player).getResources() still counts those resources as
+         * available while the build is in progress.
+         */
+        private int reservedForInProgressProduce(GameState gs, int player) {
+            int reserved = 0;
+            for (Unit u : gs.getUnits()) {
+                if (u.getPlayer() != player) {
+                    continue;
+                }
+                UnitAction inProgress = gs.getUnitAction(u);
+                if (inProgress != null && inProgress.getType() == UnitAction.TYPE_PRODUCE && inProgress.getUnitType() != null) {
+                    reserved += inProgress.getUnitType().cost;
+                }
+            }
+            return reserved;
+        }
+
+        /**
+         * Cells claimed by any unit's in-progress MOVE or PRODUCE action,
+         * across all players. A PRODUCE action's target cell isn't reflected
+         * in gs.getUnitAt(...) until the action completes and the new unit is
+         * actually placed there, so unit.getUnitActions(gs) alone doesn't
+         * reliably filter these out - a different unit can still be offered a
+         * MOVE (or another PRODUCE) into that same cell as a "legal" action.
+         * GameState.issueSafe enforces the collision globally when the action
+         * is actually issued, throwing "Inconsistent actions were executed!"
+         * if we don't avoid it ourselves first.
+         */
+        private Set<Long> collectReservedPositions(GameState gs) {
+            Set<Long> reserved = new HashSet<>();
+            for (Unit u : gs.getUnits()) {
+                UnitAction inProgress = gs.getUnitAction(u);
+                if (inProgress == null) {
+                    continue;
+                }
+                int type = inProgress.getType();
+                if (type == UnitAction.TYPE_MOVE || type == UnitAction.TYPE_PRODUCE) {
+                    reserved.add(destinationKey(u, inProgress));
+                }
+            }
+            return reserved;
+        }
+
+        private UnitAction chooseAction(Unit unit, GameState gs, int player, int remainingResources,
+                                        Set<Long> reservedPositions) {
             List<UnitAction> legalActions = unit.getUnitActions(gs);
             if (legalActions.isEmpty() || tree == null || tree.root == null) {
-                return legalActions.isEmpty() ? null : legalActions.get(0);
+                return chooseSafeFallbackAction(unit, legalActions, remainingResources, reservedPositions);
             }
 
             tree.evaluate(extractFeatures(unit, gs, player));
@@ -674,29 +915,59 @@ public class GP {
                 }
             }
 
-            UnitAction action = mapOutputToAction(bestIndex, unit, gs, legalActions);
-            return action != null ? action : legalActions.get(0);
+            UnitAction action = mapOutputToAction(bestIndex, unit, gs, legalActions, remainingResources, reservedPositions);
+            return action != null ? action : chooseSafeFallbackAction(unit, legalActions, remainingResources, reservedPositions);
         }
 
-        private UnitAction mapOutputToAction(int outputIndex, Unit unit, GameState gs, List<UnitAction> legalActions) {
+        private UnitAction mapOutputToAction(int outputIndex, Unit unit, GameState gs, List<UnitAction> legalActions,
+                                             int remainingResources, Set<Long> reservedPositions) {
             switch (outputIndex) {
                 case 0:
-                    return chooseMoveTowardTarget(unit, legalActions, findClosestEnemy(unit, gs));
+                    return chooseMoveTowardTarget(unit, legalActions, findClosestEnemy(unit, gs), reservedPositions);
                 case 1:
                     return chooseAttackAction(unit, legalActions, findClosestEnemy(unit, gs));
                 case 2:
-                    return chooseMoveTowardTarget(unit, legalActions, findClosestResource(unit, gs));
+                    return chooseMoveTowardTarget(unit, legalActions, findClosestResource(unit, gs), reservedPositions);
                 case 3:
                     return chooseByType(legalActions, UnitAction.TYPE_HARVEST);
                 case 4:
                     return chooseByType(legalActions, UnitAction.TYPE_RETURN);
                 case 5:
-                    return chooseProduceAction(unit, gs, legalActions, true);
+                    return chooseProduceAction(unit, gs, legalActions, true, remainingResources, reservedPositions);
                 case 6:
-                    return chooseProduceAction(unit, gs, legalActions, false);
+                    return chooseProduceAction(unit, gs, legalActions, false, remainingResources, reservedPositions);
                 default:
                     return null;
             }
+        }
+
+        private UnitAction chooseSafeFallbackAction(Unit unit, List<UnitAction> legalActions, int remainingResources,
+                                                    Set<Long> reservedPositions) {
+            for (UnitAction action : legalActions) {
+                if (action.getType() != UnitAction.TYPE_PRODUCE
+                        && (action.getType() != UnitAction.TYPE_MOVE
+                            || !reservedPositions.contains(destinationKey(unit, action)))) {
+                    return action;
+                }
+            }
+
+            for (UnitAction action : legalActions) {
+                if (action.getType() == UnitAction.TYPE_PRODUCE
+                        && action.getUnitType() != null
+                        && action.getUnitType().cost <= remainingResources
+                        && !reservedPositions.contains(destinationKey(unit, action))) {
+                    return action;
+                }
+            }
+
+            for (UnitAction action : legalActions) {
+                if (action.getType() == UnitAction.TYPE_MOVE
+                        && !reservedPositions.contains(destinationKey(unit, action))) {
+                    return action;
+                }
+            }
+
+            return null;
         }
 
         private UnitAction chooseByType(List<UnitAction> legalActions, int type) {
@@ -721,15 +992,19 @@ public class GP {
             return chooseByType(legalActions, UnitAction.TYPE_ATTACK_LOCATION);
         }
 
-        private UnitAction chooseMoveTowardTarget(Unit unit, List<UnitAction> legalActions, Unit target) {
+        private UnitAction chooseMoveTowardTarget(Unit unit, List<UnitAction> legalActions, Unit target,
+                                                  Set<Long> reservedPositions) {
             if (target == null) {
-                return chooseByType(legalActions, UnitAction.TYPE_MOVE);
+                return chooseByType(legalActions, UnitAction.TYPE_MOVE, unit, reservedPositions);
             }
 
             UnitAction bestMove = null;
             int bestDistance = Integer.MAX_VALUE;
             for (UnitAction action : legalActions) {
                 if (action.getType() != UnitAction.TYPE_MOVE) {
+                    continue;
+                }
+                if (reservedPositions.contains(destinationKey(unit, action))) {
                     continue;
                 }
                 int nextX = unit.getX() + UnitAction.DIRECTION_OFFSET_X[action.getDirection()];
@@ -743,7 +1018,22 @@ public class GP {
             return bestMove;
         }
 
-        private UnitAction chooseProduceAction(Unit unit, GameState gs, List<UnitAction> legalActions, boolean wantWorker) {
+        private UnitAction chooseByType(List<UnitAction> legalActions, int type, Unit unit,
+                                        Set<Long> reservedPositions) {
+            for (UnitAction action : legalActions) {
+                if (action.getType() != type) {
+                    continue;
+                }
+                if (type == UnitAction.TYPE_MOVE && reservedPositions.contains(destinationKey(unit, action))) {
+                    continue;
+                }
+                return action;
+            }
+            return null;
+        }
+
+        private UnitAction chooseProduceAction(Unit unit, GameState gs, List<UnitAction> legalActions,
+                                               boolean wantWorker, int remainingResources, Set<Long> reservedPositions) {
             Unit target = wantWorker ? findClosestResource(unit, gs) : findClosestEnemy(unit, gs);
             UnitAction bestAction = null;
             int bestDistance = Integer.MAX_VALUE;
@@ -754,6 +1044,12 @@ public class GP {
                 }
                 UnitType producedType = action.getUnitType();
                 if (!matchesProduceGoal(producedType, wantWorker)) {
+                    continue;
+                }
+                if (producedType.cost > remainingResources) {
+                    continue;
+                }
+                if (reservedPositions.contains(destinationKey(unit, action))) {
                     continue;
                 }
                 if (target == null) {
@@ -773,11 +1069,22 @@ public class GP {
             }
 
             for (UnitAction action : legalActions) {
-                if (action.getType() == UnitAction.TYPE_PRODUCE && matchesProduceGoal(action.getUnitType(), wantWorker)) {
+                if (action.getType() == UnitAction.TYPE_PRODUCE
+                        && action.getUnitType() != null
+                        && matchesProduceGoal(action.getUnitType(), wantWorker)
+                        && action.getUnitType().cost <= remainingResources
+                        && !reservedPositions.contains(destinationKey(unit, action))) {
                     return action;
                 }
             }
             return null;
+        }
+
+        /** Unique key for the cell a MOVE or PRODUCE action targets, relative to the acting unit. */
+        private long destinationKey(Unit unit, UnitAction action) {
+            int nextX = unit.getX() + UnitAction.DIRECTION_OFFSET_X[action.getDirection()];
+            int nextY = unit.getY() + UnitAction.DIRECTION_OFFSET_Y[action.getDirection()];
+            return (((long) nextX) << 32) ^ (nextY & 0xffffffffL);
         }
 
         private boolean matchesProduceGoal(UnitType producedType, boolean wantWorker) {

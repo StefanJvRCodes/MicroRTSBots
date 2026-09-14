@@ -1,50 +1,49 @@
-package ai.custom;
+package ai.custom.GP_bot;
 
 import ai.core.AI;
 import rts.units.UnitTypeTable;
+import tournaments.FixedOpponentsTournament;
 import tournaments.RoundRobinTournament;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Thin bridge between GP and the microRTS {@link RoundRobinTournament}
- * machinery: runs every bot in {@code bots} against every other bot
- * (self-matches excluded) and returns each bot's win rate, in the same
- * order the bots were supplied in.
+ * Thin bridge between GP and the microRTS tournament machinery.
  *
- * {@link RoundRobinTournament#runTournament} unconditionally writes to its
- * {@code out} argument, and unconditionally calls {@code progress.flush()}
- * at the very end regardless of whether progress logging was requested, so
- * both writers must be non-null. Since GP calls this once per individual
- * per generation, both are backed by a no-op {@link Writer} rather than a
- * file, to avoid flooding disk with tournament logs nobody reads.
+ * <p>{@link #evaluateRoundRobinWinRates} plays a population against itself
+ * (self-play). {@link #evaluateFixedOpponentsWinRates} plays a population
+ * against a fixed, external roster of bots — e.g. loaded from JARs via
+ * {@link GPOpponentLoader} — so evolution can be pushed against opponents
+ * it can't simply co-evolve around.
+ *
+ * <p>Both {@link RoundRobinTournament#runTournament} and
+ * {@link FixedOpponentsTournament#runTournament} unconditionally write to
+ * their {@code out} argument, and unconditionally call
+ * {@code progress.flush()} at the very end regardless of whether progress
+ * logging was requested, so both writers must be non-null. Since GP calls
+ * these once per generation, both are backed by a no-op {@link Writer}
+ * rather than a file, to avoid flooding disk with tournament logs nobody
+ * reads.
  */
 public class GPTournamentEvaluator {
 
     /**
-     * Directory under which each bot gets a scratch read/write folder.
-     * RoundRobinTournament creates these unconditionally (even when
-     * pre-analysis is disabled), so it must be a valid, writable path.
+     * Directories under which each bot gets a scratch read/write folder.
+     * The tournament classes create these unconditionally (even when
+     * pre-analysis is disabled), so they must be valid, writable paths.
      */
-    private static final String READ_WRITE_FOLDER = "gp_tournament_rw";
+    private static final String SELF_PLAY_READ_WRITE_FOLDER = "gp_tournament_rw/self_play";
+    private static final String FIXED_OPPONENTS_READ_WRITE_FOLDER = "gp_tournament_rw/fixed_opponents";
 
     /**
      * Runs a single round-robin tournament among {@code bots} and returns
      * each bot's average win rate (ties count as half a win), indexed the
      * same way as {@code bots}. A bot's win rate is {@code NaN} if it never
      * played a game (e.g. a population of size 1).
-     *
-     * @param bots             the individuals to evaluate; also serve as
-     *                         each other's opponents
-     * @param maps             maps to play the round robin on
-     * @param utt              unit type table for the game
-     * @param iterations       how many times to repeat the full round robin
-     *                         on each map
-     * @param maxGameLength    cycle cap before a game is declared a tie
-     * @param timeBudget       per-decision time budget in ms
-     * @param iterationsBudget per-decision search-iterations budget
      */
     public static double[] evaluateRoundRobinWinRates(List<AI> bots,
                                                         List<String> maps,
@@ -57,12 +56,9 @@ public class GPTournamentEvaluator {
             return new double[0];
         }
 
-        ensureReadWriteFolderExists();
+        ensureFolderExists(SELF_PLAY_READ_WRITE_FOLDER);
 
         RoundRobinTournament tournament = new RoundRobinTournament(bots);
-        Writer out = new NullWriter();
-        Writer progress = new NullWriter();
-
         tournament.runTournament(
                 -1,                 // playOnlyGamesInvolvingThisAI: -1 = play every match-up
                 maps,
@@ -79,15 +75,68 @@ public class GPTournamentEvaluator {
                 false,              // preAnalysis: GP trees don't do pre-game analysis
                 utt,
                 null,               // traceOutputfolder: don't write game traces
-                out,
-                progress,
-                READ_WRITE_FOLDER);
+                new NullWriter(),
+                new NullWriter(),
+                SELF_PLAY_READ_WRITE_FOLDER);
 
         return tournament.getAverageWinRates();
     }
 
-    private static void ensureReadWriteFolderExists() {
-        java.io.File folder = new java.io.File(READ_WRITE_FOLDER);
+    /**
+     * Plays every bot in {@code bots} against every bot in {@code opponents}
+     * (a fixed, external roster - e.g. loaded via
+     * {@link GPOpponentLoader#loadOpponentsFromFolder}) and returns each
+     * bot's average win rate against that roster, indexed the same way as
+     * {@code bots}.
+     *
+     * <p>If {@code opponents} is empty, every entry in the returned array is
+     * {@code NaN} (no games were played, so no rate is defined) rather than
+     * throwing, since "no fixed opponents configured" is an expected,
+     * ordinary state.
+     */
+    public static double[] evaluateFixedOpponentsWinRates(List<AI> bots,
+                                                            List<AI> opponents,
+                                                            List<String> maps,
+                                                            UnitTypeTable utt,
+                                                            int iterations,
+                                                            int maxGameLength,
+                                                            int timeBudget,
+                                                            int iterationsBudget) throws Exception {
+        if (bots == null || bots.isEmpty()) {
+            return new double[0];
+        }
+        if (opponents == null || opponents.isEmpty()) {
+            double[] undefined = new double[bots.size()];
+            Arrays.fill(undefined, Double.NaN);
+            return undefined;
+        }
+
+        ensureFolderExists(FIXED_OPPONENTS_READ_WRITE_FOLDER);
+
+        FixedOpponentsTournament tournament = new FixedOpponentsTournament(bots, opponents);
+        tournament.runTournament(
+                maps,
+                iterations,
+                maxGameLength,
+                timeBudget,
+                iterationsBudget,
+                0L,                 // preAnalysisBudgetFirstTimeInAMap
+                0L,                 // preAnalysisBudgetRestOfTimes
+                true,               // fullObservability
+                false,              // timeoutCheck
+                false,              // runGC
+                false,              // preAnalysis
+                utt,
+                null,               // traceOutputfolder
+                new NullWriter(),
+                new NullWriter(),
+                FIXED_OPPONENTS_READ_WRITE_FOLDER);
+
+        return tournament.getAverageWinRates();
+    }
+
+    private static void ensureFolderExists(String path) {
+        File folder = new File(path);
         if (!folder.exists()) {
             folder.mkdirs();
         }
