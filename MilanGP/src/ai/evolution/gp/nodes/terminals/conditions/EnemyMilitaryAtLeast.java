@@ -10,11 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/** True when the opponent has at least a map-relative number of military units. */
 public class EnemyMilitaryAtLeast extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "EnemyMilitaryAtLeast";
     private static final double MIN = 0.1, MAX = 1.0, STEP = 0.1;
-    /** Calibration: fraction 1.0 on the 16x16 reference map means 10 units. */
     private static final double AREA_PER_UNIT = 256.0 / 10;
 
     private final double fraction;

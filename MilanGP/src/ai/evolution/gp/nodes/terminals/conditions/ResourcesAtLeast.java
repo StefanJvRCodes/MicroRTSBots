@@ -10,11 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/** True when the player has banked at least a map-relative amount of resources. */
 public class ResourcesAtLeast extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "ResourcesAtLeast";
     private static final double MIN = 0.05, MAX = 1.0, STEP = 0.1;
-    /** Calibration: fraction 1.0 on the 16x16 reference map means 20 resources. */
     private static final double AREA_PER_UNIT = 256.0 / 20;
 
     private final double fraction;

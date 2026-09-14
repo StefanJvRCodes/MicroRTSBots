@@ -3,7 +3,6 @@ package ai.evolution.gp.nodes.terminals.actions;
 import ai.evolution.gp.nodes.ActionTerminal;
 import ai.evolution.gp.nodes.GPTurnContext;
 
-/** A worker builds a Barracks next to itself if the player can afford one. */
 public class BuildBarracks extends ActionTerminal {
     public static final String NAME = "BuildBarracks";
 

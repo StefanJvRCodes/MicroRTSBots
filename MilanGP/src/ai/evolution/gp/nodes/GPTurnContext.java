@@ -13,10 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Everything a node may look at while deciding one unit's action. One instance is created per turn
- * and shared by every unit decided in that turn, so per-turn lookups can be cached here.
- */
 public class GPTurnContext {
     public final AbstractionLayerAI ai;
     public final GameState gs;
@@ -24,9 +20,7 @@ public class GPTurnContext {
     public final Player player;
     public final int playerID;
     public final UnitTypeTable utt;
-    /** Tiles already claimed by a build order this turn, so two workers do not pick the same one. */
     public final List<Integer> reservedBuildPositions = new ArrayList<>();
-    /** The unit currently being decided. */
     public Unit unit;
 
     private final Map<Long, Unit> nearestEnemyByUnit = new HashMap<>();
@@ -41,7 +35,6 @@ public class GPTurnContext {
         this.utt = utt;
     }
 
-    /** Nearest enemy unit to {@code u}, cached for the rest of the turn. Null when no enemy exists. */
     public Unit nearestEnemy(Unit u) {
         if (!nearestEnemyByUnit.containsKey(u.getID())) {
             nearestEnemyByUnit.put(u.getID(), GPUtil.nearestEnemy(pgs, u, playerID));
@@ -49,11 +42,6 @@ public class GPTurnContext {
         return nearestEnemyByUnit.get(u.getID());
     }
 
-    /**
-     * 1 for the friendly worker closest to an enemy, 2 for the next closest, and so on. Ties break on
-     * unit ID so the ranking is deterministic. {@code Integer.MAX_VALUE} for non-workers and when
-     * there is no enemy on the map.
-     */
     public int workerAttackRank(Unit u) {
         if (workerAttackRanks == null) workerAttackRanks = computeWorkerAttackRanks();
         return workerAttackRanks.getOrDefault(u.getID(), Integer.MAX_VALUE);

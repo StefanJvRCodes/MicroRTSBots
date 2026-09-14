@@ -5,7 +5,6 @@ import ai.evolution.gp.nodes.GPTurnContext;
 import rts.units.Unit;
 import rts.units.UnitType;
 
-/** Trains the cheapest affordable combat unit this unit can produce. */
 public class TrainMilitary extends ActionTerminal {
     public static final String NAME = "TrainMilitary";
 

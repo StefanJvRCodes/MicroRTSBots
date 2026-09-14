@@ -21,10 +21,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
-/**
- * A resumable snapshot: generation, RNG state, every individual, and the config it ran under.
- * Resuming with different maps or opponents is refused because the scores would not be comparable.
- */
 public final class GPCheckpoint {
     private GPCheckpoint() {}
 

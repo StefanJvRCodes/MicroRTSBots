@@ -5,7 +5,6 @@ import ai.evolution.gp.nodes.GPTurnContext;
 import ai.evolution.gp.nodes.GPUtil;
 import rts.units.Unit;
 
-/** Attacks the enemy unit with the fewest hit points anywhere on the map. */
 public class AttackWeakestEnemy extends ActionTerminal {
     public static final String NAME = "AttackWeakestEnemy";
 

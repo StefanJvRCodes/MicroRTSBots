@@ -4,7 +4,6 @@ import ai.evolution.gp.nodes.GPTurnContext;
 import rts.units.Unit;
 import rts.units.UnitType;
 
-/** Shared bodies for the train/build terminals. Every helper idles the unit when the order is impossible. */
 final class Actions {
     private Actions() {}
 

@@ -18,11 +18,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Entry point for {@code make train}. Each generation: evaluate every individual on every
- * (map, opponent) case, log, stop if stagnant, breed. Writes to runs/<runId>/:
- * manifest.properties, metrics.jsonl, checkpoint-N.properties and best.txt.
- */
 public class GPTrain {
 
     public static void main(String[] args) throws Exception {
@@ -105,7 +100,6 @@ public class GPTrain {
     private static GPPopulation openPopulation(GPConfig cfg, UnitTypeTable utt) throws IOException {
         if (!cfg.resumeCheckpoint.isEmpty()) {
             GPPopulation population = GPCheckpoint.load(Paths.get(cfg.resumeCheckpoint), cfg, utt);
-            // The structure phase and its memory are not checkpointed, so a resumed run starts exploring again.
             if (cfg.structureBased) population.useStructureSearch(new GPStructure(cfg));
             System.out.println("Resumed from " + cfg.resumeCheckpoint + " at generation " + population.getGeneration());
             return population;

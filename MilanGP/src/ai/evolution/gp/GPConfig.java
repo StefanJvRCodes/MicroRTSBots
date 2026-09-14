@@ -14,7 +14,6 @@ import java.util.TreeMap;
 
 public class GPConfig {
 
-    // ---- evolution
     public int populationSize = 1000;
     public int generations = 200;
     public int tournamentSize = 3;
@@ -29,14 +28,12 @@ public class GPConfig {
     public double terminalProbability = 0.35;
     public double harvestSeedFraction = 0.5;
 
-    // ---- structure-based GP (Scheepers and Pillay, doi:10.1007/s10710-025-09528-3)
     public boolean structureBased = true;
     public int globalAreaDepth = 4;
     public int globalAreaGenerations = 10;
     public int globalAreaWindow = 10;
     public int globalSimilarityThreshold = 6;
 
-    // ---- what to play against
     public String[] maps = {
             "maps/8x8/basesWorkers8x8A.xml",
             "maps/12x12/basesWorkers12x12A.xml",
@@ -45,22 +42,18 @@ public class GPConfig {
             "WorkerRush", "LightRush", "HeavyRush", "RangedRush", "mayariBot", "EconomyRushBurster"
     };
 
-    // ---- one game
     public int maxCycles = 10000;
     public int maxInactiveCycles = 300;
     public int unitTypeTableVersion = 2;
     public int conflictPolicy = 1;
 
-    // ---- scoring
     public double drawMarginWeight = 0.25;
     public double lossMarginWeight = 0.2;
     public double harmonicMeanEpsilon = 0.1;
 
-    // ---- stopping
     public int stagnationPatience = 100;
     public double stagnationImprovementThreshold = 0.005;
 
-    // ---- run bookkeeping
     public long randomSeed = 42;
     public long evaluationSeed = 4242;
     public int threads = Runtime.getRuntime().availableProcessors();
@@ -71,7 +64,6 @@ public class GPConfig {
     public String resumeCheckpoint = "";
     public int weakestCasesToLog = 5;
 
-    // ---- GPPlay (benchmarking a saved bot)
     public String playBotFile = "./models/best_v3.txt";
     public String playMap = "maps/12x12/basesWorkers12x12A.xml";
     public String[] playOpponents = {
@@ -92,8 +84,6 @@ public class GPConfig {
             "maps/24x24/basesWorkers24x24.xml",
     };
     public String[] holdoutOpponents = {"Coacai"};
-
-    // ------------------------------------------------------------------ loading
 
     public static GPConfig fromArgs(String[] args) throws IOException {
         GPConfig cfg = new GPConfig();
@@ -192,8 +182,6 @@ public class GPConfig {
             }
         }
     }
-
-    // ------------------------------------------------------------------ helpers
 
     private static List<Field> settingFields() {
         List<Field> fields = new ArrayList<>();

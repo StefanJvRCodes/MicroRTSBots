@@ -5,17 +5,12 @@ import rts.units.UnitTypeTable;
 
 import java.util.Arrays;
 
-/**
- * Entry point for {@code make play} and {@code make holdout}: benchmarks a saved bot file against a
- * list of opponents, both sides, with win/tie/loss counts and a 95% Wilson interval on the win rate.
- */
 public class GPPlay {
 
     public static void main(String[] args) throws Exception {
         GPConfig cfg = GPConfig.fromArgs(args);
         String[] mapPaths = cfg.playHoldout ? cfg.holdoutMaps : new String[]{cfg.playMap};
         String[] opponents = cfg.playHoldout ? cfg.holdoutOpponents : cfg.playOpponents;
-        // GPConfig.validate() already guarantees the holdout sets are disjoint from the training ones.
 
         UnitTypeTable utt = new UnitTypeTable(cfg.unitTypeTableVersion, cfg.conflictPolicy);
         int totalWins = 0, totalTies = 0, totalLosses = 0;

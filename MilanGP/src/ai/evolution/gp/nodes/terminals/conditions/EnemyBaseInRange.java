@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/** True when the nearest enemy base is within a map-relative Manhattan distance. */
 public class EnemyBaseInRange extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "EnemyBaseInRange";
     private static final double MIN = 0.05, MAX = 1.0, STEP = 0.08;

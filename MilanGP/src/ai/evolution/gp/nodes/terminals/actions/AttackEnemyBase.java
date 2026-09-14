@@ -5,7 +5,6 @@ import ai.evolution.gp.nodes.GPTurnContext;
 import ai.evolution.gp.nodes.GPUtil;
 import rts.units.Unit;
 
-/** Attacks the nearest enemy base. */
 public class AttackEnemyBase extends ActionTerminal {
     public static final String NAME = "AttackEnemyBase";
 

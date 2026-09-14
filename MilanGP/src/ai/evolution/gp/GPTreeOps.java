@@ -19,17 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Generic tree operations: walking, random growth, crossover, mutation and simplification.
- * The one structural rule is that a subtree is only ever replaced by one of the same type
- * (Bool for Bool, Action for Action), which keeps every tree valid.
- */
 public final class GPTreeOps {
     private GPTreeOps() {}
 
-    // ------------------------------------------------------------------ walking
-
-    /** A node plus where it sits: its parent (null for the root), its index in the parent, and its depth. */
     public record NodeRef(GPNode parent, int index, GPNode node, int depth) {}
 
     public static List<NodeRef> collect(GPNode root) {
@@ -54,13 +46,6 @@ public final class GPTreeOps {
         return max;
     }
 
-    // ------------------------------------------------------------------ random growth
-
-    /**
-     * Grows a random action tree. {@code full} trees always use their whole depth budget; "grow"
-     * trees may stop early at a terminal with {@code terminalProbability}. Conditions inside an
-     * If are kept shallow (depth 2) so the budget is spent on action structure.
-     */
     public static ActionNode grow(int maxDepth, boolean full, double terminalProbability, Random rnd) {
         if (maxDepth <= 0 || (!full && rnd.nextDouble() < terminalProbability)) {
             return GPNodes.randomAction(rnd);
@@ -85,22 +70,10 @@ public final class GPTreeOps {
         };
     }
 
-    // ------------------------------------------------------------------ genetic operators
-
-    /**
-     * Copies {@code a}, then replaces one of its subtrees with a same-typed subtree copied from
-     * {@code b}. Splice points are tried in random order until one respects {@code maxDepth};
-     * if none does, an unchanged copy of {@code a} is returned.
-     */
     public static ActionNode crossover(ActionNode a, ActionNode b, Random rnd, int maxDepth) {
         return crossover(a, b, rnd, maxDepth, 0, Integer.MAX_VALUE);
     }
 
-    /**
-     * As above, but only nodes at levels {@code minLevel..maxLevel} may be replaced, which is how
-     * {@link GPStructure} keeps a global area intact or confines the search to it. A tree with no
-     * node in that band comes back unchanged.
-     */
     public static ActionNode crossover(ActionNode a, ActionNode b, Random rnd, int maxDepth,
                                        int minLevel, int maxLevel) {
         ActionNode child = a.copy();
@@ -127,20 +100,11 @@ public final class GPTreeOps {
         return child;
     }
 
-    /**
-     * Copies {@code root} and changes one uniformly chosen node: a parameterised terminal has its
-     * constant nudged with {@code ercPerturbRate}, otherwise the node is replaced by a fresh random
-     * subtree of the same type that fits in the remaining depth budget.
-     */
     public static ActionNode mutate(ActionNode root, Random rnd, int maxDepth,
                                     double terminalProbability, double ercPerturbRate) {
         return mutate(root, rnd, maxDepth, terminalProbability, ercPerturbRate, 0, Integer.MAX_VALUE);
     }
 
-    /**
-     * As above, but only a node at a level in {@code minLevel..maxLevel} is changed. A tree with no
-     * node in that band comes back unchanged.
-     */
     public static ActionNode mutate(ActionNode root, Random rnd, int maxDepth,
                                     double terminalProbability, double ercPerturbRate,
                                     int minLevel, int maxLevel) {
@@ -163,7 +127,6 @@ public final class GPTreeOps {
         return copy;
     }
 
-    /** The nodes whose depth falls in {@code minLevel..maxLevel}, in walk order. */
     private static List<NodeRef> inBand(List<NodeRef> nodes, int minLevel, int maxLevel) {
         if (minLevel <= 0 && maxLevel == Integer.MAX_VALUE) return nodes;
         List<NodeRef> band = new ArrayList<>();
@@ -173,14 +136,6 @@ public final class GPTreeOps {
         return band;
     }
 
-    // ------------------------------------------------------------------ simplification
-
-    /**
-     * Returns a semantically identical tree with dead branches and constant boolean structure
-     * removed. A branch is dead when the conditions on the path above it already force the other
-     * branch. Atomic conditions are matched by their exact printed form; there is deliberately no
-     * reasoning about thresholds, so a live branch is never removed.
-     */
     public static ActionNode reduce(ActionNode root) {
         return (ActionNode) reduce(root.copy(), new HashMap<>());
     }
@@ -204,7 +159,6 @@ public final class GPTreeOps {
         return rewrite(node);
     }
 
-    /** What {@code known} becomes inside the branch taken when {@code condition} is {@code value}. */
     private static Map<String, Boolean> assuming(GPNode condition, boolean value, Map<String, Boolean> known) {
         Map<String, Boolean> extended = new HashMap<>(known);
         assume(condition, value, extended);
@@ -214,7 +168,7 @@ public final class GPTreeOps {
     private static Truth resolve(GPNode condition, Map<String, Boolean> known) {
         if (condition instanceof True) return Truth.TRUE;
         if (condition instanceof Not) {
-            return switch (resolve(condition.getChildren().get(0), known)) {
+            return switch (resolve(condition.getChildren().getFirst(), known)) {
                 case TRUE -> Truth.FALSE;
                 case FALSE -> Truth.TRUE;
                 case UNKNOWN -> Truth.UNKNOWN;
@@ -233,11 +187,10 @@ public final class GPTreeOps {
         return value == null ? Truth.UNKNOWN : value ? Truth.TRUE : Truth.FALSE;
     }
 
-    /** Records what {@code condition == value} tells us. Only forcing cases decompose: a true And, a false Or. */
     private static void assume(GPNode condition, boolean value, Map<String, Boolean> known) {
         if (condition instanceof True) return;
         if (condition instanceof Not) {
-            assume(condition.getChildren().get(0), !value, known);
+            assume(condition.getChildren().getFirst(), !value, known);
         } else if (condition instanceof And || condition instanceof Or) {
             boolean forcesBothSides = value == (condition instanceof And);
             if (forcesBothSides) {
@@ -249,7 +202,6 @@ public final class GPTreeOps {
         }
     }
 
-    /** Local constant folding once a node's children are already reduced. */
     private static GPNode rewrite(GPNode node) {
         if (node instanceof And) {
             GPNode l = node.getChildren().get(0), r = node.getChildren().get(1);
@@ -264,8 +216,8 @@ public final class GPTreeOps {
             if (isFalse(r)) return l;
             if (same(l, r)) return l;
         } else if (node instanceof Not) {
-            GPNode child = node.getChildren().get(0);
-            if (child instanceof Not) return child.getChildren().get(0);
+            GPNode child = node.getChildren().getFirst();
+            if (child instanceof Not) return child.getChildren().getFirst();
         } else if (node instanceof IfThenElse) {
             GPNode cond = node.getChildren().get(0), then = node.getChildren().get(1), other = node.getChildren().get(2);
             if (isTrue(cond)) return then;
@@ -277,7 +229,7 @@ public final class GPTreeOps {
 
     private static boolean isTrue(GPNode n) { return n instanceof True; }
 
-    private static boolean isFalse(GPNode n) { return n instanceof Not && isTrue(n.getChildren().get(0)); }
+    private static boolean isFalse(GPNode n) { return n instanceof Not && isTrue(n.getChildren().getFirst()); }
 
     private static boolean same(GPNode a, GPNode b) { return GPSExpression.write(a).equals(GPSExpression.write(b)); }
 }

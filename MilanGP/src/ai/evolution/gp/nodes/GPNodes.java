@@ -13,17 +13,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 
-/**
- * The single table of every terminal the trees can use. Each entry says how to parse the terminal
- * from its s-expression parameters and how to draw a random instance. To add a terminal, write the
- * class and add one line here.
- */
 public final class GPNodes {
     private GPNodes() {}
 
     private record Spec(String name, Function<List<String>, GPNode> parse, Function<Random, GPNode> random) {}
 
-    // Value sets random terminals draw their constants from. Mutation later nudges them freely.
     private static final double[] ENEMY_RANGE = {0.02, 0.04, 0.06, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5};
     private static final double[] ENEMY_BASE_RANGE = {0.05, 0.1, 0.15, 0.25, 0.35, 0.5, 0.65, 0.8, 1.0};
     private static final double[] OWN_BASE_RANGE = {0.03, 0.06, 0.1, 0.15, 0.25, 0.35, 0.5, 0.65, 0.75};
@@ -86,7 +80,6 @@ public final class GPNodes {
         for (Spec s : ACTIONS) BY_NAME.put(s.name(), s);
     }
 
-    /** Builds a node from its parsed s-expression parts. Used by {@link GPSExpression}. */
     public static GPNode build(String name, List<GPNode> children, List<String> params) {
         switch (name) {
             case IfThenElse.NAME:
@@ -101,17 +94,13 @@ public final class GPNodes {
         }
     }
 
-    /** A uniformly drawn condition terminal with a random constant where one is needed. */
     public static BoolNode randomCondition(Random rnd) {
         return (BoolNode) CONDITIONS.get(rnd.nextInt(CONDITIONS.size())).random().apply(rnd);
     }
 
-    /** A uniformly drawn action terminal with a random constant where one is needed. */
     public static ActionNode randomAction(Random rnd) {
         return (ActionNode) ACTIONS.get(rnd.nextInt(ACTIONS.size())).random().apply(rnd);
     }
-
-    // ---- entry helpers
 
     private static Spec constant(String name, GPNode instance) {
         return new Spec(name, p -> instance, r -> instance);

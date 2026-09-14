@@ -3,10 +3,6 @@ package ai.evolution.gp.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Text form of a tree: {@code (If (EnemyInRange 0.2) (AttackNearestEnemy) (Idle))}.
- * Parameters come before children; both are optional.
- */
 public final class GPSExpression {
     private GPSExpression() {}
 

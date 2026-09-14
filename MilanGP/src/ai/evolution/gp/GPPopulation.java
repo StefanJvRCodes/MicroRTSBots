@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-/** The individuals of one run: initialisation, parallel evaluation, ranking and reproduction. */
 public class GPPopulation implements AutoCloseable {
     private final GPConfig cfg;
     private final UnitTypeTable utt;
@@ -26,7 +25,6 @@ public class GPPopulation implements AutoCloseable {
     private final ExecutorService pool;
     private List<GPIndividual> individuals = new ArrayList<>();
     private int generation = 0;
-    /** Null for ordinary GP; set to run the structure-based variant. */
     private GPStructure structure;
 
     public GPPopulation(GPConfig cfg, UnitTypeTable utt, Random rnd) {
@@ -36,11 +34,6 @@ public class GPPopulation implements AutoCloseable {
         this.pool = Executors.newFixedThreadPool(Math.max(1, cfg.threads));
     }
 
-    /**
-     * Ramped half-and-half: alternate full and grow trees over a range of depths. A share of the
-     * population is wrapped so its workers harvest from the start, otherwise random search has to
-     * rediscover an economy before anything else can be selected for.
-     */
     public void initialize() {
         individuals = new ArrayList<>();
         for (int i = 0; i < cfg.populationSize; i++) {
@@ -54,7 +47,6 @@ public class GPPopulation implements AutoCloseable {
         }
     }
 
-    /** Plays every individual against every case, in parallel, and fills in its scores. */
     public void evaluate(List<PhysicalGameState> maps, List<GPMatch.EvaluationCase> cases) throws Exception {
         List<Future<?>> futures = new ArrayList<>();
         for (GPIndividual ind : individuals) {
@@ -73,10 +65,6 @@ public class GPPopulation implements AutoCloseable {
         }
     }
 
-    /**
-     * Combat score is the harmonic mean of the shaped matchup scores, so the worst matchup
-     * dominates and a weakness cannot be averaged away by strength elsewhere.
-     */
     private void score(GPIndividual ind) {
         double inverseSum = 0, rawSum = 0, marginSum = 0, worst = 1.0;
         for (GPMatch.MatchupResult m : ind.matchups) {
@@ -92,7 +80,6 @@ public class GPPopulation implements AutoCloseable {
         ind.margin = marginSum / n;
     }
 
-    /** Higher combat score wins; among equals the smaller tree, then the better material margin. */
     static final Comparator<GPIndividual> RANKING = Comparator
             .comparingDouble((GPIndividual i) -> i.combatScore)
             .thenComparing(Comparator.comparingInt(GPIndividual::size).reversed())
@@ -106,16 +93,10 @@ public class GPPopulation implements AutoCloseable {
         return individuals.stream().mapToDouble(i -> i.combatScore).average().orElse(0);
     }
 
-    /**
-     * Elites are copied through unchanged; every other slot is filled by one genetic operator.
-     * Under structure-based GP the operators are confined to a band of tree levels and an offspring
-     * the phase rejects is redrawn, and the generation that seeds a new global area keeps only the
-     * best tree and breeds everything from it.
-     */
     public void nextGeneration() {
         List<GPIndividual> ranked = new ArrayList<>(individuals);
         ranked.sort(RANKING.reversed());
-        GPIndividual best = ranked.get(0);
+        GPIndividual best = ranked.getFirst();
         boolean seeding = structure != null && structure.seeding();
 
         List<GPIndividual> next = new ArrayList<>(cfg.populationSize);
@@ -137,7 +118,6 @@ public class GPPopulation implements AutoCloseable {
         generation++;
     }
 
-    /** Whether the structure phase, if any, allows this tree into the next generation. */
     private boolean accepted(GPIndividual individual) {
         return structure == null || structure.accepts(individual.root);
     }
@@ -168,11 +148,8 @@ public class GPPopulation implements AutoCloseable {
         return best;
     }
 
-    // ---- state access for GPTrain and GPCheckpoint
-
     public List<GPIndividual> getIndividuals() { return individuals; }
 
-    /** Switches this population to structure-based GP. Null, the default, leaves it as ordinary GP. */
     public void useStructureSearch(GPStructure search) { structure = search; }
 
     public GPStructure getStructureSearch() { return structure; }

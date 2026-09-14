@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/** True when the unit's hit points are below a fraction of its maximum. */
 public class HPBelow extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "HPBelow";
     private static final double MIN = 0.05, MAX = 0.95, STEP = 0.1;

@@ -6,7 +6,6 @@ import ai.evolution.gp.nodes.GPNode;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GPStructure {
 
     public enum Phase { EXPLORE, EXPLOIT }

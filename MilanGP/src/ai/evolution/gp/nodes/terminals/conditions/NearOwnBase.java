@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/** True when the nearest friendly base is within a map-relative Manhattan distance. */
 public class NearOwnBase extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "NearOwnBase";
     private static final double MIN = 0.03, MAX = 0.75, STEP = 0.05;

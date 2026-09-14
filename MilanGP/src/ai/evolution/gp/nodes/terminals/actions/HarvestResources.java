@@ -5,7 +5,6 @@ import ai.evolution.gp.nodes.GPTurnContext;
 import ai.evolution.gp.nodes.GPUtil;
 import rts.units.Unit;
 
-/** Returns carried resources to the nearest base, otherwise harvests the nearest patch. */
 public class HarvestResources extends ActionTerminal {
     public static final String NAME = "HarvestResources";
 

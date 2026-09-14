@@ -5,7 +5,6 @@ import ai.evolution.gp.nodes.GPTurnContext;
 import ai.evolution.gp.nodes.GPUtil;
 import rts.units.Unit;
 
-/** Attacks the nearest enemy unit. Idles if this unit cannot attack or no enemy exists. */
 public class AttackNearestEnemy extends ActionTerminal {
     public static final String NAME = "AttackNearestEnemy";
 

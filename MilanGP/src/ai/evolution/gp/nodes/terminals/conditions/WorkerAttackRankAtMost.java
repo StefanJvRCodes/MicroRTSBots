@@ -10,11 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * True when the unit is one of the {@code maxRank} friendly workers closest to an enemy. This is
- * the role-assignment primitive: it lets one shared tree send a few workers to fight while the
- * rest keep harvesting.
- */
 public class WorkerAttackRankAtMost extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "WorkerAttackRankAtMost";
     private static final int MIN = 1, MAX = 6;

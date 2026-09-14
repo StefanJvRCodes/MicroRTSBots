@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/** True when the player has at least {@code count} workers. Deliberately not map-scaled: a build order. */
 public class OwnWorkersAtLeast extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "OwnWorkersAtLeast";
     private static final int MIN = 1, MAX = 12;

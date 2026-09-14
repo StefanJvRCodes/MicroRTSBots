@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/** True once the game has reached a given cycle. Lets a tree express opening, mid and late game. */
 public class GameTimeAtLeast extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "GameTimeAtLeast";
     private static final int MIN = 0, MAX = 10000;

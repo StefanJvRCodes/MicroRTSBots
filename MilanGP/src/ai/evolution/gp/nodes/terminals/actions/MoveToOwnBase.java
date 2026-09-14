@@ -5,7 +5,6 @@ import ai.evolution.gp.nodes.GPTurnContext;
 import ai.evolution.gp.nodes.GPUtil;
 import rts.units.Unit;
 
-/** Moves towards the nearest friendly base. */
 public class MoveToOwnBase extends ActionTerminal {
     public static final String NAME = "MoveToOwnBase";
 

@@ -20,14 +20,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Adapts an evolved tree to the microRTS AI interface. Every idle unit the player owns is run
- * through the same tree; the tree tells units apart itself via conditions such as CanHarvest.
- *
- * <p>This is only the adapter, and it is the same for both variants. Whether the tree it carries was
- * evolved by ordinary GP or by structure-based GP is a property of the run that produced it, recorded
- * as {@code structureBased} in that run's manifest. See {@link GPStructure} for the variant itself.
- */
 public class GPTreeAI extends AbstractionLayerAI {
     protected UnitTypeTable utt;
     protected ActionNode root;

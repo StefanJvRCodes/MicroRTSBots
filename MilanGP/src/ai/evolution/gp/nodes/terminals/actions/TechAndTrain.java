@@ -12,15 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * The whole military tech chain behind one terminal: a barracks if the player has none, then the
- * requested unit type once a producer exists. Units that cannot take part fall back to harvesting,
- * worker production or attacking instead of idling.
- *
- * This is a hand-written macro, not something evolution discovered. It exists because
- * BuildBarracks and TrainLight/Heavy/Ranged only pay off together, so a tree otherwise needs
- * several co-adapted subtrees before the military branch returns anything at all.
- */
 public class TechAndTrain extends ActionTerminal implements PerturbableTerminal {
     public static final String NAME = "TechAndTrain";
     public static final String[] TYPES = {"Light", "Heavy", "Ranged", "Cheapest"};
@@ -66,7 +57,6 @@ public class TechAndTrain extends ActionTerminal implements PerturbableTerminal 
         ATTACK.exec(ctx);
     }
 
-    /** The requested military type if this unit can produce it, or null. */
     private UnitType producibleMilitaryType(GPTurnContext ctx, Unit u) {
         if (militaryType.equals("Cheapest")) {
             UnitType best = null;
