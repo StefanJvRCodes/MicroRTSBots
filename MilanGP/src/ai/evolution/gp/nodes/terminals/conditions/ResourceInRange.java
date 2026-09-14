@@ -1,35 +1,25 @@
 package ai.evolution.gp.nodes.terminals.conditions;
 
-import ai.evolution.gp.nodes.BoolNode;
+import ai.evolution.gp.nodes.BoolTerminal;
 import ai.evolution.gp.nodes.GPNode;
 import ai.evolution.gp.nodes.GPTurnContext;
 import ai.evolution.gp.nodes.GPUtil;
 import ai.evolution.gp.nodes.PerturbableTerminal;
-
 import rts.units.Unit;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class ResourceInRange extends BoolNode implements PerturbableTerminal {
+/** True when the nearest resource patch is within a map-relative Manhattan distance. */
+public class ResourceInRange extends BoolTerminal implements PerturbableTerminal {
     public static final String NAME = "ResourceInRange";
-    private static final double MIN_FRACTION = 0.03;
-    private static final double MAX_FRACTION = 0.75;
-    private static final double MAX_DELTA = 0.05;
+    private static final double MIN = 0.03, MAX = 0.75, STEP = 0.05;
+
     private final double rangeFraction;
 
     public ResourceInRange(double rangeFraction) {
         this.rangeFraction = rangeFraction;
-    }
-
-    @Override
-    public boolean eval(GPTurnContext ctx) {
-        Unit u = ctx.unit;
-        Unit resource = GPUtil.nearestResource(ctx.pgs, u);
-        if (resource == null) return false;
-        int range = GPUtil.absoluteRange(ctx.pgs, rangeFraction);
-        return GPUtil.manhattan(u.getX(), u.getY(), resource.getX(), resource.getY()) <= range;
     }
 
     @Override
@@ -39,19 +29,14 @@ public class ResourceInRange extends BoolNode implements PerturbableTerminal {
     public List<String> getParams() { return Collections.singletonList(String.valueOf(rangeFraction)); }
 
     @Override
-    public List<GPNode> getChildren() { return Collections.emptyList(); }
-
-    @Override
-    public void setChild(int index, GPNode child) {
-        throw new UnsupportedOperationException(NAME + " has no children");
+    public boolean eval(GPTurnContext ctx) {
+        Unit target = GPUtil.nearestResource(ctx.pgs, ctx.unit);
+        return target != null
+                && GPUtil.manhattan(ctx.unit, target) <= GPUtil.absoluteRange(ctx.pgs, rangeFraction);
     }
 
     @Override
-    public BoolNode copy() { return new ResourceInRange(rangeFraction); }
-
-    @Override
     public GPNode perturb(Random rnd) {
-        double perturbed = rangeFraction + (rnd.nextDouble() * 2 - 1) * MAX_DELTA;
-        return new ResourceInRange(Math.max(MIN_FRACTION, Math.min(MAX_FRACTION, perturbed)));
+        return new ResourceInRange(GPUtil.perturb(rangeFraction, STEP, MIN, MAX, rnd));
     }
 }

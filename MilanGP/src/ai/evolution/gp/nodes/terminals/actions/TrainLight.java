@@ -1,43 +1,17 @@
 package ai.evolution.gp.nodes.terminals.actions;
 
-import ai.evolution.gp.nodes.ActionNode;
-import ai.evolution.gp.nodes.GPNode;
+import ai.evolution.gp.nodes.ActionTerminal;
 import ai.evolution.gp.nodes.GPTurnContext;
 
-import rts.units.Unit;
-import rts.units.UnitType;
-
-import java.util.Collections;
-import java.util.List;
-
-public class TrainLight extends ActionNode {
+/** Trains a Light if this unit can produce one and the player can afford it. */
+public class TrainLight extends ActionTerminal {
     public static final String NAME = "TrainLight";
-
-    @Override
-    public void exec(GPTurnContext ctx) {
-        Unit u = ctx.unit;
-        UnitType lightType = ctx.utt.getUnitType("Light");
-        if (lightType != null && u.getType().produces.contains(lightType) && ctx.player.getResources() >= lightType.cost) {
-            ctx.ai.train(u, lightType);
-        } else {
-            ctx.ai.idle(u);
-        }
-    }
 
     @Override
     public String getName() { return NAME; }
 
     @Override
-    public List<String> getParams() { return Collections.emptyList(); }
-
-    @Override
-    public List<GPNode> getChildren() { return Collections.emptyList(); }
-
-    @Override
-    public void setChild(int index, GPNode child) {
-        throw new UnsupportedOperationException(NAME + " has no children");
+    public void exec(GPTurnContext ctx) {
+        Actions.train(ctx, "Light");
     }
-
-    @Override
-    public ActionNode copy() { return new TrainLight(); }
 }

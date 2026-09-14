@@ -1,34 +1,17 @@
 package ai.evolution.gp.nodes.terminals.conditions;
 
-import ai.evolution.gp.nodes.BoolNode;
-import ai.evolution.gp.nodes.GPNode;
+import ai.evolution.gp.nodes.BoolTerminal;
 import ai.evolution.gp.nodes.GPTurnContext;
+import ai.evolution.gp.nodes.GPUtil;
 
-import java.util.Collections;
-import java.util.List;
-
-public class IsMilitary extends BoolNode {
+public class IsMilitary extends BoolTerminal {
     public static final String NAME = "IsMilitary";
-
-    @Override
-    public boolean eval(GPTurnContext ctx) {
-        return ctx.unit.getType().canAttack && !ctx.unit.getType().canHarvest;
-    }
 
     @Override
     public String getName() { return NAME; }
 
     @Override
-    public List<String> getParams() { return Collections.emptyList(); }
-
-    @Override
-    public List<GPNode> getChildren() { return Collections.emptyList(); }
-
-    @Override
-    public void setChild(int index, GPNode child) {
-        throw new UnsupportedOperationException(NAME + " has no children");
+    public boolean eval(GPTurnContext ctx) {
+        return GPUtil.isMilitary(ctx.unit);
     }
-
-    @Override
-    public BoolNode copy() { return new IsMilitary(); }
 }

@@ -23,12 +23,9 @@ import ai.core.AI;
 import mayariBot.mayari;
 import rts.units.UnitTypeTable;
 
+/** Opponent name (as used in GPConfig.opponents) to a fresh AI instance. Only EconomyMilitaryRush uses the seed. */
 public class GPOpponents {
     private GPOpponents() {}
-
-    public static AI build(String name, UnitTypeTable utt) {
-        return build(name, utt, 0L);
-    }
 
     public static AI build(String name, UnitTypeTable utt, long seed) {
         switch (name) {

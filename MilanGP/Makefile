@@ -10,7 +10,7 @@ CLASSPATH   := $(BIN_DIR):$(LIBS)
 SOURCES     := $(shell find $(SRC_DIR) -name "*.java")
 STAMP       := $(BIN_DIR)/.compiled
 
-.PHONY: help build clean run train autopilot play
+.PHONY: help build clean run train play holdout
 
 .DEFAULT_GOAL := help
 
@@ -30,13 +30,16 @@ run: build
 train: build
 	$(JAVA) $(JAVA_OPTS) -cp "$(CLASSPATH)" ai.evolution.gp.GPTrain $(GP_ARGS)
 
-# Trains the whole opponent/map grid, splitting off and specialising stalled matchups by itself.
-autopilot: build
-	$(JAVA) $(JAVA_OPTS) -cp "$(CLASSPATH)" ai.evolution.gp.GPAutopilot $(GP_ARGS)
-
 play: build
 	$(JAVA) $(JAVA_OPTS) -cp "$(CLASSPATH)" ai.evolution.gp.GPPlay $(PLAY_ARGS)
 
-.PHONY: holdout
 holdout: build
-	$(JAVA) $(JAVA_OPTS) -cp "$(CLASSPATH)" ai.evolution.gp.GPPlay --holdout=true $(PLAY_ARGS)
+	$(JAVA) $(JAVA_OPTS) -cp "$(CLASSPATH)" ai.evolution.gp.GPPlay --playHoldout=true $(PLAY_ARGS)
+
+help:
+	@echo "make build    compile everything into bin/"
+	@echo "make run      start microRTS (resources/config.properties)"
+	@echo "make train    evolve a bot           GP_ARGS=\"--populationSize=500 --generations=100\" or GP_ARGS=--help"
+	@echo "make play     benchmark a saved bot  PLAY_ARGS=\"--playBotFile=runs/<id>/best.txt\""
+	@echo "make holdout  benchmark on unseen maps and opponents"
+	@echo "make clean    remove bin/"

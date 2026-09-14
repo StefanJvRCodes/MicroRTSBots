@@ -20,6 +20,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapts an evolved tree to the microRTS AI interface. Every idle unit the player owns is run
+ * through the same tree; the tree tells units apart itself via conditions such as CanHarvest.
+ */
 public class StructuredGPAI extends AbstractionLayerAI {
     protected UnitTypeTable utt;
     protected ActionNode root;
@@ -43,11 +47,6 @@ public class StructuredGPAI extends AbstractionLayerAI {
         this.utt = utt;
         String expression = new String(Files.readAllBytes(Paths.get(sExpressionFilePath)));
         this.root = GPSExpression.parseAction(expression);
-    }
-
-    @Override
-    public void reset() {
-        super.reset();
     }
 
     @Override

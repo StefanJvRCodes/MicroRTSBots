@@ -1,43 +1,17 @@
 package ai.evolution.gp.nodes.terminals.actions;
 
-import ai.evolution.gp.nodes.ActionNode;
-import ai.evolution.gp.nodes.GPNode;
+import ai.evolution.gp.nodes.ActionTerminal;
 import ai.evolution.gp.nodes.GPTurnContext;
 
-import rts.units.Unit;
-import rts.units.UnitType;
-
-import java.util.Collections;
-import java.util.List;
-
-public class BuildBase extends ActionNode {
+/** A worker builds a Base next to itself if the player can afford one. */
+public class BuildBase extends ActionTerminal {
     public static final String NAME = "BuildBase";
-
-    @Override
-    public void exec(GPTurnContext ctx) {
-        Unit u = ctx.unit;
-        UnitType baseType = ctx.utt.getUnitType("Base");
-        if (baseType != null && u.getType().canHarvest && ctx.player.getResources() >= baseType.cost) {
-            ctx.ai.buildIfNotAlreadyBuilding(u, baseType, u.getX(), u.getY(), ctx.reservedBuildPositions, ctx.player, ctx.pgs);
-        } else {
-            ctx.ai.idle(u);
-        }
-    }
 
     @Override
     public String getName() { return NAME; }
 
     @Override
-    public List<String> getParams() { return Collections.emptyList(); }
-
-    @Override
-    public List<GPNode> getChildren() { return Collections.emptyList(); }
-
-    @Override
-    public void setChild(int index, GPNode child) {
-        throw new UnsupportedOperationException(NAME + " has no children");
+    public void exec(GPTurnContext ctx) {
+        Actions.build(ctx, "Base");
     }
-
-    @Override
-    public ActionNode copy() { return new BuildBase(); }
 }

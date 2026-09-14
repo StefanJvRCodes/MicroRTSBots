@@ -3,7 +3,7 @@ package ai.evolution.gp;
 import ai.evolution.gp.nodes.ActionNode;
 import ai.evolution.gp.nodes.BoolNode;
 import ai.evolution.gp.nodes.GPNode;
-import ai.evolution.gp.nodes.GPNodeFactory;
+import ai.evolution.gp.nodes.GPNodes;
 import ai.evolution.gp.nodes.GPSExpression;
 import ai.evolution.gp.nodes.PerturbableTerminal;
 import ai.evolution.gp.nodes.functions.And;
@@ -18,30 +18,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
 
-public class GPTreeOps {
+/**
+ * Generic tree operations: walking, random growth, crossover, mutation and simplification.
+ * The one structural rule is that a subtree is only ever replaced by one of the same type
+ * (Bool for Bool, Action for Action), which keeps every tree valid.
+ */
+public final class GPTreeOps {
     private GPTreeOps() {}
 
-    public static class NodeRef {
-        public final GPNode parent;
-        public final int index;
-        public final GPNode node;
-        public final int depth;
+    // ------------------------------------------------------------------ walking
 
-        NodeRef(GPNode parent, int index, GPNode node, int depth) {
-            this.parent = parent;
-            this.index = index;
-            this.node = node;
-            this.depth = depth;
-        }
-    }
+    /** A node plus where it sits: its parent (null for the root), its index in the parent, and its depth. */
+    public record NodeRef(GPNode parent, int index, GPNode node, int depth) {}
 
     public static List<NodeRef> collect(GPNode root) {
-        List<NodeRef> result = new ArrayList<>();
-        collect(null, -1, root, 0, result);
-        return result;
+        List<NodeRef> out = new ArrayList<>();
+        collect(null, -1, root, 0, out);
+        return out;
     }
 
     private static void collect(GPNode parent, int index, GPNode node, int depth, List<NodeRef> out) {
@@ -50,213 +44,208 @@ public class GPTreeOps {
         for (int i = 0; i < children.size(); i++) collect(node, i, children.get(i), depth + 1, out);
     }
 
-    public static int size(GPNode root) { return collect(root).size(); }
+    public static int size(GPNode root) {
+        return collect(root).size();
+    }
 
-    public static Set<String> actionNames(GPNode root) {
-        Set<String> names = new TreeSet<>();
-        for (NodeRef ref : collect(root)) {
-            if (ref.node instanceof ActionNode && ref.node.getChildren().isEmpty()) {
-                names.add(ref.node.getName());
+    public static int depth(GPNode root) {
+        int max = 0;
+        for (NodeRef ref : collect(root)) max = Math.max(max, ref.depth());
+        return max;
+    }
+
+    // ------------------------------------------------------------------ random growth
+
+    /**
+     * Grows a random action tree. {@code full} trees always use their whole depth budget; "grow"
+     * trees may stop early at a terminal with {@code terminalProbability}. Conditions inside an
+     * If are kept shallow (depth 2) so the budget is spent on action structure.
+     */
+    public static ActionNode grow(int maxDepth, boolean full, double terminalProbability, Random rnd) {
+        if (maxDepth <= 0 || (!full && rnd.nextDouble() < terminalProbability)) {
+            return GPNodes.randomAction(rnd);
+        }
+        int conditionDepth = Math.min(2, maxDepth - 1);
+        return new IfThenElse(
+                growCondition(conditionDepth, full, terminalProbability, rnd),
+                grow(maxDepth - 1, full, terminalProbability, rnd),
+                grow(maxDepth - 1, full, terminalProbability, rnd));
+    }
+
+    public static BoolNode growCondition(int maxDepth, boolean full, double terminalProbability, Random rnd) {
+        if (maxDepth <= 0 || (!full && rnd.nextDouble() < terminalProbability)) {
+            return GPNodes.randomCondition(rnd);
+        }
+        return switch (rnd.nextInt(3)) {
+            case 0 -> new And(growCondition(maxDepth - 1, full, terminalProbability, rnd),
+                    growCondition(maxDepth - 1, full, terminalProbability, rnd));
+            case 1 -> new Or(growCondition(maxDepth - 1, full, terminalProbability, rnd),
+                    growCondition(maxDepth - 1, full, terminalProbability, rnd));
+            default -> new Not(growCondition(maxDepth - 1, full, terminalProbability, rnd));
+        };
+    }
+
+    // ------------------------------------------------------------------ genetic operators
+
+    /**
+     * Copies {@code a}, then replaces one of its subtrees with a same-typed subtree copied from
+     * {@code b}. Splice points are tried in random order until one respects {@code maxDepth};
+     * if none does, an unchanged copy of {@code a} is returned.
+     */
+    public static ActionNode crossover(ActionNode a, ActionNode b, Random rnd, int maxDepth) {
+        ActionNode child = a.copy();
+        List<NodeRef> targets = collect(child);
+        Collections.shuffle(targets, rnd);
+        List<NodeRef> donorNodes = collect(b);
+
+        for (NodeRef target : targets) {
+            boolean wantBool = target.node() instanceof BoolNode;
+            List<NodeRef> donors = new ArrayList<>();
+            for (NodeRef ref : donorNodes) if (wantBool == (ref.node() instanceof BoolNode)) donors.add(ref);
+            if (donors.isEmpty()) continue;
+
+            GPNode replacement = donors.get(rnd.nextInt(donors.size())).node().copy();
+            if (target.parent() == null) {
+                if (depth(replacement) <= maxDepth) return (ActionNode) replacement;
+                continue;
             }
+            target.parent().setChild(target.index(), replacement);
+            if (depth(child) <= maxDepth) return child;
+            target.parent().setChild(target.index(), target.node());
         }
-        return names;
+        return child;
     }
 
-    public static Set<String> reachableActionNames(GPNode root) {
-        Set<String> names = new TreeSet<>();
-        collectReachable(root, new HashMap<>(), names);
-        return names;
+    /**
+     * Copies {@code root} and changes one uniformly chosen node: a parameterised terminal has its
+     * constant nudged with {@code ercPerturbRate}, otherwise the node is replaced by a fresh random
+     * subtree of the same type that fits in the remaining depth budget.
+     */
+    public static ActionNode mutate(ActionNode root, Random rnd, int maxDepth,
+                                    double terminalProbability, double ercPerturbRate) {
+        ActionNode copy = root.copy();
+        List<NodeRef> nodes = collect(copy);
+        NodeRef pick = nodes.get(rnd.nextInt(nodes.size()));
+        int remainingDepth = Math.max(0, maxDepth - pick.depth());
+
+        GPNode fresh;
+        if (pick.node() instanceof PerturbableTerminal terminal && rnd.nextDouble() < ercPerturbRate) {
+            fresh = terminal.perturb(rnd);
+        } else if (pick.node() instanceof BoolNode) {
+            fresh = growCondition(remainingDepth, false, terminalProbability, rnd);
+        } else {
+            fresh = grow(remainingDepth, false, terminalProbability, rnd);
+        }
+        if (pick.parent() == null) return (ActionNode) fresh;
+        pick.parent().setChild(pick.index(), fresh);
+        return copy;
     }
 
-    private static void collectReachable(GPNode node, Map<String, Boolean> known, Set<String> out) {
-        if (node instanceof IfThenElse) {
-            List<GPNode> children = node.getChildren();
-            GPNode condition = children.get(0);
-            Truth known0 = resolve(condition, known);
-            if (known0 != Truth.FALSE) collectReachable(children.get(1), branchKnowledge(condition, true, known0, known), out);
-            if (known0 != Truth.TRUE) collectReachable(children.get(2), branchKnowledge(condition, false, known0, known), out);
-            return;
-        }
-        if (node instanceof ActionNode && node.getChildren().isEmpty()) {
-            out.add(node.getName());
-            return;
-        }
-        for (GPNode child : node.getChildren()) collectReachable(child, known, out);
-    }
+    // ------------------------------------------------------------------ simplification
 
-    private static Map<String, Boolean> branchKnowledge(GPNode condition, boolean taken, Truth resolved,
-                                                        Map<String, Boolean> known) {
-        if (resolved != Truth.UNKNOWN) return known;
-        Map<String, Boolean> extended = new HashMap<>(known);
-        assume(condition, taken, extended);
-        return extended;
+    /**
+     * Returns a semantically identical tree with dead branches and constant boolean structure
+     * removed. A branch is dead when the conditions on the path above it already force the other
+     * branch. Atomic conditions are matched by their exact printed form; there is deliberately no
+     * reasoning about thresholds, so a live branch is never removed.
+     */
+    public static ActionNode reduce(ActionNode root) {
+        return (ActionNode) reduce(root.copy(), new HashMap<>());
     }
 
     private enum Truth { TRUE, FALSE, UNKNOWN }
 
+    private static GPNode reduce(GPNode node, Map<String, Boolean> known) {
+        if (node instanceof IfThenElse) {
+            List<GPNode> children = new ArrayList<>(node.getChildren());
+            GPNode condition = children.get(0);
+            Truth resolved = resolve(condition, known);
+            if (resolved == Truth.TRUE) return reduce(children.get(1), known);
+            if (resolved == Truth.FALSE) return reduce(children.get(2), known);
+            node.setChild(0, reduce(condition, known));
+            node.setChild(1, reduce(children.get(1), assuming(condition, true, known)));
+            node.setChild(2, reduce(children.get(2), assuming(condition, false, known)));
+            return rewrite(node);
+        }
+        List<GPNode> children = new ArrayList<>(node.getChildren());
+        for (int i = 0; i < children.size(); i++) node.setChild(i, reduce(children.get(i), known));
+        return rewrite(node);
+    }
+
+    /** What {@code known} becomes inside the branch taken when {@code condition} is {@code value}. */
+    private static Map<String, Boolean> assuming(GPNode condition, boolean value, Map<String, Boolean> known) {
+        Map<String, Boolean> extended = new HashMap<>(known);
+        assume(condition, value, extended);
+        return extended;
+    }
+
     private static Truth resolve(GPNode condition, Map<String, Boolean> known) {
         if (condition instanceof True) return Truth.TRUE;
         if (condition instanceof Not) {
-            Truth inner = resolve(condition.getChildren().get(0), known);
-            if (inner == Truth.TRUE) return Truth.FALSE;
-            if (inner == Truth.FALSE) return Truth.TRUE;
-            return Truth.UNKNOWN;
+            return switch (resolve(condition.getChildren().get(0), known)) {
+                case TRUE -> Truth.FALSE;
+                case FALSE -> Truth.TRUE;
+                case UNKNOWN -> Truth.UNKNOWN;
+            };
         }
         if (condition instanceof And || condition instanceof Or) {
             Truth left = resolve(condition.getChildren().get(0), known);
             Truth right = resolve(condition.getChildren().get(1), known);
-            boolean conjunction = condition instanceof And;
-            Truth shortCircuit = conjunction ? Truth.FALSE : Truth.TRUE;
+            Truth shortCircuit = condition instanceof And ? Truth.FALSE : Truth.TRUE;
+            Truth both = condition instanceof And ? Truth.TRUE : Truth.FALSE;
             if (left == shortCircuit || right == shortCircuit) return shortCircuit;
-            Truth other = conjunction ? Truth.TRUE : Truth.FALSE;
-            if (left == other && right == other) return other;
+            if (left == both && right == both) return both;
             return Truth.UNKNOWN;
         }
         Boolean value = known.get(GPSExpression.write(condition));
         return value == null ? Truth.UNKNOWN : value ? Truth.TRUE : Truth.FALSE;
     }
 
+    /** Records what {@code condition == value} tells us. Only forcing cases decompose: a true And, a false Or. */
     private static void assume(GPNode condition, boolean value, Map<String, Boolean> known) {
         if (condition instanceof True) return;
         if (condition instanceof Not) {
             assume(condition.getChildren().get(0), !value, known);
-            return;
-        }
-        if (condition instanceof And || condition instanceof Or) {
-            boolean decomposes = value == condition instanceof And;
-            if (decomposes) {
+        } else if (condition instanceof And || condition instanceof Or) {
+            boolean forcesBothSides = value == (condition instanceof And);
+            if (forcesBothSides) {
                 assume(condition.getChildren().get(0), value, known);
                 assume(condition.getChildren().get(1), value, known);
             }
-            return;
-        }
-        known.put(GPSExpression.write(condition), value);
-    }
-
-    public static int depth(GPNode root) {
-        int max = 0;
-        for (NodeRef ref : collect(root)) max = Math.max(max, ref.depth);
-        return max;
-    }
-
-    public static ActionNode crossover(ActionNode a, ActionNode b, Random rnd, int maxDepth) {
-        ActionNode childRoot = a.copy();
-        ActionNode donorRoot = b.copy();
-        List<NodeRef> childNodes = collect(childRoot);
-        Collections.shuffle(childNodes, rnd);
-
-        for (NodeRef candidate : childNodes) {
-            boolean wantBool = candidate.node instanceof BoolNode;
-            List<NodeRef> donorCandidates = new ArrayList<>();
-            for (NodeRef ref : collect(donorRoot)) {
-                if (wantBool == (ref.node instanceof BoolNode)) donorCandidates.add(ref);
-            }
-            if (donorCandidates.isEmpty()) continue;
-
-            NodeRef donorPick = donorCandidates.get(rnd.nextInt(donorCandidates.size()));
-            GPNode replacement = donorPick.node.copy();
-
-            if (candidate.parent == null) {
-                if (depth(replacement) <= maxDepth) return (ActionNode) replacement;
-            } else {
-                candidate.parent.setChild(candidate.index, replacement);
-                if (depth(childRoot) <= maxDepth) return childRoot;
-                candidate.parent.setChild(candidate.index, candidate.node);
-            }
-        }
-        return a.copy();
-    }
-
-    public static ActionNode mutate(ActionNode root, Random rnd, GPNodeFactory factory, int maxDepth) {
-        return mutate(root, rnd, factory, maxDepth, 0.0);
-    }
-
-    public static ActionNode mutate(ActionNode root, Random rnd, GPNodeFactory factory, int maxDepth, double ercPerturbRate) {
-        ActionNode copy = root.copy();
-        List<NodeRef> nodes = collect(copy);
-        NodeRef pick = nodes.get(rnd.nextInt(nodes.size()));
-        int remainingDepth = Math.max(0, maxDepth - pick.depth);
-
-        if (pick.node instanceof PerturbableTerminal && rnd.nextDouble() < ercPerturbRate) {
-            BoolNode perturbed = (BoolNode) ((PerturbableTerminal) pick.node).perturb(rnd);
-            pick.parent.setChild(pick.index, perturbed);
-        } else if (pick.node instanceof BoolNode) {
-            BoolNode fresh = factory.randomBool(remainingDepth, rnd, false);
-            pick.parent.setChild(pick.index, fresh);
         } else {
-            ActionNode fresh = factory.randomAction(remainingDepth, rnd, false);
-            if (pick.parent == null) return fresh;
-            pick.parent.setChild(pick.index, fresh);
+            known.put(GPSExpression.write(condition), value);
         }
-        return copy;
     }
 
-    public static ActionNode reduce(ActionNode root) {
-        return (ActionNode) reduceNode(root.copy(), new HashMap<>());
-    }
-
-    private static GPNode reduceNode(GPNode node, Map<String, Boolean> known) {
-        if (node instanceof IfThenElse) {
-            List<GPNode> children = new ArrayList<>(node.getChildren());
-            GPNode condition = children.get(0);
-            Truth resolved = resolve(condition, known);
-            if (resolved == Truth.TRUE) return reduceNode(children.get(1), known);
-            if (resolved == Truth.FALSE) return reduceNode(children.get(2), known);
-            node.setChild(0, reduceNode(condition, known));
-            node.setChild(1, reduceNode(children.get(1), branchKnowledge(condition, true, resolved, known)));
-            node.setChild(2, reduceNode(children.get(2), branchKnowledge(condition, false, resolved, known)));
-            return rewrite(node);
-        }
-        List<GPNode> children = new ArrayList<>(node.getChildren());
-        for (int i = 0; i < children.size(); i++) {
-            node.setChild(i, reduceNode(children.get(i), known));
-        }
-        return rewrite(node);
-    }
-
+    /** Local constant folding once a node's children are already reduced. */
     private static GPNode rewrite(GPNode node) {
         if (node instanceof And) {
             GPNode l = node.getChildren().get(0), r = node.getChildren().get(1);
-            if (isConstTrue(l)) return r;
-            if (isConstTrue(r)) return l;
-            if (isConstFalse(l)) return l;
-            if (isConstFalse(r)) return r;
-            if (sameExpression(l, r)) return l;
-            return node;
-        }
-        if (node instanceof Or) {
+            if (isTrue(l)) return r;
+            if (isTrue(r)) return l;
+            if (isFalse(l) || isFalse(r)) return isFalse(l) ? l : r;
+            if (same(l, r)) return l;
+        } else if (node instanceof Or) {
             GPNode l = node.getChildren().get(0), r = node.getChildren().get(1);
-            if (isConstTrue(l)) return l;
-            if (isConstTrue(r)) return r;
-            if (isConstFalse(l)) return r;
-            if (isConstFalse(r)) return l;
-            if (sameExpression(l, r)) return l;
-            return node;
-        }
-        if (node instanceof Not) {
+            if (isTrue(l) || isTrue(r)) return isTrue(l) ? l : r;
+            if (isFalse(l)) return r;
+            if (isFalse(r)) return l;
+            if (same(l, r)) return l;
+        } else if (node instanceof Not) {
             GPNode child = node.getChildren().get(0);
             if (child instanceof Not) return child.getChildren().get(0);
-            return node;
-        }
-        if (node instanceof IfThenElse) {
-            GPNode cond = node.getChildren().get(0);
-            GPNode then = node.getChildren().get(1);
-            GPNode elseBranch = node.getChildren().get(2);
-            if (isConstTrue(cond)) return then;
-            if (isConstFalse(cond)) return elseBranch;
-            if (sameExpression(then, elseBranch)) return then;
-            return node;
+        } else if (node instanceof IfThenElse) {
+            GPNode cond = node.getChildren().get(0), then = node.getChildren().get(1), other = node.getChildren().get(2);
+            if (isTrue(cond)) return then;
+            if (isFalse(cond)) return other;
+            if (same(then, other)) return then;
         }
         return node;
     }
 
-    private static boolean isConstTrue(GPNode n) { return n instanceof True; }
+    private static boolean isTrue(GPNode n) { return n instanceof True; }
 
-    private static boolean isConstFalse(GPNode n) {
-        return n instanceof Not && isConstTrue(n.getChildren().get(0));
-    }
+    private static boolean isFalse(GPNode n) { return n instanceof Not && isTrue(n.getChildren().get(0)); }
 
-    private static boolean sameExpression(GPNode a, GPNode b) {
-        return GPSExpression.write(a).equals(GPSExpression.write(b));
-    }
+    private static boolean same(GPNode a, GPNode b) { return GPSExpression.write(a).equals(GPSExpression.write(b)); }
 }
