@@ -1,15 +1,14 @@
 package ai.custom.GP_bot;
 
 import ai.core.AI;
-import rts.units.UnitTypeTable;
-import tournaments.FixedOpponentsTournament;
-import tournaments.RoundRobinTournament;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
+import rts.units.UnitTypeTable;
+import tournaments.FixedOpponentsTournament;
+import tournaments.RoundRobinTournament;
 
 /**
  * Thin bridge between GP and the microRTS tournament machinery.
@@ -114,6 +113,12 @@ public class GPTournamentEvaluator {
         ensureFolderExists(FIXED_OPPONENTS_READ_WRITE_FOLDER);
 
         FixedOpponentsTournament tournament = new FixedOpponentsTournament(bots, opponents);
+        System.out.println("[GPTournamentEvaluator] Starting fixed-opponent tournament");
+        System.out.println("[GPTournamentEvaluator] GP bots: " + bots.size());
+        System.out.println("[GPTournamentEvaluator] Opponents: " + opponents.size());
+        System.out.println("[GPTournamentEvaluator] Maps: " + maps.size());
+        System.out.println("[GPTournamentEvaluator] Iterations: " + iterations);
+        System.out.println("[GPTournamentEvaluator] Max game length: " + maxGameLength);
         tournament.runTournament(
                 maps,
                 iterations,
@@ -131,6 +136,7 @@ public class GPTournamentEvaluator {
                 new NullWriter(),
                 new NullWriter(),
                 FIXED_OPPONENTS_READ_WRITE_FOLDER);
+        System.out.println("[GPTournamentEvaluator] Fixed-opponent tournament FINISHED");
 
         return tournament.getAverageWinRates();
     }

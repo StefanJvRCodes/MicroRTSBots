@@ -1,10 +1,17 @@
 package ai.custom.GP_bot;
 
 import ai.core.AI;
+import ai.core.AIWithComputationBudget;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.units.UnitTypeTable;
@@ -30,13 +37,32 @@ import tournaments.LoadTournamentAIs;
  * jar that bundles its own copy of some {@code ai.abstraction.*} classes
  * while other classes of the same name resolve from this project's own
  * classpath causes an {@code IllegalAccessError} the moment the bot tries to
- * act, not when it's built. To catch those before they can crash a real
- * tournament, every bot that does construct successfully is also given one
- * trial {@code getAction()} call against a real game state (see
- * {@link #buildSmokeTestState}); a bot that throws anything at all during
- * that trial is dropped the same way as any other load failure.
+ * act, not when it's built. And some bots (or their static initializers)
+ * simply never return at all - most often a search-based bot that treats an
+ * unset/negative time or iteration budget as "search indefinitely" - which
+ * throws nothing to catch and would otherwise hang the whole loader (and
+ * the whole GP run) forever. To catch all of that before it can affect a
+ * real tournament, constructing a candidate class AND giving it one trial
+ * {@code getAction()} call against a real game state (see
+ * {@link #buildSmokeTestState}) both happen together as a single task with
+ * a hard wall-clock timeout around it; a bot that throws anything, or that
+ * simply doesn't finish both steps in time, is dropped the same way as any
+ * other load failure.
  */
 public class GPOpponentLoader {
+
+    /** Budget given to a bot for its one trial decision - matches what a real tournament configures. */
+    private static final int SMOKE_TEST_TIME_BUDGET_MS = 100;
+    private static final int SMOKE_TEST_ITERATIONS_BUDGET = 100;
+
+    /**
+     * Hard wall-clock cap on constructing a candidate bot AND running its
+     * one trial decision, combined - well above the budget above to allow
+     * for JVM/JIT warmup slack, in case a bot's constructor or its decision
+     * logic ignores its configured budget entirely (a bug in the bot, not
+     * in this loader).
+     */
+    private static final long LOAD_TIMEOUT_MS = 5000;
 
     private GPOpponentLoader() {
     }
@@ -62,15 +88,11 @@ public class GPOpponentLoader {
         GameState smokeTestState = buildSmokeTestState(maps, utt);
 
         for (Class<?> c : classes) {
-            AI ai = instantiate(c, utt);
-            if (ai == null) {
-                continue;
+            AI ai = tryLoadOpponent(c, utt, smokeTestState);
+            if (ai != null) {
+                opponents.add(ai);
+                System.out.println("[GPOpponentLoader] Loaded opponent: " + c.getName());
             }
-            if (smokeTestState != null && !passesSmokeTest(ai, c, smokeTestState)) {
-                continue;
-            }
-            opponents.add(ai);
-            System.out.println("[GPOpponentLoader] Loaded opponent: " + c.getName());
         }
 
         if (opponents.isEmpty()) {
@@ -79,22 +101,72 @@ public class GPOpponentLoader {
         return opponents;
     }
 
-    private static AI instantiate(Class<?> c, UnitTypeTable utt) {
+    /**
+     * Constructs one candidate bot and, if a trial game state is available,
+     * gives it one real decision to make - both steps run as a single task
+     * on its own daemon thread with a hard timeout around the whole thing,
+     * since a hang can happen during construction (a blocking static
+     * initializer, a bot spawning its own thread, etc.) just as easily as
+     * during the decision itself. Only catches what happens here, at load
+     * time - a bot that passes this but crashes or hangs later, mid-game,
+     * on a different map or after many turns isn't covered by this check.
+     */
+    private static AI tryLoadOpponent(Class<?> c, UnitTypeTable utt, GameState smokeTestState) {
+        ExecutorService executor = newDaemonSingleThreadExecutor();
         try {
-            return construct(c, utt);
-        } catch (Throwable e) {
-            // Deliberately catching Throwable, not just Exception: resolving a
-            // class's constructors (or running its static initializers via
-            // newInstance) can throw NoClassDefFoundError / LinkageError when
-            // a dependency the class needs is missing from the classpath -
-            // those are Errors, not Exceptions, so "catch (Exception e)" alone
-            // silently lets them crash the whole GP run instead of just
-            // skipping this one bot, the same way LoadTournamentAIs already
-            // has to guard against NoClassDefFoundError when loading classes
-            // out of the JAR in the first place.
-            System.out.println("[GPOpponentLoader] Skipping " + c.getName() + " - failed to instantiate: " + rootCause(e));
+            Future<AI> future = executor.submit((Callable<AI>) () -> {
+                AI ai = construct(c, utt);
+                if (smokeTestState != null) {
+                    if (ai instanceof AIWithComputationBudget) {
+                        // Give it the same budget a real tournament would,
+                        // rather than whatever its constructor happened to
+                        // default to - some search-based bots treat an
+                        // unset/negative budget as "no limit" and would
+                        // otherwise search forever below.
+                        ((AIWithComputationBudget) ai).setTimeBudget(SMOKE_TEST_TIME_BUDGET_MS);
+                        ((AIWithComputationBudget) ai).setIterationsBudget(SMOKE_TEST_ITERATIONS_BUDGET);
+                    }
+                    ai.reset();
+                    ai.getAction(0, smokeTestState);
+                }
+                return ai;
+            });
+            return future.get(LOAD_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            System.out.println("[GPOpponentLoader] Skipping " + c.getName() + " - did not finish constructing "
+                    + "and/or making its trial decision within " + LOAD_TIMEOUT_MS + "ms (likely hangs during "
+                    + "construction, or ignores its time/iteration budget and searches indefinitely) - it would "
+                    + "otherwise have hung the whole run.");
             return null;
+        } catch (Exception e) {
+            // Covers InterruptedException and ExecutionException - the
+            // latter is how the executor reports whatever Throwable
+            // construction or the trial decision itself threw (including
+            // Errors like NoClassDefFoundError, which are Throwable but not
+            // Exception - the executor's FutureTask still captures them),
+            // which rootCause() unwraps just like it already does for
+            // reflection's InvocationTargetException.
+            System.out.println("[GPOpponentLoader] Skipping " + c.getName()
+                    + " - failed to load or crashed on a trial decision: " + rootCause(e));
+            return null;
+        } finally {
+            // shutdownNow() is best-effort: it interrupts the worker thread,
+            // but a bot stuck in a tight loop that never checks
+            // Thread.interrupted() will keep running in the background
+            // regardless. That's an acceptable trade-off here - one leaked
+            // daemon thread from a broken bot is harmless and won't keep the
+            // JVM alive, whereas blocking the loader on it would be exactly
+            // the hang this method exists to prevent.
+            executor.shutdownNow();
         }
+    }
+
+    private static ExecutorService newDaemonSingleThreadExecutor() {
+        return Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r, "gp-opponent-load");
+            t.setDaemon(true);
+            return t;
+        });
     }
 
     private static AI construct(Class<?> c, UnitTypeTable utt) throws ReflectiveOperationException {
@@ -130,24 +202,6 @@ public class GPOpponentLoader {
             System.out.println("[GPOpponentLoader] Could not build a trial game state from \"" + maps.get(0)
                     + "\" - opponents will not be crash-tested before use: " + rootCause(e));
             return null;
-        }
-    }
-
-    /**
-     * Gives a candidate bot one real decision to make before it's trusted.
-     * Only catches what happens here, at load time - a bot that passes this
-     * but crashes later, mid-game, on a different map or after many turns
-     * isn't covered by this check.
-     */
-    private static boolean passesSmokeTest(AI ai, Class<?> c, GameState smokeTestState) {
-        try {
-            ai.reset();
-            ai.getAction(0, smokeTestState);
-            return true;
-        } catch (Throwable e) {
-            System.out.println("[GPOpponentLoader] Skipping " + c.getName()
-                    + " - crashed on a trial decision (would otherwise have crashed mid-tournament): " + rootCause(e));
-            return false;
         }
     }
 

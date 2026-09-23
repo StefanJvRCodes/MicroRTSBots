@@ -58,26 +58,13 @@ public class GP {
     public Random random;
     public int growProbability = -1;
     public int fullProbability = -1;
-    // Node is the single source of truth for the default function set and
-    // default feature indices, so both Tree and GP build against the same
-    // values instead of maintaining their own copies.
     public String[] functions = Node.DEFAULT_FUNCTIONS;
     public String[] terminals = new String[0];
     public int[] featureIndices = Node.DEFAULT_FEATURE_INDICES;
     public UnitTypeTable utt = new UnitTypeTable();
 
-    // Fixed opponents (e.g. past microRTS competition winners) loaded from
-    // JARs in this folder, in addition to self-play. Both optional: if the
-    // folder doesn't exist or has no usable bots in it, GP just falls back
-    // to self-play only - see GPOpponentLoader for how bots are discovered.
     public String opponentsFolder = "opponents";
-    // How much weight fixed-opponent win rate gets versus self-play win
-    // rate when both are available: 0.0 = self-play only, 1.0 = fixed
-    // opponents only, 0.5 = equal blend. Only consulted when tournamentMode
-    // is BOTH.
     public double fixedOpponentWeight = 0.5;
-    // Which matches count toward fitness. Defaults to BOTH, matching the
-    // original self-play-plus-opponents-if-present behavior.
     public TournamentMode tournamentMode = TournamentMode.BOTH;
     private List<AI> fixedOpponents;
     private boolean fixedOpponentsLoaded = false;
@@ -88,12 +75,6 @@ public class GP {
     public double[] winRates;
     public Vector<Double>[] actionDistributions;
 
-    /**
-     * A Tree configured with this GP run's parameters but with no root of
-     * its own. Mutation delegates subtree generation to it (recursiveGrow /
-     * configureModiRecursive) instead of GP reimplementing tree-building
-     * logic that Tree already owns.
-     */
     private Tree treeFactory;
 
     private Tree treeFactory() {
@@ -263,7 +244,7 @@ public class GP {
         }
     }
 
-    /** Builds a fresh Tree configured with this run's parameters (no root yet). */
+
     private Tree newConfiguredTree() {
         return new Tree(random, modiRate, functionProbability, terminalProbability,
                 maxDepth, fullProbability, growProbability, functions, terminals, featureIndices, numOutputCells);
@@ -364,14 +345,13 @@ public class GP {
         int remainingDepth = Math.max(1, maxDepth - target.getDepth() + 1);
 
         if (isRoot) {
-            // Generate a completely new tree, delegating to Tree's own
-            // subtree-building logic instead of reimplementing it here.
+
             Node replacementRoot = treeFactory().recursiveGrow(maxDepth);
             treeFactory().configureModiRecursive(replacementRoot);
             return new Tree(replacementRoot, numOutputCells);
         }
 
-        // Replace non-root node with a randomly generated subtree.
+
         Node replacementNode = treeFactory().recursiveGrow(remainingDepth);
         treeFactory().configureModiRecursive(replacementNode);
         Node parentOfTarget = child.findParentOf(target);
@@ -384,26 +364,6 @@ public class GP {
     }
 
 
-    /*evaluation
-        //start tournament for first individual
-        //for every player action, set feature vector
-        //get action probability distribution and pick best action
-        //after tournament, store win rate
-
-
-        set feature vector
-        //public double evaluate(double[] features, OutputVector output)
-
-        features[0] = Math.min(enemyCount, 10) / 10.0; // Cap at 10 enemies
-        features[1] = encodeEnemyType(nearestEnemyType); // 0.0-1.0
-        features[2] = Math.min(allyCount, 5) / 5.0; // Cap at 5 allies
-        features[3] = encodeUnitType(myType); // 0.0-1.0
-        features[4] = Math.min(resources, 200) / 200.0; // Cap resources
-        features[5] = myHealth / maxHealth;  // Should I fight or flee?
-        features[6] = myDamage / maxEnemyHealth;  // Can I kill them quickly?
-        features[7] = alliesNearResource / enemiesNearResource;
-    
-    */
 
     public int selectTournamentWinnerIndex() {
         int drawCount = Math.max(1, Math.min(tournamentSize, populationSize));
@@ -521,14 +481,6 @@ public class GP {
 
 
 
-
-    /**
-     * Loads the fixed-opponent roster from {@link #opponentsFolder} the
-     * first time it's needed and caches it for the rest of the run (the
-     * folder is scanned and every bot instantiated once, not every
-     * generation). Returns an empty list - never null - if the folder is
-     * missing or empty, so callers don't need a null check.
-     */
     private List<AI> loadFixedOpponentsIfNeeded() {
         if (!fixedOpponentsLoaded) {
             fixedOpponents = GPOpponentLoader.loadOpponentsFromFolder(opponentsFolder, utt, DEFAULT_TOURNAMENT_MAPS);
@@ -537,13 +489,6 @@ public class GP {
         return fixedOpponents;
     }
 
-    /**
-     * Combines self-play and fixed-opponent win rates per individual. If
-     * either side is NaN for a given individual (no games of that kind were
-     * played), falls back entirely to the other side rather than producing
-     * a NaN that would make that individual look artificially bad in
-     * tournament selection.
-     */
     private double[] blendWinRates(double[] selfPlay, double[] fixedOpponent, double weight) {
         double[] blended = new double[selfPlay.length];
         for (int i = 0; i < selfPlay.length; i++) {
@@ -560,24 +505,7 @@ public class GP {
         return blended;
     }
 
-    /**
-     * Plays the population against each currently-loaded fixed opponent one
-     * at a time - rather than one combined round robin - so a bot that
-     * passes {@link GPOpponentLoader}'s load-time smoke test but still
-     * crashes mid-game (e.g. only later in a real game than the smoke test
-     * reaches, or only on a specific map) can be isolated to exactly the
-     * opponent responsible instead of taking down the whole generation.
-     * That opponent is then permanently removed from {@link #fixedOpponents}
-     * - this generation and every one after it - rather than letting the
-     * crash propagate and kill the GP run. Win rates from opponents that did
-     * complete successfully are averaged together.
-     *
-     * <p>Returns an all-NaN array (same convention as
-     * {@link GPTournamentEvaluator#evaluateFixedOpponentsWinRates} with an
-     * empty opponents list) if every opponent crashed this generation, or
-     * none were loaded to begin with - callers already handle that the same
-     * way they'd handle "no opponents configured".
-     */
+
     private double[] evaluateFixedOpponentsWithRecovery(List<AI> bots) {
         List<AI> opponents = loadFixedOpponentsIfNeeded();
 
@@ -824,11 +752,6 @@ public class GP {
         public PlayerAction getAction(int player, GameState gs) {
             PlayerAction pa = new PlayerAction();
             int remainingResources = gs.getPlayer(player).getResources() - reservedForInProgressProduce(gs, player);
-            // Cells already claimed by ANY unit's (any player's) in-progress
-            // MOVE or PRODUCE action, plus cells claimed by actions we choose
-            // for our own units earlier in this same call. See
-            // collectReservedPositions() for why this can't just be read off
-            // gs.getUnitAt(...).
             Set<Long> reservedPositions = collectReservedPositions(gs);
             for (Unit unit : gs.getUnits()) {
                 if (unit.getPlayer() != player) {
@@ -852,14 +775,7 @@ public class GP {
             return pa;
         }
 
-        /**
-         * Resources already committed to this player's units that are mid-way
-         * through a PRODUCE action issued on a previous decision cycle. microRTS
-         * only deducts a produce action's cost (and spawns the unit) when the
-         * action completes, not when it's issued, so
-         * gs.getPlayer(player).getResources() still counts those resources as
-         * available while the build is in progress.
-         */
+
         private int reservedForInProgressProduce(GameState gs, int player) {
             int reserved = 0;
             for (Unit u : gs.getUnits()) {
@@ -874,17 +790,7 @@ public class GP {
             return reserved;
         }
 
-        /**
-         * Cells claimed by any unit's in-progress MOVE or PRODUCE action,
-         * across all players. A PRODUCE action's target cell isn't reflected
-         * in gs.getUnitAt(...) until the action completes and the new unit is
-         * actually placed there, so unit.getUnitActions(gs) alone doesn't
-         * reliably filter these out - a different unit can still be offered a
-         * MOVE (or another PRODUCE) into that same cell as a "legal" action.
-         * GameState.issueSafe enforces the collision globally when the action
-         * is actually issued, throwing "Inconsistent actions were executed!"
-         * if we don't avoid it ourselves first.
-         */
+
         private Set<Long> collectReservedPositions(GameState gs) {
             Set<Long> reserved = new HashSet<>();
             for (Unit u : gs.getUnits()) {
