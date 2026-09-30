@@ -12,6 +12,9 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.UnitAction;
@@ -66,6 +69,12 @@ public class GP {
     public String opponentsFolder = "opponents";
     public double fixedOpponentWeight = 0.5;
     public TournamentMode tournamentMode = TournamentMode.BOTH;
+    // How many fixed opponents get evaluated concurrently each generation.
+    // Game simulation is CPU-bound (no I/O waiting), so more threads than
+    // available cores just adds context-switching overhead rather than
+    // speeding anything up - default to the core count and let parameters.txt
+    // override it if needed.
+    public int maxOpponentThreads = Runtime.getRuntime().availableProcessors();
     private List<AI> fixedOpponents;
     private boolean fixedOpponentsLoaded = false;
 
@@ -149,6 +158,9 @@ public class GP {
                             break;
                         case "fixed opponent weight":
                             fixedOpponentWeight = Double.parseDouble(value);
+                            break;
+                        case "max opponent threads":
+                            maxOpponentThreads = Integer.parseInt(value);
                             break;
                         case "tournament mode":
                             switch (value.toLowerCase()) {
@@ -505,50 +517,123 @@ public class GP {
         return blended;
     }
 
+    /**
+     * Small immutable result of one opponent's evaluation task, so results
+     * can be collected from Futures and aggregated single-threaded after
+     * every task has finished, rather than needing any of the actual
+     * aggregation logic (crash bookkeeping, summing win rates) to be
+     * synchronized itself.
+     */
+    private static final class OpponentEvaluation {
+        final AI opponent;
+        final double[] winRates;
+        final Exception error;
 
-    private double[] evaluateFixedOpponentsWithRecovery(List<AI> bots) {
-        List<AI> opponents = loadFixedOpponentsIfNeeded();
-
-        double[] sum = null;
-        int succeeded = 0;
-        List<AI> crashed = new ArrayList<>();
-
-        for (AI opponent : new ArrayList<>(opponents)) {
-            double[] result;
-            try {
-                result = GPTournamentEvaluator.evaluateFixedOpponentsWinRates(
-                        bots, java.util.Collections.singletonList(opponent),
-                        DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100);
-            } catch (Exception e) {
-                System.out.println("[GP] Fixed opponent \"" + opponent + "\" crashed mid-tournament - permanently "
-                        + "removing it from the opponent roster: " + e);
-                crashed.add(opponent);
-                continue;
-            }
-
-            if (sum == null) {
-                sum = result;
-            } else {
-                for (int i = 0; i < sum.length; i++) {
-                    sum[i] += result[i];
-                }
-            }
-            succeeded++;
+        OpponentEvaluation(AI opponent, double[] winRates, Exception error) {
+            this.opponent = opponent;
+            this.winRates = winRates;
+            this.error = error;
         }
+    }
 
-        opponents.removeAll(crashed);
+    /**
+     * Plays the population against each currently-loaded fixed opponent
+     * concurrently - one opponent's whole mini-tournament per thread - since
+     * these evaluations are fully independent of one another: each
+     * FixedOpponentsTournament call clones every AI before playing a game
+     * (confirmed in Tournament.playSingleGame), so different opponents'
+     * concurrent evaluations never touch the same live bot instance, only
+     * independent clones of it. If a given opponent's mini-tournament
+     * throws, it's logged and permanently removed from
+     * {@link #fixedOpponents} (the same cached list {@link
+     * #loadFixedOpponentsIfNeeded()} reuses every generation - once removed,
+     * it's gone for the rest of the run, not just this generation).
+     * Opponents that complete successfully have their win-rate arrays
+     * averaged together, same as if it'd been one combined round robin.
+     *
+     * <p>Returns an all-NaN array (same convention as
+     * {@link GPTournamentEvaluator#evaluateFixedOpponentsWinRates} with an
+     * empty opponents list) if every opponent crashed this generation, or
+     * none were loaded to begin with - callers already handle that the same
+     * way they'd handle "no opponents configured".
+     */
+    private double[] evaluateFixedOpponentsWithRecovery(List<AI> bots) throws Exception {
+        List<AI> opponents = loadFixedOpponentsIfNeeded();
+        List<AI> snapshot = new ArrayList<>(opponents);
 
-        if (succeeded == 0) {
+        if (snapshot.isEmpty()) {
             double[] undefined = new double[bots.size()];
             java.util.Arrays.fill(undefined, Double.NaN);
             return undefined;
         }
 
-        double[] averaged = new double[sum.length];
-        for (int i = 0; i < sum.length; i++) {
-            averaged[i] = sum[i] / succeeded;
+        int threads = Math.max(1, Math.min(snapshot.size(), maxOpponentThreads));
+        ExecutorService executor = Executors.newFixedThreadPool(threads, r -> {
+            Thread t = new Thread(r, "gp-opponent-eval");
+            t.setDaemon(true);
+            return t;
+        });
+
+        List<Future<OpponentEvaluation>> futures = new ArrayList<>();
+        try {
+            for (int i = 0; i < snapshot.size(); i++) {
+                AI opponent = snapshot.get(i);
+                // Unique scratch folder per concurrent evaluation: every one
+                // of these calls always has exactly one opponent, at local
+                // index 0, so without this, concurrently-running evaluations
+                // for different opponents would all read/write the same
+                // "opponentAI0readWriteFolder" path at the same time.
+                String readWriteFolder = GPTournamentEvaluator.FIXED_OPPONENTS_READ_WRITE_FOLDER_BASE + "/opp" + i;
+                futures.add(executor.submit(() -> {
+                    try {
+                        double[] result = GPTournamentEvaluator.evaluateFixedOpponentsWinRates(
+                                bots, java.util.Collections.singletonList(opponent),
+                                DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100, readWriteFolder);
+                        return new OpponentEvaluation(opponent, result, null);
+                    } catch (Exception e) {
+                        return new OpponentEvaluation(opponent, null, e);
+                    }
+                }));
+            }
+
+            double[] sum = null;
+            int succeeded = 0;
+            List<AI> crashed = new ArrayList<>();
+
+            for (Future<OpponentEvaluation> future : futures) {
+                OpponentEvaluation eval = future.get();
+                if (eval.error != null) {
+                    System.out.println("[GP] Fixed opponent \"" + eval.opponent + "\" crashed mid-tournament - "
+                            + "permanently removing it from the opponent roster: " + eval.error);
+                    crashed.add(eval.opponent);
+                    continue;
+                }
+                if (sum == null) {
+                    sum = eval.winRates;
+                } else {
+                    for (int i = 0; i < sum.length; i++) {
+                        sum[i] += eval.winRates[i];
+                    }
+                }
+                succeeded++;
+            }
+
+            opponents.removeAll(crashed);
+
+            if (succeeded == 0) {
+                double[] undefined = new double[bots.size()];
+                java.util.Arrays.fill(undefined, Double.NaN);
+                return undefined;
+            }
+
+            double[] averaged = new double[sum.length];
+            for (int i = 0; i < sum.length; i++) {
+                averaged[i] = sum[i] / succeeded;
+            }
+            return averaged;
+        } finally {
+            executor.shutdown();
         }
-        return averaged;
     }
 
     public double startTournament(Tree individual) {
@@ -585,14 +670,32 @@ public class GP {
                 }
                 case BOTH:
                 default: {
-                    double[] selfPlayWinRates = GPTournamentEvaluator.evaluateRoundRobinWinRates(
-                            bots, DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100);
                     List<AI> opponents = loadFixedOpponentsIfNeeded();
                     if (opponents.isEmpty()) {
-                        evaluatedWinRates = selfPlayWinRates;
+                        evaluatedWinRates = GPTournamentEvaluator.evaluateRoundRobinWinRates(
+                                bots, DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100);
                     } else {
-                        double[] fixedOpponentWinRates = evaluateFixedOpponentsWithRecovery(bots);
-                        evaluatedWinRates = blendWinRates(selfPlayWinRates, fixedOpponentWinRates, fixedOpponentWeight);
+                        // Self-play and the fixed-opponent batch don't depend
+                        // on each other's results, so run them concurrently
+                        // rather than one after the other.
+                        ExecutorService executor = Executors.newFixedThreadPool(2, r -> {
+                            Thread t = new Thread(r, "gp-selfplay-vs-fixed");
+                            t.setDaemon(true);
+                            return t;
+                        });
+                        try {
+                            Future<double[]> selfPlayFuture = executor.submit(() ->
+                                    GPTournamentEvaluator.evaluateRoundRobinWinRates(
+                                            bots, DEFAULT_TOURNAMENT_MAPS, utt, 1, 2000, 100, 100));
+                            Future<double[]> fixedOpponentFuture = executor.submit(() ->
+                                    evaluateFixedOpponentsWithRecovery(bots));
+
+                            double[] selfPlayWinRates = selfPlayFuture.get();
+                            double[] fixedOpponentWinRates = fixedOpponentFuture.get();
+                            evaluatedWinRates = blendWinRates(selfPlayWinRates, fixedOpponentWinRates, fixedOpponentWeight);
+                        } finally {
+                            executor.shutdown();
+                        }
                     }
                     break;
                 }

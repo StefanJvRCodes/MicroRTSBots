@@ -36,7 +36,8 @@ public class GPTournamentEvaluator {
      * pre-analysis is disabled), so they must be valid, writable paths.
      */
     private static final String SELF_PLAY_READ_WRITE_FOLDER = "gp_tournament_rw/self_play";
-    private static final String FIXED_OPPONENTS_READ_WRITE_FOLDER = "gp_tournament_rw/fixed_opponents";
+    /** Base path GP builds unique per-opponent subfolders under when evaluating opponents concurrently. */
+    public static final String FIXED_OPPONENTS_READ_WRITE_FOLDER_BASE = "gp_tournament_rw/fixed_opponents";
 
     /**
      * Runs a single round-robin tournament among {@code bots} and returns
@@ -92,6 +93,14 @@ public class GPTournamentEvaluator {
      * {@code NaN} (no games were played, so no rate is defined) rather than
      * throwing, since "no fixed opponents configured" is an expected,
      * ordinary state.
+     *
+     * <p>{@code readWriteFolder} lets each caller give its own call a unique
+     * scratch folder. This matters once GP is evaluating multiple opponents
+     * concurrently (see {@code GP.evaluateFixedOpponentsWithRecovery}): every
+     * such call always has exactly one opponent, at local index 0, so
+     * without a unique folder per call, concurrently-running evaluations for
+     * different opponents would all read and write the same
+     * {@code opponentAI0readWriteFolder} path at the same time.
      */
     public static double[] evaluateFixedOpponentsWinRates(List<AI> bots,
                                                             List<AI> opponents,
@@ -100,7 +109,8 @@ public class GPTournamentEvaluator {
                                                             int iterations,
                                                             int maxGameLength,
                                                             int timeBudget,
-                                                            int iterationsBudget) throws Exception {
+                                                            int iterationsBudget,
+                                                            String readWriteFolder) throws Exception {
         if (bots == null || bots.isEmpty()) {
             return new double[0];
         }
@@ -110,15 +120,13 @@ public class GPTournamentEvaluator {
             return undefined;
         }
 
-        ensureFolderExists(FIXED_OPPONENTS_READ_WRITE_FOLDER);
+        ensureFolderExists(readWriteFolder);
 
         FixedOpponentsTournament tournament = new FixedOpponentsTournament(bots, opponents);
-        System.out.println("[GPTournamentEvaluator] Starting fixed-opponent tournament");
-        System.out.println("[GPTournamentEvaluator] GP bots: " + bots.size());
-        System.out.println("[GPTournamentEvaluator] Opponents: " + opponents.size());
-        System.out.println("[GPTournamentEvaluator] Maps: " + maps.size());
-        System.out.println("[GPTournamentEvaluator] Iterations: " + iterations);
-        System.out.println("[GPTournamentEvaluator] Max game length: " + maxGameLength);
+        String label = "[GPTournamentEvaluator:" + Thread.currentThread().getName() + "]";
+        System.out.println(label + " Starting fixed-opponent tournament vs " + describe(opponents));
+        System.out.println(label + " GP bots: " + bots.size() + ", opponents: " + opponents.size()
+                + ", maps: " + maps.size() + ", iterations: " + iterations + ", max game length: " + maxGameLength);
         tournament.runTournament(
                 maps,
                 iterations,
@@ -135,10 +143,17 @@ public class GPTournamentEvaluator {
                 null,               // traceOutputfolder
                 new NullWriter(),
                 new NullWriter(),
-                FIXED_OPPONENTS_READ_WRITE_FOLDER);
-        System.out.println("[GPTournamentEvaluator] Fixed-opponent tournament FINISHED");
+                readWriteFolder);
+        System.out.println(label + " Fixed-opponent tournament FINISHED vs " + describe(opponents));
 
         return tournament.getAverageWinRates();
+    }
+
+    private static String describe(List<AI> opponents) {
+        if (opponents.size() == 1) {
+            return String.valueOf(opponents.get(0));
+        }
+        return opponents.size() + " opponents";
     }
 
     private static void ensureFolderExists(String path) {
