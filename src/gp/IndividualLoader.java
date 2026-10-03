@@ -45,9 +45,23 @@ import java.util.Map;
  * read into. That is what setUpState() below assembles, without running any evolution.
  *
  * IT FOLLOWS THAT THE PARAMS FILE IS PART OF THE ARCHIVE. A .ind saved under a 29-entry
- * function set cannot be read by a params file listing 25. BenchmarkStatistics now writes
- * a best-<stamp>.params snapshot beside each individual for exactly this reason; older
- * archived individuals predate that and may no longer be readable at all.
+ * function set cannot be read by a params file listing 25. The tree COUNT also lives in
+ * the params (numtrees), so a 4-tree role individual read against a 1-tree params file
+ * would come back as one tree -- the round-trip check below catches that loudly.
+ *
+ * ------------------------------------------------------------------------------------
+ * 2026-10: WHICH PARAMS FILE, WHEN NONE IS NAMED. Resolution order:
+ *   1. an explicit "@path.params" in the spec;
+ *   2. the SNAPSHOT beside the individual: best-<stamp>.ind -> best-<stamp>.params
+ *      (BenchmarkStatistics writes it; Pruner copies it to <out>-pruned.params);
+ *   3. for a "-pruned.ind", the unpruned original's snapshot;
+ *   4. config/microrts.params, with a printed warning, since that file has changed
+ *      (25 -> 29 -> 55 entries, 1 -> 4 trees) and is the wrong file for most archives.
+ * The snapshot is the gathered parameter set the run actually used, so it is right by
+ * construction. Note: the snapshot code in BenchmarkStatistics was found MISSING on
+ * 2026-10-03 (the earlier notes describe it, but the file did not contain it), so
+ * individuals archived before that date have no snapshot and need step 1.
+ * ------------------------------------------------------------------------------------
  *
  * THE ROUND-TRIP CHECK IS NOT OPTIONAL. ECJ's read path is far less exercised than its
  * write path, and the specific hazard is ephemeral random constants. GPNode.printNode is
@@ -64,12 +78,12 @@ import java.util.Map;
  * USAGE
  *   From code:   IndividualLoader.makeBot("results/best-seed4242-....ind", utt)
  *   By name:     any Bots.make() call site, as "evolved:results/best-....ind"
- *                optionally "evolved:&lt;ind&gt;@&lt;params&gt;" to override the params file
+ *                optionally "evolved:<ind>@<params>" to override the params file
  *   Inspection:  java -cp "out;lib/*" gp.IndividualLoader results/best-....ind
  */
 public final class IndividualLoader {
 
-    /** Used when a spec does not name one explicitly. */
+    /** Last resort when a spec names no params file and no snapshot sits beside the .ind. */
     public static final String DEFAULT_PARAMS = "config/microrts.params";
 
     private IndividualLoader() {}
@@ -91,15 +105,9 @@ public final class IndividualLoader {
             this.paramsPath = paramsPath;
         }
 
-        /** Lisp form of the loaded tree(s) -- what the bot actually scores with. */
+        /** Lisp form of the loaded tree(s), labelled by role when there are role trees. */
         public String lispForm() {
-            if (individual.trees == null || individual.trees.length == 0) return "(no trees)";
-            StringBuilder sb = new StringBuilder();
-            for (GPTree t : individual.trees) {
-                sb.append(t == null || t.child == null ? "(empty)" : t.child.makeLispTree());
-                sb.append('\n');
-            }
-            return sb.toString();
+            return IndividualLoader.lispForm(individual);
         }
 
         public String describe() {
@@ -111,9 +119,33 @@ public final class IndividualLoader {
                     depth = Math.max(depth, t.child.depth());
                 }
             }
-            return nodes + " nodes, depth " + depth + ", fitness "
-                 + individual.fitness.fitnessToStringForHumans();
+            return individual.trees.length + " tree(s), " + nodes + " nodes, depth " + depth
+                 + ", fitness " + individual.fitness.fitnessToStringForHumans();
         }
+    }
+
+    /**
+     * Lisp form of every tree. With 4+ trees EvolvedBot dispatches by role, so each tree is
+     * labelled with the role that uses it; with one tree there is no label. Shared by
+     * BenchmarkStatistics and Pruner so all three print trees the same way.
+     */
+    public static String lispForm(GPIndividual ind) {
+        if (ind.trees == null || ind.trees.length == 0) return "(no trees)";
+        boolean roles = ind.trees.length >= 4;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ind.trees.length; i++) {
+            GPTree t = ind.trees[i];
+            if (ind.trees.length > 1) {
+                sb.append("tree ").append(i);
+                if (roles && i < EvolvedBot.ROLE_NAMES.length) {
+                    sb.append(" (").append(EvolvedBot.ROLE_NAMES[i]).append(")");
+                }
+                sb.append(":\n");
+            }
+            sb.append(t == null || t.child == null ? "(empty)" : t.child.makeLispTree());
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 
     /**
@@ -148,13 +180,14 @@ public final class IndividualLoader {
     /** Load (or fetch from cache) the individual named by a spec. */
     public static synchronized Loaded load(String spec) {
         String indPath = spec.trim();
-        String paramsPath = DEFAULT_PARAMS;
+        String paramsPath = null;
 
         int at = indPath.lastIndexOf('@');
         if (at >= 0) {
             paramsPath = indPath.substring(at + 1).trim();
             indPath = indPath.substring(0, at).trim();
         }
+        if (paramsPath == null) paramsPath = resolveParams(indPath);
 
         String key = indPath + "@" + paramsPath;
         Loaded cached = CACHE.get(key);
@@ -163,6 +196,21 @@ public final class IndividualLoader {
         Loaded fresh = loadUncached(indPath, paramsPath);
         CACHE.put(key, fresh);
         return fresh;
+    }
+
+    /** Steps 2-4 of the resolution order in the class comment. */
+    static String resolveParams(String indPath) {
+        String base = indPath.endsWith(".ind") ? indPath.substring(0, indPath.length() - 4) : indPath;
+        String sibling = base + ".params";
+        if (new File(sibling).isFile()) return sibling;
+        if (base.endsWith("-pruned")) {
+            String original = base.substring(0, base.length() - "-pruned".length()) + ".params";
+            if (new File(original).isFile()) return original;
+        }
+        System.err.println("WARNING: no params snapshot beside " + indPath + "; falling back to "
+                + DEFAULT_PARAMS + ". If this individual came from a different config (e.g."
+                + " config/microrts-stage4.params), name it: \"" + indPath + "@<params>\".");
+        return DEFAULT_PARAMS;
     }
 
     private static Loaded loadUncached(String indPath, String paramsPath) {
@@ -267,6 +315,7 @@ public final class IndividualLoader {
      * fitness line reads back verbatim regardless, and the tree structure survives, so a
      * broken constant produces a bot that looks entirely correct and plays differently.
      * Comparing the re-printed form against the original is the only cheap way to see it.
+     * It also catches a tree-count mismatch between the file and the params.
      */
     private static void verifyRoundTrip(EvolutionState state, GPIndividual ind,
                                         String original, String indPath) {
@@ -282,11 +331,11 @@ public final class IndividualLoader {
         throw new IllegalArgumentException(
                 "ROUND-TRIP FAILED for " + indPath + "."
               + "\nThe individual was read without error but does not re-print identically,"
-              + "\nwhich means something was lost or changed in the reading. The usual cause"
-              + "\nis an ephemeral random constant: GPNode.printNode / readNode must both be"
-              + "\noverridden in gp.ScoreERC (normally via encode()/decode()), otherwise the"
-              + "\nconstants come back wrong and the loaded bot silently plays differently"
-              + "\nfrom the one that was evolved."
+              + "\nwhich means something was lost or changed in the reading. Two usual causes:"
+              + "\n  (1) an ephemeral random constant: GPNode.printNode / readNode must both be"
+              + "\n      overridden in gp.ScoreERC (normally via encode()/decode());"
+              + "\n  (2) the params file declares a different numtrees than the individual has"
+              + "\n      -- e.g. a 4-tree role individual read with a 1-tree params file."
               + "\n\n--- on disk ---\n" + trim(a)
               + "\n\n--- re-printed ---\n" + trim(b));
     }

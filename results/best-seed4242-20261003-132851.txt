@@ -1,0 +1,50 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed4242-20261003-132851
+generations       : 3
+population        : 500
+training maps     : maps/8x8/basesWorkers8x8.xml, maps/8x8/basesWorkers8x8C.xml, maps/8x8/basesWorkers8x8E.xml, maps/16x16/basesWorkers16x16B.xml
+training opponents: PassiveAI, RandomBiasedAI, WorkerRush, WorkerRushPlusPlus, WorkerDefense, LightRush
+repeats           : 2  (stochastic opponents only)
+cycle cap         : 4000
+win bonus         : 0.5
+eval range        : [0.05, 1.0]
+fitness           : Fitness: Standardized=0.39026620303490944 Adjusted=0.7192867076945624 Hits=41
+tree              : 4 tree(s), 208 nodes, depth 6
+worst cycle (ms)  : 11   (G1 gate 100)
+
+Evolved scoring function
+------------------------
+tree 0:
+(max (+ (+ (min (- aIsMove uCarrying) (+ movesTowardEnemyBase movesTowardEnemyBase)) (min (* placesTowardEnemy distEnemyBase) (- movesTowardEnemyBase placesTowardResource))) (min movesTowardEnemyMajor (+ (* tgtWounded uIsBarracks) (if> enemiesNearMyBase enemyUnitCount enemyUnitCount movesTowardEnemy)))) (if> (/ (max (/ aIsNone uCarrying) (max uIsCombat mapArea)) (min (/ distNearestEnemy aProducesBarracks) (min movesTowardEnemyMajor movesTowardMyBase))) (- (- (min movesTowardEnemyBaseMajor threatAtDest) (* placesTowardEnemy movesTowardResource)) (* (max movesTowardEnemyMajor enemyUnitCount) (min aIsHarvest tgtIsWorker))) (- (min (/ aIsMove myCombatCount) (if> tgtIsWorker myBarracksCount aProducesBuilding aProducesHeavy)) (if> (* aProducesRanged aProducesBarracks) mapArea (max movesTowardResource aProducesCombat) (- aProducesBase movesTowardEnemyBaseMajor))) (* (if> (* enemyWorkerCount aIsHarvest) (* uIsWorker myBarracksCount) (+ distEnemyBase aProducesHeavy) (max tgtKillable aProducesBase)) (max (max uCarrying aIsAttack) (if> enemyWorkerCount aIsAttack mapArea tgtWounded)))))
+tree 1:
+(* (min (- (if> (* mapArea enemyUnitCount) (if> aIsNone tgtIsBuilding uIsWorker tgtWounded) (+ enemyCombatCount enemiesNearMyBase) (max myCombatCount distEnemyBase)) (min (+ aProducesWorker gameTimeK) (max uIsBase movesTowardEnemyMajor))) (if> (- (max enemyWorkerCount aIsNone) (- enemyCombatCount placesTowardEnemy)) (* (min tgtIsWorker myResources) (/ aProducesWorker mapArea)) (- (if> aIsMove movesTowardEnemyBase uHpFrac aProducesBuilding) (+ aProducesLight enemyUnitCount)) (min (max gameTimeK gameTimeK) (/ movesTowardEnemyBaseMajor tgtWounded)))) (* (/ (+ (if> enemyCombatCount aIsAttack movesTowardEnemy aProducesRanged) (- uHpFrac aIsHarvest)) (if> (if> uHpFrac myWorkerCount uIsCombat aIsProduce) (- uIsBarracks aIsMove) (min enemyUnitCount enemiesNearMyBase) (* uIsBase movesTowardEnemy))) (max (min (/ enemyUnitCount aProducesBase) (min aProducesLight tgtIsWorker)) (max (- uIsBase myCombatCount) (+ aProducesHeavy enemyCombatCount)))))
+tree 2:
+aProducesLight
+tree 3:
+(max (max aIsNone uIsCombat) (+ uIsBase myResources))
+
+
+Benchmark
+---------
+vs WorkerRush            :  20W   5T  75L / 100 games  (win rate 20%)   [TRAINING]
+vs LightRush             :  85W  15T   0L / 100 games  (win rate 85%)   [TRAINING]
+vs HeavyRush             :  85W  15T   0L / 100 games  (win rate 85%)
+vs RangedRush            :  85W  15T   0L / 100 games  (win rate 85%)
+vs WorkerRushPlusPlus    :  20W  10T  70L / 100 games  (win rate 20%)   [TRAINING]
+vs EconomyRush           :  80W  20T   0L / 100 games  (win rate 80%)
+vs EconomyRushBurster    :  90W  10T   0L / 100 games  (win rate 90%)
+vs EconomyMilitaryRush   :  90W  10T   0L / 100 games  (win rate 90%)
+vs EMRDeterministico     :  90W  10T   0L / 100 games  (win rate 90%)
+vs SimpleEconomyRush     :  90W  10T   0L / 100 games  (win rate 90%)
+vs LightDefense          : 100W   0T   0L / 100 games  (win rate 100%)
+vs HeavyDefense          : 100W   0T   0L / 100 games  (win rate 100%)
+vs RangedDefense         : 100W   0T   0L / 100 games  (win rate 100%)
+vs WorkerDefense         :  20W  60T  20L / 100 games  (win rate 20%)   [TRAINING]
+vs RandomAI              : 100W   0T   0L / 100 games  (win rate 100%)
+vs RandomBiasedAI        :  94W   2T   4L / 100 games  (win rate 94%)   [TRAINING]
+vs RandomBiasedSingleUnitAI: 100W   0T   0L / 100 games  (win rate 100%)
+vs PassiveAI             : 100W   0T   0L / 100 games  (win rate 100%)   [TRAINING]
+
+NOTE: rows marked [TRAINING] are training performance, not a result.

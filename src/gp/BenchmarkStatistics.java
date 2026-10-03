@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * At the end of evolution, take the best individual OF THE RUN, write it to disk, and
@@ -77,15 +78,39 @@ import java.util.List;
  * below, and the .txt now also records node count and depth so tree bloat is visible in
  * the archive rather than only in the .stat file.
  *
- * PERSISTENCE. Three files per run, stamped with seed and timestamp so repeated runs
+ * PERSISTENCE. Four files per run, stamped with seed and timestamp so repeated runs
  * never overwrite each other:
  *
- *   best-<stamp>.txt   Lisp tree, size, depth, fitness, config, benchmark table.
- *   best-<stamp>.ind   ECJ parseable format, for reloading.
- *   bench-<stamp>.csv  one row per opponent.
+ *   best-<stamp>.txt     Lisp tree(s), size, depth, fitness, config, benchmark table.
+ *   best-<stamp>.ind     ECJ parseable format, for reloading.
+ *   best-<stamp>.params  the GATHERED parameter set the run used (see below).
+ *   bench-<stamp>.csv    one row per opponent.
+ *
+ * ------------------------------------------------------------------------------------
+ * 2026-10: THE .params SNAPSHOT WAS MISSING, AND NOW EXISTS.
+ *
+ * The 2026-09-12 notes record this file writing best-<stamp>.params. The version in the
+ * repo on 2026-10-03 did not -- most likely lost in one of the file shuffles. That
+ * mattered more after stage 4: config/microrts.params has 29 entries and 1 tree, the
+ * stage-4 config 55 entries and 4 trees, so a stage-4 .ind read with the default params
+ * cannot load. The snapshot is ParameterDatabase.list(pw, false): every parameter the run
+ * actually saw, flattened from the params file, its parents inside the ECJ jar, and any
+ * -p overrides. Not a file copy -- a copy would miss the overrides and the inherited
+ * koza defaults. IndividualLoader picks the snapshot up automatically.
+ *
+ * 2026-10: DISTINCT GAMES. With a deterministic bot and a deterministic opponent there
+ * are only (maps x sides) distinct games; extra repeats replay them identically. The
+ * notes said this file reported that; it did not. Each row now prints the distinct count
+ * so "100 games" is never mistaken for 100 independent samples.
+ *
+ * 2026-10: ROLE TREES. Lisp output labels each tree with the role that uses it, via
+ * IndividualLoader.lispForm, so all three tools print individuals the same way.
+ * ------------------------------------------------------------------------------------
  *
  * IMPORTANT: the panel includes the training opponents. Numbers against those are
- * TRAINING performance, not a result, and are marked as such in both outputs.
+ * TRAINING performance, not a result, and are marked as such in both outputs. On the
+ * stage-4 validation maps those rows are a trained-against opponent on UNSEEN maps --
+ * more informative than before, but still not a held-out result.
  */
 public class BenchmarkStatistics extends SimpleStatistics {
 
@@ -140,13 +165,13 @@ public class BenchmarkStatistics extends SimpleStatistics {
         state.output.message("fitness: " + best.fitness.fitnessToStringForHumans());
         state.output.message("tree: " + describeTrees(gpBest));
         state.output.message("maps: " + String.join(", ", benchMaps)
-                + "   games per opponent: " + gamesPer + "   cycle cap: " + maxCycles);
+                + "   games per opponent per map: " + gamesPer + "   cycle cap: " + maxCycles);
 
         long worstCycleMs = 0;
         int brokenOpponents = 0;
         List<String> csv = new ArrayList<>();
         List<String> table = new ArrayList<>();
-        csv.add("opponent,status,wins,draws,losses,errors,games,win_rate,trained_against,note");
+        csv.add("opponent,status,wins,draws,losses,errors,games,distinct_games,win_rate,trained_against,note");
 
         for (String opponent : benchOpponents) {
             boolean trained = wasTrainedAgainst(problem, opponent);
@@ -156,11 +181,11 @@ public class BenchmarkStatistics extends SimpleStatistics {
             String probeFailure = probe(opponent, utt);
             if (probeFailure != null) {
                 brokenOpponents++;
-                String line = String.format("vs %-22s: ERROR -- could not construct (%s)",
+                String line = String.format("vs %-24s: ERROR -- could not construct (%s)",
                         opponent, probeFailure);
                 state.output.message(line);
                 table.add(line);
-                csv.add(String.format("%s,ERROR,0,0,0,0,0,,%s,%s",
+                csv.add(String.format("%s,ERROR,0,0,0,0,0,0,,%s,%s",
                         opponent, trained ? "yes" : "no", csvSafe(probeFailure)));
                 continue;
             }
@@ -189,23 +214,26 @@ public class BenchmarkStatistics extends SimpleStatistics {
             }
 
             int played = w + t + l;
+            int distinct = distinctGames(problem, opponent, played);
             double rate = (played == 0) ? 0.0 : 100.0 * w / played;
             String status = (err == 0) ? "OK" : (played == 0 ? "ERROR" : "PARTIAL");
             if (err > 0) brokenOpponents++;
 
             String line = String.format(
-                    "vs %-22s: %3dW %3dT %3dL / %3d games  (win rate %.0f%%)%s%s",
-                    opponent, w, t, l, played, rate,
+                    "vs %-24s: %3dW %3dT %3dL / %3d games, %3d distinct  (win rate %.0f%%)%s%s",
+                    opponent, w, t, l, played, distinct, rate,
                     err > 0 ? String.format("   [%d ERRORS -- %s]", err, status) : "",
-                    trained ? "   [TRAINING]" : "");
+                    trained ? "   [TRAINING OPPONENT]" : "");
             state.output.message(line);
             table.add(line);
-            csv.add(String.format("%s,%s,%d,%d,%d,%d,%d,%.1f,%s,%s",
-                    opponent, status, w, t, l, err, played, rate,
+            csv.add(String.format(Locale.ROOT, "%s,%s,%d,%d,%d,%d,%d,%d,%.1f,%s,%s",
+                    opponent, status, w, t, l, err, played, distinct, rate,
                     trained ? "yes" : "no", csvSafe(firstError)));
         }
 
         state.output.message("");
+        state.output.message("'distinct' = independent games. Against a deterministic opponent"
+                + " only (maps x sides) games exist; repeats replay them exactly.");
         if (brokenOpponents > 0) {
             state.output.warning(brokenOpponents + " opponent(s) could not be played and are "
                     + "marked ERROR or PARTIAL above. Those rows are NOT results. If these are "
@@ -216,6 +244,18 @@ public class BenchmarkStatistics extends SimpleStatistics {
                 + " ms   (G1 gate is 100 ms)");
 
         writeArtifacts(state, gpBest, problem, stamp, table, csv, worstCycleMs, brokenOpponents);
+    }
+
+    /**
+     * Number of statistically independent games behind a row. Deterministic opponents:
+     * one per (map, side) actually covered. Stochastic opponents: every game played.
+     */
+    private int distinctGames(MicroRTSProblem problem, String opponent, int played) {
+        boolean stochastic = problem.stochastic != null
+                && problem.stochastic.contains(opponent.trim().toLowerCase(Locale.ROOT));
+        if (stochastic) return played;
+        int sidesCovered = Math.min(gamesPer, 2);
+        return Math.min(played, benchMaps.length * sidesCovered);
     }
 
     /**
@@ -276,33 +316,21 @@ public class BenchmarkStatistics extends SimpleStatistics {
         return "seed" + (seed == null ? "x" : seed.trim()) + "-" + when;
     }
 
-    /** One-line size summary, e.g. "1 tree, 143 nodes, depth 9". */
+    /** One-line size summary, e.g. "4 tree(s), 143 nodes, depth 9". */
     private static String describeTrees(final GPIndividual ind) {
         if (ind.trees == null || ind.trees.length == 0) return "(no trees)";
         int nodes = 0;
         int depth = 0;
-        for (GPTree t : ind.trees) {
-            if (t == null || t.child == null) continue;
-            nodes += t.child.numNodes(GPNode.NODESEARCH_ALL);
-            depth = Math.max(depth, t.child.depth());
-        }
-        return ind.trees.length + " tree(s), " + nodes + " nodes, depth " + depth;
-    }
-
-    /**
-     * The readable scoring function. makeLispTree() is the call that actually renders a
-     * GP tree; the genotypeTo*() convenience methods do not.
-     */
-    private static String lispForm(final GPIndividual ind) {
-        if (ind.trees == null || ind.trees.length == 0) return "(no trees)";
-        StringBuilder sb = new StringBuilder();
+        StringBuilder per = new StringBuilder();
         for (int i = 0; i < ind.trees.length; i++) {
             GPTree t = ind.trees[i];
-            if (ind.trees.length > 1) sb.append("tree ").append(i).append(":\n");
-            sb.append(t == null || t.child == null ? "(empty)" : t.child.makeLispTree());
-            sb.append('\n');
+            int n = (t == null || t.child == null) ? 0 : t.child.numNodes(GPNode.NODESEARCH_ALL);
+            nodes += n;
+            if (t != null && t.child != null) depth = Math.max(depth, t.child.depth());
+            if (ind.trees.length > 1) per.append(i == 0 ? " [" : ", ").append(n);
         }
-        return sb.toString();
+        if (per.length() > 0) per.append(" per tree]");
+        return ind.trees.length + " tree(s), " + nodes + " nodes, depth " + depth + per;
     }
 
     /** ECJ's parseable individual format -- the one a loader can read back. */
@@ -310,6 +338,19 @@ public class BenchmarkStatistics extends SimpleStatistics {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         ind.printIndividual(state, pw);
+        pw.flush();
+        return sw.toString();
+    }
+
+    /** Every parameter the run saw, flattened. See the 2026-10 note in the class comment. */
+    private static String paramsSnapshot(final EvolutionState state, final String stamp) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        pw.println("# Gathered parameter snapshot for best-" + stamp + ".ind");
+        pw.println("# Written by gp.BenchmarkStatistics via ParameterDatabase.list(pw, false):");
+        pw.println("# the params file, its parents inside the ECJ jar, and all -p overrides.");
+        pw.println("# gp.IndividualLoader uses this automatically for the .ind beside it.");
+        state.parameters.list(pw, false);
         pw.flush();
         return sw.toString();
     }
@@ -341,13 +382,15 @@ public class BenchmarkStatistics extends SimpleStatistics {
                .append('\n');
             txt.append("tree              : ").append(describeTrees(best)).append('\n');
             txt.append("worst cycle (ms)  : ").append(worstCycleMs).append("   (G1 gate 100)\n");
+            txt.append("benchmark maps    : ").append(join(benchMaps)).append('\n');
 
             txt.append("\nEvolved scoring function\n------------------------\n");
-            txt.append(lispForm(best)).append('\n');
+            txt.append(IndividualLoader.lispForm(best)).append('\n');
 
             txt.append("\nBenchmark\n---------\n");
             for (String line : table) txt.append(line).append('\n');
-            txt.append("\nNOTE: rows marked [TRAINING] are training performance, not a result.\n");
+            txt.append("\nNOTE: rows marked [TRAINING OPPONENT] are an opponent seen in training."
+                    + " 'distinct' counts independent games.\n");
             if (brokenOpponents > 0) {
                 txt.append("WARNING: ").append(brokenOpponents).append(" opponent(s) could not be ")
                    .append("played (ERROR or PARTIAL above). Those rows are NOT measurements -- ")
@@ -357,11 +400,13 @@ public class BenchmarkStatistics extends SimpleStatistics {
 
             write(dir.resolve("best-" + stamp + ".txt"), txt.toString());
             write(dir.resolve("best-" + stamp + ".ind"), reloadableForm(state, best));
+            write(dir.resolve("best-" + stamp + ".params"), paramsSnapshot(state, stamp));
             write(dir.resolve("bench-" + stamp + ".csv"), String.join("\n", csv) + "\n");
 
             state.output.message("");
             state.output.message("Wrote " + new File(resultsDir).getAbsolutePath()
-                    + File.separator + "best-" + stamp + ".{txt,ind} and bench-" + stamp + ".csv");
+                    + File.separator + "best-" + stamp + ".{txt,ind,params} and bench-"
+                    + stamp + ".csv");
         } catch (IOException e) {
             // Never let an unwritable results directory destroy a finished run: the
             // benchmark table has already been printed to stdout above.

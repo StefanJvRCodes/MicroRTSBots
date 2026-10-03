@@ -3,6 +3,7 @@ package gp;
 import ai.core.AI;
 import ai.core.AIWithComputationBudget;
 import ai.core.ParameterSpecification;
+import bots.EvolvedBot;
 import ec.EvolutionState;
 import ec.gp.ADFStack;
 import ec.gp.GPIndividual;
@@ -26,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -66,8 +68,8 @@ import java.util.Locale;
  * HOW IT WORKS
  *
  * Phase 1, algebraic. Only rules true for every input:
- *   max(x, x) -&gt; x        min(x, x) -&gt; x
- *   if&gt;(a, a, then, else) -&gt; else      (nothing is strictly greater than itself)
+ *   max(x, x) -> x        min(x, x) -> x
+ *   if>(a, a, then, else) -> else      (nothing is strictly greater than itself)
  * Structural equality is compared on makeLispTree() form. No games needed, no risk.
  *
  * Phase 2, behavioural. Greedily try replacing each node with one of its children,
@@ -79,6 +81,28 @@ import java.util.Locale;
  * candidate and stops that game immediately.
  *
  * ---------------------------------------------------------------------------------
+ * 2026-10: ROLE TREES -- TRACEBOT USED trees[0] FOR EVERY UNIT. FIXED.
+ *
+ * TraceBot hard-coded trees[0] for both the reference and the candidate. With a 4-tree
+ * role individual that has two consequences, and the second is the dangerous one:
+ *   (1) the trace games are played by a bot that is NOT the evolved bot (every unit
+ *       scored by the worker tree);
+ *   (2) edits to trees 1-3 (base, barracks, combat) never reach TraceBot, so every
+ *       candidate in those trees "plays identically" and is ACCEPTED -- the pruner would
+ *       have cut three of the four trees down to a single leaf and reported success.
+ * Deterministic -verify rows would then have shown DIFFERS (they use the real EvolvedBot),
+ * but stochastic rows use the trace test and would have passed.
+ * TraceBot now dispatches per unit exactly as EvolvedBot does, via EvolvedBot.roleOf.
+ * Single-tree individuals are unaffected.
+ *
+ * 2026-10: -verify-maps. Pruning traces on the TRAINING maps (no leakage); verification
+ * can now be run on other maps, e.g. the validation set, which is a much stronger check
+ * that the pruned tree is the same bot outside the states it was pruned against.
+ *
+ * 2026-10: the params file used to load the individual is copied beside the output as
+ * <out>.params, so the pruned .ind loads on its own with IndividualLoader.
+ * ---------------------------------------------------------------------------------
+ *
  * RESTORING A REJECTED CANDIDATE MUST PUT BACK THE ORIGINAL OBJECT, NOT A COPY.
  *
  * The first version restored by splicing in a CLONE of the rejected node. That looks
@@ -100,14 +124,9 @@ import java.util.Locale;
  * compared the W/T/L tables. That is exact for a DETERMINISTIC opponent and meaningless
  * for a stochastic one: ai.RandomBiasedAI seeds its RNG from the clock, so the two runs
  * are different games and the tables can differ for reasons that have nothing to do with
- * pruning. The first run of this tool reported exactly that -- 17 rows identical and
- * RandomBiasedAI flagged as DIFFERS, which was the verifier's bug rather than a real
- * divergence.
- *
- * Stochastic opponents are therefore checked by DECISION EQUIVALENCE over sampled games:
- * the same test phase 2 uses, repeated a few times so different random draws are seen.
- * That is strictly stronger evidence than table equality anyway -- matching outcomes can
- * hide divergent play, matching decisions cannot.
+ * pruning. Stochastic opponents are therefore checked by DECISION EQUIVALENCE over sampled
+ * games, which is strictly stronger evidence than table equality anyway -- matching
+ * outcomes can hide divergent play, matching decisions cannot.
  * ---------------------------------------------------------------------------------
  *
  * THE LIMIT OF THE GUARANTEE, WHICH BELONGS IN THE WRITE-UP. Equivalence is established
@@ -117,20 +136,16 @@ import java.util.Locale;
  *
  * WHICH OPPONENTS TO TRACE AGAINST -- A METHODOLOGY DECISION, NOT A DEFAULT. Pruning is
  * guided by the games it traces, so tracing against the held-out panel would let held-out
- * opponents shape the artefact that is later evaluated on them. That is leakage, the same
- * kind the train/eval split exists to prevent. The default here is the TRAINING opponents
- * from the params file. Overriding with -opponents is supported because it is sometimes
- * the right call, but if the overridden set includes held-out bots, say so wherever the
+ * opponents shape the artefact that is later evaluated on them. The default here is the
+ * TRAINING opponents and maps from the params. Override with care, and say so wherever the
  * pruned tree is reported.
  *
  * USAGE
- *   java -cp "out;lib/*;lib/bots/*" gp.Pruner results/best-&lt;stamp&gt;.ind -verify
- *   java -cp "out;lib/*;lib/bots/*" gp.Pruner results/best-&lt;stamp&gt;.ind \
- *        -params results/best-&lt;stamp&gt;.params -opponents PassiveAI,WorkerRush \
- *        -verify -verify-samples 10
+ *   java -cp "out;lib/*;lib/bots/*" gp.Pruner results/best-<stamp>.ind -verify
+ *   java -cp "out;lib/*;lib/bots/*" gp.Pruner results/best-<stamp>.ind \
+ *        -verify -verify-maps maps/8x8/basesWorkers8x8B.xml,maps/16x16/basesWorkers16x16C.xml
  *
- * Writes &lt;input&gt;-pruned.ind, which every existing runner accepts as
- * "evolved:results/best-&lt;stamp&gt;-pruned.ind".
+ * Writes <input>-pruned.ind and <input>-pruned.params.
  */
 public final class Pruner {
 
@@ -151,9 +166,10 @@ public final class Pruner {
             System.out.println("usage: gp.Pruner <path.ind> [-params <path.params>]");
             System.out.println("                  [-opponents A,B,C] [-maxcycles 3000]");
             System.out.println("                  [-out <path.ind>] [-verify] [-verify-samples N]");
+            System.out.println("                  [-verify-maps m1.xml,m2.xml]");
             System.out.println();
-            System.out.println("Default opponents are the TRAINING opponents from the params");
-            System.out.println("file. Tracing against held-out bots would leak them.");
+            System.out.println("Default trace opponents and maps are the TRAINING ones from the");
+            System.out.println("params file. Tracing against held-out bots would leak them.");
             return;
         }
 
@@ -161,6 +177,7 @@ public final class Pruner {
         String paramsPath = null;
         String outPath = null;
         String[] opponents = null;
+        String[] verifyMaps = null;
         int maxCycles = -1;
         boolean verify = false;
         int verifySamples = 5;
@@ -170,6 +187,7 @@ public final class Pruner {
                 case "-params":         paramsPath = args[++i]; break;
                 case "-out":            outPath = args[++i]; break;
                 case "-opponents":      opponents = args[++i].trim().split("\\s*,\\s*"); break;
+                case "-verify-maps":    verifyMaps = args[++i].trim().split("\\s*,\\s*"); break;
                 case "-maxcycles":      maxCycles = Integer.parseInt(args[++i]); break;
                 case "-verify":         verify = true; break;
                 case "-verify-samples": verifySamples = Integer.parseInt(args[++i]); break;
@@ -184,6 +202,7 @@ public final class Pruner {
         MicroRTSProblem problem = (MicroRTSProblem) loaded.problem;
 
         if (opponents == null) opponents = problem.opponents;
+        if (verifyMaps == null) verifyMaps = problem.maps;
         if (maxCycles <= 0) maxCycles = problem.maxCycles;
         if (outPath == null) {
             outPath = indPath.endsWith(".ind")
@@ -193,6 +212,7 @@ public final class Pruner {
 
         System.out.println();
         System.out.println("=== Pruning " + loaded.indPath + " ===");
+        System.out.println("params          : " + loaded.paramsPath);
         System.out.println("trace opponents : " + String.join(", ", opponents)
                 + "   maps: " + String.join(", ", problem.maps)
                 + "   cycle cap: " + maxCycles);
@@ -214,19 +234,25 @@ public final class Pruner {
         System.out.println();
         System.out.println("TOTAL: " + before + " -> " + after + " nodes ("
                 + String.format("%.0f%%", 100.0 * (before - after) / Math.max(1, before))
-                + " smaller), depth " + depth(working));
+                + " smaller), depth " + depth(working) + perTree(working));
         System.out.println();
         System.out.println("Pruned scoring function");
         System.out.println("-----------------------");
-        System.out.println(lisp(working));
+        System.out.println(IndividualLoader.lispForm(working));
 
         writeIndividual(loaded.state, working, outPath);
+        String outParams = (outPath.endsWith(".ind") ? outPath.substring(0, outPath.length() - 4)
+                                                     : outPath) + ".params";
+        Files.copy(Paths.get(loaded.paramsPath), Paths.get(outParams),
+                   StandardCopyOption.REPLACE_EXISTING);
         System.out.println("Wrote " + Paths.get(outPath).toAbsolutePath());
+        System.out.println("  and " + Paths.get(outParams).toAbsolutePath());
 
         if (verify) {
             System.out.println();
             System.out.println("=== Verification against the full panel ===");
-            verifyPanel(loaded, working, problem, maxCycles, verifySamples);
+            System.out.println("verify maps: " + String.join(", ", verifyMaps));
+            verifyPanel(loaded, working, problem, verifyMaps, maxCycles, verifySamples);
         }
     }
 
@@ -315,7 +341,8 @@ public final class Pruner {
                       + " object rather than a clone.");
             }
 
-            for (GPTree tree : working.trees) {
+            for (int ti = 0; ti < working.trees.length; ti++) {
+                GPTree tree = working.trees[ti];
                 if (tree == null || tree.child == null) continue;
 
                 List<GPNode> nodes = preorder(tree.child);
@@ -346,7 +373,8 @@ public final class Pruner {
                             removed += delta;
                             changed = true;
                             System.out.println("  round " + round + ": -" + delta
-                                    + " nodes (" + countNodes(working) + " left)");
+                                    + " nodes in " + treeLabel(working, ti)
+                                    + " (" + countNodes(working) + " left)");
                             break;
                         }
 
@@ -426,10 +454,11 @@ public final class Pruner {
     }
 
     /**
-     * Plays using the REFERENCE tree while scoring every decision with the CANDIDATE too,
-     * and raises Divergence the moment the two would pick different actions.
+     * Plays using the REFERENCE individual while scoring every decision with the CANDIDATE
+     * too, and raises Divergence the moment the two would pick different actions.
      *
-     * NOTE: the selection logic below is deliberately identical to bots.EvolvedBot --
+     * NOTE: tree dispatch and selection below are deliberately identical to
+     * bots.EvolvedBot -- role tree via EvolvedBot.roleOf when there are 4+ trees,
      * best-first walk, resource-consistency check, NONE fallback -- because comparing raw
      * argmax would miss divergences that only appear once an unaffordable top choice is
      * skipped. If EvolvedBot's selection ever changes, this must change with it.
@@ -440,8 +469,6 @@ public final class Pruner {
         private final GPProblem problem;
         private final GPIndividual refInd;
         private final GPIndividual candInd;
-        private final GPNode refTree;
-        private final GPNode candTree;
         private final ScoreData refData;
         private final ScoreData candData;
         private final ADFStack refStack;
@@ -453,12 +480,16 @@ public final class Pruner {
             this.problem = loaded.problem;
             this.refInd = loaded.individual;
             this.candInd = candidate;
-            this.refTree = loaded.individual.trees[0].child;
-            this.candTree = candidate.trees[0].child;
             this.refData = (ScoreData) loaded.problem.input.clone();
             this.candData = (ScoreData) loaded.problem.input.clone();
             this.refStack = (ADFStack) loaded.problem.stack.clone();
             this.candStack = (ADFStack) loaded.problem.stack.clone();
+        }
+
+        /** Same rule as EvolvedBot: role tree with 4+ trees, else tree 0. */
+        private static GPNode treeFor(GPIndividual ind, Unit u) {
+            int t = ind.trees.length >= 4 ? EvolvedBot.roleOf(u) : 0;
+            return ind.trees[t].child;
         }
 
         private double score(GPNode tree, GPIndividual ind, ScoreData data, ADFStack stack,
@@ -486,6 +517,9 @@ public final class Pruner {
 
                 List<UnitAction> legal = u.getUnitActions(gs);
                 if (legal.isEmpty()) continue;
+
+                GPNode refTree = treeFor(refInd, u);
+                GPNode candTree = treeFor(candInd, u);
 
                 double[] refScores = new double[legal.size()];
                 double[] candScores = new double[legal.size()];
@@ -545,14 +579,12 @@ public final class Pruner {
      *
      * STOCHASTIC opponents: table comparison is INVALID -- ai.RandomBiasedAI seeds from
      * the clock, so the two runs are different games and the tables can differ for reasons
-     * unrelated to pruning. Use decision equivalence over sampled games instead, which is
-     * the stronger property anyway: matching outcomes can hide divergent play, matching
-     * decisions cannot.
+     * unrelated to pruning. Use decision equivalence over sampled games instead.
      */
     private static void verifyPanel(IndividualLoader.Loaded loaded, GPIndividual pruned,
-                                    MicroRTSProblem problem, int maxCycles, int samples) {
+                                    MicroRTSProblem problem, String[] maps, int maxCycles,
+                                    int samples) {
         GPIndividual original = loaded.individual;
-        String[] maps = problem.maps;
         boolean allMatch = true;
 
         System.out.println("Deterministic opponents: outcome tables must match exactly.");
@@ -606,7 +638,7 @@ public final class Pruner {
             for (int side = 0; side < 2; side++) {
                 UnitTypeTable utt = new UnitTypeTable();
                 try {
-                    bots.EvolvedBot ours = new bots.EvolvedBot(
+                    EvolvedBot ours = new EvolvedBot(
                             utt, ind, loaded.state, 0, loaded.problem,
                             (ScoreData) loaded.problem.input.clone(),
                             (ADFStack) loaded.problem.stack.clone());
@@ -672,23 +704,33 @@ public final class Pruner {
         return d;
     }
 
-    private static String lisp(GPIndividual ind) {
-        StringBuilder sb = new StringBuilder();
-        for (GPTree t : ind.trees) {
-            sb.append(t == null || t.child == null ? "(empty)" : t.child.makeLispTree());
-            sb.append('\n');
+    /** " [a, b, c, d per tree]" for multi-tree individuals, empty otherwise. */
+    private static String perTree(GPIndividual ind) {
+        if (ind.trees.length <= 1) return "";
+        StringBuilder sb = new StringBuilder(" [");
+        for (int i = 0; i < ind.trees.length; i++) {
+            GPTree t = ind.trees[i];
+            if (i > 0) sb.append(", ");
+            sb.append(t == null || t.child == null ? 0 : t.child.numNodes(GPNode.NODESEARCH_ALL));
         }
-        return sb.toString();
+        return sb.append(" per tree]").toString();
+    }
+
+    private static String treeLabel(GPIndividual ind, int i) {
+        if (ind.trees.length >= 4 && i < EvolvedBot.ROLE_NAMES.length) {
+            return "tree " + i + " (" + EvolvedBot.ROLE_NAMES[i] + ")";
+        }
+        return "tree " + i;
     }
 
     private static String describe(GPIndividual ind) {
-        return countNodes(ind) + " nodes, depth " + depth(ind)
-             + ", fitness " + ind.fitness.fitnessToStringForHumans();
+        return ind.trees.length + " tree(s), " + countNodes(ind) + " nodes, depth " + depth(ind)
+             + perTree(ind) + ", fitness " + ind.fitness.fitnessToStringForHumans();
     }
 
     /**
      * Write in ECJ's reloadable format so the pruned tree is a first-class individual --
-     * loadable by gp.IndividualLoader, playable as "evolved:&lt;path&gt;" anywhere.
+     * loadable by gp.IndividualLoader, playable as "evolved:<path>" anywhere.
      *
      * The fitness line is carried over from the original and is now STALE: it was measured
      * for the unpruned tree. That is harmless for play (nothing reads it) but it must not

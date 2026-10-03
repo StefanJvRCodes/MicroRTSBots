@@ -14,6 +14,7 @@ import ec.util.Parameter;
 import eval.Panel;
 import rts.units.UnitTypeTable;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -117,6 +118,22 @@ import java.util.Set;
  * every thread. clone() below hands each thread its own. gp.Features is already safe:
  * it holds no static mutable state.
  * ------------------------------------------------------------------------------------
+ *
+ * ------------------------------------------------------------------------------------
+ * 2026-10: FAIL LOUDLY ON A BAD MAP OR OPPONENT NAME -- A FOURTH WAY TO FLATTEN THE
+ * LANDSCAPE. evaluate() catches any exception from a game and scores it 3.0, which is
+ * right for a crashing INDIVIDUAL and catastrophic for a typo in the params: a missing
+ * map file or an unknown opponent makes every game throw, every individual scores 3.0,
+ * and the run looks like a hopeless fitness landscape while printing one warnOnce line.
+ * That risk grew the moment the map list went from one entry to several, so setup()
+ * now checks every map exists and every opponent constructs, and fatals otherwise.
+ *
+ * 2026-10: TIE-RATE REPORT. EvolvedBot counts decisions decided by getUnitActions()
+ * list order rather than by the tree; this file aggregates them per generation the same
+ * way it aggregates the calibration range, and prints them per role, split into ALL
+ * ties and CROSS-TYPE ties (tied actions of different types). Only the second means the
+ * engine chose what the unit does; ties among equivalent placements are mostly benign.
+ * ------------------------------------------------------------------------------------
  */
 public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
 
@@ -200,6 +217,20 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
     private static int calCount = 0;
     private static boolean calReported = false;
 
+    // ---------------------------------------------------------------------------------
+    // Tie-rate accumulator (2026-10). Same pattern and same caveat as calibration:
+    // reporting only, never feeds fitness. Reported once per generation after
+    // TIE_SAMPLE_GAMES games, so it is a SAMPLE of the generation, not all of it.
+    // ---------------------------------------------------------------------------------
+    private static final int TIE_SAMPLE_GAMES = 2000;
+    private static final Object TIE_LOCK = new Object();
+    private static int tieGeneration = -1;
+    private static final long[] tieDecisions = new long[4];
+    private static final long[] tieTied = new long[4];
+    private static final long[] tieCross = new long[4];
+    private static int tieGames = 0;
+    private static boolean tieReported = false;
+
     @Override
     public void setup(final EvolutionState state, final Parameter base) {
         super.setup(state, base);
@@ -255,6 +286,8 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
         utt = new UnitTypeTable();
         stateEval = new SimpleSqrtEvaluationFunction3();
 
+        validateMapsAndOpponents(state, base);
+
         state.output.message("microRTS fitness: " + gamesPerIndividual() + " games per individual"
                 + " (" + maps.length + " maps x " + opponents.length + " opponents"
                 + (swapSides ? " x 2 sides" : "") + ", " + repeats + " repeats on stochastic"
@@ -265,6 +298,34 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
                 + round2(qualityShare) + " quality."
                 + " Win reward: fitness x (1 - " + round2(winBonus) + " x win fraction)."
                 + " meanEval mapped from [" + round2(evalLo) + ", " + round2(evalHi) + "].");
+    }
+
+    /**
+     * See the 2026-10 block in the class comment: a bad name here would otherwise turn
+     * into a silently flat landscape rather than an error.
+     */
+    private void validateMapsAndOpponents(final EvolutionState state, final Parameter base) {
+        for (String m : maps) {
+            if (!new File(m).isFile()) {
+                state.output.fatal("Map not found: '" + m + "' (relative to working directory "
+                        + System.getProperty("user.dir") + "). A missing map makes every game"
+                        + " throw and every individual score 3.0.", base.push(P_MAPS));
+            }
+        }
+        for (String o : opponents) {
+            AI probe = null;
+            String why = "returned null";
+            try {
+                probe = Panel.make(o, utt);
+            } catch (Exception e) {
+                why = e.toString();
+            }
+            if (probe == null) {
+                state.output.fatal("Opponent '" + o + "' cannot be constructed (" + why + ")."
+                        + " An unknown opponent makes every game against it score 3.0.",
+                        base.push(P_OPPONENTS));
+            }
+        }
     }
 
     /**
@@ -340,9 +401,15 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
                     for (int rep = 0; rep < reps; rep++) {
                         double f;
                         try {
-                            Panel.Result r = playOne((GPIndividual) ind, state, threadnum,
-                                                     map, opponent, side);
+                            // Fresh bot AND fresh opponent per game. This matters more now
+                            // that games repeat: a reused opponent would carry internal state
+                            // across repeats and the second game would not be an independent
+                            // sample.
+                            EvolvedBot ours = new EvolvedBot(utt, (GPIndividual) ind, state,
+                                                             threadnum, this, (ScoreData) input, stack);
+                            Panel.Result r = playOne(ours, map, opponent, side);
                             note(state, r.meanEval);
+                            noteTies(state, ours);
                             f = score(r);
                             if (r.won()) wins++;
                         } catch (Exception e) {
@@ -360,6 +427,7 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
         }
 
         reportCalibration(state);
+        reportTies(state);
 
         // Averaging over repeats is what shrinks the variance; the win reward then works
         // off a win FRACTION that reflects reliability rather than a single lucky game.
@@ -377,13 +445,8 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
         ind.evaluated = true;
     }
 
-    private Panel.Result playOne(GPIndividual ind, EvolutionState state, int threadnum,
-                                 String map, String opponent, int side) throws Exception {
-        // Fresh bot AND fresh opponent per game. This matters more now that games repeat:
-        // a reused opponent would carry internal state across repeats and the second game
-        // would not be an independent sample.
-        EvolvedBot ours = new EvolvedBot(utt, ind, state, threadnum, this,
-                                         (ScoreData) input, stack);
+    private Panel.Result playOne(EvolvedBot ours, String map, String opponent, int side)
+            throws Exception {
         AI theirs = Panel.make(opponent, utt);
         return Panel.play(ours, theirs, map, utt, side, maxCycles, stateEval, 50);
     }
@@ -416,6 +479,10 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
 
     private static double clamp01(double v) {
         return v < 0.0 ? 0.0 : (v > 1.0 ? 1.0 : v);
+    }
+
+    private static String pct(long num, long den) {
+        return (Math.round(1000.0 * num / den) / 10.0) + "%";
     }
 
     private static double round2(double v) {
@@ -460,5 +527,54 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
                 + round2(lo) + ", " + round2(hi) + "]  mapped from ["
                 + round2(evalLo) + ", " + round2(evalHi) + "]"
                 + (bad ? "   <-- CLAMPING, recalibrate" : "   ok"));
+    }
+
+    /** Accumulate one game's tie counts into the shared per-generation totals. */
+    private void noteTies(final EvolutionState state, final EvolvedBot bot) {
+        synchronized (TIE_LOCK) {
+            if (state.generation != tieGeneration) {
+                tieGeneration = state.generation;
+                java.util.Arrays.fill(tieDecisions, 0);
+                java.util.Arrays.fill(tieTied, 0);
+                java.util.Arrays.fill(tieCross, 0);
+                tieGames = 0;
+                tieReported = false;
+            }
+            for (int r = 0; r < 4; r++) {
+                tieDecisions[r] += bot.decisionsByRole[r];
+                tieTied[r] += bot.tiesByRole[r];
+                tieCross[r] += bot.crossTypeTiesByRole[r];
+            }
+            tieGames++;
+        }
+    }
+
+    /**
+     * Prints, per role, the share of multi-choice decisions that were decided by
+     * getUnitActions() list order rather than by the tree. High numbers mean the engine's
+     * fixed priority (attack > harvest > return > produce > move > none) is doing the
+     * playing for that role.
+     */
+    private void reportTies(final EvolutionState state) {
+        long[] d = new long[4], t = new long[4], c = new long[4];
+        int g;
+        synchronized (TIE_LOCK) {
+            if (tieReported || tieGames < TIE_SAMPLE_GAMES || state.generation != tieGeneration) return;
+            tieReported = true;
+            System.arraycopy(tieDecisions, 0, d, 0, 4);
+            System.arraycopy(tieTied, 0, t, 0, 4);
+            System.arraycopy(tieCross, 0, c, 0, 4);
+            g = tieGames;
+        }
+        // Format: role all-ties% / cross-type% . The second number is the one that
+        // matters: it is the share of decisions where list order chose WHAT to do, not
+        // merely which of several equivalent placements or steps.
+        StringBuilder sb = new StringBuilder("tie rate generation " + state.generation
+                + " (first " + g + " games, all / cross-type):");
+        for (int r = 0; r < 4; r++) {
+            sb.append("  ").append(EvolvedBot.ROLE_NAMES[r]).append(' ');
+            sb.append(d[r] == 0 ? "n/a" : pct(t[r], d[r]) + " / " + pct(c[r], d[r]));
+        }
+        state.output.message(sb.toString());
     }
 }

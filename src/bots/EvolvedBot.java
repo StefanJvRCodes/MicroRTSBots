@@ -34,8 +34,31 @@ import java.util.List;
  * THREADING: one EvolvedBot instance belongs to one evaluation thread. ECJ clones the
  * Problem per eval thread, so each thread must build its own bot with its own ScoreData.
  * Sharing one across threads will corrupt the evaluation context.
+ *
+ * ------------------------------------------------------------------------------------
+ * 2026-10: ROLE TREES. If the individual has 4 or more trees, each unit is scored by the
+ * tree for its role: 0 worker, 1 base, 2 barracks, 3 combat. With 1 tree, every unit uses
+ * trees[0], exactly as before -- so every archived single-tree .ind still plays
+ * identically. The tree count comes from the params file
+ * (pop.subpop.0.species.ind.numtrees), never from this class.
+ *
+ * Why: a single tree has to learn uIsWorker / uIsBase gating by accident before it can
+ * give different roles different policies, and the pruned 17-node tree shows it barely
+ * did (combat units reduced exactly to movesTowardEnemy). Role trees make that structure
+ * free. Apply the same choice to BOTH ordinary GP and SBGP in Phase 4, or the comparison
+ * is confounded.
+ *
+ * 2026-10: TIE COUNTERS. For every decision with more than one legal action, records
+ * whether the top score was shared. A tied decision is decided by getUnitActions() list
+ * order, not by the tree, so the tie rate is the fraction of the bot's behaviour that is
+ * the ENGINE'S policy rather than an evolved one. MicroRTSProblem aggregates and reports
+ * it per generation. Worth reporting in the write-up alongside win rates.
+ * ------------------------------------------------------------------------------------
  */
 public class EvolvedBot extends AIWithComputationBudget {
+
+    public static final int ROLE_WORKER = 0, ROLE_BASE = 1, ROLE_BARRACKS = 2, ROLE_COMBAT = 3;
+    public static final String[] ROLE_NAMES = {"worker", "base", "barracks", "combat"};
 
     private final UnitTypeTable utt;
     private final GPIndividual individual;
@@ -51,6 +74,18 @@ public class EvolvedBot extends AIWithComputationBudget {
     /** Worst per-cycle decision time seen, in ms. The G1 100 ms gate reads this. */
     public long worstCycleMillis = 0;
 
+    /** Decisions with more than one legal action, per role. */
+    public final long[] decisionsByRole = new long[4];
+    /** Of those, decisions where the top score was shared (list order decided). */
+    public final long[] tiesByRole = new long[4];
+    /**
+     * Of the ties, those where the tied actions are of DIFFERENT TYPES (e.g. attack vs
+     * harvest, produce vs idle). A tie between four placements of the same produce, or two
+     * equally good moves, is mostly harmless; a cross-type tie means the engine's list order
+     * chose WHAT the unit does. This is the number that matters.
+     */
+    public final long[] crossTypeTiesByRole = new long[4];
+
     public EvolvedBot(UnitTypeTable utt, GPIndividual individual, EvolutionState state,
                       int threadnum, GPProblem problem, ScoreData data, ADFStack stack) {
         super(100, -1);
@@ -63,11 +98,20 @@ public class EvolvedBot extends AIWithComputationBudget {
         this.stack = stack;
     }
 
+    /** Role of a unit for tree dispatch and tie statistics. */
+    public static int roleOf(Unit u) {
+        if (u.getType().canHarvest) return ROLE_WORKER;
+        String n = u.getType().name;
+        if (n.equals("Base")) return ROLE_BASE;
+        if (n.equals("Barracks")) return ROLE_BARRACKS;
+        return ROLE_COMBAT;
+    }
+
     /** Evaluate the evolved tree for one candidate action. */
-    private double scoreAction(Unit u, UnitAction a, GameState gs, int player) {
+    private double scoreAction(Unit u, UnitAction a, GameState gs, int player, int tree) {
         data.set(u, a, gs, player);
         data.score = 0.0;
-        individual.trees[0].child.eval(state, threadnum, data, stack, individual, problem);
+        individual.trees[tree].child.eval(state, threadnum, data, stack, individual, problem);
         double s = data.score;
         return (Double.isNaN(s)) ? Double.NEGATIVE_INFINITY : s;
     }
@@ -80,6 +124,8 @@ public class EvolvedBot extends AIWithComputationBudget {
         PlayerAction pa = new PlayerAction();
 
         if (!gs.canExecuteAnyAction(player)) return pa;
+
+        boolean roleTrees = individual.trees.length >= 4;
 
         // 1. Reserve resources already committed to in-flight durative actions.
         for (Unit u : pgs.getUnits()) {
@@ -97,11 +143,31 @@ public class EvolvedBot extends AIWithComputationBudget {
             List<UnitAction> legal = u.getUnitActions(gs);
             if (legal.isEmpty()) continue;
 
+            int role = roleOf(u);
+            int tree = roleTrees ? role : 0;
+
             double[] scores = new double[legal.size()];
             for (int i = 0; i < legal.size(); i++) {
-                scores[i] = scoreAction(u, legal.get(i), gs, player);
+                scores[i] = scoreAction(u, legal.get(i), gs, player, tree);
             }
             lastScores = scores;
+
+            if (legal.size() > 1) {
+                double top = Double.NEGATIVE_INFINITY;
+                for (double s : scores) if (s > top) top = s;
+                int atTop = 0, firstType = -1;
+                boolean crossType = false;
+                for (int i = 0; i < scores.length; i++) {
+                    if (scores[i] != top) continue;
+                    atTop++;
+                    int ty = legal.get(i).getType();
+                    if (firstType == -1) firstType = ty;
+                    else if (ty != firstType) crossType = true;
+                }
+                decisionsByRole[role]++;
+                if (atTop > 1) tiesByRole[role]++;
+                if (crossType) crossTypeTiesByRole[role]++;
+            }
 
             // Walk candidates best-first; the top choice may be unaffordable given
             // what other units already claimed this cycle.
