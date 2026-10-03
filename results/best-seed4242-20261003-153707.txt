@@ -1,0 +1,44 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed4242-20261003-153707
+generations       : 100
+population        : 500
+training maps     : maps/8x8/basesWorkers8x8.xml, maps/8x8/basesWorkers8x8C.xml, maps/8x8/basesWorkers8x8E.xml, maps/16x16/basesWorkers16x16B.xml
+training opponents: PassiveAI, RandomBiasedAI, WorkerRush, WorkerRushPlusPlus, WorkerDefense, LightRush
+repeats           : 2  (stochastic opponents only)
+cycle cap         : 4000
+win bonus         : 0.5
+eval range        : [0.05, 1.0]
+fitness           : Fitness: Standardized=0.16962989736922449 Adjusted=0.8549713052387234 Hits=50
+tree              : 1 tree(s), 225 nodes, depth 12
+worst cycle (ms)  : 45   (G1 gate 100)
+benchmark maps    : maps/8x8/basesWorkers8x8B.xml, maps/8x8/basesWorkers8x8D.xml, maps/8x8/basesWorkers8x8F.xml, maps/8x8/basesWorkers8x8G.xml, maps/8x8/basesWorkers8x8K.xml, maps/16x16/basesWorkers16x16.xml, maps/16x16/basesWorkers16x16C.xml, maps/16x16/basesWorkers16x16D.xml, maps/16x16/basesWorkers16x16E.xml, maps/16x16/basesWorkers16x16G.xml
+
+Evolved scoring function
+------------------------
+(- (- (min (+ (if> myBarracksCount aProducesWorker uIsCombat threatAtDest) (- movesTowardEnemyMajor aProducesBase)) (+ (* tgtWounded uIsBarracks) (if> enemiesNearMyBase enemyUnitCount enemyUnitCount movesTowardEnemy))) (+ (max (+ (+ (if> tgtKillable movesTowardEnemyBase placesTowardEnemy movesTowardEnemyBase) (- movesTowardEnemyMajor aProducesBase)) tgtIsWorker) (/ enemyUnitCount enemiesNearMyBase)) (max (if> movesTowardEnemyBaseMajor threatAtDest threatAtDest distNearestResource) (max (if> tgtIsWorker myBarracksCount aProducesBuilding aProducesHeavy) (/ (- movesTowardEnemyMajor aProducesBase) (max (* myWorkerCount movesTowardResource) (max (/ (+ myBarracksCount enemiesNearMyBase) (* myWorkerCount movesTowardResource)) (/ (* (+ myBarracksCount myWorkerCount) (- uIsBase uIsCombat)) (/ enemyUnitCount enemiesNearMyBase))))))))) (if> (/ (/ (max (if> movesTowardEnemyBaseMajor threatAtDest threatAtDest distNearestResource) (max (if> tgtKillable movesTowardEnemyBase placesTowardEnemy movesTowardEnemyBase) (/ (/ (/ enemiesNearMyBase aProducesWorker) enemiesNearMyBase) (if> movesTowardResource enemiesNearMyBase aProducesRanged aIsProduce)))) (max (if> movesTowardEnemyBaseMajor threatAtDest threatAtDest distNearestResource) (- movesTowardEnemyMajor (+ (+ (if> tgtKillable movesTowardEnemyBase placesTowardEnemy movesTowardEnemyBase) (- movesTowardEnemyMajor aProducesBase)) tgtIsWorker)))) (if> (max aProducesLight aIsNone) (/ tgtIsWorker (max (if> movesTowardEnemyBaseMajor threatAtDest threatAtDest distNearestResource) (max (/ (+ myBarracksCount enemiesNearMyBase) (* myWorkerCount movesTowardResource)) (/ (* (+ myBarracksCount myWorkerCount) (- uIsBase uIsCombat)) aProducesBase)))) (if> movesTowardResource enemiesNearMyBase aProducesRanged aIsProduce) (max tgtIsCombat (max aProducesLight aIsNone)))) (+ (+ placesTowardEnemy tgtIsWorker) (/ (+ aIsMove myBarracksCount) (min (/ distEnemyBase placesTowardEnemy) (/ enemiesNearMyBase aProducesWorker)))) (if> (max aProducesLight aIsNone) (* (+ myBarracksCount myWorkerCount) (- uIsBase uIsCombat)) (/ enemiesNearMyBase aProducesWorker) (+ (min distNearestResource distNearestEnemy) (- tgtIsWorker myCombatCount))) (- (if> enemyCombatCount (/ (+ myBarracksCount enemiesNearMyBase) (* myWorkerCount movesTowardResource)) (max (+ (+ (if> tgtKillable movesTowardEnemyBase placesTowardEnemy movesTowardEnemyBase) (- movesTowardEnemyMajor aProducesBase)) tgtIsWorker) (/ enemyUnitCount enemiesNearMyBase)) aProducesBase) (min enemyCombatCount aIsMove))))
+
+
+Benchmark
+---------
+vs WorkerRush              :  40W   0T  60L / 100 games,  20 distinct  (win rate 40%)   [TRAINING OPPONENT]
+vs LightRush               : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)   [TRAINING OPPONENT]
+vs HeavyRush               : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs RangedRush              : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs WorkerRushPlusPlus      :  45W   0T  55L / 100 games,  20 distinct  (win rate 45%)   [TRAINING OPPONENT]
+vs EconomyRush             : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs EconomyRushBurster      : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs EconomyMilitaryRush     : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs EMRDeterministico       : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs SimpleEconomyRush       : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs LightDefense            : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs HeavyDefense            : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs RangedDefense           : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)
+vs WorkerDefense           :  45W  40T  15L / 100 games,  20 distinct  (win rate 45%)   [TRAINING OPPONENT]
+vs RandomAI                : 100W   0T   0L / 100 games, 100 distinct  (win rate 100%)
+vs RandomBiasedAI          :  97W   3T   0L / 100 games, 100 distinct  (win rate 97%)   [TRAINING OPPONENT]
+vs RandomBiasedSingleUnitAI: 100W   0T   0L / 100 games, 100 distinct  (win rate 100%)
+vs PassiveAI               : 100W   0T   0L / 100 games,  20 distinct  (win rate 100%)   [TRAINING OPPONENT]
+
+NOTE: rows marked [TRAINING OPPONENT] are an opponent seen in training. 'distinct' counts independent games.
