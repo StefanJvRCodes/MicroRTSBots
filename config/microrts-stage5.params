@@ -1,0 +1,427 @@
+# =====================================================================
+# microrts-stage5.params -- evolve a microRTS scorer  (stage 5)
+#
+#   java -cp "out;lib/*;lib/bots/*" ec.Evolve -file config/microrts-stage5.params
+#
+# A NEW FILE. Stage 4 stays reproducible from microrts-stage4.params.
+#
+# WHY STAGE 5 EXISTS -- THE STAGE-4 DIAGNOSIS (2026-10-03, gp.Bench):
+#   * Both stage-4 runs (1 tree and 4 trees) stopped at Hits = 50/56 with near-identical
+#     fitness. The 6 non-wins were EXACTLY the 16x16B games against WorkerRush (LL),
+#     WorkerRushPlusPlus (LL) and WorkerDefense (TT), identical for both runs.
+#   * On the validation maps the stage-4 bot won 0 of 20 16x16 games against WorkerRush
+#     and WorkerRushPlusPlus -- and so did the September stage-3 bot. Stage 4 improved
+#     everything EXCEPT the worker bots on 16x16, which it did not move at all.
+#   * No stage-4 bot ever built a barracks (barracks/combat tie rates read n/a from
+#     generation 4 on). Pure worker rush wins 8x8; it does not win 16x16.
+# Only 6 of 56 training games rewarded solving 16x16, and those are deep in the loss
+# band, so there was almost no selection pressure toward it.
+#
+# CHANGES FROM STAGE 4 (two, both listed so they stay separable in the write-up):
+#   1. MAPS: 16x16 weight 1/4 -> 1/2. 16x16D and 16x16G move from VALIDATION to TRAIN.
+#      Validation shrinks to 8 maps; the TEST set is untouched. Stage-4 validation
+#      numbers are therefore not directly comparable -- re-bench stage-4 bots on the new
+#      validation list with gp.Bench if a comparison is needed.
+#   2. BREEDING: ECJ's Koza default is crossover 0.9 + reproduction 0.1 and NO mutation.
+#      Both stage-4 runs converged early (gen 17 and gen 47) and then sat still for
+#      50-80 generations. Subtree mutation at 0.1 is added to keep injecting new
+#      material. Tournament size stays 7.
+#
+# Everything else (terminals, fitness, opponents, 4 role trees, cycle cap) is unchanged.
+# Cost: 6 maps x 14 games = 84 games per individual, half on 16x16 (longer games).
+# Expect roughly 3-4 hours. Time the first few generations and extrapolate.
+# =====================================================================
+
+parent.0 = @ec.gp.koza.GPKozaDefaults koza.params
+
+# ---------------------------------------------------------------------
+# Seeds -- ONE PER THREAD, NOT ONE PER RUN  (unchanged; see microrts.params)
+# ---------------------------------------------------------------------
+# Runs include RandomBiasedAI, so they are reproducible only in distribution.
+# Plan on several seeds per configuration: change all eight together, e.g. 5242..5249.
+seed.0 = 4242
+seed.1 = 4243
+seed.2 = 4244
+seed.3 = 4245
+seed.4 = 4246
+seed.5 = 4247
+seed.6 = 4248
+seed.7 = 4249
+
+evalthreads = 8
+breedthreads = 1
+
+state = ec.simple.SimpleEvolutionState
+init = ec.gp.GPInitializer
+finish = ec.simple.SimpleFinisher
+breed = ec.simple.SimpleBreeder
+eval = ec.simple.SimpleEvaluator
+exch = ec.simple.SimpleExchanger
+
+generations = 100
+quit-on-run-complete = false
+checkpoint = false
+checkpoint-prefix = ec
+checkpoint-modulo = 1
+
+# ---------------------------------------------------------------------
+# Population and ROLE TREES
+# ---------------------------------------------------------------------
+pop.subpop.0.size = 500
+pop.subpop.0.duplicate-retries = 100
+pop.subpop.0.species = ec.gp.GPSpecies
+pop.subpop.0.species.ind = ec.gp.GPIndividual
+pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
+
+# ROLE TREES. bots.EvolvedBot scores each unit with trees[role] when the individual
+# has 4 or more trees: 0 worker, 1 base, 2 barracks, 3 combat. With numtrees = 1 every
+# unit uses tree 0, exactly as in stage 3. All four trees share tc0, so they share the
+# function set and depth limits.
+#
+# NOTE ON CROSSOVER: with no xover tree fixed, ECJ picks the crossover tree at random
+# for each parent independently, so a subtree from one role's tree can land in
+# another's. That is legal (same constraints) and arguably useful, but it means roles
+# are a convention the fitness enforces, not a wall the operators respect.
+#
+# NOTE ON TOOLING: IndividualLoader reads multi-tree .ind files via printIndividual
+# format, but check that BenchmarkStatistics' readable dump and gp.Pruner handle
+# trees[1..3] -- if either only touches trees[0], the readable tree and the pruning
+# will silently cover one role out of four.
+pop.subpop.0.species.ind.numtrees = 4
+pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
+pop.subpop.0.species.ind.tree.0.tc = tc0
+pop.subpop.0.species.ind.tree.1 = ec.gp.GPTree
+pop.subpop.0.species.ind.tree.1.tc = tc0
+pop.subpop.0.species.ind.tree.2 = ec.gp.GPTree
+pop.subpop.0.species.ind.tree.2.tc = tc0
+pop.subpop.0.species.ind.tree.3 = ec.gp.GPTree
+pop.subpop.0.species.ind.tree.3.tc = tc0
+
+gp.koza.xover.maxdepth = 12
+gp.koza.mutate.maxdepth = 12
+
+# ---------------------------------------------------------------------
+# Function set: 7 functions + 1 ERC + 47 terminals = 55
+# ---------------------------------------------------------------------
+# func.0 - func.28 are IDENTICAL to microrts.params (same order, same indices). Only
+# appended entries are new, so a stage-3 tree's node names all still resolve here.
+#
+# DILUTION WARNING. 47 of 55 entries are terminals and only one is the ERC, so random
+# initial trees are terminal-heavy and constants are rare (1 draw in 55 at a leaf).
+# If evolved trees turn out constant-starved, raising the ERC's share is the first
+# knob; if the tie-rate line stays high for a role, that role's terminals are not
+# being picked up.
+#
+# ENGINE LIST ORDER, FOR READING RESULTS. When scores tie, argmax keeps the first legal
+# action, and the engine lists them ATTACK > HARVEST > RETURN > PRODUCE (UnitTypeTable
+# order: Worker; Light, Heavy, Ranged; Base, Barracks) > MOVE (up, right, down, left)
+# > NONE. Much of stage 3's non-move behaviour was this order, not evolution.
+
+gp.fs.size = 1
+gp.fs.0.name = f0
+gp.fs.0.size = 55
+
+# -- functions --
+gp.fs.0.func.0 = gp.nodes.Add
+gp.fs.0.func.0.nc = nc2
+gp.fs.0.func.1 = gp.nodes.Sub
+gp.fs.0.func.1.nc = nc2
+gp.fs.0.func.2 = gp.nodes.Mul
+gp.fs.0.func.2.nc = nc2
+gp.fs.0.func.3 = gp.nodes.Div
+gp.fs.0.func.3.nc = nc2
+gp.fs.0.func.4 = gp.nodes.Min
+gp.fs.0.func.4.nc = nc2
+gp.fs.0.func.5 = gp.nodes.Max
+gp.fs.0.func.5.nc = nc2
+gp.fs.0.func.6 = gp.nodes.IfGreater
+gp.fs.0.func.6.nc = nc4
+
+# -- ephemeral random constants --
+gp.fs.0.func.7 = gp.nodes.ScoreERC
+gp.fs.0.func.7.nc = nc0
+gp.fs.0.func.7.range = 10.0
+
+# -- terminals: action type --
+gp.fs.0.func.8 = gp.nodes.FeatureNode
+gp.fs.0.func.8.nc = nc0
+gp.fs.0.func.8.feature = aIsMove
+gp.fs.0.func.9 = gp.nodes.FeatureNode
+gp.fs.0.func.9.nc = nc0
+gp.fs.0.func.9.feature = aIsHarvest
+gp.fs.0.func.10 = gp.nodes.FeatureNode
+gp.fs.0.func.10.nc = nc0
+gp.fs.0.func.10.feature = aIsReturn
+gp.fs.0.func.11 = gp.nodes.FeatureNode
+gp.fs.0.func.11.nc = nc0
+gp.fs.0.func.11.feature = aIsProduce
+gp.fs.0.func.12 = gp.nodes.FeatureNode
+gp.fs.0.func.12.nc = nc0
+gp.fs.0.func.12.feature = aIsAttack
+
+# -- terminals: produce target --
+gp.fs.0.func.13 = gp.nodes.FeatureNode
+gp.fs.0.func.13.nc = nc0
+gp.fs.0.func.13.feature = aProducesWorker
+gp.fs.0.func.14 = gp.nodes.FeatureNode
+gp.fs.0.func.14.nc = nc0
+gp.fs.0.func.14.feature = aProducesCombat
+gp.fs.0.func.15 = gp.nodes.FeatureNode
+gp.fs.0.func.15.nc = nc0
+gp.fs.0.func.15.feature = aProducesBuilding
+
+# -- terminals: acting unit --
+gp.fs.0.func.16 = gp.nodes.FeatureNode
+gp.fs.0.func.16.nc = nc0
+gp.fs.0.func.16.feature = uIsWorker
+gp.fs.0.func.17 = gp.nodes.FeatureNode
+gp.fs.0.func.17.nc = nc0
+gp.fs.0.func.17.feature = uIsBase
+gp.fs.0.func.18 = gp.nodes.FeatureNode
+gp.fs.0.func.18.nc = nc0
+gp.fs.0.func.18.feature = uIsCombat
+gp.fs.0.func.19 = gp.nodes.FeatureNode
+gp.fs.0.func.19.nc = nc0
+gp.fs.0.func.19.feature = uCarrying
+
+# -- terminals: economy and army --
+gp.fs.0.func.20 = gp.nodes.FeatureNode
+gp.fs.0.func.20.nc = nc0
+gp.fs.0.func.20.feature = myResources
+gp.fs.0.func.21 = gp.nodes.FeatureNode
+gp.fs.0.func.21.nc = nc0
+gp.fs.0.func.21.feature = myWorkerCount
+gp.fs.0.func.22 = gp.nodes.FeatureNode
+gp.fs.0.func.22.nc = nc0
+gp.fs.0.func.22.feature = enemyUnitCount
+
+# -- terminals: spatial (position only -- these gate, they do not steer) --
+gp.fs.0.func.23 = gp.nodes.FeatureNode
+gp.fs.0.func.23.nc = nc0
+gp.fs.0.func.23.feature = distNearestEnemy
+gp.fs.0.func.24 = gp.nodes.FeatureNode
+gp.fs.0.func.24.nc = nc0
+gp.fs.0.func.24.feature = distNearestResource
+
+# -- terminals: DIRECTION --
+gp.fs.0.func.25 = gp.nodes.FeatureNode
+gp.fs.0.func.25.nc = nc0
+gp.fs.0.func.25.feature = movesTowardEnemy
+gp.fs.0.func.26 = gp.nodes.FeatureNode
+gp.fs.0.func.26.nc = nc0
+gp.fs.0.func.26.feature = movesTowardEnemyBase
+gp.fs.0.func.27 = gp.nodes.FeatureNode
+gp.fs.0.func.27.nc = nc0
+gp.fs.0.func.27.feature = movesTowardMyBase
+gp.fs.0.func.28 = gp.nodes.FeatureNode
+gp.fs.0.func.28.nc = nc0
+gp.fs.0.func.28.feature = movesTowardResource
+
+# ======== 2026-10 additions start here (func.29 onward) ========
+
+# -- terminals: held back until 2026-10, now released --
+gp.fs.0.func.29 = gp.nodes.FeatureNode
+gp.fs.0.func.29.nc = nc0
+gp.fs.0.func.29.feature = aIsNone
+gp.fs.0.func.30 = gp.nodes.FeatureNode
+gp.fs.0.func.30.nc = nc0
+gp.fs.0.func.30.feature = uIsBarracks
+gp.fs.0.func.31 = gp.nodes.FeatureNode
+gp.fs.0.func.31.nc = nc0
+gp.fs.0.func.31.feature = uHpFrac
+gp.fs.0.func.32 = gp.nodes.FeatureNode
+gp.fs.0.func.32.nc = nc0
+gp.fs.0.func.32.feature = myBarracksCount
+gp.fs.0.func.33 = gp.nodes.FeatureNode
+gp.fs.0.func.33.nc = nc0
+gp.fs.0.func.33.feature = distEnemyBase
+gp.fs.0.func.34 = gp.nodes.FeatureNode
+gp.fs.0.func.34.nc = nc0
+gp.fs.0.func.34.feature = mapArea
+
+# -- terminals: produce target, split --
+gp.fs.0.func.35 = gp.nodes.FeatureNode
+gp.fs.0.func.35.nc = nc0
+gp.fs.0.func.35.feature = aProducesLight
+gp.fs.0.func.36 = gp.nodes.FeatureNode
+gp.fs.0.func.36.nc = nc0
+gp.fs.0.func.36.feature = aProducesHeavy
+gp.fs.0.func.37 = gp.nodes.FeatureNode
+gp.fs.0.func.37.nc = nc0
+gp.fs.0.func.37.feature = aProducesRanged
+gp.fs.0.func.38 = gp.nodes.FeatureNode
+gp.fs.0.func.38.nc = nc0
+gp.fs.0.func.38.feature = aProducesBarracks
+gp.fs.0.func.39 = gp.nodes.FeatureNode
+gp.fs.0.func.39.nc = nc0
+gp.fs.0.func.39.feature = aProducesBase
+
+# -- terminals: attack target (0 for non-attacks) --
+gp.fs.0.func.40 = gp.nodes.FeatureNode
+gp.fs.0.func.40.nc = nc0
+gp.fs.0.func.40.feature = tgtWounded
+gp.fs.0.func.41 = gp.nodes.FeatureNode
+gp.fs.0.func.41.nc = nc0
+gp.fs.0.func.41.feature = tgtKillable
+gp.fs.0.func.42 = gp.nodes.FeatureNode
+gp.fs.0.func.42.nc = nc0
+gp.fs.0.func.42.feature = tgtIsWorker
+gp.fs.0.func.43 = gp.nodes.FeatureNode
+gp.fs.0.func.43.nc = nc0
+gp.fs.0.func.43.feature = tgtIsCombat
+gp.fs.0.func.44 = gp.nodes.FeatureNode
+gp.fs.0.func.44.nc = nc0
+gp.fs.0.func.44.feature = tgtIsBuilding
+
+# -- terminals: produce placement (0 for non-produce) --
+gp.fs.0.func.45 = gp.nodes.FeatureNode
+gp.fs.0.func.45.nc = nc0
+gp.fs.0.func.45.feature = placesTowardEnemy
+gp.fs.0.func.46 = gp.nodes.FeatureNode
+gp.fs.0.func.46.nc = nc0
+gp.fs.0.func.46.feature = placesTowardResource
+
+# -- terminals: threat at the cell occupied after the action --
+gp.fs.0.func.47 = gp.nodes.FeatureNode
+gp.fs.0.func.47.nc = nc0
+gp.fs.0.func.47.feature = threatAtDest
+
+# -- terminals: symmetric major-axis direction --
+gp.fs.0.func.48 = gp.nodes.FeatureNode
+gp.fs.0.func.48.nc = nc0
+gp.fs.0.func.48.feature = movesTowardEnemyMajor
+gp.fs.0.func.49 = gp.nodes.FeatureNode
+gp.fs.0.func.49.nc = nc0
+gp.fs.0.func.49.feature = movesTowardEnemyBaseMajor
+
+# -- terminals: context -- GATES ONLY, constant across a unit's actions --
+gp.fs.0.func.50 = gp.nodes.FeatureNode
+gp.fs.0.func.50.nc = nc0
+gp.fs.0.func.50.feature = myCombatCount
+gp.fs.0.func.51 = gp.nodes.FeatureNode
+gp.fs.0.func.51.nc = nc0
+gp.fs.0.func.51.feature = enemyCombatCount
+gp.fs.0.func.52 = gp.nodes.FeatureNode
+gp.fs.0.func.52.nc = nc0
+gp.fs.0.func.52.feature = enemyWorkerCount
+gp.fs.0.func.53 = gp.nodes.FeatureNode
+gp.fs.0.func.53.nc = nc0
+gp.fs.0.func.53.feature = enemiesNearMyBase
+gp.fs.0.func.54 = gp.nodes.FeatureNode
+gp.fs.0.func.54.nc = nc0
+gp.fs.0.func.54.feature = gameTimeK
+
+# Arity-4 node constraint for if>. koza.params defines nc0..nc3 only.
+gp.nc.size = 5
+gp.nc.4 = ec.gp.GPNodeConstraints
+gp.nc.4.name = nc4
+gp.nc.4.returns = nil
+gp.nc.4.size = 4
+gp.nc.4.child.0 = nil
+gp.nc.4.child.1 = nil
+gp.nc.4.child.2 = nil
+gp.nc.4.child.3 = nil
+
+# ---------------------------------------------------------------------
+# Breeding: crossover 0.8 / subtree mutation 0.1 / reproduction 0.1  (stage 5)
+# ---------------------------------------------------------------------
+# Overrides the koza.params pipeline (crossover 0.9, reproduction 0.1, no mutation).
+# Mutation uses koza.params' defaults (tournament source, KozaNodeSelector, GrowBuilder)
+# with the depth cap above. With 4 trees and no tree fixed, mutation picks a random tree
+# per individual, so every role tree keeps receiving new material.
+pop.subpop.0.species.pipe = ec.breed.MultiBreedingPipeline
+pop.subpop.0.species.pipe.generate-max = false
+pop.subpop.0.species.pipe.num-sources = 3
+pop.subpop.0.species.pipe.source.0 = ec.gp.koza.CrossoverPipeline
+pop.subpop.0.species.pipe.source.0.prob = 0.8
+pop.subpop.0.species.pipe.source.1 = ec.breed.ReproductionPipeline
+pop.subpop.0.species.pipe.source.1.prob = 0.1
+pop.subpop.0.species.pipe.source.2 = ec.gp.koza.MutationPipeline
+pop.subpop.0.species.pipe.source.2.prob = 0.1
+
+# ---------------------------------------------------------------------
+# Parsimony pressure -- STILL OFF, deliberately
+# ---------------------------------------------------------------------
+# Turn on uniformly when setting up the Phase 4 comparison, not before. Four trees at
+# depth 12 can bloat four times as fast; watch the G1 decision-time number. If it
+# climbs toward 100 ms, that overrides the "not before" rule.
+#
+# select.tournament = ec.parsimony.DoubleTournamentSelection
+# select.tournament.size = 7
+# select.tournament.size2 = 1.4
+# select.tournament.do-length-first = false
+
+# ---------------------------------------------------------------------
+# The problem
+# ---------------------------------------------------------------------
+eval.problem = gp.MicroRTSProblem
+eval.problem.data = gp.ScoreData
+
+# ---- OPPONENTS (stage 4) ----
+# Adds the three the stage-3 bot still fails against or barely beats. WorkerRush's
+# stage-3 "side split" was a list-order artefact: re-implementing the pruned 17-node
+# tree by hand and adding a symmetric tie-break turned 1W-1L into 0W-2L. The bot has
+# never genuinely beaten WorkerRush. These three are the gradient now.
+#
+# MicroRTSProblem.setup() constructs each opponent once and fatals if a name is wrong.
+eval.problem.opponents = PassiveAI, RandomBiasedAI, WorkerRush, WorkerRushPlusPlus, WorkerDefense, LightRush
+
+# ---- MAPS: the train / validation / test split ----
+#
+# DUPLICATES, CHECKED AGAINST THE MAP FILES (unit lists and terrain compared):
+#   basesWorkers8x8   == basesWorkers8x8A    (identical)
+#   basesWorkers16x16 == basesWorkers16x16A  (identical)
+#   basesWorkers8x8Obstacle has the SAME units as basesWorkers8x8, different terrain.
+# A duplicate on both sides of a split is leakage: an "unseen" 8x8A result would be a
+# training-map result. Each duplicate pair is kept entirely on one side below.
+#
+#   TRAIN       basesWorkers8x8 (+A), 8x8C, 8x8E, 16x16B, 16x16D, 16x16G   (stage 5: +D, +G)
+#   VALIDATION  8x8B, 8x8D, 8x8F, 8x8G, 8x8K, basesWorkers16x16 (+A), 16x16C, 16x16E
+#               -- for choosing between runs and seeds; NEVER reported as a result.
+#   TEST        8x8H, 8x8I, 8x8J, 8x8L, 16x16F, 16x16H, 16x16I, 16x16J, 16x16K, 16x16L
+#               -- touched ONCE, at the end, for the numbers in the write-up.
+#   EXCLUDED    basesWorkers8x8Obstacle (same start as a training map; usable later as a
+#               separate "terrain transfer" probe, but not as an independent test map).
+#
+# PROVISIONAL: agree it with the team and supervisors, then FREEZE it and record it in
+# PROJECT_CONTEXT.md. Changing it after seeing test results invalidates the test set.
+#
+# STATISTICS: with deterministic bots, distinct games = maps x sides, so the test set
+# gives 20 distinct games per opponent (10 maps x 2 sides) instead of the 2 the
+# single-map benchmark gave. That is what makes Phase 6 statistics possible.
+eval.problem.maps = maps/8x8/basesWorkers8x8.xml, maps/8x8/basesWorkers8x8C.xml, maps/8x8/basesWorkers8x8E.xml, maps/16x16/basesWorkers16x16B.xml, maps/16x16/basesWorkers16x16D.xml, maps/16x16/basesWorkers16x16G.xml
+eval.problem.swap-sides = true
+
+# 4000 because a 16x16 map is now in training; 3000 cut real 16x16 games short.
+eval.problem.max-cycles = 4000
+
+# Cost: per map, PassiveAI 2 + RandomBiasedAI 2x2 + four deterministic opponents 2 each
+# = 14 games; 6 maps = 84 games per individual, ~42,000 per generation. Budget several
+# hours per run at 8 threads -- time the smoke test and extrapolate before committing.
+eval.problem.repeats = 2
+
+eval.problem.speed-weight = 0.5
+eval.problem.margin-weight = 0.25
+eval.problem.win-bonus = 0.5
+
+# RECALIBRATE from the smoke test: maps and opponents both changed, so the stage-3
+# range is a guess here.
+eval.problem.eval-lo = 0.05
+eval.problem.eval-hi = 1.00
+eval.problem.calibrate-eval = true
+
+# ---------------------------------------------------------------------
+# Statistics + end-of-run benchmark -- on VALIDATION maps
+# ---------------------------------------------------------------------
+# Benchmark on validation during development. Switch bench-maps to the TEST list only
+# for the final reported runs. Check that BenchmarkStatistics accepts a comma list here
+# (the name suggests it does); if it reads one map, it will fail or use the first.
+stat = gp.BenchmarkStatistics
+stat.file = $results/microrts.stat
+stat.bench-opponents = all
+stat.bench-maps = maps/8x8/basesWorkers8x8B.xml, maps/8x8/basesWorkers8x8D.xml, maps/8x8/basesWorkers8x8F.xml, maps/8x8/basesWorkers8x8G.xml, maps/8x8/basesWorkers8x8K.xml, maps/16x16/basesWorkers16x16.xml, maps/16x16/basesWorkers16x16C.xml, maps/16x16/basesWorkers16x16E.xml
+# Deterministic matchups replay identically, so per map 2 games (one per side) is the
+# whole information content. Set to whatever makes BenchmarkStatistics play each
+# (map, side) at least once; extra games only help against stochastic opponents.
+stat.bench-games = 10
+stat.bench-max-cycles = 4000
