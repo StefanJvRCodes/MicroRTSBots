@@ -7,6 +7,7 @@ import ec.EvolutionState;
 import ec.gp.ADFStack;
 import ec.gp.GPIndividual;
 import ec.gp.GPProblem;
+import gp.MicroRTSProblem;
 import gp.ScoreData;
 import rts.GameState;
 import rts.PhysicalGameState;
@@ -53,6 +54,9 @@ import java.util.List;
  * order, not by the tree, so the tie rate is the fraction of the bot's behaviour that is
  * the ENGINE'S policy rather than an evolved one. MicroRTSProblem aggregates and reports
  * it per generation. Worth reporting in the write-up alongside win rates.
+ *
+ * 2026-10: NONE DURATION. Legal actions come from getUnitActions(gs, noneDuration), not
+ * getUnitActions(gs), whose NONE lasts 10 cycles. See MicroRTSProblem for why this matters.
  * ------------------------------------------------------------------------------------
  */
 public class EvolvedBot extends AIWithComputationBudget {
@@ -67,6 +71,14 @@ public class EvolvedBot extends AIWithComputationBudget {
     private final GPProblem problem;
     private final ScoreData data;
     private final ADFStack stack;
+
+    /**
+     * Duration of the NONE action in each unit's legal list. Taken from the problem's
+     * 'none-duration' (see MicroRTSProblem), so every construction site -- fitness,
+     * benchmark, Bench, Pruner, the loader -- automatically uses the value the individual
+     * was evolved with. Non-microRTS problems fall back to the engine default of 10.
+     */
+    private final int noneDuration;
 
     /** Scores for the most recently considered unit -- the adapter/G2 hook. */
     public double[] lastScores = new double[0];
@@ -96,6 +108,12 @@ public class EvolvedBot extends AIWithComputationBudget {
         this.problem = problem;
         this.data = data;
         this.stack = stack;
+        this.noneDuration = noneDurationOf(problem);
+    }
+
+    /** The NONE duration a given problem specifies; 10 (engine default) if unspecified. */
+    public static int noneDurationOf(GPProblem problem) {
+        return (problem instanceof MicroRTSProblem) ? ((MicroRTSProblem) problem).noneDuration : 10;
     }
 
     /** Role of a unit for tree dispatch and tie statistics. */
@@ -140,7 +158,7 @@ public class EvolvedBot extends AIWithComputationBudget {
         for (Unit u : pgs.getUnits()) {
             if (u.getPlayer() != player || gs.getActionAssignment(u) != null) continue;
 
-            List<UnitAction> legal = u.getUnitActions(gs);
+            List<UnitAction> legal = u.getUnitActions(gs, noneDuration);
             if (legal.isEmpty()) continue;
 
             int role = roleOf(u);

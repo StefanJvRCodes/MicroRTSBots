@@ -133,6 +133,19 @@ import java.util.Set;
  * way it aggregates the calibration range, and prints them per role, split into ALL
  * ties and CROSS-TYPE ties (tied actions of different types). Only the second means the
  * engine chose what the unit does; ties among equivalent placements are mostly benign.
+ *
+ * 2026-10: NONE DURATION -- A HANDICAP EVERY EVOLVED BOT HAD UNTIL STAGE 6.
+ * Unit.getUnitActions(gs) offers NONE with a duration of TEN cycles (the engine default).
+ * A worker's attack takes five. So whenever an evolved bot chose to wait, that unit was
+ * frozen for ten cycles and could not take the first strike when an enemy stepped
+ * adjacent -- and workers have 1 HP, so first strike decides every worker fight.
+ * Scripted bots (AbstractionLayerAI) never lock units like that.
+ * Found 2026-10-03 while diagnosing the 16x16 WorkerRush wall: no scripted bot in the
+ * engine beats WorkerRush on the basesWorkers16x16 maps (every army strategy 0/12; the
+ * WorkerRush mirror 6/12, side 0 only), and hand-written scorers over gp.Features won
+ * 0/12 with the default NONE, 3-4/12 with a 1-cycle NONE -- including the first win from
+ * both sides. 'none-duration' makes this a parameter; default 10 keeps every archived
+ * individual replaying exactly as it was evolved.
  * ------------------------------------------------------------------------------------
  */
 public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
@@ -151,6 +164,7 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
     public static final String P_WIN_BONUS = "win-bonus";
     public static final String P_REPEATS = "repeats";
     public static final String P_STOCHASTIC = "stochastic-opponents";
+    public static final String P_NONE_DURATION = "none-duration";
 
     /**
      * Opponents assumed stochastic when 'stochastic-opponents' is not set. Anything with
@@ -179,6 +193,14 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
 
     public int repeats;
     public Set<String> stochastic;
+
+    /**
+     * Duration, in cycles, of the NONE (wait) action offered to an evolved bot's units.
+     * See the 2026-10 block in the class comment. Default 10 = the engine's own default,
+     * which is what every individual archived before stage 6 was evolved and benchmarked
+     * with, so their params snapshots (which lack this key) replay identically.
+     */
+    public int noneDuration;
 
     /**
      * Range of Panel.Result.meanEval, used to map raw evaluation values onto 0..1.
@@ -268,6 +290,12 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
             repeats = 1;
         }
 
+        noneDuration = state.parameters.getIntWithDefault(base.push(P_NONE_DURATION), null, 10);
+        if (noneDuration < 1) {
+            state.output.warning("none-duration must be at least 1; using 1.");
+            noneDuration = 1;
+        }
+
         stochastic = new HashSet<>();
         String[] declared = splitList(state.parameters.getString(base.push(P_STOCHASTIC), null));
         for (String s : (declared == null || declared.length == 0) ? DEFAULT_STOCHASTIC : declared) {
@@ -293,6 +321,8 @@ public class MicroRTSProblem extends GPProblem implements SimpleProblemForm {
                 + (swapSides ? " x 2 sides" : "") + ", " + repeats + " repeats on stochastic"
                 + " opponents), cap " + maxCycles + " cycles.");
         state.output.message("Stochastic opponents this run: " + stochasticInUse());
+        state.output.message("Unit NONE (wait) action lasts " + noneDuration + " cycle(s)"
+                + (noneDuration == 10 ? " -- engine default, as in stages 1-5." : "."));
         state.output.message("Banded fitness: win 0-1, draw 1-2, loss 2-3."
                 + " Loss band split " + round2(survivalShare) + " survival / "
                 + round2(qualityShare) + " quality."

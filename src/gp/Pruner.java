@@ -95,6 +95,10 @@ import java.util.Locale;
  * TraceBot now dispatches per unit exactly as EvolvedBot does, via EvolvedBot.roleOf.
  * Single-tree individuals are unaffected.
  *
+ * 2026-10: TraceBot also takes its legal actions with the problem's none-duration, the
+ * same as EvolvedBot. If the two ever generate different legal lists, list indices stop
+ * corresponding and "same pick" comparisons become meaningless.
+ *
  * 2026-10: -verify-maps. Pruning traces on the TRAINING maps (no leakage); verification
  * can now be run on other maps, e.g. the validation set, which is a much stronger check
  * that the pruned tree is the same bot outside the states it was pruned against.
@@ -515,7 +519,7 @@ public final class Pruner {
             for (Unit u : pgs.getUnits()) {
                 if (u.getPlayer() != player || gs.getActionAssignment(u) != null) continue;
 
-                List<UnitAction> legal = u.getUnitActions(gs);
+                List<UnitAction> legal = u.getUnitActions(gs, EvolvedBot.noneDurationOf(problem));
                 if (legal.isEmpty()) continue;
 
                 GPNode refTree = treeFor(refInd, u);
