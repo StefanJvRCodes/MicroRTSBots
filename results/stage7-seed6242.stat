@@ -1,0 +1,4071 @@
+
+Generation: 0
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6818901502976069 Adjusted=0.5945691517505184 Hits=67
+Tree 0:
+ (* (max aProducesHeavy movesTowardEnemyMajor)
+     (/ distNearestResource uCarrying))
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (* distNearestEnemy movesTowardEnemyBase)
+Tree 3:
+ (if> (if> (+ (/ (+ aProducesBarracks mapArea)
+     (* myResources aProducesLight)) (+ (if> uIsBarracks
+     aProducesHeavy aProducesBarracks uIsWorker)
+     (+ movesTowardMyBase tgtIsCombat))) (- (if>
+     (* movesTowardEnemy enemyCombatCount) (+
+     aIsReturn uIsBase) (max enemyCombatCount
+     uIsBase) (if> myCombatCount aProducesBarracks
+     aProducesLight placesTowardResource)) (/
+     (+ movesTowardEnemy aProducesBarracks) (max
+     placesTowardResource distNearestEnemy)))
+     (min (* (- movesTowardResource aIsNone) (+
+         aProducesRanged enemyCombatCount)) (+ (*
+         distEnemyBase movesTowardEnemyBase) (+ movesTowardMyBase
+         aProducesLight))) (/ (+ (max distNearestEnemy
+     movesTowardEnemyBase) (if> placesTowardEnemy
+     myCombatCount aProducesBase threatAtDest))
+     (max (* aProducesHeavy uIsWorker) (/ distNearestResource
+         distNearestResource)))) (* (max (+ (+ distNearestEnemy
+     tgtKillable) (min aProducesCombat tgtKillable))
+     (min (/ myBarracksCount uHpFrac) (- placesTowardResource
+         uHpFrac))) (min (* (* movesTowardEnemyBase
+     distEnemyBase) (max myCombatCount uHpFrac))
+     (+ (- distEnemyBase 6.0278) (+ tgtIsWorker
+         aProducesBarracks)))) (+ (/ (max (if> aProducesWorker
+     uIsBarracks distNearestEnemy uIsBase) (min
+     uIsBase enemiesNearMyBase)) (/ (+ threatAtDest
+     aIsAttack) (/ myCombatCount tgtIsBuilding)))
+     (if> (- (- enemiesNearMyBase aProducesWorker)
+         (+ aIsReturn movesTowardEnemyMajor)) (max
+         (if> aIsReturn aProducesWorker aProducesCombat
+             enemyWorkerCount) (max enemiesNearMyBase
+         -5.5795)) (min (/ aProducesWorker tgtIsCombat)
+         (min aIsMove movesTowardEnemyMajor)) (+ (/
+         aIsAttack aIsNone) (if> tgtIsCombat aIsHarvest
+         movesTowardMyBase aProducesLight)))) (min
+     (max (/ (min aProducesBase tgtWounded) (+
+         uCarrying uHpFrac)) (/ (+ threatAtDest myBarracksCount)
+         (max uCarrying uIsWorker))) (/ (+ (+ distNearestEnemy
+     uIsCombat) (if> aProducesWorker aIsAttack
+     distNearestEnemy enemyUnitCount)) (/ (+ tgtKillable
+     uIsWorker) (min aIsAttack uIsCombat)))))
+
+Generation: 1
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6545860336137157 Adjusted=0.6043807814670958 Hits=69
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone aIsMove placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded))) (- (-
+     (min myBarracksCount uIsCombat) (+ tgtKillable
+     uIsWorker)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) (if> (min (+
+     movesTowardEnemyBase mapArea) (/ distEnemyBase
+     distEnemyBase)) (max (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (- mapArea uIsCombat))
+     (- (/ uIsCombat uIsBase) (/ movesTowardEnemyBaseMajor
+         tgtIsWorker)) (/ (- movesTowardEnemy uIsWorker)
+     (* aIsMove aIsHarvest))))
+Tree 1:
+ uIsCombat
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         movesTowardEnemyBase))) (if> (* (* myResources
+     movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ threatAtDest
+
+Generation: 2
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6599888794759393 Adjusted=0.6024136741902159 Hits=69
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone aIsMove placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded))) (- (-
+     (min myBarracksCount uIsCombat) (+ tgtKillable
+     uIsWorker)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) (if> (min (+
+     movesTowardEnemyBase mapArea) (/ distEnemyBase
+     distEnemyBase)) (max (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (- mapArea uIsCombat))
+     (- (/ uIsCombat uIsBase) (/ movesTowardEnemyBaseMajor
+         aProducesWorker)) (/ (- movesTowardEnemy
+     uIsWorker) (* aIsMove aIsHarvest))))
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ threatAtDest
+
+Generation: 3
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.666497112676964 Adjusted=0.6000610456466128 Hits=68
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone aIsMove placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded))) (- (-
+     (min myBarracksCount uIsCombat) (+ tgtKillable
+     uIsWorker)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) (if> (min (+
+     movesTowardEnemyBase mapArea) (/ distEnemyBase
+     distEnemyBase)) (max (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (- mapArea uIsCombat))
+     (- (/ uIsCombat uIsBase) (/ movesTowardEnemyBaseMajor
+         aProducesWorker)) (/ (- movesTowardEnemy
+     uIsWorker) (* aIsMove aIsHarvest))))
+Tree 1:
+ (max distEnemyBase movesTowardResource)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ threatAtDest
+
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6230171616659452 Adjusted=0.6161364301123905 Hits=72
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone aIsMove placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded))) (- (-
+     (min myBarracksCount uIsCombat) (+ tgtKillable
+     uIsWorker)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) (if> (min (+
+     movesTowardEnemyBase mapArea) (/ distEnemyBase
+     distEnemyBase)) (max (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (- mapArea uIsCombat))
+     (- (/ uIsCombat uIsBase) (/ movesTowardEnemyBaseMajor
+         tgtIsWorker)) (/ (- movesTowardEnemy uIsWorker)
+     (* aIsMove aIsHarvest))))
+Tree 1:
+ distEnemyBase
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         movesTowardEnemyBase))) (if> (* (* myResources
+     movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.6264847445752367 Adjusted=0.6148228585206647 Hits=72
+Tree 0:
+ (if> (* distEnemyBase movesTowardEnemyMajor)
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     (if> (min (+ movesTowardEnemyBase mapArea)
+         (/ distEnemyBase distEnemyBase)) (max (min
+         movesTowardEnemyBaseMajor movesTowardEnemy)
+         (- mapArea uIsCombat)) (- (/ uIsCombat uIsBase)
+         (/ movesTowardEnemyBaseMajor tgtIsWorker))
+         (/ (- movesTowardEnemy uIsWorker) (* aIsMove
+             aIsHarvest))))
+Tree 1:
+ distEnemyBase
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         movesTowardEnemyBase))) (if> (* (* myResources
+     movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 6
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5887525037660808 Adjusted=0.6294246571631112 Hits=74
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone aIsMove placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded))) (- (-
+     (min myBarracksCount uIsCombat) (+ tgtKillable
+     uIsWorker)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) (if> (min (+
+     movesTowardEnemyBase mapArea) (/ distEnemyBase
+     distEnemyBase)) (max (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (- mapArea uIsCombat))
+     (- (/ uIsCombat uIsBase) (/ movesTowardEnemyBaseMajor
+         tgtIsWorker)) (/ (- movesTowardEnemy uIsWorker)
+     (* aIsMove aIsHarvest))))
+Tree 1:
+ 1.8354
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         movesTowardEnemyBase))) (if> (* (* myResources
+     movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 7
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5887525037660808 Adjusted=0.6294246571631112 Hits=74
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone aIsMove placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded))) (- (-
+     (min myBarracksCount uIsCombat) (+ tgtKillable
+     uIsWorker)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) (if> (min (+
+     movesTowardEnemyBase mapArea) (/ distEnemyBase
+     distEnemyBase)) (max (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (- mapArea uIsCombat))
+     (- (/ uIsCombat uIsBase) (/ movesTowardEnemyBaseMajor
+         tgtIsWorker)) (/ (- movesTowardEnemy uIsWorker)
+     (* aIsMove aIsHarvest))))
+Tree 1:
+ 1.8354
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         movesTowardEnemyBase))) (if> (* (* myResources
+     movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 8
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5821091443890559 Adjusted=0.6320676443508947 Hits=73
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (- distEnemyBase enemiesNearMyBase)
+     aProducesHeavy)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 9
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5739846075989888 Adjusted=0.6353302282450113 Hits=73
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> (- myWorkerCount aIsMove) distEnemyBase
+         placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded))) (- (- (min myBarracksCount
+     uIsCombat) (+ tgtKillable uIsWorker)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (- distEnemyBase enemiesNearMyBase)
+     aProducesHeavy)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 10
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5597855696036518 Adjusted=0.641113765563368 Hits=74
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> (- myWorkerCount aIsMove) distEnemyBase
+         placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded))) (- (- (min myBarracksCount
+     uIsCombat) (+ tgtKillable uIsWorker)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 11
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.5597093379391107 Adjusted=0.6411451003565376 Hits=74
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (if> (min (+ movesTowardEnemyBase mapArea)
+         (/ distEnemyBase distEnemyBase)) (max (min
+         movesTowardEnemyBaseMajor movesTowardEnemy)
+         (- mapArea uIsCombat)) (- (/ uIsCombat uIsBase)
+         (/ movesTowardEnemyBaseMajor aProducesWorker))
+         (/ (- movesTowardEnemy uIsWorker) (* aIsMove
+             aIsHarvest))) (max gameTimeK enemyCombatCount))
+     (- (- aIsMove gameTimeK) (* aIsAttack distNearestResource))))
+     (max (* (min (if> enemyUnitCount tgtWounded
+         uCarrying mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+         (- tgtKillable aProducesBuilding) (* distEnemyBase
+         movesTowardEnemy)) (+ (if> enemiesNearMyBase
+         movesTowardEnemyBaseMajor distNearestResource
+         gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+         (max enemyUnitCount mapArea) (if> tgtKillable
+         aProducesHeavy movesTowardMyBase movesTowardMyBase))
+         (max (/ threatAtDest aIsReturn) (min uIsBase
+             threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 12
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.47306536041925756 Adjusted=0.6788565034991959 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (max
+     (* movesTowardMyBase myCombatCount) aProducesHeavy)
+     (- (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+         (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 13
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4905477275421703 Adjusted=0.6708943172513797 Hits=79
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         (if> enemiesNearMyBase aProducesBuilding
+             myWorkerCount myResources)))) (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (* (min (* uIsCombat
+         uCarrying) (/ placesTowardEnemy movesTowardMyBase))
+         (if> (+ enemiesNearMyBase tgtKillable) (*
+             tgtKillable aProducesLight) (if> aIsNone
+             distEnemyBase placesTowardEnemy myCombatCount)
+             (- placesTowardEnemy tgtWounded))) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (max
+     (* movesTowardMyBase myCombatCount) aProducesHeavy)
+     (- (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+         (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 14
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.47671874052129837 Adjusted=0.6771770226515773 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) (/ (* enemyCombatCount
+     uIsBase) (/ placesTowardEnemy aIsAttack))
+     (/ (+ tgtKillable aProducesLight) (min tgtIsBuilding
+         uHpFrac))) (if> (* (* myResources movesTowardEnemyBase)
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (max (* movesTowardMyBase
+     myCombatCount) aProducesHeavy) (- (max (/
+     uHpFrac aIsReturn) (max gameTimeK enemyCombatCount))
+     (- (- aIsMove gameTimeK) (* aIsAttack distNearestResource))))
+     (max (* (min (if> enemyUnitCount tgtWounded
+         uCarrying mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+         (- tgtKillable aProducesBuilding) (* distEnemyBase
+         movesTowardEnemy)) (+ (if> enemiesNearMyBase
+         movesTowardEnemyBaseMajor distNearestResource
+         gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+         (max enemyUnitCount mapArea) (if> tgtKillable
+         aProducesHeavy movesTowardMyBase movesTowardMyBase))
+         (max (/ threatAtDest aIsReturn) (min uIsBase
+             threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 15
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.47215129791925753 Adjusted=0.6792780072356711 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> (- myWorkerCount aIsMove) distEnemyBase
+         placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded))) (- (- (min myBarracksCount
+     uIsCombat) (+ tgtKillable uIsWorker)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (- placesTowardEnemy tgtWounded)
+     (* aProducesHeavy myResources)) (+ (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack distNearestResource)))) (max
+     (* (min (if> enemyUnitCount tgtWounded uCarrying
+         mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) placesTowardEnemy (* (max
+     enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 16
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4719930511897999 Adjusted=0.6793510330715952 Hits=80
+Tree 0:
+ (if> placesTowardEnemy (- (- (min myBarracksCount
+     uIsCombat) (+ tgtKillable uIsWorker)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (- placesTowardEnemy tgtWounded) aProducesHeavy)
+Tree 2:
+ (max (if> (if> (/ movesTowardEnemyBaseMajor
+     tgtIsWorker) (- (min aIsProduce aIsMove)
+     (min aProducesWorker enemiesNearMyBase))
+     (/ (* enemyCombatCount uIsBase) (/ placesTowardEnemy
+         movesTowardEnemyMajor)) (/ (+ tgtKillable
+     aProducesLight) (min tgtIsBuilding (if> enemiesNearMyBase
+     aProducesBuilding myWorkerCount myResources))))
+     (if> (* (* myResources movesTowardEnemyBase)
+         (max distNearestResource uIsCombat)) (- (min
+         gameTimeK uCarrying) (* aProducesHeavy myResources))
+         (+ (- movesTowardEnemyBase aProducesRanged)
+             (/ aProducesRanged aIsHarvest)) (if> (max
+         uIsCombat aProducesCombat) (min placesTowardEnemy
+         aIsMove) (/ tgtIsWorker aProducesCombat)
+         (if> movesTowardResource aIsProduce -2.4508
+             myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) (* aIsAttack distNearestResource))))
+     (max (max movesTowardEnemy aProducesCombat)
+         (if> distNearestEnemy (+ (if> enemiesNearMyBase
+             movesTowardEnemyBaseMajor distNearestResource
+             gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+             (max enemyUnitCount mapArea) (if> tgtKillable
+             aProducesHeavy movesTowardMyBase movesTowardMyBase))
+             (max (/ threatAtDest aIsReturn) (min uIsBase
+                 threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 17
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.47153386751633086 Adjusted=0.6795630206512404 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) movesTowardEnemyMajor)
+     (if> (+ enemiesNearMyBase tgtKillable) (*
+         tgtKillable aProducesLight) (if> aIsNone
+         distEnemyBase placesTowardEnemy myCombatCount)
+         (- placesTowardEnemy tgtWounded))) (- (-
+     (min myBarracksCount uIsCombat) (+ tgtKillable
+     uIsWorker)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) movesTowardResource)
+Tree 1:
+ (max (* (if> movesTowardEnemyMajor (* tgtKillable
+     aProducesLight) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) (max distNearestResource uIsCombat))
+     aProducesHeavy)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea (+ enemiesNearMyBase
+     tgtKillable)) (* placesTowardResource aProducesBarracks)
+     (/ aProducesBarracks myCombatCount) (/ uHpFrac
+     aIsReturn)) (- (min aIsProduce aIsMove) (min
+     aProducesWorker enemiesNearMyBase)) (/ (*
+     enemyCombatCount uIsBase) (/ placesTowardEnemy
+     aIsAttack)) (/ (+ tgtKillable aProducesLight)
+     (min tgtIsBuilding (if> enemiesNearMyBase
+         aProducesBuilding myWorkerCount myResources))))
+     (if> (* (* myResources movesTowardEnemyBase)
+         (max distNearestResource uIsCombat)) (- (min
+         gameTimeK uCarrying) (* aProducesHeavy myResources))
+         (+ (- movesTowardEnemyBase aProducesRanged)
+             (/ aProducesRanged aIsHarvest)) (if> (max
+         uIsCombat aProducesCombat) (min placesTowardEnemy
+         aIsMove) (/ tgtIsWorker aProducesCombat)
+         (if> movesTowardResource aIsProduce -2.4508
+             myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) (* aIsAttack distNearestResource))))
+     (max (max movesTowardEnemy aProducesCombat)
+         (if> (+ (max (min enemyUnitCount uCarrying)
+             (- myWorkerCount aIsMove)) (* distEnemyBase
+             movesTowardEnemy)) (+ (if> enemiesNearMyBase
+             movesTowardEnemyBaseMajor distNearestResource
+             gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+             (max enemyUnitCount mapArea) (if> tgtKillable
+             aProducesHeavy movesTowardMyBase movesTowardMyBase))
+             (max (/ threatAtDest aIsReturn) (min uIsBase
+                 threatAtDest)))))
+Tree 3:
+ (+ (* movesTowardEnemy enemyUnitCount) (*
+     aProducesBuilding myWorkerCount))
+
+Generation: 18
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4716820696029312 Adjusted=0.6794945869455392 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> (- (+ enemiesNearMyBase tgtKillable)
+         aIsMove) distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (min movesTowardEnemyBaseMajor
+     movesTowardEnemy) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) movesTowardEnemyMajor
+         (if> movesTowardResource aIsProduce -2.4508
+             myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) (* aIsAttack distNearestResource))))
+     (max (* (min (if> enemyUnitCount tgtWounded
+         uCarrying mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+         (- tgtKillable aProducesBuilding) (* distEnemyBase
+         movesTowardEnemy)) placesTowardEnemy (* (max
+         enemyUnitCount mapArea) (if> tgtKillable
+         aProducesHeavy movesTowardMyBase movesTowardMyBase))
+         (max (/ threatAtDest aIsReturn) (min uIsBase
+             threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 19
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4712071014906861 Adjusted=0.6797139566460492 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> (if> (if> (/ mapArea aIsMove) (*
+     placesTowardResource aProducesBarracks) (/
+     aProducesBarracks myCombatCount) (if> myCombatCount
+     myWorkerCount gameTimeK movesTowardMyBase))
+     (- (min aIsProduce aIsMove) (min aProducesWorker
+         enemiesNearMyBase)) movesTowardMyBase (/
+     (+ tgtKillable aProducesLight) (min tgtIsBuilding
+     (if> enemiesNearMyBase aProducesBuilding
+         myWorkerCount myResources)))) movesTowardEnemyMajor
+     (+ (+ (min threatAtDest aProducesBuilding)
+         (/ aProducesCombat movesTowardResource))
+         (max (- movesTowardResource aIsNone) (* tgtIsCombat
+             tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) movesTowardEnemyMajor))
+     (max (* (min (if> enemyUnitCount tgtWounded
+         uCarrying mapArea) (min myBarracksCount distEnemyBase))
+         (+ (* movesTowardEnemy enemyUnitCount) (*
+             aProducesBuilding myWorkerCount))) (if> (+
+         (- tgtKillable aProducesBuilding) (* distEnemyBase
+         movesTowardEnemy)) (+ (if> enemiesNearMyBase
+         movesTowardEnemyBaseMajor distNearestResource
+         gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+         (max enemyUnitCount mapArea) (if> tgtKillable
+         aProducesHeavy movesTowardMyBase movesTowardMyBase))
+         (max (/ threatAtDest aIsReturn) (min uIsBase
+             threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 20
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4711970568478289 Adjusted=0.6797185974138565 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> (* aIsAttack distNearestResource)
+     (min enemyUnitCount uCarrying) (if> aIsNone
+     distEnemyBase placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded)) aProducesHeavy)
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 21
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4711970568478289 Adjusted=0.6797185974138565 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (+
+         tgtKillable uIsWorker)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (if> (* aIsAttack distNearestResource)
+     (min enemyUnitCount uCarrying) (if> aIsNone
+     distEnemyBase placesTowardEnemy myCombatCount)
+     (- placesTowardEnemy tgtWounded)) aProducesHeavy)
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 22
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4483708770452444 Adjusted=0.6904308943577039 Hits=81
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     movesTowardResource))) (max (max movesTowardEnemy
+     aProducesCombat) (if> (+ (- tgtKillable aProducesBuilding)
+     (* distEnemyBase movesTowardEnemy)) (+ (if>
+     enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) (min uIsBase threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 23
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4483708770452444 Adjusted=0.6904308943577039 Hits=81
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     movesTowardResource))) (max (max movesTowardEnemy
+     aProducesCombat) (if> (+ (- tgtKillable aProducesBuilding)
+     (* distEnemyBase movesTowardEnemy)) (+ (if>
+     enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) (min uIsBase threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 24
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4649218081137636 Adjusted=0.6826302908874038 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (max (- placesTowardEnemy
+     tgtWounded) aProducesHeavy) (* tgtKillable
+     aProducesLight) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded))) (- (- (min myBarracksCount
+     uIsCombat) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     movesTowardResource))) (max (max movesTowardEnemy
+     aProducesCombat) (if> (+ (- tgtKillable aProducesBuilding)
+     (* distEnemyBase movesTowardEnemy)) (+ (if>
+     enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) (min uIsBase threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 25
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.46538263762746207 Adjusted=0.682415619185346 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     movesTowardResource))) (max (max movesTowardEnemy
+     aProducesCombat) (if> (+ (- tgtKillable aProducesBuilding)
+     (* distEnemyBase movesTowardEnemy)) (+ (if>
+     enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) (min uIsBase threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 26
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4649561120131913 Adjusted=0.6826143061895328 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (max (max movesTowardEnemy
+     aProducesCombat) aProducesHeavy) (* tgtKillable
+     aProducesLight) (* uIsCombat uCarrying) (-
+     placesTowardEnemy tgtWounded))) (- (- (min
+     myBarracksCount uIsCombat) (- myWorkerCount
+     aIsMove)) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     movesTowardResource))) (max (max movesTowardEnemy
+     aProducesCombat) (if> (+ (- tgtKillable aProducesBuilding)
+     (* distEnemyBase movesTowardEnemy)) (+ (if>
+     enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) (min uIsBase threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 27
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.45624434759272625 Adjusted=0.6866979443752486 Hits=80
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (/ threatAtDest aIsReturn))) (max distNearestResource
+     uIsCombat)) (- (min gameTimeK uCarrying)
+     (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (+ (+
+     (min threatAtDest aProducesBuilding) (/ aProducesCombat
+     movesTowardResource)) (max (- movesTowardResource
+     aIsNone) (* tgtIsCombat tgtIsWorker))) (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     movesTowardResource))) (max (max movesTowardEnemy
+     aProducesCombat) (if> (+ (- tgtKillable aProducesBuilding)
+     (* distEnemyBase movesTowardEnemy)) (+ (if>
+     enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) (min uIsBase threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 28
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44730498897126475 Adjusted=0.6909393718809701 Hits=81
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) threatAtDest (-
+     placesTowardEnemy tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack (* tgtKillable aProducesLight))))
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 29
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44730498897126475 Adjusted=0.6909393718809701 Hits=81
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) threatAtDest (-
+     placesTowardEnemy tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack (* tgtKillable aProducesLight))))
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 30
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44674639522126475 Adjusted=0.6912061459445078 Hits=81
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max (if> (+ enemiesNearMyBase
+     tgtKillable) (* tgtKillable aProducesLight)
+     (/ placesTowardEnemy movesTowardMyBase) (-
+     placesTowardEnemy tgtWounded)) aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack (* tgtKillable aProducesLight))))
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 31
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44654404748529547 Adjusted=0.6913028343232426 Hits=81
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (min enemyUnitCount
+     uCarrying) (* tgtKillable aProducesLight)
+     (if> (+ (min threatAtDest aProducesBuilding)
+         movesTowardEnemyMajor) distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded)))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) (- placesTowardEnemy
+     tgtWounded)) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor movesTowardEnemyMajor
+     (+ (+ (min threatAtDest aProducesBuilding)
+         (/ aProducesCombat movesTowardResource))
+         (max (- movesTowardResource aIsNone) (* tgtIsCombat
+             tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max aProducesHeavy (min uIsBase threatAtDest)))))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 32
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44258875221594146 Adjusted=0.6931982510357947 Hits=81
+Tree 0:
+ (if> (max (- movesTowardResource aIsNone)
+     (* tgtIsCombat tgtIsWorker)) (- (- (min myBarracksCount
+     uIsCombat) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (- placesTowardEnemy tgtWounded) aProducesLight)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack (* tgtKillable aProducesLight))))
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ (/ placesTowardEnemy movesTowardMyBase)
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) movesTowardEnemyMajor))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 33
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44258875221594146 Adjusted=0.6931982510357947 Hits=81
+Tree 0:
+ (if> (max (- movesTowardResource aIsNone)
+     (* tgtIsCombat tgtIsWorker)) (- (- (min myBarracksCount
+     uIsCombat) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (- placesTowardEnemy tgtWounded) aProducesLight)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack (* tgtKillable aProducesLight))))
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ (/ placesTowardEnemy movesTowardMyBase)
+     tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max (/ threatAtDest
+     aIsReturn) movesTowardEnemyMajor))))
+Tree 3:
+ movesTowardEnemyMajor
+
+Generation: 34
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4430532970182373 Adjusted=0.6929750980551358 Hits=81
+Tree 0:
+ (if> (max (- movesTowardResource aIsNone)
+     (* tgtIsCombat tgtIsWorker)) (- (- (min myBarracksCount
+     uIsCombat) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (max (max (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded))
+     aProducesHeavy) (max (max (- placesTowardEnemy
+     tgtWounded) aProducesHeavy) movesTowardEnemyMajor))
+     aProducesLight)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack (* tgtKillable aProducesLight))))
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max aProducesBuilding movesTowardEnemyMajor))))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 35
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4430532970182373 Adjusted=0.6929750980551358 Hits=81
+Tree 0:
+ (if> (max (- movesTowardResource aIsNone)
+     (* tgtIsCombat tgtIsWorker)) (- (- (min myBarracksCount
+     uIsCombat) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (max (max (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) (- placesTowardEnemy tgtWounded))
+     aProducesHeavy) (max (max (- placesTowardEnemy
+     tgtWounded) aProducesHeavy) movesTowardEnemyMajor))
+     aProducesLight)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (-
+     (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (- (- aIsMove gameTimeK)
+     (* aIsAttack (* tgtKillable aProducesLight))))
+     (max distNearestResource uIsCombat)) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (+ (- movesTowardEnemyBase aProducesRanged)
+         (/ aProducesRanged aIsHarvest)) (if> (max
+     uIsCombat aProducesCombat) (min placesTowardEnemy
+     aIsMove) (/ tgtIsWorker aProducesCombat)
+     (if> movesTowardResource aIsProduce -2.4508
+         myCombatCount))) (+ (+ (min threatAtDest
+     aProducesBuilding) (/ aProducesCombat movesTowardResource))
+     (max (- movesTowardResource aIsNone) (* tgtIsCombat
+         tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (* distEnemyBase
+     movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max aProducesBuilding movesTowardEnemyMajor))))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 36
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44311119459093196 Adjusted=0.6929472959174588 Hits=81
+Tree 0:
+ (if> (max movesTowardEnemy aProducesCombat)
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (- placesTowardEnemy
+         tgtWounded) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (max aProducesRanged
+     uIsBarracks) (- placesTowardEnemy tgtWounded))
+     aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor movesTowardEnemyMajor
+     (+ (+ (min threatAtDest aProducesBuilding)
+         (/ aProducesCombat movesTowardResource))
+         (max (- movesTowardResource aIsNone) (* tgtIsCombat
+             tgtIsWorker))) (- (max (/ uHpFrac aIsReturn)
+     (max gameTimeK enemyCombatCount)) (- (- aIsMove
+     gameTimeK) movesTowardResource))) (max (max
+     movesTowardEnemy aProducesCombat) (if> (+
+     (- tgtKillable aProducesBuilding) (+ (min
+     threatAtDest aProducesBuilding) movesTowardEnemyMajor))
+     (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+         distNearestResource gameTimeK) (/ tgtIsCombat
+         tgtKillable)) (* (max enemyUnitCount mapArea)
+     (if> tgtKillable aProducesHeavy movesTowardMyBase
+         movesTowardMyBase)) (max aProducesHeavy (min
+     uIsBase threatAtDest)))))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 37
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.44298009605776867 Adjusted=0.6930102520000149 Hits=81
+Tree 0:
+ (if> (max movesTowardEnemy aProducesCombat)
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) (min (max movesTowardEnemy
+     aProducesCombat) (* (min uCarrying movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- placesTowardEnemy tgtWounded))
+     aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemyMajor (if> (* (*
+     myResources movesTowardEnemyBase) placesTowardEnemy)
+     (- (max movesTowardEnemy aProducesCombat)
+         (* aProducesHeavy myResources)) (+ (- movesTowardEnemyBase
+     aProducesRanged) (/ aProducesRanged aIsHarvest))
+     (if> (max uIsCombat aProducesCombat) (min
+         placesTowardEnemy aIsMove) (/ tgtIsWorker
+         aProducesCombat) (if> movesTowardResource
+         aIsProduce -2.4508 myCombatCount))) (- (min
+     gameTimeK uCarrying) (* aProducesHeavy myResources))
+     (- (max (/ uHpFrac aIsReturn) (max gameTimeK
+         enemyCombatCount)) (max (/ uHpFrac aIsReturn)
+         (max gameTimeK enemyCombatCount)))) (max
+     (max movesTowardEnemy aProducesCombat) (if>
+     (+ (- tgtKillable aProducesBuilding) (* distEnemyBase
+         movesTowardEnemy)) (+ (if> enemiesNearMyBase
+     movesTowardEnemyBaseMajor distNearestResource
+     gameTimeK) (/ tgtIsCombat tgtKillable)) (*
+     (max enemyUnitCount mapArea) (if> tgtKillable
+     aProducesHeavy movesTowardMyBase movesTowardMyBase))
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)))))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 38
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.43732037683306657 Adjusted=0.6957391101650972 Hits=82
+Tree 0:
+ (if> (* (max (/ threatAtDest aIsReturn) (min
+     uIsBase threatAtDest)) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying))
+     (- (- (min myBarracksCount uIsCombat) (-
+         myWorkerCount aIsMove)) (* (min uCarrying
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (- placesTowardEnemy tgtWounded)
+Tree 2:
+ (max (- placesTowardEnemy tgtWounded) (*
+     uIsCombat uCarrying))
+Tree 3:
+ (+ aIsHarvest (max movesTowardEnemy aProducesCombat))
+
+Generation: 39
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.41637250264639614 Adjusted=0.706028956458536 Hits=83
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+         placesTowardEnemy myCombatCount) (- placesTowardEnemy
+         tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (max (max tgtIsWorker aProducesHeavy)
+     movesTowardEnemyMajor))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 40
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4356919197785868 Adjusted=0.6965282636362685 Hits=82
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) (if> aIsNone distEnemyBase
+         placesTowardEnemy myCombatCount) (- placesTowardEnemy
+         tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ (- (min
+     myBarracksCount uIsCombat) (- myWorkerCount
+     aIsMove)) tgtKillable)) (max (max tgtIsWorker
+     aProducesHeavy) movesTowardEnemyMajor))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 41
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39835747014360995 Adjusted=0.7151247240788159 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (+ aIsHarvest (max movesTowardEnemyMajor
+     (min enemyUnitCount uCarrying))) (* tgtKillable
+     aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) (max
+     movesTowardEnemy aProducesCombat) (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (max (max tgtIsWorker aProducesHeavy)
+     movesTowardEnemyMajor))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 42
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3993410080900387 Adjusted=0.7146220929842545 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* (/ (- placesTowardEnemy tgtWounded) (max
+         movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) (max
+     movesTowardEnemy aProducesCombat) (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (/ tgtIsCombat
+     tgtKillable)) (max (max (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy) aProducesCombat)
+     movesTowardEnemyMajor))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 43
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39908012639361 Adjusted=0.7147553461270918 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) (max movesTowardEnemy
+         aProducesCombat) (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ (max (min uCarrying movesTowardMyBase) uIsCombat)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 44
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39842164425075277 Adjusted=0.7150919067301628 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (- (min myBarracksCount
+     uIsCombat) (- myWorkerCount movesTowardEnemyMajor)))
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+         (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (+ aIsHarvest (max movesTowardEnemyMajor
+     (min enemyUnitCount uCarrying))) (* tgtKillable
+     aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) (max
+     movesTowardEnemy aProducesCombat) (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (+ (max movesTowardEnemy aProducesCombat)
+     (/ tgtIsCombat tgtKillable)) (max (max tgtIsWorker
+     aProducesHeavy) movesTowardEnemyMajor))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 45
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39842164425075277 Adjusted=0.7150919067301628 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (- (min myBarracksCount
+     uIsCombat) (- myWorkerCount movesTowardEnemyMajor)))
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+         (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (+ aIsHarvest (max movesTowardEnemyMajor
+     (min enemyUnitCount uCarrying))) (* tgtKillable
+     aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) (max
+     movesTowardEnemy aProducesCombat) (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (+ (max movesTowardEnemy aProducesCombat)
+     (/ tgtIsCombat tgtKillable)) (max (max tgtIsWorker
+     aProducesHeavy) movesTowardEnemyMajor))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 46
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39814262639361003 Adjusted=0.7152346127801102 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (- placesTowardEnemy
+     tgtWounded) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (max (/ threatAtDest aIsReturn) (min uIsBase
+         threatAtDest)) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) (max
+     movesTowardEnemy aProducesCombat) (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (+ aIsAttack (/ tgtIsCombat tgtKillable))
+     (max (max tgtIsWorker aProducesHeavy) movesTowardEnemyMajor))
+Tree 3:
+ (max (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (max movesTowardEnemy
+     aProducesCombat)) (max movesTowardEnemy aProducesCombat))
+
+Generation: 47
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3991038429114673 Adjusted=0.7147432301515579 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (max (if> (* distEnemyBase movesTowardEnemy)
+     (* tgtKillable aProducesLight) (if> aIsNone
+     distEnemyBase placesTowardEnemy myCombatCount)
+     placesTowardEnemy) aProducesCombat) movesTowardEnemyMajor)
+Tree 2:
+ (max (+ (min (max (- placesTowardEnemy tgtWounded)
+     aProducesHeavy) uCarrying) (/ tgtIsCombat
+     tgtKillable)) (max (max tgtIsWorker aProducesHeavy)
+     movesTowardEnemyMajor))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 48
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3986685750543243 Adjusted=0.7149656593672735 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) aIsMove) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount aIsMove)) (* (min uCarrying
+     movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (* movesTowardEnemyMajor movesTowardEnemyMajor)
+     (* (/ (- placesTowardEnemy tgtWounded) (max
+         movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) (max
+     movesTowardEnemy aProducesCombat) (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ (- placesTowardEnemy tgtWounded)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 49
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39840071791146714 Adjusted=0.7151026077085509 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     (max (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+         distNearestResource gameTimeK) (if> aIsNone
+         distEnemyBase placesTowardEnemy myCombatCount))
+         (min enemyUnitCount uCarrying)))) (if> (*
+     distEnemyBase movesTowardEnemy) (* tgtKillable
+     aProducesLight) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) placesTowardEnemy))
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+         (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (max (if> (* distEnemyBase movesTowardEnemy)
+     (* tgtKillable aProducesLight) (if> aIsNone
+     distEnemyBase placesTowardEnemy myCombatCount)
+     placesTowardEnemy) aProducesCombat) movesTowardEnemyMajor)
+Tree 2:
+ (max (max movesTowardEnemy aProducesCombat)
+     movesTowardEnemyMajor)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 50
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3979863763936101 Adjusted=0.7153145530500112 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (* tgtKillable aProducesLight)
+     (* distEnemyBase movesTowardEnemy) placesTowardEnemy))
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+         (min uCarrying movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (if>
+         (* distEnemyBase movesTowardEnemy) (* tgtKillable
+         aProducesLight) (if> aIsNone distEnemyBase
+         placesTowardEnemy myCombatCount) placesTowardEnemy)
+         (max movesTowardEnemy aProducesCombat) (-
+         placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (min (min uCarrying movesTowardMyBase)
+     movesTowardMyBase) uIsCombat)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 51
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3790458283590703 Adjusted=0.725139063137519 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (max movesTowardEnemy aProducesCombat)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (min (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (- placesTowardEnemy
+     tgtWounded)) movesTowardMyBase)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 52
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3860274892075949 Adjusted=0.7214864119121545 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (max movesTowardEnemy aProducesCombat)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (min (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (- placesTowardEnemy
+     tgtWounded)) movesTowardMyBase)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 53
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37869262164669787 Adjusted=0.7253248362246322 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (max movesTowardEnemy aProducesCombat)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) (max movesTowardEnemy
+         aProducesCombat) (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy) aProducesHeavy)
+Tree 2:
+ (min (- placesTowardEnemy tgtWounded) movesTowardMyBase)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 54
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.38690791090344756 Adjusted=0.7210284058071228 Hits=84
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (max movesTowardEnemy aProducesCombat)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (min enemyUnitCount uCarrying) (- myWorkerCount
+     aIsMove))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 55
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3838106561651929 Adjusted=0.7226422166535367 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ (if>
+     (* distEnemyBase movesTowardEnemy) (* tgtKillable
+     aProducesLight) (* distEnemyBase movesTowardEnemy)
+     placesTowardEnemy) movesTowardMyBase)) (if>
+     (* distEnemyBase movesTowardEnemy) (max movesTowardEnemy
+     aProducesCombat) (if> aIsNone distEnemyBase
+     placesTowardEnemy myCombatCount) placesTowardEnemy))
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+         (min (/ (max aProducesRanged uIsBarracks)
+             (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+             movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (max (if> (max movesTowardEnemy aProducesCombat)
+     (max movesTowardEnemy aProducesCombat) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) (max movesTowardEnemy
+         aProducesCombat) (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy) aProducesHeavy)
+Tree 2:
+ (min (+ (if> enemiesNearMyBase movesTowardEnemyBaseMajor
+     distNearestResource gameTimeK) (- placesTowardEnemy
+     tgtWounded)) movesTowardMyBase)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 56
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3772645584292236 Adjusted=0.7260769137488766 Hits=85
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ placesTowardEnemy movesTowardMyBase))
+     (if> (* distEnemyBase movesTowardEnemy) (-
+         placesTowardEnemy tgtWounded) (if> aIsNone
+         distEnemyBase placesTowardEnemy myCombatCount)
+         placesTowardEnemy)) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount aIsMove)) (* (min (/ (max
+     aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor)) movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemy (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded)))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 57
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37751526593878976 Adjusted=0.7259447678922749 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) (if> (* distEnemyBase
+     movesTowardEnemy) (max movesTowardEnemy aProducesCombat)
+     (if> aIsNone distEnemyBase placesTowardEnemy
+         myCombatCount) placesTowardEnemy)) (- (-
+     (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max uCarrying (- myWorkerCount aIsMove))
+         (/ (max aProducesRanged uIsBarracks) (max
+             movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+         movesTowardMyBase)) (if> (* distEnemyBase
+         movesTowardEnemy) (max movesTowardEnemy aProducesCombat)
+         (if> aIsNone distEnemyBase placesTowardEnemy
+             myCombatCount) placesTowardEnemy)) (/ threatAtDest
+         aIsReturn) placesTowardEnemy (- placesTowardEnemy
+         tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemy (if> movesTowardEnemy
+     movesTowardEnemyMajor (min (max movesTowardEnemy
+     uIsCombat) uCarrying) (- placesTowardEnemy
+     tgtWounded)))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 58
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37692104758738665 Adjusted=0.7262580536132989 Hits=85
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ placesTowardEnemy movesTowardMyBase))
+     (if> (* distEnemyBase movesTowardEnemy) (-
+         placesTowardEnemy tgtWounded) (if> aIsNone
+         distEnemyBase placesTowardEnemy myCombatCount)
+         placesTowardEnemy)) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount aIsMove)) (* (min (/ (max
+     aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor)) movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) (min enemyUnitCount
+     uCarrying) (if> (- placesTowardEnemy tgtWounded)
+     (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemy (if> movesTowardEnemy
+     movesTowardEnemyMajor (- placesTowardEnemy
+     tgtWounded) (- placesTowardEnemy tgtWounded)))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 59
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3772202344496315 Adjusted=0.7261002815570907 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) aIsReturn)
+     (if> (* distEnemyBase movesTowardEnemy) (-
+         placesTowardEnemy tgtWounded) (if> aIsNone
+         distEnemyBase placesTowardEnemy myCombatCount)
+         placesTowardEnemy)) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount aIsMove)) (* (min (/ (max
+     aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor)) movesTowardMyBase)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying))) (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) movesTowardResource)
+Tree 1:
+ (max placesTowardEnemy aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemy (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (max (if> (max movesTowardEnemy
+     aProducesCombat) (* tgtKillable aProducesLight)
+     aIsProduce (if> (- placesTowardEnemy tgtWounded)
+     (if> enemyCombatCount aProducesHeavy distNearestEnemy
+         uCarrying) (- placesTowardEnemy tgtWounded)
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 60
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3774432394719531 Adjusted=0.7259827275230252 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+         (min (/ (max aProducesRanged uIsBarracks)
+             (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+             movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> aIsAttack (/ threatAtDest aIsReturn)
+         placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 61
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3772257749470804 Adjusted=0.7260973604988077 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount aIsMove)) (*
+         (min (/ (max aProducesRanged uIsBarracks)
+             (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+             movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> enemyUnitCount
+     (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max (if> movesTowardEnemy movesTowardResource
+     aIsProduce (if> (- placesTowardEnemy tgtWounded)
+     (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 62
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3767742244049888 Adjusted=0.7263355038711433 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) aIsReturn) (- (- (if>
+     movesTowardEnemy movesTowardEnemyMajor (min
+     enemyUnitCount uCarrying) (- placesTowardEnemy
+     tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying))
+         (/ threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (- placesTowardEnemy tgtWounded)
+Tree 3:
+ (* distEnemyBase movesTowardEnemy)
+
+Generation: 63
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3767742244049888 Adjusted=0.7263355038711433 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) aIsReturn) (- (- (if>
+     movesTowardEnemy movesTowardEnemyMajor (min
+     enemyUnitCount uCarrying) (- placesTowardEnemy
+     tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying))
+         (/ threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (- placesTowardEnemy tgtWounded)
+Tree 3:
+ (* distEnemyBase movesTowardEnemy)
+
+Generation: 64
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3769002707219529 Adjusted=0.7262690125521349 Hits=85
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) aIsReturn) (- (- (if>
+     movesTowardEnemy movesTowardEnemyMajor (min
+     enemyUnitCount uCarrying) (- placesTowardEnemy
+     tgtWounded)) (- myWorkerCount aIsMove)) (*
+     (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> (max movesTowardEnemy aProducesCombat)
+     (* tgtKillable aProducesLight) aIsProduce
+     (if> (- placesTowardEnemy tgtWounded) (/
+         threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemy aProducesCombat)
+Tree 3:
+ (* distEnemyBase (* distEnemyBase movesTowardEnemy))
+
+Generation: 65
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37216737524761745 Adjusted=0.7287740679736995 Hits=86
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ myWorkerCount
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 66
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3555145746202317 Adjusted=0.7377272208822729 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ (/ threatAtDest aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 67
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3555145746202317 Adjusted=0.7377272208822729 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ (/ threatAtDest aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 68
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3555145746202317 Adjusted=0.7377272208822729 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ (/ threatAtDest aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 69
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3549780531757164 Adjusted=0.7380193337126457 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ (/ threatAtDest aIsReturn)
+Tree 3:
+ (max movesTowardEnemy movesTowardEnemy)
+
+Generation: 70
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3551336853504613 Adjusted=0.737934574876561 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ (/ threatAtDest aIsReturn)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 71
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35450569587342057 Adjusted=0.738276703484199 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ movesTowardEnemy
+
+Generation: 72
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35450569587342057 Adjusted=0.738276703484199 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ movesTowardEnemy
+
+Generation: 73
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35449750470632857 Adjusted=0.7382811681272252 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ aProducesLight
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* (- placesTowardEnemy
+     tgtWounded) (max movesTowardEnemy aProducesCombat))
+     aIsProduce (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 74
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35449750470632857 Adjusted=0.7382811681272252 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ aProducesLight
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* (- placesTowardEnemy
+     tgtWounded) (max movesTowardEnemy aProducesCombat))
+     aIsProduce (if> (max movesTowardEnemy aProducesCombat)
+     (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 75
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35497941837023167 Adjusted=0.7380185901294348 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (- placesTowardEnemy tgtWounded) aProducesHeavy)
+Tree 2:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) uCarrying) movesTowardMyBase)
+         (if> enemyCombatCount aProducesHeavy distNearestEnemy
+             uCarrying))) (- (max (/ threatAtDest aIsReturn)
+     (- myWorkerCount aIsMove)) (/ (max aProducesRanged
+     uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 76
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35513778093400716 Adjusted=0.7379323446437792 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (- (max (min enemyUnitCount
+     uCarrying) (- myWorkerCount aIsMove)) (/
+     (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))) aIsProduce (if>
+     (max movesTowardEnemy aProducesCombat) movesTowardEnemy
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 77
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35426132605518074 Adjusted=0.7384099218966059 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (- placesTowardEnemy
+     tgtWounded) (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+     (min enemyUnitCount uCarrying) (- placesTowardEnemy
+     tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+     aProducesCombat))) (* (min (/ (max aProducesRanged
+     uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+     movesTowardMyBase) (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)))
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 78
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35459020847079364 Adjusted=0.7382306425563986 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount (max movesTowardEnemy
+     aProducesCombat) placesTowardEnemy (max threatAtDest
+     enemyUnitCount)) aProducesHeavy)
+Tree 2:
+ (- placesTowardEnemy tgtWounded)
+Tree 3:
+ (* distEnemyBase movesTowardEnemy)
+
+Generation: 79
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35459020847079364 Adjusted=0.7382306425563986 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount (max movesTowardEnemy
+     aProducesCombat) placesTowardEnemy (max threatAtDest
+     enemyUnitCount)) aProducesHeavy)
+Tree 2:
+ (- placesTowardEnemy tgtWounded)
+Tree 3:
+ (* distEnemyBase movesTowardEnemy)
+
+Generation: 80
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35477177934132936 Adjusted=0.7381317025116848 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount movesTowardEnemy
+     placesTowardEnemy (max movesTowardEnemyMajor
+     (min enemyUnitCount uCarrying))) aProducesHeavy)
+Tree 2:
+ (/ (max (if> movesTowardEnemy aProducesLight
+     aIsProduce (if> (max aProducesRanged uIsBarracks)
+     (/ threatAtDest aIsReturn) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+     aIsReturn)
+Tree 3:
+ (* distEnemyBase movesTowardEnemy)
+
+Generation: 81
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3548633768364307 Adjusted=0.7380818000520266 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (- placesTowardEnemy
+         tgtWounded) movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     aProducesLight) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (/ threatAtDest aIsReturn)
+     placesTowardEnemy (- placesTowardEnemy tgtWounded)))
+     aProducesHeavy)
+Tree 2:
+ (min enemyUnitCount uCarrying)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 82
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35469682310556333 Adjusted=0.7381725438076678 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy movesTowardEnemy
+     aIsProduce (if> (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (if> (max movesTowardEnemy
+     placesTowardResource) movesTowardEnemy placesTowardEnemy
+     (- placesTowardEnemy tgtWounded)) (- placesTowardEnemy
+     tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+     aProducesCombat))) movesTowardEnemy placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase))
+Tree 3:
+ movesTowardEnemy
+
+Generation: 83
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3547746391929359 Adjusted=0.7381301443579712 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (- placesTowardEnemy
+         tgtWounded) movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     movesTowardEnemy) aIsProduce (if> movesTowardEnemy
+     aProducesLight aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) movesTowardEnemy placesTowardEnemy
+     (- placesTowardEnemy tgtWounded)))) aProducesHeavy)
+Tree 2:
+ (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase))
+Tree 3:
+ movesTowardEnemy
+
+Generation: 84
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3546338946952835 Adjusted=0.7382068350097971 Hits=87
+Tree 0:
+ (if> (* (min movesTowardEnemyBaseMajor (/
+     placesTowardEnemy movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (if> enemyCombatCount
+     aProducesHeavy distNearestEnemy uCarrying)
+     aIsProduce (if> (max movesTowardEnemy aProducesCombat)
+     movesTowardEnemy placesTowardEnemy (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ (- movesTowardEnemy tgtWounded)
+Tree 3:
+ (max movesTowardEnemy aProducesCombat)
+
+Generation: 85
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.354748700497145 Adjusted=0.7381442769666694 Hits=87
+Tree 0:
+ (if> (if> movesTowardEnemy (max movesTowardEnemy
+     aProducesCombat) aIsProduce placesTowardEnemy)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ aProducesLight
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     (max movesTowardEnemy aProducesCombat)) aIsProduce
+     (if> (max movesTowardEnemy aProducesCombat)
+         (/ threatAtDest aIsReturn) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (* distEnemyBase movesTowardEnemy)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 86
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3546859015494409 Adjusted=0.7381784949974279 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (- placesTowardEnemy
+         tgtWounded) movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     movesTowardEnemy) aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor) placesTowardEnemy
+     (- placesTowardEnemy tgtWounded))) aProducesHeavy)
+Tree 2:
+ (max aProducesRanged uIsBarracks)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 87
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3544865831502062 Adjusted=0.7382871210685922 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (- placesTowardEnemy
+         tgtWounded) movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     movesTowardEnemy) aIsProduce (if> movesTowardEnemy
+     aProducesLight aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) movesTowardEnemy placesTowardEnemy
+     (- placesTowardEnemy tgtWounded)))) aProducesHeavy)
+Tree 2:
+ (min (* uIsCombat uCarrying) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))
+Tree 3:
+ (* distEnemyBase movesTowardEnemy)
+
+Generation: 88
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3544865831502062 Adjusted=0.7382871210685922 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (- placesTowardEnemy
+         tgtWounded) movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     movesTowardEnemy) aIsProduce (if> movesTowardEnemy
+     aProducesLight aIsProduce (if> (max movesTowardEnemy
+     aProducesCombat) movesTowardEnemy placesTowardEnemy
+     (- placesTowardEnemy tgtWounded)))) aProducesHeavy)
+Tree 2:
+ (min (* uIsCombat uCarrying) (max movesTowardEnemyMajor
+     movesTowardEnemyBaseMajor))
+Tree 3:
+ (* distEnemyBase movesTowardEnemy)
+
+Generation: 89
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35456030365403274 Adjusted=0.7382469405772645 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (* (min (max movesTowardEnemy
+     aProducesCombat) (/ (- placesTowardEnemy
+     tgtWounded) movesTowardMyBase)) movesTowardEnemyBase))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount movesTowardEnemy
+     placesTowardEnemy (max movesTowardEnemy aProducesCombat))
+     aProducesHeavy)
+Tree 2:
+ (/ threatAtDest aIsReturn)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 90
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35456030365403274 Adjusted=0.7382469405772645 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (* (min (max movesTowardEnemy
+     aProducesCombat) (/ (- placesTowardEnemy
+     tgtWounded) movesTowardMyBase)) movesTowardEnemyBase))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount movesTowardEnemy
+     placesTowardEnemy (max movesTowardEnemy aProducesCombat))
+     aProducesHeavy)
+Tree 2:
+ (/ threatAtDest aIsReturn)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 91
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3542311623132681 Adjusted=0.7384263690194677 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount movesTowardEnemy
+     placesTowardEnemy (if> (max aProducesRanged
+     uIsBarracks) (/ threatAtDest aIsReturn) placesTowardEnemy
+     movesTowardEnemy)) aProducesHeavy)
+Tree 2:
+ aIsProduce
+Tree 3:
+ movesTowardEnemy
+
+Generation: 92
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35440317682219685 Adjusted=0.7383325859780362 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ aProducesCombat movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount movesTowardEnemy
+     placesTowardEnemy (max movesTowardEnemyMajor
+     (max movesTowardEnemy aProducesCombat)))
+     movesTowardEnemy)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ movesTowardEnemy
+
+Generation: 93
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3543015886694012 Adjusted=0.7383879693905536 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (- placesTowardEnemy tgtWounded)
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (/ threatAtDest aIsReturn) (- myWorkerCount
+         aIsMove)) (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount placesTowardEnemy
+     placesTowardEnemy (max movesTowardEnemy aProducesCombat))
+     aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemyMajor (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat))))
+Tree 3:
+ movesTowardEnemy
+
+Generation: 94
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3543015886694012 Adjusted=0.7383879693905536 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (- placesTowardEnemy tgtWounded)
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (/ threatAtDest aIsReturn) (- myWorkerCount
+         aIsMove)) (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount placesTowardEnemy
+     placesTowardEnemy (max movesTowardEnemy aProducesCombat))
+     aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemyMajor (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat))))
+Tree 3:
+ movesTowardEnemy
+
+Generation: 95
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3543015886694012 Adjusted=0.7383879693905536 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (- placesTowardEnemy tgtWounded)
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (/ threatAtDest aIsReturn) (- myWorkerCount
+         aIsMove)) (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount placesTowardEnemy
+     placesTowardEnemy (max movesTowardEnemy aProducesCombat))
+     aProducesHeavy)
+Tree 2:
+ (max movesTowardEnemyMajor (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat))))
+Tree 3:
+ movesTowardEnemy
+
+Generation: 96
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35436495137576823 Adjusted=0.7383534245951926 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy aProducesCombat
+     aIsProduce placesTowardEnemy) aProducesHeavy)
+Tree 2:
+ (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase)
+Tree 3:
+ movesTowardEnemy
+
+Generation: 97
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3547405093300532 Adjusted=0.7381487400081661 Hits=87
+Tree 0:
+ (if> (* (min (* uIsCombat uCarrying) (/ placesTowardEnemy
+     movesTowardMyBase)) movesTowardEnemyBase)
+     (- (- (if> movesTowardEnemy movesTowardEnemyMajor
+         (min enemyUnitCount uCarrying) (- placesTowardEnemy
+         tgtWounded)) (- myWorkerCount (max movesTowardEnemy
+         aProducesCombat))) (* (min (- placesTowardEnemy
+         tgtWounded) movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> movesTowardEnemy (* tgtKillable
+     movesTowardEnemy) aIsProduce (if> (if> enemyUnitCount
+     movesTowardEnemy placesTowardEnemy (max movesTowardEnemyMajor
+     (max movesTowardEnemy aProducesCombat)))
+     movesTowardEnemy placesTowardEnemy (- placesTowardEnemy
+     tgtWounded))) aProducesHeavy)
+Tree 2:
+ aProducesCombat
+Tree 3:
+ (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)
+
+Generation: 98
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35477327399842057 Adjusted=0.7381308881659897 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (* (min (max movesTowardEnemy
+         aProducesCombat) (/ (- placesTowardEnemy
+         tgtWounded) movesTowardMyBase)) movesTowardEnemyBase)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max movesTowardEnemy (- placesTowardEnemy
+     tgtWounded))
+Tree 2:
+ aProducesCombat
+Tree 3:
+ movesTowardEnemy
+
+Generation: 99
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3547963528426049 Adjusted=0.7381183141671598 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) tgtKillable) (- myWorkerCount
+     (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (- placesTowardEnemy tgtWounded) aProducesHeavy)
+Tree 2:
+ (if> movesTowardEnemy movesTowardEnemyMajor
+     (if> movesTowardEnemy (* tgtKillable movesTowardEnemy)
+         aIsProduce (if> uIsBarracks (max movesTowardEnemyMajor
+         movesTowardEnemyBaseMajor) placesTowardEnemy
+         (- placesTowardEnemy tgtWounded))) movesTowardEnemy)
+Tree 3:
+ movesTowardEnemy
+
+Best Individual of Run:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3542311623132681 Adjusted=0.7384263690194677 Hits=87
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat)
+     (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase))
+     movesTowardEnemyBase) (- (- (if> movesTowardEnemy
+     movesTowardEnemyMajor (min enemyUnitCount
+     uCarrying) (- placesTowardEnemy tgtWounded))
+     (- myWorkerCount (max movesTowardEnemy aProducesCombat)))
+     (* (min (/ (max aProducesRanged uIsBarracks)
+         (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))
+         movesTowardMyBase) (if> enemyCombatCount
+         aProducesHeavy distNearestEnemy uCarrying)))
+     (- (max (min enemyUnitCount uCarrying) (-
+         myWorkerCount aIsMove)) (/ (max aProducesRanged
+         uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)))
+     movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount movesTowardEnemy
+     placesTowardEnemy (if> (max aProducesRanged
+     uIsBarracks) (/ threatAtDest aIsReturn) placesTowardEnemy
+     movesTowardEnemy)) aProducesHeavy)
+Tree 2:
+ aIsProduce
+Tree 3:
+ movesTowardEnemy

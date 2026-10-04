@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4600052881240294128|0.3542311623132681|i87|
+Tree 0:
+ (if> (* (min (max movesTowardEnemy aProducesCombat) (/ (- placesTowardEnemy tgtWounded) movesTowardMyBase)) movesTowardEnemyBase) (- (- (if> movesTowardEnemy movesTowardEnemyMajor (min enemyUnitCount uCarrying) (- placesTowardEnemy tgtWounded)) (- myWorkerCount (max movesTowardEnemy aProducesCombat))) (* (min (/ (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor)) movesTowardMyBase) (if> enemyCombatCount aProducesHeavy distNearestEnemy uCarrying))) (- (max (min enemyUnitCount uCarrying) (- myWorkerCount aIsMove)) (/ (max aProducesRanged uIsBarracks) (max movesTowardEnemyMajor movesTowardEnemyBaseMajor))) movesTowardResource)
+Tree 1:
+ (max (if> enemyUnitCount movesTowardEnemy placesTowardEnemy (if> (max aProducesRanged uIsBarracks) (/ threatAtDest aIsReturn) placesTowardEnemy movesTowardEnemy)) aProducesHeavy)
+Tree 2:
+ aIsProduce
+Tree 3:
+ movesTowardEnemy
