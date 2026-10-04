@@ -467,6 +467,463 @@ NEXT, IN ORDER. (1) Fix the train/eval MAP split; it has stopped being housekeep
 
 ---
 
+
+# PROJECT_CONTEXT.md — session update 2026-10-03 / 2026-10-04
+
+**One file for the whole session.** It replaces the three separate additions files
+(2026-10-03, 2026-10-04, 2026-10-04b); those can be deleted once this is merged.
+
+How to merge it into PROJECT_CONTEXT.md:
+- **Section 0** goes at the very top, directly under the title, so every new session reads
+  it first.
+- **Section A** replaces the "Current status" paragraph at the end of section 1.
+- **Sections B–J** are appended above the "Keep this file current" line.
+- **Section K** lists the fixes to the older sections (§4, §6, §7, §10, §11).
+
+---
+
+## 0. Instructions for the next assistant session (read first)
+
+This file is used by a fresh assistant window that has none of the earlier conversations.
+It describes the project's state, but **not the contents of the source code**.
+
+- **Ask for the source files before writing code; never assume their contents.** Before
+  changing or writing code that touches an existing class (e.g. `Features.java`,
+  `EvolvedBot.java`, `MicroRTSProblem.java`, `BenchmarkStatistics.java`, `Pruner.java`,
+  `IndividualLoader.java`, `Bench.java`, `FeatureNode.java`, `Panel.java`, `ScoreData.java`,
+  or a params file), ask the user to attach the current version. Guessed code has cost this
+  project before: the August file shuffles, and BenchmarkStatistics silently missing code
+  the notes said it had.
+- **Phase 4 needs the Scheepers & Pillay paper.** Structure-based GP means specifically
+  Scheepers & Pillay (proposal ref [18]); Prof. Pillay is a supervisor and co-author. Do
+  not design or implement it from general knowledge. If the paper (or Prof. Pillay's
+  description of the method) is not attached, ask for it first.
+- **The user places files manually.** Give each new or changed file with its exact path
+  relative to the repo root (e.g. `src\gp\Bench.java`), and say whether it is new or a
+  replacement.
+- **Commands are PowerShell, run from the repo root** (MICRORTSBOTS\). Follow the
+  rebuild rules and command sheet in section K.
+- **Keep the methodology rules in section I.** In particular: never tune against the test
+  maps, Coac or mayari; parsimony is identical across configurations; report seed spread
+  and the selected individual separately.
+
+---
+
+## A. Current status (replaces the paragraph at the end of §1)
+
+**Current status:** Ordinary-GP pipeline complete for this phase. The best bot (stage 7,
+seed 8242, selected on validation) beats 15 of the 18 scripted panel bots in every game on
+8 unseen validation maps (RandomBiasedAI 100%), and beats **WorkerRush 69%,
+WorkerRushPlusPlus 81% and WorkerDefense 75%**, including WorkerRush from both sides on
+a 16x16 map, which nothing in the engine manages, not even WorkerRush's own mirror. Pruned
+54 → 34 nodes and verified equivalent. Explained: an all-in, better-timed version of
+WorkerRush's own strategy. Across five seeds the results vary widely (25–69% against
+WorkerRush), so many seeds are needed for Phase 6. In a single sanity check, a different
+seed's 10-node bot beat Coac and mayari 10/16 each; they are held out from now on. Worst
+decision time ≤ 20 ms warm (44 ms cold) against the 100 ms G1 gate. Nothing reported on
+test maps yet. **Next: Phase 4 (structure-based GP), blocked on the Scheepers & Pillay
+method description.**
+
+---
+
+## B. Where the session started and where it ended
+
+**Start (stage 3, September):** a 17-node bot trained on one 8x8 map. It beat 13 of 18
+panel bots on that map and split WorkerRush by side. A single map meant only 2 distinct
+games per opponent, so no statistics were possible.
+
+**End (stage 7):**
+- A proper train / validation / test map split, 8x8 and 16x16.
+- 55 terminals and one evolved tree per unit role.
+- Working parsimony pressure.
+- Five seeds, with the best bot beating the whole scripted panel on unseen maps except the
+  worker bots, and beating those 69–81%.
+- Tools to benchmark, prune, inspect and watch any saved bot.
+
+---
+
+## C. Findings that belong in the write-up
+
+**1. The engine's action order was playing part of the game.**
+`Unit.getUnitActions()` lists legal actions in a fixed order, checked against the engine
+source:
+
+ATTACK > HARVEST > RETURN > PRODUCE > MOVE > NONE
+
+- Attacks are listed up, right, down, left, then any other target in range.
+- Produce follows UnitTypeTable order (Worker; Light, Heavy, Ranged; Base, Barracks), each
+  up/right/down/left.
+- Moves are listed up, right, down, left.
+
+EvolvedBot's argmax keeps the first maximum, so every tied score is settled by this order.
+Much of the stage-3 bot's non-move behaviour came from it: "attack whenever possible", "the
+base always trains a worker". Every bot since still relies on it for part of its policy,
+and the write-up must say so.
+
+EvolvedBot now counts tied decisions per role, split into all ties and **cross-type ties**
+(tied actions of different types, i.e. where list order chose *what* the unit does). This
+is reported every generation as the "tie rate" line.
+
+**2. The stage-3 WorkerRush "side split" was a tie-break artefact.**
+The 17-node stage-3 tree was re-implemented by hand, and it reproduced its benchmark.
+Adding a symmetric tie-break (mirrored paths on the 180°-symmetric map) turned WorkerRush
+1W-1L into 0W-2L. That bot never genuinely beat WorkerRush.
+
+**3. The engine's wait action lasted 10 cycles: a handicap for every bot in stages 1–5.**
+- `getUnitActions(gs)` offers NONE (wait) with a 10-cycle duration; a worker attack takes 5.
+- Any unit that chose to wait was frozen and could not take the first strike, and workers
+  have 1 HP, so the first strike decides every worker fight.
+- Scripted bots never lock units like this.
+- It is now the parameter `eval.problem.none-duration`. The default is 10, so archived bots
+  replay exactly as evolved; stage 6 onward uses 1.
+
+**4. The 16x16 WorkerRush wall.** Tested directly against the engine on six 16x16 maps,
+both sides, 12 games each:
+
+| Challenger vs WorkerRush | Wins / 12 |
+|---|---|
+| LightRush, HeavyRush, RangedRush, LightDefense, RangedDefense, EconomyRush, EconomyMilitaryRush | 0 each |
+| WorkerDefense | 1 |
+| WorkerRush (mirror), WorkerRushPlusPlus | 6 (player 0 only) |
+| Hand-written scorers over gp.Features (rush / economy+defend / split), wait = 10 | 0 / 0 / 1 |
+| Same, with BFS path-following | 0 / 0 / 0 |
+| Same, "patient" (penalise stepping into threat) | 0 / 0 / 0 |
+| Same, wait = 1 | 2 / 1 / 3 (vs WR++: 2 / 1 / 4) |
+
+What this showed:
+- An army is not the answer on these maps; evolution was right never to build barracks.
+- Movement and pathfinding were not the problem.
+- The wait duration was the lever that worked.
+
+**5. Duplicate maps.**
+- basesWorkers8x8 ≡ basesWorkers8x8A, and basesWorkers16x16 ≡ basesWorkers16x16A
+  (identical units and terrain).
+- basesWorkers8x8Obstacle has the same starting units as basesWorkers8x8, with different
+  terrain.
+
+**6. Parsimony fixed overfitting.**
+- Stage 6 won its own 16x16 training maps but none of the unseen ones, with a 514-node
+  tree pinned at depth 12.
+- With parsimony (stage 7, seed 4242) the bot shrank to 10 nodes and won its first unseen
+  16x16 game.
+- Smaller trees generalised better: the classic overfitting story.
+
+**7. Large seed variance.**
+- With an identical config, results against WorkerRush ranged from 25% to 69%.
+- Training Hits mostly predict validation, but not always: seed 6242 was second on Hits
+  and last on validation.
+- Parsimony can collapse a run: seed 5242 ended at 4 nodes, one terminal per tree.
+
+**8. The best bot: an all-in WorkerRush** (seed 8242). See section F.
+
+---
+
+## D. Map split (to be frozen after agreement with the team and supervisors)
+
+| Set | Maps | Purpose |
+|---|---|---|
+| TRAIN | 8x8 (≡A), 8x8C, 8x8E, 16x16B, 16x16D, 16x16G, 16x16F, 16x16H | fitness |
+| VALIDATION | 8x8B, 8x8D, 8x8F, 8x8G, 8x8K, 16x16 (≡A), 16x16C, 16x16E | choosing between runs; never reported |
+| TEST | 8x8H, 8x8I, 8x8J, 8x8L, 16x16I, 16x16J, 16x16K, 16x16L | touched once, at the end |
+| EXCLUDED | 8x8Obstacle | same start as a training map |
+
+How it got here:
+- Stage 4 defined it.
+- Stage 5 moved 16x16D and 16x16G from validation to train.
+- Stage 7 moved 16x16F and 16x16H from test to train. No test result had ever been looked
+  at, so that move was legitimate. **No further changes.**
+
+With deterministic bots, distinct games = maps × 2 sides, so validation and test each give
+16 distinct games per opponent. That is what makes Phase 6 statistics possible.
+
+---
+
+## E. Training stages (one config file each; each header lists exactly what changed)
+
+| Stage | Config | Change from previous | Training Hits | Validation vs WR / WR++ / WD | Tree | Worst cycle |
+|---|---|---|---|---|---|---|
+| 4 A | stage4 + numtrees=1 | 55 terminals, 4 maps, 6 opponents, 1 tree | 50/56 | 40 / 45 / 45% (10 maps) | 225 nodes, depth 12 | 45 ms |
+| 4 B | stage4 | same, 4 role trees | 50/56 | 30 / 35 / 35% (10 maps) | 252 nodes | 6 ms |
+| 5 | stage5 | 16x16 weight 1/2 (+16x16D,G); subtree mutation 0.1 | 66/84 | 38 / 31 / 31% | 236 nodes | 16 ms |
+| 6 | stage6 | + wait duration 1 | 71/84 | 44 / 44 / 44% | 514 nodes, depth 12 | 30 ms |
+| 7 (4242) | stage7 | + working parsimony; +16x16F,H to train | 79/112 | 50 / 56 / 56% | 10 nodes | 16 ms |
+
+All seed 4242. Validation is 8 maps from stage 5 on.
+
+Notes:
+- In stages 4–6, every training non-win was a 16x16 game against the three worker bots.
+- No bot in any stage built an army; the barracks and combat tie rates read n/a.
+- Stage 4 A vs B (one seed each) is noise: the role-tree effect is untested.
+- The baseline: the stage-3 September bot on the stage-4 validation maps also got
+  30 / 35 / 35% against the worker bots. Stage 4's gain was converting 16x16 draws against
+  the other bots into wins.
+- The fitness scale changed between stages (cycle cap 3000 → 4000, map lists). Compare Hits
+  and benchmark tables only, never fitness values across stages.
+
+**Stage 7 across five seeds** (validation maps):
+
+| Seed | Training Hits /112 | Tree | vs WorkerRush | vs WR++ | vs WorkerDefense |
+|---|---|---|---|---|---|
+| 4242 | 79 | 10 | 50% | 56% | 56% |
+| 5242 | 74 | 4 | 31% | 44% | 44% |
+| 6242 | 87 | 76 | 25% | 31% | 31% |
+| 7242 | 88 | 70 | 44% | 44% | 44% |
+| **8242** | **103** | 54 | **69%** | **81%** | **75%** |
+| Mean | | | 44% | 51% | 50% |
+
+RandomBiasedAI was 96–100% for every seed, and the other 15 panel bots 100% wherever
+checked. Each seed took about 1.3–1.5 hours.
+
+---
+
+## F. The best bot (stage 7, seed 8242), pruned and explained
+
+**Files:** results/best-seed8242-20261004-070118{,-pruned}.{ind,params}
+
+**Validation results:**
+- 15/18 panel bots: 100%.
+- RandomBiasedAI: 100%.
+- WorkerRush: 11W-2T-3L.
+- WorkerRushPlusPlus: 13W-0T-3L.
+- WorkerDefense: 12W-3T-1L.
+
+Against WorkerRush per map (side 0 then side 1):
+`8x8B:LT 8x8D:WW 8x8F:WW 8x8G:LW 8x8K:WW 16x16:WL 16x16C:WW 16x16E:WT`
+
+**Pruning** (role-aware Pruner, its first real run):
+- 54 → 34 nodes [27, 5, 1, 1].
+- Traced on training maps and opponents only, then verified on all 8 validation maps.
+- Every deterministic row was identical, and decisions were identical over 80 sampled
+  games per stochastic opponent: "Equivalent across the whole panel."
+
+```
+tree 0 (worker):
+(if> (+ distEnemyBase (- uIsWorker movesTowardEnemyMajor)) myResources
+     (if> (+ distEnemyBase (- movesTowardEnemyMajor movesTowardEnemyBase)) myResources
+          (+ (- tgtKillable (- uIsWorker movesTowardEnemyMajor)) movesTowardEnemy)
+          (/ aIsHarvest (- placesTowardEnemy gameTimeK)))
+     placesTowardEnemy)
+tree 1 (base):     (/ uIsWorker (- placesTowardEnemy gameTimeK))   -- constant 0 for a base
+tree 2 (barracks): uIsWorker                                       -- never runs
+tree 3 (combat):   aIsMove                                         -- never runs
+```
+
+**Reading it.** Each worker decides every cycle by comparing its distance to the enemy base
+with the resources we have banked:
+
+- **Far from the enemy base relative to the bank → combat mode.** Either:
+  - attack killable targets and step toward the enemy along the long axis; or
+  - when closing on the base, make harvesting negative, so the engine order takes over:
+    attack > return > produce > move.
+- **Close relative to the bank → everything scores 0 except producing a building on the
+  enemy-facing side.** Possibly a forward Base, but this branch is dormant in practice:
+  games end long before enough resources are banked.
+- The base trains workers by list order. No barracks or army is ever built.
+
+**Watched** (eval.Watch, 16x16C vs WorkerRush):
+- Wins as player 0 at cycle 426 and as player 1 at cycle 295; only workers on both sides.
+- **WorkerRush keeps one worker home harvesting; the evolved bot commits every worker to
+  the fight.** So it has one more fighter at every clash, and with 1-HP workers and
+  kill-first targeting the edge snowballs.
+
+**For the write-up:** evolution found a better-timed, all-in version of WorkerRush's own
+strategy, and the full commitment is what lets it beat WorkerRush from both sides.
+
+**Earlier stage-7 bot (seed 4242, 10 nodes):**
+```
+worker:   (min movesTowardEnemy movesTowardEnemyMajor)
+base:     (* placesTowardEnemy distEnemyBase)
+barracks: (min movesTowardEnemy movesTowardEnemyMajor)     -- never runs
+combat:   movesTowardEnemy                                  -- never runs
+```
+A plain worker rush: march at the nearest enemy, train workers on the enemy-facing side.
+
+---
+
+## G. Competition bots: one sanity check, then held out
+
+On the seed-4242 bot (10 nodes), validation maps, gp.Bench with `ai.coac.CoacAI` and
+`mayariBot.mayari`:
+
+```
+vs ai.coac.CoacAI   10W 0T 6L  8x8B:LL 8x8D:LW 8x8F:LW 8x8G:LL 8x8K:WW 16x16:WW 16x16C:WW 16x16E:WW
+vs mayariBot.mayari 10W 1T 5L  8x8B:WW 8x8D:WW 8x8F:LL 8x8G:WW 8x8K:TW 16x16:LL 16x16C:WL 16x16E:WW
+```
+
+Verified in-session against the real jars, with the engine built from a clean clone:
+1. An exact hand re-implementation of the 10-node tree reproduced both grids character for
+   character, so the harness and loader are consistent.
+2. Calling `preGameAnalysis(gs, 1000)`, as the competition harness does, changed nothing.
+3. The bots play properly in our harness: Coac beats LightRush 14/16 and WorkerRush 11/16;
+   mayari beats LightRush 15/16 and WorkerRush 9/16, on the same maps.
+4. Plausibility: Coac itself loses to WorkerRush on 16x16C and 16x16E.
+
+**Decision:** Coac and mayari are held-out opponents. They were checked once and are not
+run on seed 8242 or any later individual. Their numbers come from the final test-map
+evaluation only; repeated checks would turn them into a selection signal.
+
+**Caveat to resolve:** we use `new UnitTypeTable()` = VERSION_ORIGINAL. Check which version
+the 2025 benchmark used. If it was VERSION_ORIGINAL_FINETUNED, the comparison must be
+re-run on that table.
+
+---
+
+## H. Code changed or added this session
+
+| File | What changed |
+|---|---|
+| `src/gp/Features.java` | 26 new terminals; all old ones unchanged in behaviour (details below). |
+| `src/bots/EvolvedBot.java` | Role trees (≥4 trees: 0 worker, 1 base, 2 barracks, 3 combat; 1 tree as before); tie counters (all / cross-type); wait duration taken from the problem. |
+| `src/gp/MicroRTSProblem.java` | Startup check that every map exists and every opponent constructs (otherwise every individual silently scores 3.0); tie-rate report; `none-duration` parameter. |
+| `src/gp/BenchmarkStatistics.java` | Writes the missing `best-<stamp>.params` snapshot (`ParameterDatabase.list`, including -p overrides and inherited defaults); "distinct games" per row; role-labelled trees. |
+| `src/gp/IndividualLoader.java` | Finds the params snapshot beside a .ind automatically (then the unpruned original's, then config/microrts.params with a warning); role-labelled output. |
+| `src/gp/Pruner.java` | Role-aware TraceBot (it used trees[0] for every unit); same wait duration as EvolvedBot; `-verify-maps`; writes `<out>-pruned.params`. |
+| `src/gp/Bench.java` (new) | Benchmark any .ind outside a run, with a per-map, per-side grid. `-maps train / validation / validation-of:<params> / list`, `-opponents`, `-samples`, `-maxcycles`, `-csv`. No "test" keyword on purpose. |
+| `config/microrts-stage4..7.params` (new) | One per stage. `microrts.params` (stage 3) untouched. |
+
+**New terminals in gp.Features:**
+- Produce type split: aProducesLight, aProducesHeavy, aProducesRanged, aProducesBarracks,
+  aProducesBase.
+- Attack target: tgtWounded, tgtKillable, tgtIsWorker, tgtIsCombat, tgtIsBuilding.
+- Produce placement: placesTowardEnemy, placesTowardResource.
+- threatAtDest.
+- Symmetric major-axis moves: movesTowardEnemyMajor, movesTowardEnemyBaseMajor.
+- Context gates: myCombatCount, enemyCombatCount, enemyWorkerCount, enemiesNearMyBase,
+  gameTimeK.
+- Released from the held-back list: aIsNone, uIsBarracks, uHpFrac, myBarracksCount,
+  distEnemyBase, mapArea.
+- The function set is now 55 entries.
+
+**Bugs found and fixed:**
+- **The Pruner would have collapsed role-tree bots.** It scored every unit with trees[0], so
+  edits to trees 1–3 never changed a decision and every candidate would have been accepted.
+- **The `.params` snapshot and the distinct-games warning were both missing** from
+  BenchmarkStatistics, despite the 2026-09-12 notes describing them (probably lost in a file
+  shuffle).
+- **The commented-out parsimony block was non-functional.** `select.tournament = ...` only
+  sets defaults for ordinary TournamentSelection. Koza breeding takes its selector from
+  `breed.reproduce.source.0`, `gp.koza.xover.source.0` and `gp.koza.mutate.source.0`; stage
+  7 sets those (DoubleTournamentSelection, size 7, size2 1.4, do-length-first false).
+- **A fourth flat landscape:** a typo in a map path or opponent name made every individual
+  score 3.0. It is now caught at startup.
+
+---
+
+## I. Methodology rules adopted
+
+- **Parsimony must be identical for ordinary GP and SBGP** in Phase 4 (on since stage 7).
+- **Role trees, terminals, fitness and map split** are shared by all configurations.
+- **Report seed spread and selected individual separately:** the mean and range over seeds,
+  and the validation-selected individual's test result.
+- **Selection uses validation only.** Test maps and the competition bots are used once, at
+  the end.
+- **Compare across stages with Hits and benchmark tables only**, never fitness values.
+- **Stochastic opponents limit reproducibility.** Runs with RandomBiasedAI are reproducible
+  only in distribution.
+
+---
+
+## J. What to do next, in order
+
+1. **Phase 4: structure-based GP (Scheepers & Pillay). Blocked on the paper.** Get the paper
+   or Prof. Pillay's description of the method. Then design SBGP to reuse role trees, the 55
+   terminals, the fitness, the map split and identical parsimony, so the ordinary-GP vs SBGP
+   comparison isolates the method.
+2. **Supervisor and team meeting:**
+   - freeze the map split (section D);
+   - confirm which unit-table version the 2025 benchmark used;
+   - present the findings in section C and the seed-8242 result.
+3. **Many seeds per configuration** (10+, about 1.5 h each) for both ordinary GP and SBGP,
+   to support the Phase 6 statistics (Mann-Whitney U on per-seed validation/test results).
+4. **List-order ablation:** replay the best bots with legal actions shuffled under a fixed
+   seed, and measure the drop. This quantifies how much of the policy is evolved and how
+   much is the engine's order.
+5. **Final evaluation, once:** the selected individual of each configuration on the TEST
+   maps against the full scripted panel plus Coac and mayari (and the other held-out bots in
+   the proposal: TMA, the PPO agent).
+6. **Phase 5:** the adapter wrapping the frozen GP policy. The per-unit `scores[]` hook in
+   EvolvedBot is unchanged.
+7. **Still-open housekeeping:**
+   - ScoreERC round-trip test: no evolved tree yet contains a constant;
+   - finish the src/gp/nodes/ folder move;
+   - delete src/gp/symreg/;
+   - quarantine pre-snapshot .ind files.
+
+---
+
+## K. Fixes to older sections of PROJECT_CONTEXT.md
+
+- **§4 folder tree.** Add:
+  - src/gp/Bench.java, src/gp/IndividualLoader.java, src/gp/Pruner.java;
+  - config/microrts-stage4.params to microrts-stage7.params;
+  - the best-*.params, -pruned.ind and prune-*.log artefacts in results/.
+- **§6 important files.** Add short entries for Bench, IndividualLoader and Pruner, as in
+  section H.
+- **§7 build & run.** Add the working conventions and the command sheet below.
+- **§10 workplan.** Update:
+  - 3b done; M1 met; G1 green (≤ 20 ms warm);
+  - Phase 2 map split defined, pending freeze;
+  - Phase 4 next, blocked on the paper.
+- **§11 backlog.** Tick: ECJ, function set, persistence, map split (pending freeze), harness
+  (gp.Bench). Add: ERC round-trip test, multi-seed runs, list-order ablation, unit-table
+  version check, parsimony-uniformity rule.
+
+### Working conventions and command sheet (for §7)
+
+**Conventions:**
+- All commands assume PowerShell in the repo root (MICRORTSBOTS\).
+- The user places new and changed files manually; each session gives exact paths.
+- Branch: HeinrichFirstBot_Chimera.
+
+**Rules:**
+- A .java file changed → rebuild.
+- A .java file added → regenerate sources.txt, then rebuild.
+- Only a .params file changed → no rebuild.
+- Never rebuild while a run is going.
+
+```powershell
+# regenerate sources.txt (UTF-8, no BOM) and build
+$src = Get-ChildItem -Recurse src -Filter *.java | ForEach-Object FullName
+[System.IO.File]::WriteAllLines("$PWD\sources.txt", $src, (New-Object System.Text.UTF8Encoding $false))
+javac -cp "lib/microrts.jar;lib/*" -d out '@sources.txt'
+
+# quick check of a config (minutes)
+java -cp "out;lib/*;lib/bots/*" ec.Evolve -file config/microrts-stage7.params -p generations=2 -p pop.subpop.0.size=50 -p stat.bench-games=2 -p 'stat.file=$results/check7.stat' 2>&1 | Tee-Object results\check7.log
+
+# one full run (own .stat file per run; single quotes because of the $)
+java -cp "out;lib/*;lib/bots/*" ec.Evolve -file config/microrts-stage7.params -p 'stat.file=$results/stage7-seed4242.stat' 2>&1 | Tee-Object results\stage7-seed4242.log
+
+# several seeds back to back (each sets seed.0-7 = base..base+7)
+foreach ($s in 5,6,7,8) {
+  $b = $s*1000 + 242
+  $seeds = 0..7 | ForEach-Object { "-p"; "seed.$_=$($b + $_)" }
+  java -cp "out;lib/*;lib/bots/*" ec.Evolve -file config/microrts-stage7.params $seeds -p ('stat.file=$results/stage7-seed' + $b + '.stat') 2>&1 | Tee-Object "results\stage7-seed$b.log"
+}
+
+# summarise seeds
+foreach ($b in 5242,6242,7242,8242) { "===== seed $b"; Select-String -Path "results\stage7-seed$b.log" -Pattern "best fitness of run|tree: |^vs WorkerRush |^vs WorkerRushPlusPlus |^vs WorkerDefense |^vs RandomBiasedAI " | ForEach-Object Line }
+
+# progress of a running job (second window)
+Select-String -Path results\stage7-seed4242.log -Pattern "best fitness of generation" | Select-Object -Last 1
+
+# inspect / benchmark / prune / watch a saved bot
+java -cp "out;lib/*;lib/bots/*" gp.IndividualLoader <path.ind>
+java -cp "out;lib/*;lib/bots/*" gp.Bench <path.ind> -opponents WorkerRush,WorkerRushPlusPlus,WorkerDefense
+java -cp "out;lib/*;lib/bots/*" gp.Bench <path.ind> -maps train -opponents WorkerRush
+java -cp "out;lib/*;lib/bots/*" gp.Pruner <path.ind> -verify -verify-maps maps/8x8/basesWorkers8x8B.xml,maps/8x8/basesWorkers8x8D.xml,maps/8x8/basesWorkers8x8F.xml,maps/8x8/basesWorkers8x8G.xml,maps/8x8/basesWorkers8x8K.xml,maps/16x16/basesWorkers16x16.xml,maps/16x16/basesWorkers16x16C.xml,maps/16x16/basesWorkers16x16E.xml
+java -cp "out;lib/*;lib/bots/*" eval.Watch maps/16x16/basesWorkers16x16C.xml evolved:<path.ind> WorkerRush 20 4000
+
+# competition bots by class name (held out: final evaluation only)
+java -cp "out;lib/*;lib/bots/*" gp.Bench <path.ind> -opponents ai.coac.CoacAI,mayariBot.mayari
+
+# overnight runs: keep the laptop awake on AC, restore afterwards (admin terminal)
+powercfg /change standby-timeout-ac 0
+powercfg /change standby-timeout-ac 30
+```
+
+The `java : NativeCommandError` block at the top of every ECJ log is harmless: ECJ prints
+its banner to stderr and `2>&1` makes PowerShell wrap it as an error.
+
 ## ALSO WORTH FIXING when you next open the file
 
 - **§4 folder tree** is missing `src/gp/IndividualLoader.java`, `src/gp/Pruner.java`, and the
