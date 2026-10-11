@@ -934,3 +934,204 @@ its banner to stderr and `2>&1` makes PowerShell wrap it as an error.
 - **§11 TODO backlog**: ECJ is confirmed, the function set is defined, persistence is done.
   Add the map split, the non-MOVE sufficiency gap, and the RandomBiasedAI reproducibility
   caveat.
+
+
+  # PROJECT_CONTEXT.md — session update 2026-10-11 (Phase 4: SBGP built and piloted)
+
+How to merge: append above the "Keep this file current" line. Add the two lines under
+"For section 0" to section 0. Replace the "Current status" paragraph with the one under
+"For section A".
+
+---
+
+## For section 0 (instructions to the next assistant session)
+
+- **Code delivery format.** This chat setup has no file-download tool. Deliver new or changed
+  files as ONE PowerShell block that writes each file with
+  `[System.IO.File]::WriteAllText(path, @'...'@, (New-Object System.Text.UTF8Encoding $false))`
+  (UTF-8 without BOM, which javac requires), then regenerates sources.txt, builds and runs the
+  tests. Edits to existing files use `.Replace()` / `[regex]::Replace` followed by a check that
+  prints PATCH APPLIED or fails loudly. Monitoring and one-off commands should be SINGLE LINES:
+  long multi-line pastes have been cut off mid-string in the terminal.
+- **Long runs use a snapshot of out/** (`Copy-Item out out-<name> -Recurse`, then run with
+  `-cp "out-<name>;lib/*;lib/bots/*"`), so `out/` can be rebuilt while runs are going.
+
+## For section A (replaces "Current status")
+
+**Current status:** Ordinary-GP pipeline complete (stage 7; best seed 8242). Phase 4 SBGP is
+**implemented, unit-tested and piloted** (Scheepers & Pillay, GPEM 27:2, 2026) as a breeder plus
+node selector on top of the unchanged stage-7 configuration. Three full-size pilots (seed 4242)
+show the mechanism working as the paper describes. The decisive design issue: with parsimony
+keeping trees at 3–5 levels, the paper's **Dg = 4 freezes whole trees and switches local search
+off**. **Dg = 2 restores it** (pilot 3: real local-search gains, and a global search that escaped
+to a better area). Validation results of all SBGP pilots (44–63% vs the worker bots) lie inside
+the ordinary-GP seed spread, so no performance claim yet. Next: settle the open questions with
+Prof. Pillay, freeze the SBGP configuration, run 10+ seeds of each method for Phase 6.
+
+---
+
+## 1. The method (from the paper; GPEM 27:2, doi 10.1007/s10710-025-09528-3)
+
+Also in Scheepers' MSc dissertation (UP, 2024, hdl.handle.net/2263/100614, Chapter 9).
+We use SBGP-HH only; the transfer-learning variant is not part of this project.
+
+- **First global search:** canonical GP for Sg generations. The top Dg levels of the best
+  individual become the **global area**.
+- **Local search:** the area is frozen in every individual; operators act from level Dg+1 down.
+  It ends when fitness has not changed for Wg generations.
+- **Later global searches:** operators act within the top Dg levels for Sg generations.
+  Offspring whose **similarity index** to any previous area is ≥ Tg are discarded.
+- **Similarity index (Figure 3):** nodes matched **top-down from the root**. A node counts only if
+  it AND every ancestor match. Figure 3's answer is 3; a naive positional count gives 4.
+- **Paper parameters (Table 5):** Sg 10, Dg 4, Tg 6, Wg 10 (GP: pop 500, depth 8, tournament 4).
+  The paper reports SBGP is not very sensitive to these parameters (Table 27).
+
+## 2. Code added
+
+| File | What it does |
+|---|---|
+| `src/gp/sbgp/GlobalArea.java` | Stores an area (deep copy, one root per role tree) and computes the top-down similarity index. Terminals are keyed by feature name, because every terminal is the same class (FeatureNode) and ECJ's node comparison would treat them all as equal. |
+| `src/gp/sbgp/SBGPBreeder.java` | Phase controller (FIRST_GLOBAL → LOCAL → GLOBAL → LOCAL …). LOCAL: re-grafts the area onto every child and re-evaluates reproduced copies that change. GLOBAL: over-breeds and keeps only dissimilar children; after `max-rounds` it back-fills with the least-similar rejects and warns. Phase-best during GLOBAL comes only from children that passed the filter. Logs every transition, area and rejection rate. Requires breedthreads = 1. |
+| `src/gp/sbgp/SBGPNodeSelector.java` | KozaNodeSelector with a depth rule: LOCAL picks only level ≥ Dg, GLOBAL only level < Dg (root = level 0). Falls back to ordinary selection when nothing qualifies and counts it ("selector fallbacks"). |
+| `src/gp/sbgp/SimilarityTest.java` | 12 checks including Figure 3 (= 3). `java -cp "out;lib/*" gp.sbgp.SimilarityTest` |
+| `src/gp/sbgp/SBGPUnitTest.java` | Graft and top-match checks. `java -cp "out;lib/*" gp.sbgp.SBGPUnitTest` |
+| `config/microrts-sbgp.params` | `parent.0 = microrts-stage7.params`; changes ONLY the breeder and the node selectors. Fitness, maps, opponents, role trees, terminals and parsimony are inherited unchanged, so the comparison isolates the method. |
+
+**SBGP parameters** (`breed.sbgp.*`, as in the file): sg 10, dg 4 (pilot 3 overrode it to 2 on
+the command line; **set the final value after the meeting**), tg 6, wg 10, count-terminals true,
+erc-by-value false, combine any, trees 0,1, tg-cap true, min-improvement 0.001, max-rounds 20.
+Plus `breed.clone-pipeline-and-population = true`, and `gp.koza.xover.ns.0/1` and
+`gp.koza.mutate.ns.0` set to SBGPNodeSelector.
+
+EvolvedBot needed no change: SBGP only changes breeding, so both methods play through
+identical code.
+
+## 3. Interpretations we made (each is a parameter; confirm with Prof. Pillay)
+
+1. **Stagnation** = phase-best has not improved by more than `min-improvement` (0.001) for Wg
+   generations. The paper says "no change in fitness", but our fitness is noisy (RandomBiasedAI).
+2. **Entering LOCAL:** each child keeps its own subtrees below the area wherever the same
+   position exists, and takes the area source's subtrees elsewhere (graft). The alternative,
+   in the style of Kapoor & Pillay, replaces non-matching trees with offspring.
+3. **Role trees:** similarity is computed per tree and only over the trees that execute
+   (`trees = 0,1`: worker, base). `combine = any` means a child is too similar if ANY live tree
+   is. Barracks and combat trees never run (their tie rate reads n/a in nearly every generation).
+4. **Terminals count toward similarity** (`count-terminals = true`), following the journal text.
+   Pillay's 2004 original counted function nodes only.
+5. **tg-cap:** Tg per tree is capped at that tree's area size. Otherwise an area with fewer than
+   Tg nodes (e.g. a 1-node worker tree) can never be matched and the filter is silently inert.
+6. **Phase-best during GLOBAL** is chosen only from individuals that pass the filter.
+   Back-filled rejects are excluded.
+
+## 4. Smoke tests (pop 40, Sg = Wg = 2, 10 generations)
+
+| Config | GLOBAL rejection | Worker area changed? | Base changed? | Fitness |
+|---|---|---|---|---|
+| all trees, combine=all | 39% → 0% | no | yes | flat |
+| all trees, combine=any | 100% → 100% (back-filled) | no | no | flat |
+| live trees, combine=all | 63% → 0% | no | yes | flat |
+| **live trees, combine=any** | 100% → 83% → real escape | **yes** | **yes** | **improved** |
+
+- Under combine=all, the worker area never changed in 3 of 3 runs. Escape happened through
+  base or dead trees only, so the playing policy stayed the same.
+- Under combine=any over all 4 trees, nothing could escape, because each breeding operation
+  changes only one tree.
+
+## 5. Full-size pilots (pop 500, 100 generations, seed 4242, validation maps)
+
+| | Ordinary GP 4242 | SBGP pilot 1 | SBGP pilot 2 | SBGP pilot 3 | Ordinary mean (5 seeds) |
+|---|---|---|---|---|---|
+| Config | stage 7 | Dg 4, before fixes | Dg 4 + phase-best screen + min-improvement 0.001 | pilot 2 with **Dg 2** | |
+| Best fitness of run | – | 0.236 | 0.465 | 0.309 | – |
+| Training Hits /112 | 79 | 94 | 81 | 91 | – |
+| vs WorkerRush | 50% | 56% | 44% | 44% | 44% |
+| vs WR++ | 56% | 63% | 44% | 50% | 51% |
+| vs WorkerDefense | 56% | 63% | 44% | 50% | 50% |
+| Other 15 panel bots | 100% | 100% | 100% (RBAI 96%) | 100% (RBAI 98%) | 100% |
+| Tree size | 10 | 166 | 12 | 78 (depth 11) | – |
+| Areas / cycles | – | 2 / 1 | 5 / 4 | 4 / 3 | – |
+| Worst decision time | ≤ 20 ms | 2 ms | 15 ms | 16 ms | – |
+
+Result files: `results\sbgp-seed4242.*`, `results\sbgp2-seed4242.*`,
+`results\sbgp3-dg2-seed4242.*`, plus `best-seed4242-<stamp>.{txt,ind,params}` per run
+(pilot 3: `best-seed4242-20261011-155225`).
+
+**Caution:** same ECJ seed means the same initial population, but RandomBiasedAI is not seeded by
+ECJ, so the runs diverge from generation 0 (gen-0 best fitness 0.682 / 0.686 / 0.693). Single
+runs per configuration are not evidence of which method is better. Training fitness and
+validation also disagree (pilot 3 has the 2nd-best training fitness but mid-pack validation),
+as with ordinary seed 6242.
+
+## 6. Findings
+
+1. **The global search behaves as the paper describes.** It escapes within 2 generations (the
+   first GLOBAL generation is always ~100% back-filled, because the whole population carries the
+   old area; the second rejects ~80%; then ~1–5%). Fitness can get worse during exploration
+   (pilot 1: 0.236 → 0.345 → 0.285; Figure 4) or successive areas can get worse (pilot 2:
+   0.478 → 0.613; Figure 5). **Pilot 3's first global search escaped to a BETTER area**
+   (0.488 → 0.372, below the 0.421 where the local search had stalled), which is the method's
+   claimed benefit.
+2. **Bug found and fixed: phase-best leak.** In pilot 1, area #2 was the old area again, because
+   phase-best came from back-filled rejects. Fixed by interpretation 6.
+3. **Decisive issue: Dg versus tree depth under parsimony.**
+   - Parsimony (on for both methods since stage 7, required to be identical) keeps trees at
+     3–5 levels. The paper's Dg = 4 assumes deeper trees.
+   - Pilot 2 (Dg 4): areas ≤ 4 levels, so entire trees were frozen. About 470 of 500 selector
+     fallbacks per generation, a flat worker tie rate, and almost no gain in any local phase.
+   - Pilot 1 (Dg 4) only worked because its first area happened to be deep.
+   - **Pilot 3 (Dg 2): fallbacks dropped to ~120 per generation (mostly the dead 1-node barracks
+     tree), and local phases gained 0.550 → 0.421 and 0.371 → 0.318.**
+   - "Grafted area onto 0 of 500" in pilot 3, generations 70–79, is expected: every tree of that
+     area extended past depth 2, so the selector never fell back and no child lost its top.
+4. **Frozen areas can lock in bloat.** Pilot 1's area was taken at generation 10, before parsimony
+   had shrunk anything, and parsimony cannot touch frozen nodes: 166 nodes vs 10 for the ordinary
+   twin. Pilot 3 ended at 78 nodes, depth 11 (cap 12). Prune before interpreting either.
+5. **Known minor gap:** if every individual in a GLOBAL generation is too similar, phase-best
+   falls back to the best of them. A later dissimilar individual replaces it only if it is
+   better. Consider leaving phase-best unset in that case.
+
+## 7. Questions for Prof. Pillay (meeting 2026-10-12), with evidence and our proposals
+
+1. **Dg when parsimony keeps trees shallow** (finding 3). *Proposal: Dg = 2* (pilot 3 evidence),
+   or Dg relative to each tree's depth (always leave ≥ 1 level free). Switching parsimony off
+   during LOCAL is ruled out, because parsimony must stay identical across methods.
+2. **Role trees.** One area per role tree, similarity only over live roles, rejected if ANY live
+   role is too similar (section 4 evidence). Is this faithful to the method?
+3. **Do terminals count toward similarity?** Journal text vs her 2004 original. It matters here
+   because evolved trees have terminals near the root.
+4. **Tg with arity-4 `if>`**, and our tg-cap for small areas (interpretation 5). With Dg = 2 an
+   area holds at most 5 nodes, so Tg = 6 is always capped. Should Tg scale with Dg?
+5. **Stagnation with a noisy fitness:** is a minimum improvement acceptable (interpretation 1)?
+6. **Entering LOCAL:** graft vs replace (interpretation 2).
+7. **Training/validation gap:** better training fitness has not reliably meant better validation
+   (pilot 3, ordinary seed 6242). Is selecting the reported individual on validation (our current
+   rule) acceptable for both methods?
+8. **Also on the agenda:** freeze the map split; the unit-table version used by the 2025
+   benchmark; the stage-7 seed-8242 result.
+
+9. **Sg and Wg for a 100-generation budget with a noisy fitness.** The paper's Sg = Wg = 10 gave
+   pilot 3 three cycles, with about 30% of generations spent in global search. Should Wg be larger
+   (or min-improvement 0) so local search can run as long as it keeps gaining, as in pilot 1?
+   Should the generation budget be raised for SBGP, and then for ordinary GP too, to keep the
+   comparison fair?
+
+## 8. Next steps
+
+1. Apply Prof. Pillay's answers as parameter values; write the final Dg into
+   `microrts-sbgp.params` and freeze it.
+2. Run 10+ seeds per method (ordinary stage 7 and SBGP), identical except breeder and node
+   selector. Report seed spread and the validation-selected individual separately.
+   **Stage-7 seeds 9242–13242 were started the evening of 2026-10-11** (logs:
+   `results\stage7-seed<seed>.log`). Check them with:
+   `foreach ($b in 9242,10242,11242,12242,13242) { $log = "results\stage7-seed$b.log"; if (Test-Path $log) { "seed $b : finished=" + (Select-String -Path $log -Pattern "best fitness of run" -Quiet) + ", last written " + (Get-Item $log).LastWriteTime } else { "seed $b : NO LOG" } }`
+3. Prune and inspect the pilot SBGP bots (`gp.Pruner`, `gp.IndividualLoader`).
+4. Still open from before: list-order ablation, ERC round-trip test, unit-table version check,
+   `src/gp/nodes/` folder move, delete `src/gp/symreg/`.
+
+## 9. Housekeeping
+
+- A stale pre-role-tree copy of `EvolvedBot.java` was found in `lib\bots\` and removed. The live
+  file is `src\bots\EvolvedBot.java` (role trees, tie counters, none-duration).
+- Snapshot folders `out-sbgp`, `out-sbgp2`, `out-sbgp3` can be deleted. Keep `out-stage7` until
+  the seed runs finish. Keep all snapshot folders git-ignored.
+- Commit today's work: `src/gp/sbgp/`, `config/microrts-sbgp.params`, the pilot results.
