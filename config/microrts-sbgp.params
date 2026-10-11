@@ -1,0 +1,43 @@
+# =====================================================================
+# microrts-sbgp.params -- structure-based GP (Scheepers & Pillay, GPEM 27:2, 2026)
+#
+#   java -cp "out;lib/*;lib/bots/*" ec.Evolve -file config/microrts-sbgp.params
+#
+# INHERITS EVERYTHING from microrts-stage7.params -- fitness, maps, opponents, role trees,
+# function set, parsimony selectors, seeds, benchmark -- and changes ONLY the breeder and
+# the node selectors. That is what makes ordinary GP vs SBGP a clean comparison: any
+# difference between them comes from the search method.
+#
+# Values below are the paper's Table 5. Open questions for Prof. Pillay are marked (Q).
+# =====================================================================
+
+parent.0 = microrts-stage7.params
+
+breed = gp.sbgp.SBGPBreeder
+# SBGP re-breeds within one generation during GLOBAL search; populations must not be recycled.
+breed.clone-pipeline-and-population = true
+
+breed.sbgp.sg = 10
+breed.sbgp.dg = 4
+# (Q) Tg = 6 was tuned for the paper's function set (max arity 3); ours has if> at arity 4.
+breed.sbgp.tg = 6
+breed.sbgp.wg = 10
+# (Q) Does a terminal count toward similarity? Paper text: nodes. Pillay 2004: function nodes.
+breed.sbgp.count-terminals = true
+breed.sbgp.erc-by-value = false
+# (Q) Role trees: all = too similar only if EVERY role tree is; any = if ANY is; sum = summed.
+# Smoke tests 2026-10-11 (pop 40, Sg=Wg=2): with combine=all the WORKER area never changed in 3/3 runs
+# (escape happened via base or dead trees only); with combine=any over all 4 trees, 100% rejection.
+# combine=any over the LIVE trees (worker, base) gave a real escape in both and the only fitness gain.
+breed.sbgp.combine = any
+breed.sbgp.trees = 0,1
+breed.sbgp.max-rounds = 20
+# (Q) What counts as "a change in fitness" with a stochastic opponent? Pilot 2026-10-11: with 0.0,
+# 0.0003-sized gains kept resetting stagnation and LOCAL ran 71 of 100 generations (one cycle only).
+breed.sbgp.min-improvement = 0.001
+
+gp.koza.xover.ns.0 = gp.sbgp.SBGPNodeSelector
+gp.koza.xover.ns.1 = same
+gp.koza.mutate.ns.0 = gp.sbgp.SBGPNodeSelector
+
+stat.file = $results/sbgp.stat
