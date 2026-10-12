@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4598575938711908178|0.27224438226015935|i93|
+Tree 0:
+ (/ (if> (/ aProducesWorker (max tgtIsWorker tgtIsBuilding)) (+ (max tgtIsWorker tgtIsBuilding) (+ threatAtDest movesTowardEnemyMajor)) uCarrying (if> (/ (/ (+ (* movesTowardEnemy distEnemyBase) (- aIsHarvest uHpFrac)) threatAtDest) (- (+ threatAtDest movesTowardEnemyMajor) uHpFrac)) (max aIsProduce myWorkerCount) (/ distEnemyBase distNearestEnemy) (+ myWorkerCount distNearestEnemy))) (max uCarrying (if> (/ (- placesTowardResource (- aIsHarvest uHpFrac)) aProducesBuilding) aIsHarvest (/ aProducesBarracks aIsNone) aProducesCombat)))
+Tree 1:
+ (/ tgtKillable (- placesTowardResource (- uIsWorker uHpFrac)))
+Tree 2:
+ (+ threatAtDest movesTowardEnemyMajor)
+Tree 3:
+ (- placesTowardResource (- aIsHarvest uHpFrac))
