@@ -1,0 +1,51 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed10242-20261012-225340
+generations       : 100
+population        : 500
+training maps     : maps/8x8/basesWorkers8x8.xml, maps/8x8/basesWorkers8x8C.xml, maps/8x8/basesWorkers8x8E.xml, maps/16x16/basesWorkers16x16B.xml, maps/16x16/basesWorkers16x16D.xml, maps/16x16/basesWorkers16x16G.xml, maps/16x16/basesWorkers16x16F.xml, maps/16x16/basesWorkers16x16H.xml
+training opponents: PassiveAI, RandomBiasedAI, WorkerRush, WorkerRushPlusPlus, WorkerDefense, LightRush
+repeats           : 2  (stochastic opponents only)
+cycle cap         : 4000
+win bonus         : 0.5
+eval range        : [0.05, 1.0]
+fitness           : Fitness: Standardized=0.5156085964892019 Adjusted=0.6598009554158164 Hits=78
+tree              : 4 tree(s), 6 nodes, depth 2 [3, 1, 1, 1 per tree]
+worst cycle (ms)  : 2   (G1 gate 100)
+benchmark maps    : maps/8x8/basesWorkers8x8B.xml, maps/8x8/basesWorkers8x8D.xml, maps/8x8/basesWorkers8x8F.xml, maps/8x8/basesWorkers8x8G.xml, maps/8x8/basesWorkers8x8K.xml, maps/16x16/basesWorkers16x16.xml, maps/16x16/basesWorkers16x16C.xml, maps/16x16/basesWorkers16x16E.xml
+
+Evolved scoring function
+------------------------
+tree 0 (worker):
+(+ movesTowardEnemy threatAtDest)
+tree 1 (base):
+placesTowardEnemy
+tree 2 (barracks):
+uIsBarracks
+tree 3 (combat):
+aProducesRanged
+
+
+Benchmark
+---------
+vs WorkerRush              :  30W   5T  45L /  80 games,  16 distinct  (win rate 38%)   [TRAINING OPPONENT]
+vs LightRush               :  60W  20T   0L /  80 games,  16 distinct  (win rate 75%)   [TRAINING OPPONENT]
+vs HeavyRush               :  60W  20T   0L /  80 games,  16 distinct  (win rate 75%)
+vs RangedRush              :  60W  20T   0L /  80 games,  16 distinct  (win rate 75%)
+vs WorkerRushPlusPlus      :  35W   0T  45L /  80 games,  16 distinct  (win rate 44%)   [TRAINING OPPONENT]
+vs EconomyRush             :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs EconomyRushBurster      :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs EconomyMilitaryRush     :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs EMRDeterministico       :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs SimpleEconomyRush       :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs LightDefense            :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs HeavyDefense            :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs RangedDefense           :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)
+vs WorkerDefense           :  35W  30T  15L /  80 games,  16 distinct  (win rate 44%)   [TRAINING OPPONENT]
+vs RandomAI                :  80W   0T   0L /  80 games,  80 distinct  (win rate 100%)
+vs RandomBiasedAI          :  75W   2T   3L /  80 games,  80 distinct  (win rate 94%)   [TRAINING OPPONENT]
+vs RandomBiasedSingleUnitAI:  80W   0T   0L /  80 games,  80 distinct  (win rate 100%)
+vs PassiveAI               :  80W   0T   0L /  80 games,  16 distinct  (win rate 100%)   [TRAINING OPPONENT]
+
+NOTE: rows marked [TRAINING OPPONENT] are an opponent seen in training. 'distinct' counts independent games.

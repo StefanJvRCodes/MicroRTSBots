@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4599296594070808495|0.31224879087369123|i91|
+Tree 0:
+ (- (- (if> (/ (min aProducesRanged aProducesRanged) (- mapArea tgtIsBuilding)) (* distEnemyBase placesTowardEnemy) distNearestResource (if> (- aIsMove tgtIsCombat) (/ movesTowardResource distEnemyBase) (max aIsReturn aIsAttack) (/ gameTimeK mapArea))) (- (/ (min movesTowardEnemyMajor tgtIsCombat) aIsAttack) movesTowardEnemyMajor)) (+ (if> (/ (if> placesTowardResource aIsReturn aProducesWorker movesTowardEnemy) (max enemyCombatCount enemyUnitCount)) (* (min aProducesRanged tgtWounded) (* tgtKillable uCarrying)) (min movesTowardEnemyBaseMajor tgtWounded) (/ (/ enemyWorkerCount (max aIsReturn aIsAttack)) (/ enemyUnitCount tgtIsWorker))) distEnemyBase))
+Tree 1:
+ (* distEnemyBase (if> (/ (if> placesTowardResource aIsReturn aProducesWorker movesTowardEnemy) (/ (min distNearestResource movesTowardEnemyBaseMajor) aIsAttack)) (min movesTowardEnemyBaseMajor tgtWounded) (min movesTowardEnemyBaseMajor tgtWounded) (* distEnemyBase placesTowardEnemy)))
+Tree 2:
+ (- (/ (/ (min aProducesRanged aProducesRanged) (- mapArea tgtIsBuilding)) aProducesRanged) (- (/ (* (min aProducesRanged tgtWounded) tgtIsWorker) (if> placesTowardResource aIsReturn aProducesWorker movesTowardEnemy)) (min distNearestResource movesTowardEnemyBaseMajor)))
+Tree 3:
+ (* (min (/ (min aProducesRanged aProducesRanged) (- mapArea tgtIsBuilding)) (min distNearestResource movesTowardEnemyBaseMajor)) (- (/ enemyCombatCount (* enemyCombatCount movesTowardEnemyBase)) (max (/ (if> placesTowardResource aIsReturn aProducesWorker movesTowardEnemy) (/ movesTowardEnemyBaseMajor aIsAttack)) (min distNearestResource movesTowardEnemyBaseMajor))))

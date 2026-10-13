@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4592087129787156962|0.10301078218188978|i106|
+Tree 0:
+ (if> (/ (/ distNearestEnemy aProducesCombat) (min uHpFrac tgtIsBuilding)) (- (/ (+ threatAtDest movesTowardEnemyMajor) (/ aIsHarvest threatAtDest)) (min (min uIsWorker tgtIsBuilding) (+ threatAtDest movesTowardEnemyMajor))) (/ (if> (/ (/ distNearestEnemy aProducesCombat) (/ aIsHarvest threatAtDest)) (+ (max enemiesNearMyBase tgtIsBuilding) (+ threatAtDest movesTowardEnemyMajor)) (+ (/ aProducesBase aProducesHeavy) (- movesTowardEnemyBaseMajor tgtKillable)) (max (max enemyWorkerCount aProducesBase) (max aIsReturn distNearestEnemy))) (max (max (max enemyWorkerCount aProducesBase) (/ threatAtDest aIsProduce)) (if> (/ tgtKillable (- distEnemyBase myBarracksCount)) (/ movesTowardMyBase movesTowardEnemyBaseMajor) (/ aProducesBarracks aIsNone) (min myWorkerCount aProducesLight)))) (max (max enemyWorkerCount aProducesBase) (max aIsReturn distNearestEnemy)))
+Tree 1:
+ (if> (+ (/ (/ (if> enemyWorkerCount uIsWorker uIsBarracks tgtIsCombat) (/ aIsHarvest threatAtDest)) (max aProducesBase aIsProduce)) (- (/ gameTimeK placesTowardEnemy) (- aProducesBarracks aProducesRanged))) uCarrying (+ uIsCombat (if> aProducesCombat movesTowardEnemyBase aProducesRanged distNearestResource)) (- (/ (if> enemyWorkerCount uIsWorker uIsBarracks tgtIsCombat) (/ aIsHarvest threatAtDest)) (min (min uIsWorker tgtWounded) (* aProducesBase placesTowardResource))))
+Tree 2:
+ (- (/ distNearestEnemy uIsBarracks) (min uHpFrac tgtIsBuilding))
+Tree 3:
+ (* aProducesBase placesTowardResource)
