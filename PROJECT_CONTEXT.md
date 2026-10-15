@@ -1143,7 +1143,7 @@ current" line. Apply the one-line fixes under "For section 10".
 
 ---
 
-## For section A (replaces "Current status")
+## For section A (replaces "Current status"  UPDATED SEE END OF FILE FOR NEW GP +ADAPTER STAUS)
 
 **Current status:** Ordinary GP complete: 10 seeds of stage 7 on frozen config and frozen
 map split. Selected individual is seed 8242 (69 / 81 / 75% vs WorkerRush / WR++ /
@@ -1360,4 +1360,254 @@ part of what our results test.
 5. Weight export + Java forward pass; verify Java and Python give identical outputs.
 6. Swap in the selected SBGP bot when the runs finish.
 
-small note. Henirich uses a 4070 Laptop GPU
+small note. Henirich uses a 4050 Laptop GPU
+
+---
+
+# Session update 2026-10-14: SBGP results; SBGP + adapter pipeline built, verified and first-trained
+
+## Current status (supersedes earlier "Current status" paragraphs)
+
+Ordinary GP and SBGP are both complete: 10 seeds each, frozen configs, frozen map split.
+
+- **SBGP vs ordinary GP:** SBGP averages 48 / 51 / 51% against WorkerRush / WR++ / WorkerDefense on validation, against ordinary GP's 40 / 49 / 48%. The difference is not significant. SBGP has a higher floor and a lower peak.
+- **Selected SBGP individual:** seed 5242, pruned 46 → 14 nodes. It is the purest all-in worker rush so far.
+- **The SBGP + adapter hybrid is wired end to end.** The EvolvedBot hook, Java RL environment, PPO trainer and argmax evaluator are each verified to reproduce the base bot exactly.
+- **No trained adapter improves on the base yet.** 20-iteration runs at τ 0.1 / 0.2 / 0.3 left the argmax unchanged.
+- **Overnight 2026-10-14:** 500-iteration runs at τ 0.2, then τ 0.1.
+- **Next:**
+  1. evaluate the overnight checkpoints;
+  2. implement the tie-aware base distribution (section 7);
+  3. align the adapter design with the GP + adapter teammates.
+
+## Instructions for the next assistant session (additions)
+
+- **Adapter runs use `out/` directly.** The Python scripts put `ROOT/out` on the JPype classpath. While an adapter run is going **or queued** (for example, a foreach over several τ values), do not rebuild `out/` and do not edit `adapter/*.py`. A later run in the queue loads both fresh and would silently change.
+- **Python:** use plain `python` (3.10.11). There are three Pythons on PATH, and only 3.10 has torch and JPype.
+- **Terminal:** Heinrich runs commands in the VS Code terminal at the repo root, so no `cd` is needed. Give each command as a single line where possible.
+
+## 1. SBGP final results (10 seeds, frozen config Dg = 2, validation maps)
+
+| Seed | Hits /112 | Nodes [per tree] | vs WR | vs WR++ | vs WD | vs RBAI | Rest of panel | Areas |
+|---|---|---|---|---|---|---|---|---|
+| 4242 | 84 | 250 [81,27,139,3] | 44% | 44% | 44% | 100% | SimpleEconomyRush 94% | 4 |
+| **5242** | 94 | 46 [7,29,1,9] | **63%** | **75%** | **75%** | 100% | 100% | 5 |
+| 6242 | 90 | 22 | 44% | 50% | 50% | 99% | 100% | 5 |
+| 7242 | 91 | 58 | 44% | 44% | 44% | 98% | 100% | 4 |
+| 8242 | 90 | 20 | 50% | 50% | 50% | 100% | 100% | 5 |
+| 9242 | **106** | 140 | 44% | 44% | 44% | **76%** | **69–86% across the panel** | **3** |
+| 10242 | 78 | **6** [3,1,1,1] | 38% | 44% | 44% | 94% | Light/Heavy/RangedRush 75% (draws) | 5 |
+| 11242 | 89 | 18 | 56% | 63% | 63% | 96% | RandomAI 99% | 5 |
+| 12242 | 91 | 144 | 50% | 56% | 56% | 95% | 100% | 4 |
+| 13242 | 82 | 16 | 44% | 44% | 44% | 93% | 100% | 4 |
+| **Mean** | | | **48%** | **51%** | **51%** | | | |
+| **Median** | | | 44% | 47% | 47% | | | |
+
+Every run ended mid-phase (Sg = Wg = 10 in 100 generations).
+
+| | Ordinary GP (stage 7) | SBGP |
+|---|---|---|
+| vs WR: mean / median | 40% / 41% | 48% / 44% |
+| vs WR: range | 25–69% | 38–63% |
+| vs WR++ / WD: mean | 49% / 48% | 51% / 51% |
+| Rest of panel at 100% | 9 of 10 seeds | 6 of 10 (7 ignoring a RandomAI 99%) |
+| Collapsed (≤ 6 nodes) | 2 (5242, 13242) | 1 (10242) |
+| Bloated / overfit | 1 (11242) | 1 (9242) |
+| Validation-selected | 8242: 69 / 81 / 75% | 5242: 63 / 75 / 75% |
+
+**Findings for the write-up:**
+
+1. **No significant difference.** Mann-Whitney U on per-seed WorkerRush rates gives U = 28, against a critical value of 23 (n = 10, 10, two-sided α = 0.05). SBGP's advantage is a raised floor (worst seed 38% vs 25%), not a higher peak. SBGP is also weaker on the wider panel (3 seeds below 100% vs 1).
+2. **Training Hits are a poor selector, again.** SBGP 9242 had the best training Hits of any run in the project (106/112), yet it is the worst seed on the wider panel. It also found the fewest areas (3), so it spent the longest stretches in local search. One seed only, so this is a hypothesis, not a claim: long local exploitation of one area overfits.
+3. **The two validation-selected bots converge.** Ordinary 8242 and SBGP 5242 play 14 of 16 WorkerRush validation games identically:
+```
+   ordinary 8242:  8x8B:LT 8x8D:WW 8x8F:WW 8x8G:LW 8x8K:WW 16x16:WL 16x16C:WW 16x16E:WT
+   SBGP     5242:  8x8B:LL 8x8D:WW 8x8F:WW 8x8G:LW 8x8K:WT 16x16:WL 16x16C:WW 16x16E:WT
+```
+4. **There is no shared 7/16 attractor.** Many seeds of both methods win exactly 7 of 16 WorkerRush games, but a different 7. This was checked on ordinary and SBGP seeds 7242, 9242 and 13242. The only shared structure is coarse: small 8x8 maps are mostly winnable, and 16x16 and 16x16E are mostly lost. Suggested phrasing: "the top individuals of both methods converge; weaker seeds differ in *which* games they win, not just how many."
+5. **Evaluation counts are nominal.** "Evaluations So Far" reads 49,500 at generation 99 for every run of both methods, which is just generations × 500. It ignores ECJ skipping unchanged reproduced individuals and SBGP's LOCAL-phase re-evaluations. Report: "equal nominal budget, 100 × 500 = 50,000 evaluation slots; actual game counts not logged." If real counts are needed, add a counter in `MicroRTSProblem.evaluate()` and do a short run of each method to get the ratio.
+
+## 2. The selected SBGP bot (seed 5242), pruned and explained
+
+**Files:** `results\best-seed5242-20261012-160727{,-pruned}.{ind,params}` and `results\prune-sbgp-seed5242.log`.
+
+**Pruning:** 46 → 14 nodes, depth 3, [5, 7, 1, 1] per tree. It was traced on training maps and opponents, then verified on all 8 validation maps. All 18 panel rows are equivalent, and stochastic opponents are decision-identical over 80 sampled games.
+
+```
+tree 0 (worker):   (+ (+ tgtKillable movesTowardEnemy) movesTowardEnemyMajor)
+tree 1 (base):     (/ aIsNone (if> gameTimeK aProducesCombat tgtIsBuilding distNearestResource))
+tree 2 (barracks): aProducesBuilding        -- never runs
+tree 3 (combat):   movesTowardEnemyBase     -- never runs
+```
+
+**Workers.**
+- Scores: a move toward the nearest enemy along the long axis scores 2, other moves toward it score 1, and attacking a killable target scores 1. Everything else scores 0.
+- Play: every worker charges the nearest enemy. When an enemy is adjacent, the move into its cell is illegal, so the attack wins. Next to the enemy base nothing scores above 0, and list order (attack first) makes the worker hit the base. No worker ever harvests.
+
+**Base.** Two facts were checked in the source: `gameTimeK` is continuous (`time/1000.0`), and protected division returns 1.0 on a zero divisor.
+- At cycle 0, waiting scores 1/distance > 0, so the base **waits one cycle**.
+- From cycle 1 the divisor is `tgtIsBuilding` = 0, so every action scores 1.0. List order (PRODUCE before NONE) then makes it **train workers whenever it can**.
+- So the tree amounts to "wait one cycle, then defer to engine list order". The pruner correctly kept it, because the delay changes decisions.
+
+**Watched** (16x16C vs WorkerRush): the base pumps workers, no worker ever harvests or returns, and it wins.
+
+This is the **purest all-in worker rush** in the project: ordinary 8242's combat branch without the resource gate.
+
+## 3. Infrastructure bug fixed: SBGP `.params` snapshots were not self-contained
+
+**The bug.** BenchmarkStatistics' snapshot (written via `ParameterDatabase.list`) kept the line `parent.0 = microrts-stage7.params` from `microrts-sbgp.params`. ECJ resolves a relative parent path from the snapshot's own folder, so it looked for `results\microrts-stage7.params` and loading failed. Ordinary-GP snapshots were unaffected, because stage 7's parent is the jar reference `@ec.gp.koza.GPKozaDefaults`.
+
+**Fixed in place.** The parent lines are commented out in all 18 affected snapshots in `results\` (the 10 final SBGP runs, the pilots and the smoke runs). The originals are kept as `*.params.orig`. The loader round trip and benchmarks reproduce exactly.
+
+**Source fix still pending.** BenchmarkStatistics should skip `parent.*` keys when writing the snapshot. Pruner copies whatever snapshot it loaded, so it inherits the fix.
+
+## 4. Adapter (Phase 5): pipeline built and verified
+
+**Environment.**
+- Python 3.10.11, PyTorch 2.7.1+cu118 with CUDA, JPype 1.7.1, JDK Temurin 21.0.9 (`JAVA_HOME` set).
+- **GPU: RTX 4050 Laptop, 6 GB.** This corrects the earlier note of a 4070.
+- Package list saved to `results\python-env-20261014.txt`.
+
+**JPype smoke test** (`adapter\smoke_jpype.py`): Python drives the engine cycle by cycle at about 9,000 cycles/s.
+
+**EvolvedBot hook** (`src\bots\EvolvedBot.java`, replaced). `getAction` is now split in two:
+- `propose(player, gs)` runs exactly the old getAction body and also returns, per idle unit, a `UnitDecision`: the unit, role, legal list, scores, and `pick` (the index of the action the base policy took, -1 = NONE fallback). `pick` is the paper's one-hot base action.
+- `static commit(gs, player, decisions, chosen, executed)` builds a PlayerAction from chosen indices. Per unit, in order: the chosen action if affordable, else the base pick if affordable, else NONE.
+- `getAction` is now `return propose(...).action`. A new accessor `noneDuration()` was added.
+- **Known approximation:** base picks reserve resources for earlier units' *base* picks, and are not recomputed if the adapter changes an earlier unit.
+- **Verified:**
+  - `rl.HookTest`: commit(base picks) reproduces propose() on 12 games, 6,756 decisions, 0 mismatches. Random overrides: games complete, 274 affordability fallbacks.
+  - Bench grids of pruned 5242 and pruned 8242 are unchanged.
+
+**Package `rl`** (new; depends on eval, bots and gp; nothing depends on it):
+- **`rl.ActionCodec`:** a fixed 86-code vocabulary per unit.
+
+  | Codes | Action |
+  |---|---|
+  | 0 | NONE |
+  | 1–4 | MOVE up / right / down / left |
+  | 5–8 | HARVEST, by direction |
+  | 9–12 | RETURN, by direction |
+  | 13–36 | PRODUCE: 6 types (Worker, Light, Heavy, Ranged, Base, Barracks) × 4 directions |
+  | 37–85 | ATTACK: 7×7 relative offsets |
+
+  Decoding only looks codes up in the unit's own legal list, so a decoded action is always legal.
+- **`rl.AdapterEnv`:** `reset(map, opponent, side)` and `step(int[] codeByCell)`. Each step advances to the next decision point, skipping cycles with no idle units. The game loop matches Panel.play call for call. It exposes:
+  - `obs()`: 29 planes, channel-major. Mine, enemy, 7 unit types, HP, carrying, resource amount, busy, 5 current-action types, wall, decide-here, 6 base-action types, and broadcast planes for my resources, enemy resources and time.
+  - `mask()`: H×W×86.
+  - `baseCode()`: -1 where no unit decides.
+  - `executedCode()`.
+  - `evalNow()`: normalised SimpleSqrtEvaluationFunction3 value, as in Panel.
+  - `diagnostics()`.
+
+  Sending a cell's baseCode back reproduces the exact base pick. Illegal codes fall back to the base pick and are counted.
+- **`rl.EnvTest`:**
+  - Identity: base codes reproduce Panel.play on 64 games (8 training maps × WorkerRush/LightRush/WorkerDefense/PassiveAI × 2 sides), 0 mismatches over 36,585 decisions, 0 unencodable, 0 duplicate codes.
+  - Random codes: 48 games complete, 0 illegal; **53,000 decision steps/s in Java**.
+
+**Python** (`adapter\`):
+- `env_check.py`: about **10,700 decision steps/s** driven from Python with numpy conversion, so the bridge costs about 5×.
+- **`ppo_adapter.py`:** the trainer.
+  - Per unit, p(a) = softmax(onehot(base)/τ + adj(s)), masked to legal codes (the paper's Eq. 3, checked against arXiv:2311.11537).
+  - PPO with the paper's settings: γ 0.99, λ 0.95, clip 0.2, value coefficient 1, Adam lr 2.5e-4, 8,192 samples per iteration (8 envs × 1,024 decision steps).
+  - Our additions: 4 epochs × 8 minibatches, entropy coefficient 0.01, gradient clip 0.5.
+  - Reward: +1 win, −1 loss, 0 draw, plus `--shaping` (0.5) × Δ`evalNow`.
+  - Episodes sample uniformly over the 8 TRAINING maps × 6 TRAINING opponents × side, mirroring stage 7.
+  - Output goes to `results\adapter\<run>\`: `args.json`, `log.csv`, and `adapter-NNNN.pt` every 10 iterations plus a final checkpoint (Ctrl+C also saves).
+- **Network** (departure from the paper's CNN → MLP): fully convolutional. 3 × conv3x3(64), a global-context broadcast, then a conv mix. The policy head is a 1x1 conv to 86 logits per cell, **zero-initialised so iteration 0 IS the base bot**. The value head pools mean+max into an MLP. Boards are padded to 16×16 with the padding marked as wall.
+- **`eval_adapter.py`:** argmax play on the 8 VALIDATION maps against the panel (default: `eval.Panel.FULL_PANEL`), in Bench format with per-map grids. With no `--ckpt` it evaluates the bare base bot. **Verified:** base-only output matches Bench exactly (WR 10W-2T-4L, WR++ 12W-0T-4L, WD 12W-2T-2L, same grids, 0.00% argmax differences).
+
+**Departures from the paper, to state in the write-up:**
+- fully convolutional per-cell adapter instead of CNN → MLP;
+- one adapter across all training maps and opponents (the paper trains one per map), evaluated on held-out maps;
+- joint action = one code per idle unit, with a step's log-prob summed over units;
+- argmax at evaluation (the paper does not say what it uses at test time).
+
+## 5. First adapter runs (20 iterations each, base = SBGP 5242 pruned)
+
+| τ | Override rate (sampled ≠ base), iteration 1 → 20 | Entropy | Cost while exploring | Argmax change at iteration 20 |
+|---|---|---|---|---|
+| 0.1 | 0.02% → ~0% | 0.001 → 0.0005 | none | 0.00% |
+| 0.2 | 1.3% → ~1% (fluctuating) | 0.07 → 0.05 | small | 0.00% |
+| 0.3 | 6.7% → 0.7% (falling) | 0.28 → 0.02 | RBAI 88%, LR 90% | 0.01% |
+
+Findings:
+- **At the paper's τ = 0.1 there is no exploration at all.** The base logit is 10. The paper itself warns that low τ suppresses exploration.
+- **At τ = 0.3 the adapter first learns to *suppress* deviations,** because random ones are mostly harmful.
+- **PPO barely updated** (kl ≈ 0.0001, clipfrac ≈ 0). 20 iterations is about 4% of the paper's budget.
+- **Do not judge progress from the trainer's rolling W/D/L.** Short games finish first, so early windows are full of quick wins, and the rates fall even at τ = 0.1, where the policy *is* the base bot. Use `eval_adapter.py` on validation.
+- **Throughput:** about 900–1,400 decision steps/s with the network in the loop, and 8–15 s per iteration.
+
+## 6. Overnight runs (started 2026-10-14 ~20:20)
+
+```powershell
+foreach ($t in 0.2,0.1) { python adapter\ppo_adapter.py --tau $t --iters 500 --run "tau$t-500" 2>&1 | Tee-Object "results\adapter\tau$t-500.log" | Select-String "^it |^run |^saved" }
+```
+
+τ 0.2 is our best guess and τ 0.1 is the paper-faithful control. They take about 2 h and 1.5 h. Power settings were changed to stop sleep on AC; restore them afterwards (admin PowerShell):
+`powercfg /change standby-timeout-ac 30; powercfg /change hibernate-timeout-ac 180; powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 1; powercfg /setactive SCHEME_CURRENT`
+
+**Morning check** (every 100th checkpoint, worker bots only, about 7 minutes):
+```powershell
+foreach ($t in 0.2,0.1) { foreach ($i in "0100","0200","0300","0400","0500") { $c = "results\adapter\tau$t-500\adapter-$i.pt"; if (Test-Path $c) { python adapter\eval_adapter.py --ckpt $c --opponents WorkerRush,WorkerRushPlusPlus,WorkerDefense 2>&1 | Select-String "^vs |^TOTAL|^ckpt" } } }
+```
+
+How to read it:
+- **~0% argmax differences at iteration 500:** exploration is the binding problem.
+- **Differences appear but the score drops:** the adapter overfits the training maps.
+- **The score rises above 34W:** run the full panel.
+
+The base reference on validation is 34W-4T-10L against the three worker bots.
+
+## 7. Plan: making the hybrid stronger, more consistent and faster to train
+
+**Tie-aware base distribution (main idea).** Give logit 1/τ to every action in the GP's top-score **tie set**, not only the list-order pick, plus a small bonus on the actual pick so the initial argmax is still exactly the base bot.
+- Exploration then happens only where the GP was indifferent: the decisions currently made by engine list order, such as attack-target choice, the direction around blocked cells, and production placement. Deliberate GP decisions are never overridden at random.
+- The paper explicitly allows the base agent to output an action *distribution*, so this is faithful to the method.
+- Narrative: "GP decides what matters; the adapter learns the choices GP left to the engine's action order."
+- **Needs:** AdapterEnv exposing each cell's tie set (scores are already in `UnitDecision`), plus about 10 lines in the trainer.
+- **Report it as a clean comparison:** paper-faithful one-hot vs tie-aware.
+
+**Supporting changes:**
+- **Opponent weighting:** sample WorkerRush, WR++ and WorkerDefense more often; all the headroom is there. This must be identical for GP + adapter.
+- **16 envs instead of 8:** rollouts are per-step bound, so this should roughly double throughput.
+- **3+ adapter seeds,** selected on validation (the same rule as GP).
+
+**Team alignment (required for a clean 2×2).** GP + adapter and SBGP + adapter must use the same adapter design, τ, reward, opponent weighting and training budget. Agree before final training.
+
+## 8. Code added or changed this session
+
+| File | New / replaced | What |
+|---|---|---|
+| `src\bots\EvolvedBot.java` | replaced | propose/commit hook, UnitDecision, Proposal, `noneDuration()`; play unchanged (verified) |
+| `src\rl\HookTest.java` | new | propose/commit identity + random-override test |
+| `src\rl\ActionCodec.java` | new | 86-code action vocabulary |
+| `src\rl\AdapterEnv.java` | new | RL environment for JPype |
+| `src\rl\EnvTest.java` | new | env identity vs Panel.play + random-code test |
+| `adapter\smoke_jpype.py` | new | JPype bridge smoke test |
+| `adapter\env_check.py` | new | env driven from Python, throughput |
+| `adapter\ppo_adapter.py` | new | PPO trainer (Adapter-RL) |
+| `adapter\eval_adapter.py` | new | argmax evaluation on validation maps |
+
+Test commands:
+- `java -cp "out;lib/*;lib/bots/*" rl.HookTest`
+- `java -cp "out;lib/*;lib/bots/*" rl.EnvTest`
+- `python adapter\env_check.py`
+- `python adapter\ppo_adapter.py --smoke`
+
+## 9. Housekeeping and open items
+
+- The **original ordinary-GP 9242 training log was overwritten** on 2026-10-13 by an accidental restart, killed in generation 0. Its numbers survive in the 2026-10-12 table, and `best-seed9242-20261011-182142.{ind,params}` still benches at 44% against WorkerRush.
+- **File-name trap:** `best-seed<N>-*` exists for both methods (and for the pilots, for seed 4242). Pick by timestamp: ordinary stage 7 is 2026-10-04 or 2026-10-11/12 morning; final SBGP is 2026-10-12 afternoon to 2026-10-13.
+- **Still open:**
+  - BenchmarkStatistics `parent.*` source fix;
+  - real evaluation counts (optional);
+  - Java-side adapter forward pass, for final evaluation inside the 100 ms budget without Python;
+  - the PPO baseline (needs the bridge, now largely built);
+  - TMA availability;
+  - unit-table version check for the 2025 benchmark;
+  - list-order ablation (now cheap: the adapter env can shuffle or override ties);
+  - ERC round-trip test;
+  - `src/gp/nodes/` folder move;
+  - delete `src/gp/symreg/`.
+- **Commit tonight's work:** `src\rl\`, `src\bots\EvolvedBot.java`, `adapter\`, the pruned SBGP 5242 files, and `results\prune-sbgp-seed5242.log`. Add `adapter\__pycache__\` to `.gitignore`, and decide whether `results\adapter\*.pt` checkpoints go into git (probably not; archive the selected ones only).
