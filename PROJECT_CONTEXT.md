@@ -1611,3 +1611,200 @@ Test commands:
   - `src/gp/nodes/` folder move;
   - delete `src/gp/symreg/`.
 - **Commit tonight's work:** `src\rl\`, `src\bots\EvolvedBot.java`, `adapter\`, the pruned SBGP 5242 files, and `results\prune-sbgp-seed5242.log`. Add `adapter\__pycache__\` to `.gitignore`, and decide whether `results\adapter\*.pt` checkpoints go into git (probably not; archive the selected ones only).
+
+---
+
+# Session update 2026-10-16 / 2026-10-17: adapter evaluated against a null control; tie-aware mode built and tested
+
+## Current status (supersedes earlier "Current status" paragraphs)
+
+Ordinary GP and SBGP are complete (10 seeds each; no significant difference). The SBGP + adapter hybrid is trained and evaluated in two modes: the paper's one-hot base distribution, and a new tie-aware mode.
+
+- **No adapter configuration reliably improves on the base bot.** Tie-aware mode is a null result.
+- **Every run overfits the training maps:** late checkpoints score worse on validation than random perturbation does, while training win rates rise.
+- **There is one candidate signal.** One-hot τ 0.2, seed 1, iterations 390–420 scored 36–38W, above the null maximum of 34W.
+- **A reproduction test is running:** two more training seeds (2, 3) of that exact configuration, finished 2026-10-17, with every-10th-checkpoint evals running overnight into `results\adapter\grid-<run>.txt`.
+- **A new null control** (random tie-breaking) now defines what counts as an adapter effect. It also gives the list-order ablation number: about +3 wins for 5242 on validation.
+
+**Next:** apply the pre-declared selection rule (section 6) to the three seeds, then decide how to report the adapter.
+
+## Instructions for the next assistant session (additions)
+
+- **Never compare an adapter checkpoint with the base bot's validation score alone.** The base (SBGP 5242) was *selected* as the best of 10 seeds on these validation maps, so its 34W is inflated by selection. Any perturbation regresses toward the mean. Compare with the random-tie null distribution (section 5) instead.
+- **Use the pre-declared selection rule in section 6** for any adapter run, including the GP + adapter teammates' runs. Do not pick single peak checkpoints.
+- Validation outcomes are chaotic: changing about 2% of decisions moves the result by about ±3 wins out of 48. Treat differences under about 4 wins as noise.
+
+## 1. Overnight one-hot runs (2026-10-14), evaluated
+
+Base = SBGP 5242 pruned. Validation maps, against WorkerRush + WR++ + WorkerDefense (48 games). **Base reference: 34W-4T-10L.**
+
+| Checkpoint | 100 | 200 | 300 | 400 | 500 |
+|---|---|---|---|---|---|
+| one-hot τ 0.2 (seed 1) | 24W | 24W | 27W | **38W** | 27W |
+| one-hot τ 0.1 (seed 1) | 26W | 30W | 21W | 21W | 26W |
+
+Neighbours of τ 0.2 / 400: 380 = 21W, 390 = 36W, 400 = 38W, 410 = 30W, 420 = 36W.
+
+Findings:
+- **Most checkpoints score below the base.** Exploration did happen (argmax differs from base on 0.1–1.6% of decisions), but most deviations hurt.
+- **Wins track game length.** The good checkpoints (390, 400, 420) play about 10–14k decisions against 21–37k for the others, with 0–1 draws instead of 4–7. They win by breaking stalemates, mostly against WorkerDefense.
+- **Every deviation in the one-hot runs was off-tie.** The adapter overrode deliberate GP choices, never list-order ones.
+- **Training metrics at iteration 500:** KL about 0.0003–0.001, clipfrac below 1.5%, entropy near 0. PPO takes small steps and does not converge.
+
+## 2. Tie-aware base distribution (new, `--base-dist ties`)
+
+**Idea:** give logit 1/τ to every action in the GP's top-score *tie set*, plus a small bonus β on the actual pick. With zero adapter the argmax is still exactly the base bot, so exploration happens only where the GP was indifferent and engine list order decided. The paper allows a base *distribution*, so this stays within the method.
+
+**Tie set definition** (in `rl.AdapterEnv`): the base pick plus every *later* legal action with exactly the pick's score.
+- Equal-score actions *before* the pick are excluded, because `propose()` walks ties in list order, so those were tried and found unaffordable.
+- After an affordability fallback, the same rule applies relative to the pick's score.
+- After a NONE fallback, the tie set is {base code}.
+
+**Logits:** pick 1/τ + β, other tie actions 1/τ, everything else 0. Default β = 1, so a 2-way tie samples the pick 73% of the time. In ties mode τ only controls how hard deliberate GP choices are protected.
+
+**Verified:**
+- `rl.EnvTest`: still 0 mismatches.
+- `tie_check.py`: invariants OK (the base code is always in the tie set, and the tie set is always within the legal codes).
+- Ties-mode zero-adapter eval reproduces the base exactly: WR 10W 2T 4L, same grid, 0.00% differences.
+- Smoke training runs with off-tie at 0.000% in early iterations.
+
+**Headroom** (`tie_check.py`, 32 training games against WorkerRush and PassiveAI):
+
+| Base action | Decisions | Tied | Mean tie size |
+|---|---|---|---|
+| NONE | 15,117 (77%) | 0% | 1.00 |
+| MOVE | 3,527 | 0% | 1.00 |
+| ATTACK | 798 | 37.5% | 1.38 |
+| PRODUCE | 145 | 100% | 3.84 |
+| HARVEST | 4 | 100% | 2.00 |
+| **All** | 19,591 | **2.3%** | 1.04 |
+
+Findings:
+- **5242's movement is entirely deliberate** (0% MOVE ties): the major-axis terminal breaks every symmetry.
+- **The tie-set headroom is only attack-target choice and production placement.**
+- **77% of all "decisions" are a broke base waiting one cycle** (none-duration 1). These dilute every per-decision percentage we report, override rates included. Report rates per action type where it matters.
+
+## 3. Tie-aware runs (500 iterations, seed 1)
+
+| Checkpoint | 50 | 100 | 150 | 200 | 250 | 300 | 350 | 400 | 450 | 500 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| ties τ 0.1 | 27 | 30 | 30 | 33 | 30 | 33 | 21 | 24 | 21 | 21 |
+| ties τ 0.2 | 29 | 32 | 24 | 29 | 29 | 26 | 24 | 24 | 21 | 33 |
+
+(Wins out of 48.)
+
+Findings:
+- **No checkpoint beats the base.** Variance between checkpoints stayed large.
+- **Changing only tied decisions already changes outcomes.** τ 0.1 checkpoints 50 and 100 had 0.00% off-tie deviations yet lost 4–7 wins against the base.
+- **The adapter pushes past the GP even at τ 0.1.** Training off-tie rate was 0.44–0.69%, about 25× what a zero adapter would sample (≈ e⁻¹⁰ per alternative), so it learned adjustments of about +10 logits on some off-tie actions.
+- **Overfitting:** after iteration 300, τ 0.1 validation fell to 21W with 9 draws and long games, while training win rates against WR++ and WD rose to 52–58%.
+
+## 4. Training win rates (last 3 iterations; biased toward short games, comparable across runs only)
+
+| Run | WR | WR++ | WD |
+|---|---|---|---|
+| one-hot τ 0.2 | 30–34 | 40–44 | 30–32 |
+| one-hot τ 0.1 | 48–52 | 40–42 | 44–50 |
+| ties τ 0.1 | 44–50 | 52–54 | 56–58 |
+| ties τ 0.2 | 42–46 | 52–54 | 58–60 |
+
+Ties mode looked best in training and was no better on validation. **Training win rates do not predict validation for the adapter**, the same lesson as GP training Hits.
+
+## 5. Null control and list-order ablation (`adapter\random_ties.py`)
+
+The base bot with ties broken **uniformly at random** instead of by list order, 10 RNG seeds, on the same 48 validation games. About 2% of decisions change.
+
+| Seed | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Wins | 28 | 34 | 32 | 28 | 33 | 28 | 28 | 33 | 34 | 29 |
+
+**Mean 30.7, sd 2.7, min 28, median 30.5, max 34.**
+
+Findings for the write-up:
+1. **List-order ablation:** list order is worth about **+3 wins** (34 vs 30.7, about 1.2 sd) for SBGP 5242 on validation. The base sits at the top of its own null. Part of this is likely selection luck, since 5242 was chosen on these maps.
+2. **Noise floor:** perturbing about 2% of decisions moves outcomes by ±2.7 wins. Adapter checkpoints in 28–34 are indistinguishable from harmless perturbation; below 28 is harmful; above 34 is a candidate signal.
+3. **Re-reading the adapter runs against the null:**
+   - Ties mode is a null result: early checkpoints sit inside the null, late ones fall below it (overfitting).
+   - One-hot τ 0.1 never rises above the null.
+   - One-hot τ 0.2 seed 1 at 390 / 400 / 420 (36 / 38 / 36) is the only result above the null maximum. That region was found by searching checkpoints, so it is itself selected and needs reproduction.
+   - Strictly, the fair null for one-hot (off-tie deviations) would be random *off-tie* overrides at a matched rate. This null perturbs ties only. Note it as a limitation, or build the matched null if the one-hot signal reproduces.
+
+## 6. Pre-declared selection rule (fixed 2026-10-17, before seeing seeds 2 and 3)
+
+- Evaluate **every 10th checkpoint** on the validation maps against WR + WR++ + WD (48 games).
+- A run **improves on the base** only if its **best 3-consecutive-checkpoint window averages above 34W** (the null maximum).
+- The reported checkpoint is the **centre of that window**.
+- Apply the same rule to every adapter run, including the GP + adapter teammates' runs, for a clean 2×2.
+
+## 7. Reproduction test (in progress)
+
+- **Training:** one-hot τ 0.2, seeds 2 and 3, 500 iterations, otherwise identical to seed 1. Done 2026-10-17. Output: `results\adapter\onehot-tau0.2-s{2,3}-500\`.
+- **Evaluation:** every 10th checkpoint for seeds 2, 3 and 1, running overnight 2026-10-17. Output: `results\adapter\grid-<run>.txt`. Re-evaluating seed 1's 380–420 also confirms the evals are deterministic.
+- **Summary command:**
+
+```powershell
+$runs = "onehot-tau0.2-s2-500","onehot-tau0.2-s3-500","tau0.2-500"; foreach ($r in $runs) { $w = @(Get-Content "results\adapter\grid-$r.txt" | Where-Object { $_ -match '^TOTAL (\d+)W' } | ForEach-Object { [int]($_ -replace '^TOTAL (\d+)W.*','$1') }); $best = 0; $at = 0; for ($k = 1; $k -lt $w.Count - 1; $k++) { $m = ($w[$k-1] + $w[$k] + $w[$k+1]) / 3; if ($m -gt $best) { $best = $m; $at = ($k + 1) * 10 } }; "$r : $($w.Count) ckpts, best 3-window mean {0:N1} centred at iter $at, max single $(($w | Measure-Object -Maximum).Maximum), run mean {1:N1}" -f $best, ($w | Measure-Object -Average).Average }
+```
+
+- **How to read it:**
+  - **Windows above 34 in seeds 2 and 3 as well:** the one-hot adapter genuinely helps for a while before overfitting. Report the result with early stopping by validation, then run the full panel on the selected checkpoint.
+  - **No such windows:** seed 1's region was luck. The conclusion is that Adapter-RL gives no reliable gain on this base, demonstrated against a proper null. This is fully reportable.
+
+## 8. Code added or changed
+
+| File | New / replaced | What |
+|---|---|---|
+| `src\rl\AdapterEnv.java` | replaced | `tieMask()` (tie set per cell), tie diagnostics in `diagnostics()`; `step()` unchanged |
+| `adapter\ppo_adapter.py` | replaced | `--base-dist {onehot,ties}`, `--pick-bonus`, `base_logits()`; new log columns `off_tie` and `tied`; one-hot mode algorithmically identical to before |
+| `adapter\eval_adapter.py` | replaced | reads `base_dist`/`pick_bonus` from the checkpoint (old checkpoints → onehot); reports off-tie and tied rates |
+| `adapter\tie_check.py` | new | tie-set invariants plus headroom per action type |
+| `adapter\random_ties.py` | new | null control / list-order ablation, random tie-breaking over N seeds |
+
+Backups of the replaced files: `*.bak-20261016`. Delete them once committed.
+
+**Run folders:**
+- `results\adapter\tau0.2-500`, `tau0.1-500` (one-hot, seed 1)
+- `ties-tau0.1-500`, `ties-tau0.2-500`
+- `onehot-tau0.2-s2-500`, `onehot-tau0.2-s3-500`
+
+Eval CSVs sit beside each checkpoint folder.
+
+**Test commands:**
+- `java -cp "out;lib/*;lib/bots/*" rl.EnvTest`
+- `python adapter\tie_check.py`
+- `python adapter\eval_adapter.py --base-dist ties --opponents WorkerRush` (must give 10W 2T 4L, 0.00%)
+- `python adapter\random_ties.py`
+
+## 9. Write-up notes from this session
+
+- **Departure:** a tie-aware base distribution as a variant of the paper's one-hot (Eq. 3), reported as a clean comparison. Result: null.
+- **Method:** a null control by random tie-breaking, and the selection-bias argument for why the selected base's validation score is not a fair reference.
+- **Finding:** the adapter overfits the training maps in every configuration. This is consistent with the paper's own warning that RL generalises poorly across microRTS maps, and with our departure of evaluating on held-out maps rather than training one adapter per map.
+- **Finding:** list order contributes about +3 wins of 5242's 34 on validation, the list-order ablation (backlog item 4) for the SBGP bot. Run `random_ties.py --base <8242 pruned .ind>` for the ordinary-GP bot too.
+
+## 10. Next steps
+
+1. **Read the reproduction summary** (section 7) and apply the rule.
+2. **If the signal reproduces:**
+   - run the full panel on the selected checkpoint(s);
+   - consider the matched off-tie null;
+   - consider early stopping or a lower learning rate to fight overfitting.
+3. **If it does not:** freeze the adapter conclusion as "no reliable gain on this base" with the null evidence. Spend the remaining effort on the final test-map evaluation and the write-up.
+4. **Team alignment, required for the 2×2:**
+   - share the null-control method and the selection rule with the GP + adapter teammates;
+   - agree on τ, base distribution, budget, opponent weighting and seeds.
+5. **Still open from before:**
+   - list-order ablation for ordinary 8242;
+   - Java-side adapter forward pass (needed only if an adapter is kept);
+   - PPO baseline;
+   - TMA availability;
+   - unit-table version;
+   - BenchmarkStatistics `parent.*` fix;
+   - ERC round-trip;
+   - `src/gp/nodes/` move;
+   - delete `src/gp/symreg/`.
+6. **Commit:** the five files above, `adapter\tie_check.py`, `adapter\random_ties.py`, the `grid-*.txt` files and eval CSVs. Keep `.pt` checkpoints out of git except selected ones.
+
+---
+
+*Keep this file current: when a decision is made, a file is added, or a milestone is hit, update the relevant section so the next session starts from truth.*

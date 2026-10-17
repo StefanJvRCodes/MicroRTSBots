@@ -32,8 +32,17 @@ import java.util.List;
  * After reset() and every step(), Python reads (row-major, cell = y*width + x):
  *   obs()          float[CHANNELS * H * W], channel-major
  *   mask()         byte[H * W * ActionCodec.N], 1 = legal code for the unit at that cell
+ *   tieMask()      byte[H * W * ActionCodec.N], 1 = code in the base policy's TIE SET
  *   baseCode()     int[H * W], the base policy's code, -1 where no unit decides
  *   executedCode() int[H * W], what each unit actually got at the PREVIOUS step, -1 = none
+ *
+ * 2026-10-16: TIE SET. For a deciding unit: the base pick, plus every LATER legal action
+ * (higher index) with exactly the same score as the pick. Equal-score actions BEFORE the
+ * pick are excluded on purpose: propose() walks ties in list order, so those were tried
+ * and were unaffordable. If the pick came from the affordability fallback (top score
+ * unaffordable), the same rule applies relative to the pick's score. NONE fallback
+ * (pick = -1): the tie set is {base code} only. The base code is always in the tie set.
+ * These are the decisions engine list order made, not the evolved tree.
  *
  * Sending a cell's baseCode back means "do what the base policy did" and maps to the exact
  * base pick (including the rare NONE fallback). A code not in the mask falls back to the
@@ -69,6 +78,7 @@ public final class AdapterEnv {
 
     private float[] obs = new float[0];
     private byte[] mask = new byte[0];
+    private byte[] tie = new byte[0];
     private int[] baseCode = new int[0];
     private int[] executedCode = new int[0];
 
@@ -77,6 +87,8 @@ public final class AdapterEnv {
 
     /** Cumulative diagnostics. */
     public long steps, decisions, overrides, illegalRequests, unencodable, duplicateCodes, affordFallbacks;
+    /** Tie-set diagnostics: decisions seen, decisions with tie set > 1, summed tie-set size. */
+    public long tieDecisions, tiedDecisions, tieSizeSum;
 
     public AdapterEnv(String baseSpec, int maxCycles) {
         this.base = IndividualLoader.makeBot(baseSpec, utt);
@@ -98,6 +110,7 @@ public final class AdapterEnv {
             h = pgs.getHeight();
             obs = new float[CHANNELS * w * h];
             mask = new byte[w * h * ActionCodec.N];
+            tie = new byte[w * h * ActionCodec.N];
             baseCode = new int[w * h];
             executedCode = new int[w * h];
         }
@@ -160,6 +173,7 @@ public final class AdapterEnv {
                 prop = null;
                 cellOf = new int[0];
                 Arrays.fill(mask, (byte) 0);
+                Arrays.fill(tie, (byte) 0);
                 Arrays.fill(baseCode, -1);
                 encodeObs();
                 return;
@@ -186,6 +200,7 @@ public final class AdapterEnv {
         List<EvolvedBot.UnitDecision> ds = prop.decisions;
         int n = ds.size();
         Arrays.fill(mask, (byte) 0);
+        Arrays.fill(tie, (byte) 0);
         Arrays.fill(baseCode, -1);
         cellOf = new int[n];
         legalIdxByCode = new int[n][];
@@ -196,16 +211,36 @@ public final class AdapterEnv {
             cellOf[k] = cell;
             int[] table = new int[ActionCodec.N];
             Arrays.fill(table, -1);
+            int[] codeOf = new int[d.legal.size()];
             for (int i = 0; i < d.legal.size(); i++) {
                 int code = ActionCodec.encode(d.unit, d.legal.get(i));
+                codeOf[i] = code;
                 if (code < 0) { unencodable++; continue; }
-                if (table[code] >= 0) { duplicateCodes++; continue; }
+                if (table[code] >= 0) { duplicateCodes++; codeOf[i] = -1; continue; }
                 table[code] = i;
                 mask[cell * ActionCodec.N + code] = 1;
             }
             legalIdxByCode[k] = table;
-            baseCode[cell] = d.pick < 0 ? ActionCodec.NONE
+            int bc = d.pick < 0 ? ActionCodec.NONE
                     : ActionCodec.encode(d.unit, d.legal.get(d.pick));
+            baseCode[cell] = bc;
+
+            // Tie set: the pick plus later legal actions with exactly the pick's score.
+            int off = cell * ActionCodec.N;
+            int nTie = 0;
+            if (bc >= 0) { tie[off + bc] = 1; nTie = 1; }
+            if (d.pick >= 0) {
+                double ref = d.scores[d.pick];
+                for (int i = d.pick + 1; i < d.legal.size(); i++) {
+                    int c = codeOf[i];
+                    if (c < 0 || d.scores[i] != ref || tie[off + c] != 0) continue;
+                    tie[off + c] = 1;
+                    nTie++;
+                }
+            }
+            tieDecisions++;
+            tieSizeSum += nTie;
+            if (nTie > 1) tiedDecisions++;
         }
         encodeObs();
     }
@@ -273,6 +308,7 @@ public final class AdapterEnv {
 
     public float[] obs()          { return obs; }
     public byte[] mask()          { return mask; }
+    public byte[] tieMask()       { return tie; }
     public int[] baseCode()       { return baseCode; }
     public int[] executedCode()   { return executedCode; }
     public int width()            { return w; }
@@ -297,6 +333,8 @@ public final class AdapterEnv {
     public String diagnostics() {
         return "steps " + steps + ", decisions " + decisions + ", overrides " + overrides
              + ", illegal " + illegalRequests + ", unencodable " + unencodable
-             + ", duplicate codes " + duplicateCodes + ", afford fallbacks " + affordFallbacks;
+             + ", duplicate codes " + duplicateCodes + ", afford fallbacks " + affordFallbacks
+             + ", tied " + tiedDecisions + "/" + tieDecisions
+             + String.format(" (mean tie size %.2f)", tieDecisions == 0 ? 0.0 : (double) tieSizeSum / tieDecisions);
     }
 }

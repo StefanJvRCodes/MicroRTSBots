@@ -1,9 +1,18 @@
 """Adapter-RL training (Jin, Slabaugh & Lucas, arXiv:2311.11537) on a frozen evolved bot.
 
-Per idle unit:  p(a) = softmax( onehot(base_action)/tau + adj(s) )  over its legal codes.
+Per idle unit:  p(a) = softmax( base_logits/tau + adj(s) )  over its legal codes.
 The base agent is the frozen evolved bot, played through rl.AdapterEnv (Java, via JPype).
 PPO as in the paper: gamma 0.99, GAE lambda 0.95, clip 0.2, value coef 1, Adam lr 2.5e-4,
 8192 samples per iteration by default (8 envs x 1024 decision steps).
+
+Base distribution (--base-dist):
+  onehot (default, the paper's Eq. 3): 1/tau on the base pick, 0 elsewhere.
+  ties   (2026-10-16): 1/tau on every action in the base policy's top-score TIE SET
+         (see rl.AdapterEnv), plus --pick-bonus on the actual pick. With adj = 0 the argmax
+         is still exactly the base bot. Exploration then happens where the GP was
+         indifferent (where engine list order decided), and tau only controls how hard the
+         GP's deliberate choices are protected. The paper allows the base agent to output
+         a distribution, so this stays within the method.
 
 Departures from the paper (state them in the write-up):
   - fully convolutional adapter with per-cell action logits (GridNet style) instead of
@@ -13,9 +22,9 @@ Departures from the paper (state them in the write-up):
     map), because we evaluate on held-out maps;
   - joint action = one code per idle unit; a step's log-prob is the sum over deciding units.
 
-The last policy layer is zero-initialised, so iteration 0 IS the base bot. Watch the
-override rate (fraction of decisions where the sampled action differs from the base one):
-with tau = 0.1 it starts near 0.05%, and if it never rises the adapter is not exploring.
+The last policy layer is zero-initialised, so iteration 0 IS the base bot.
+Logged per iteration: override (sampled != base), off_tie (sampled outside the tie set),
+tied (decisions whose tie set has > 1 action: the ties-mode headroom).
 
 Training touches TRAINING maps and opponents only (mirrors config/microrts-stage7.params).
 """
@@ -50,6 +59,10 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--base", default=DEFAULT_BASE)
     p.add_argument("--tau", type=float, default=0.1)
+    p.add_argument("--base-dist", choices=["onehot", "ties"], default="onehot",
+                   help="onehot: paper's one-hot base action; ties: 1/tau on the whole tie set")
+    p.add_argument("--pick-bonus", type=float, default=1.0,
+                   help="ties mode: extra logit on the actual base pick (> 0 keeps argmax = base)")
     p.add_argument("--envs", type=int, default=8)
     p.add_argument("--steps", type=int, default=1024, help="decision steps per env per iteration")
     p.add_argument("--iters", type=int, default=500)
@@ -69,6 +82,8 @@ def parse_args():
     p.add_argument("--run", default=None)
     p.add_argument("--smoke", action="store_true", help="tiny run to check everything works")
     a = p.parse_args()
+    if a.base_dist == "ties" and a.pick_bonus <= 0:
+        p.error("--pick-bonus must be > 0 in ties mode, or the initial argmax is not the base bot")
     if a.smoke:
         a.envs, a.steps, a.iters, a.save_every = 4, 128, 3, 1
     return a
@@ -98,14 +113,23 @@ class Adapter(nn.Module):
         return adj, v
 
 
-def policy(net, obs, base, mask, tau, actions=None):
+def base_logits(base, tau, ties=None, bonus=0.0, dtype=torch.float32):
+    """Base-agent logits per cell. onehot (ties is None): 1/tau on the pick.
+    ties: 1/tau on every tie-set action, plus bonus on the pick."""
+    d = (base >= 0).unsqueeze(-1).to(dtype)
+    onehot = F.one_hot(base.clamp(min=0), A).to(dtype) * d
+    if ties is None:
+        return onehot / tau
+    return ties.to(dtype) * d / tau + bonus * onehot
+
+
+def policy(net, obs, base, mask, tau, actions=None, ties=None, bonus=0.0):
     """Combined distribution of the paper's Eq. 3, masked to legal codes, per cell."""
     adj, value = net(obs)
     decide = base >= 0
-    onehot = F.one_hot(base.clamp(min=0), A).to(adj.dtype) * decide.unsqueeze(-1)
     legal = mask.clone()
     legal[..., 0] |= ~decide                         # dummy legal code where no unit decides
-    logits = (onehot / tau + adj).masked_fill(~legal, -1e9)
+    logits = (base_logits(base, tau, ties, bonus, adj.dtype) + adj).masked_fill(~legal, -1e9)
     dist = torch.distributions.Categorical(logits=logits)
     if actions is None:
         actions = dist.sample()
@@ -128,7 +152,7 @@ class Slot:
         self.env.reset(self.map, self.opp, self.side)
         self.prev_eval = float(self.env.evalNow())
 
-    def read(self, obs, mask, base, i):
+    def read(self, obs, mask, base, i, ties=None):
         env = self.env
         h, w = env.height(), env.width()
         assert h <= P and w <= P, f"map larger than {P}x{P}"
@@ -140,6 +164,9 @@ class Slot:
         mask[i].reshape(P, P, A)[:h, :w] = np.asarray(env.mask(), dtype=np.int8).reshape(h, w, A) != 0
         base[i] = -1
         base[i].reshape(P, P)[:h, :w] = np.asarray(env.baseCode(), dtype=np.int64).reshape(h, w)
+        if ties is not None:
+            ties[i] = False
+            ties[i].reshape(P, P, A)[:h, :w] = np.asarray(env.tieMask(), dtype=np.int8).reshape(h, w, A) != 0
 
     def act(self, actions):
         env = self.env
@@ -166,6 +193,7 @@ def main():
     rng = np.random.default_rng(args.seed)
     torch.manual_seed(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    use_ties = args.base_dist == "ties"
 
     cp = [os.path.join(ROOT, "out")]
     cp += glob.glob(os.path.join(ROOT, "lib", "*.jar"))
@@ -175,30 +203,34 @@ def main():
     JIntArray = jpype.JArray(jpype.JInt)
 
     stamp = time.strftime("%Y%m%d-%H%M%S")
-    run = args.run or f"{os.path.basename(args.base)[:-4]}-tau{args.tau:g}-s{args.seed}-{stamp}"
+    run = args.run or f"{os.path.basename(args.base)[:-4]}-{args.base_dist}-tau{args.tau:g}-s{args.seed}-{stamp}"
     if args.smoke:
         run = "smoke-" + run
     out = os.path.join(ROOT, "results", "adapter", run)
     os.makedirs(out, exist_ok=True)
     with open(os.path.join(out, "args.json"), "w") as fh:
         json.dump(vars(args), fh, indent=2)
+    bd = (f"ties (tie set 1/tau = {1 / args.tau:g}, pick +{args.pick_bonus:g})" if use_ties
+          else f"onehot (base logit {1 / args.tau:g})")
     print(f"run {run}\ndevice {device}, {args.envs} envs x {args.steps} steps = "
-          f"{args.envs * args.steps} samples/iter, tau {args.tau} (base logit {1 / args.tau:g})")
+          f"{args.envs * args.steps} samples/iter, tau {args.tau}, base dist {bd}")
 
     E, T = args.envs, args.steps
     slots = [Slot(AdapterEnv(args.base, args.maxcycles), rng, args.shaping, JIntArray) for _ in range(E)]
     cur_obs = np.zeros((E, C, P, P), np.float32)
     cur_mask = np.zeros((E, P * P, A), bool)
+    cur_tie = np.zeros((E, P * P, A), bool)
     cur_base = np.full((E, P * P), -1, np.int64)
     for i, s in enumerate(slots):
         s.new_game()
-        s.read(cur_obs, cur_mask, cur_base, i)
+        s.read(cur_obs, cur_mask, cur_base, i, cur_tie)
 
     net = Adapter(args.width).to(device)
     opt = torch.optim.Adam(net.parameters(), lr=args.lr, eps=1e-5)
 
     obs_b = np.zeros((T, E, C, P, P), np.float32)
     mask_b = np.zeros((T, E, P * P, A), bool)
+    tie_b = np.zeros((T, E, P * P, A), bool) if use_ties else None
     base_b = np.full((T, E, P * P), -1, np.int64)
     act_b = np.zeros((T, E, P * P), np.int64)
     lp_b = np.zeros((T, E), np.float32)
@@ -209,14 +241,17 @@ def main():
     recent = defaultdict(lambda: deque(maxlen=50))
     episodes, total_steps = 0, 0
     log_path = os.path.join(out, "log.csv")
-    fields = ["iter", "steps", "sps", "episodes", "win", "draw", "loss", "override", "entropy",
-              "pg_loss", "v_loss", "kl", "clipfrac"] + [f"win_{SHORT[o]}" for o in TRAIN_OPPONENTS]
+    fields = ["iter", "steps", "sps", "episodes", "win", "draw", "loss", "override", "off_tie", "tied",
+              "entropy", "pg_loss", "v_loss", "kl", "clipfrac"] + [f"win_{SHORT[o]}" for o in TRAIN_OPPONENTS]
     logf = open(log_path, "w", newline="")
     logw = csv.DictWriter(logf, fieldnames=fields)
     logw.writeheader()
 
     def tens(x):
         return torch.from_numpy(x).to(device)
+
+    def ties_t(x):
+        return tens(x) if use_ties else None
 
     def save(tag):
         path = os.path.join(out, f"adapter-{tag}.pt")
@@ -227,16 +262,22 @@ def main():
     try:
         for it in range(1, args.iters + 1):
             t0 = time.perf_counter()
-            n_dec = n_over = 0
+            n_dec = n_over = n_off = n_tied = 0
             for t in range(T):
                 obs_b[t], mask_b[t], base_b[t] = cur_obs, cur_mask, cur_base
+                if use_ties:
+                    tie_b[t] = cur_tie
                 with torch.no_grad():
-                    a, lp, _, v = policy(net, tens(cur_obs), tens(cur_base), tens(cur_mask), args.tau)
+                    a, lp, _, v = policy(net, tens(cur_obs), tens(cur_base), tens(cur_mask), args.tau,
+                                         ties=ties_t(cur_tie), bonus=args.pick_bonus)
                 a_np = a.cpu().numpy()
                 act_b[t], lp_b[t], val_b[t] = a_np, lp.cpu().numpy(), v.cpu().numpy()
                 dec = cur_base >= 0
                 n_dec += int(dec.sum())
                 n_over += int(((a_np != cur_base) & dec).sum())
+                in_tie = np.take_along_axis(cur_tie, a_np[..., None], -1)[..., 0]
+                n_off += int((~in_tie & dec).sum())
+                n_tied += int(((cur_tie.sum(-1) > 1) & dec).sum())
                 for i, s in enumerate(slots):
                     r, d, info = s.act(a_np[i])
                     rew_b[t, i], done_b[t, i] = r, float(d)
@@ -244,12 +285,13 @@ def main():
                         episodes += 1
                         recent[info[0]].append(info[1])
                         recent["ALL"].append(info[1])
-                    s.read(cur_obs, cur_mask, cur_base, i)
+                    s.read(cur_obs, cur_mask, cur_base, i, cur_tie)
             t_roll = time.perf_counter() - t0
             total_steps += T * E
 
             with torch.no_grad():
-                _, _, _, next_v = policy(net, tens(cur_obs), tens(cur_base), tens(cur_mask), args.tau)
+                _, _, _, next_v = policy(net, tens(cur_obs), tens(cur_base), tens(cur_mask), args.tau,
+                                         ties=ties_t(cur_tie), bonus=args.pick_bonus)
             next_v = next_v.cpu().numpy()
             adv = np.zeros((T, E), np.float32)
             last = np.zeros(E, np.float32)
@@ -263,6 +305,7 @@ def main():
 
             B = T * E
             f_obs, f_mask = obs_b.reshape(B, C, P, P), mask_b.reshape(B, P * P, A)
+            f_tie = tie_b.reshape(B, P * P, A) if use_ties else None
             f_base, f_act = base_b.reshape(B, P * P), act_b.reshape(B, P * P)
             f_lp, f_adv, f_ret = lp_b.reshape(B), adv.reshape(B), ret.reshape(B)
             mb = max(1, B // args.minibatches)
@@ -273,7 +316,8 @@ def main():
                 for s0 in range(0, B, mb):
                     j = idx[s0:s0 + mb]
                     _, nlp, ent, nv = policy(net, tens(f_obs[j]), tens(f_base[j]), tens(f_mask[j]),
-                                             args.tau, tens(f_act[j]))
+                                             args.tau, tens(f_act[j]),
+                                             ties=tens(f_tie[j]) if use_ties else None, bonus=args.pick_bonus)
                     logratio = nlp - tens(f_lp[j])
                     ratio = logratio.exp()
                     ad = tens(f_adv[j])
@@ -297,9 +341,11 @@ def main():
                 q = recent[key]
                 return 100.0 * sum(1 for x in q if x == res) / len(q) if q else float("nan")
 
+            nd = max(1, n_dec)
             row = {"iter": it, "steps": total_steps, "sps": round(T * E / t_roll), "episodes": episodes,
                    "win": rate("ALL", "W"), "draw": rate("ALL", "D"), "loss": rate("ALL", "L"),
-                   "override": 100.0 * n_over / max(1, n_dec), "entropy": np.mean(st["ent"]),
+                   "override": 100.0 * n_over / nd, "off_tie": 100.0 * n_off / nd, "tied": 100.0 * n_tied / nd,
+                   "entropy": np.mean(st["ent"]),
                    "pg_loss": np.mean(st["pg"]), "v_loss": np.mean(st["v"]),
                    "kl": np.mean(st["kl"]), "clipfrac": np.mean(st["clip"])}
             for o in TRAIN_OPPONENTS:
@@ -309,7 +355,8 @@ def main():
             per_opp = " ".join(f"{SHORT[o]} {row['win_' + SHORT[o]]:.0f}" for o in TRAIN_OPPONENTS)
             print(f"it {it:4d} | {total_steps:8d} steps | {row['sps']:5d} sps rollout, {t_all:5.1f}s/iter | "
                   f"eps {episodes:5d} | W/D/L {row['win']:.0f}/{row['draw']:.0f}/{row['loss']:.0f} "
-                  f"[{per_opp}] | override {row['override']:.3f}% | ent {row['entropy']:.4f} "
+                  f"[{per_opp}] | override {row['override']:.3f}% (off-tie {row['off_tie']:.3f}%) "
+                  f"| tied {row['tied']:.1f}% | ent {row['entropy']:.4f} "
                   f"| v {row['v_loss']:.3f} | kl {row['kl']:.4f} clip {row['clipfrac']:.3f}", flush=True)
             if it % args.save_every == 0:
                 save(f"{it:04d}")

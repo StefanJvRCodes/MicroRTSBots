@@ -5,21 +5,23 @@ Deterministic opponents: one game per map x side (16 distinct games).
 Stochastic opponents (RandomAI, RandomBiasedAI, RandomBiasedSingleUnitAI): --samples games
 per map x side.
 
-Sanity check: with no --ckpt the adapter is zero, argmax == base action everywhere, and the
-results must match gp.Bench for the base bot exactly (e.g. 5242 pruned vs WorkerRush:
-10W 2T 4L, 8x8B:LL 8x8D:WW 8x8F:WW 8x8G:LW 8x8K:WT 16x16:WL 16x16C:WW 16x16E:WT).
+Sanity check: with no --ckpt the adapter is zero, argmax == base action everywhere (in both
+onehot and ties mode, since --pick-bonus > 0), and the results must match gp.Bench for the
+base bot exactly (e.g. 5242 pruned vs WorkerRush: 10W 2T 4L,
+8x8B:LL 8x8D:WW 8x8F:WW 8x8G:LW 8x8K:WT 16x16:WL 16x16C:WW 16x16E:WT).
 
-Validation is for choosing tau and checkpoints. Never point this at the test maps.
+Base distribution and pick bonus come from the checkpoint's args (older checkpoints have
+none and evaluate as onehot). Validation is for choosing tau and checkpoints. Never point
+this at the test maps.
 """
 import argparse, csv, glob, os, sys, time
 
 import numpy as np
 import torch
-import torch.nn.functional as F
 import jpype
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from ppo_adapter import Adapter, Slot, C, A, P, DEFAULT_BASE, ROOT  # noqa: E402
+from ppo_adapter import Adapter, Slot, base_logits, C, A, P, DEFAULT_BASE, ROOT  # noqa: E402
 
 VALIDATION_MAPS = [
     "maps/8x8/basesWorkers8x8B.xml", "maps/8x8/basesWorkers8x8D.xml", "maps/8x8/basesWorkers8x8F.xml",
@@ -29,13 +31,12 @@ VALIDATION_MAPS = [
 STOCHASTIC = {"RandomAI", "RandomBiasedAI", "RandomBiasedSingleUnitAI"}
 
 
-def greedy(net, obs, base, mask, tau):
+def greedy(net, obs, base, mask, tau, ties=None, bonus=0.0):
     adj, _ = net(obs)
     decide = base >= 0
-    onehot = F.one_hot(base.clamp(min=0), A).to(adj.dtype) * decide.unsqueeze(-1)
     legal = mask.clone()
     legal[..., 0] |= ~decide
-    return (onehot / tau + adj).masked_fill(~legal, -1e9).argmax(-1)
+    return (base_logits(base, tau, ties, bonus, adj.dtype) + adj).masked_fill(~legal, -1e9).argmax(-1)
 
 
 def main():
@@ -43,6 +44,9 @@ def main():
     p.add_argument("--ckpt", default=None, help="adapter .pt; omit to evaluate the bare base bot")
     p.add_argument("--base", default=None, help="override the base .ind (default: from ckpt)")
     p.add_argument("--tau", type=float, default=None, help="override tau (default: from ckpt)")
+    p.add_argument("--base-dist", choices=["onehot", "ties"], default=None,
+                   help="override the base distribution (default: from ckpt, else onehot)")
+    p.add_argument("--pick-bonus", type=float, default=None, help="override the pick bonus (default: from ckpt, else 1.0)")
     p.add_argument("--opponents", default=None, help="comma list; default: eval.Panel.FULL_PANEL")
     p.add_argument("--samples", type=int, default=5)
     p.add_argument("--maxcycles", type=int, default=4000)
@@ -55,6 +59,8 @@ def main():
         targs = ck["args"]
         tau = a.tau if a.tau is not None else targs["tau"]
         base = a.base or targs["base"]
+        bdist = a.base_dist or targs.get("base_dist", "onehot")
+        bonus = a.pick_bonus if a.pick_bonus is not None else targs.get("pick_bonus", 1.0)
         net = Adapter(targs["width"]).to(device)
         net.load_state_dict(ck["net"])
         label = os.path.basename(a.ckpt)[:-3]
@@ -62,10 +68,13 @@ def main():
     else:
         tau = a.tau if a.tau is not None else 0.1
         base = a.base or DEFAULT_BASE
+        bdist = a.base_dist or "onehot"
+        bonus = a.pick_bonus if a.pick_bonus is not None else 1.0
         net = Adapter().to(device)
-        label = "base-only"
+        label = f"base-only-{bdist}"
         out_dir = os.path.join(ROOT, "results", "adapter")
     net.eval()
+    use_ties = bdist == "ties"
 
     cp = [os.path.join(ROOT, "out")]
     cp += glob.glob(os.path.join(ROOT, "lib", "*.jar"))
@@ -79,14 +88,16 @@ def main():
     slot = Slot(env, None, 0.0, JIntArray)
     obs = np.zeros((1, C, P, P), np.float32)
     mask = np.zeros((1, P * P, A), bool)
+    tie = np.zeros((1, P * P, A), bool)
     bse = np.full((1, P * P), -1, np.int64)
 
     def tens(x):
         return torch.from_numpy(x).to(device)
 
     print(f"\n=== Adapter eval (argmax, validation maps) ===\nckpt  : {a.ckpt or '(none: base only)'}"
-          f"\nbase  : {base}\ntau   : {tau}\nmaps  : {', '.join(os.path.basename(m)[12:-4] for m in VALIDATION_MAPS)}\n")
-    rows, decisions, overrides = [], 0, 0
+          f"\nbase  : {base}\ntau   : {tau}\ndist  : {bdist}" + (f" (pick bonus {bonus:g})" if use_ties else "")
+          + f"\nmaps  : {', '.join(os.path.basename(m)[12:-4] for m in VALIDATION_MAPS)}\n")
+    rows, decisions, overrides, off_tie, tied = [], 0, 0, 0, 0
     totW = totT = totL = 0
     t0 = time.perf_counter()
     for opp in opps:
@@ -99,12 +110,16 @@ def main():
                 for _ in range(reps):
                     env.reset(m, opp, side)
                     while not env.done():
-                        slot.read(obs, mask, bse, 0)
+                        slot.read(obs, mask, bse, 0, tie)
                         with torch.no_grad():
-                            act = greedy(net, tens(obs), tens(bse), tens(mask), tau).cpu().numpy()
+                            act = greedy(net, tens(obs), tens(bse), tens(mask), tau,
+                                         tens(tie) if use_ties else None, bonus).cpu().numpy()
                         dec = bse >= 0
                         decisions += int(dec.sum())
                         overrides += int(((act != bse) & dec).sum())
+                        in_tie = np.take_along_axis(tie, act[..., None], -1)[..., 0]
+                        off_tie += int((~in_tie & dec).sum())
+                        tied += int(((tie.sum(-1) > 1) & dec).sum())
                         h, w = env.height(), env.width()
                         codes = act[0].reshape(P, P)[:h, :w].reshape(-1).astype(np.int32)
                         codes[np.asarray(env.baseCode(), dtype=np.int32) < 0] = -1
@@ -120,9 +135,10 @@ def main():
         print(f"vs {opp:<25} {W:3d}W {T:3d}T {L:3d}L  ({100.0 * W / n:3.0f}%)")
         print("    " + " ".join(grid), flush=True)
 
-    print(f"\nTOTAL {totW}W {totT}T {totL}L.  argmax differs from base on "
-          f"{100.0 * overrides / max(1, decisions):.2f}% of {decisions} decisions.  "
-          f"{time.perf_counter() - t0:.0f}s")
+    nd = max(1, decisions)
+    print(f"\nTOTAL {totW}W {totT}T {totL}L.  argmax differs from base on {100.0 * overrides / nd:.2f}% "
+          f"of {decisions} decisions (outside the tie set: {100.0 * off_tie / nd:.2f}%); "
+          f"tied decisions {100.0 * tied / nd:.1f}%.  {time.perf_counter() - t0:.0f}s")
     path = os.path.join(out_dir, f"eval-{label}-validation-{time.strftime('%Y%m%d-%H%M%S')}.csv")
     with open(path, "w", newline="") as fh:
         wr = csv.DictWriter(fh, fieldnames=["opponent", "map", "side", "result", "cycles"])
