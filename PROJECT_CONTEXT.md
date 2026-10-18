@@ -1807,4 +1807,143 @@ Eval CSVs sit beside each checkpoint folder.
 
 ---
 
+---
+
+# Session update 2026-10-18: adapter result explained and frozen; deadline plan
+
+## Current status (supersedes earlier "Current status" paragraphs)
+
+Ordinary GP and SBGP are complete (10 seeds each; no significant difference). **The SBGP + adapter result is frozen.**
+
+- **Selected checkpoint:** `results\adapter\onehot-tau0.2-s3-500\adapter-0270.pt` (one-hot, τ 0.2, training seed 3, iteration 270), chosen by the pre-declared rule.
+- **Validation result:** 42W 1T 5L against the three worker bots (base 34W 4T 10L). Full panel: WR, WR++ and WD each 88% (base 63 / 75 / 75%); the other 15 bots 100%, except RandomBiasedAI 96% (3 draws).
+- **It is a learned effect:** the matched off-tie null never exceeds 34.
+- **What it learned:** one opening decision, the placement of the first worker at cycle 0.
+- **It is unreliable:** 1 of 3 adapter seeds, transient, selected on validation.
+
+**Next:** the deadline plan (section 1), starting with the unit-table check and the test-map evaluation mode.
+
+## Instructions for the next assistant session (additions)
+
+- **There is a deadline.** The target is to submit by the **end of October 2026** (exact date to be confirmed with Prof. Pillay; asked by email 2026-10-18). **All experimental numbers freeze on 2026-10-21.** After that, no new experiments unless Prof. Pillay requires the PPO baseline. Prioritise accuracy and efficiency, and do not open new lines of investigation.
+- **Heinrich's working pattern:** focused work in the evenings only; daytime is low-focus. Plan focused tasks (analysis, decisions, reviewing drafts) for evenings, and machine runs, collecting tables, figures, references and proofreading for the daytime.
+- **The assistant drafts the report prose** section by section from this file; Heinrich reviews and corrects.
+- Still unknown: whether the report is individual or shared with the team. Ask before drafting.
+
+## 1. Deadline and plan
+
+| Date | Evening (focus) | Daytime (low focus / machine) |
+|---|---|---|
+| Sun 18 Oct | Adapter null + breakdown (**done**); email Prof. Pillay (**sent**) | — |
+| Mon 19 | Team message (selection rule, nulls, placement finding); unit-table version check | 8242 list-order ablation (`random_ties.py --base <8242 pruned>`) |
+| Tue 20 | Test-map mode for Bench / eval_adapter (assistant writes, Heinrich verifies) | Final test evaluation runs |
+| **Wed 21** | Read test results; **freeze all numbers** | Collect tables and grids into one results file |
+| Thu 22 – Sun 25 | Review drafts: background, method, GP vs SBGP, adapter | Figures, references, formatting |
+| Mon 26 – Wed 28 | Results discussion, intro, conclusion, abstract | Proofread earlier sections |
+| Thu 29 – Fri 31 | Revision and buffer | Final formatting, submit |
+
+**Agreed cuts:**
+- **PPO baseline:** dropped unless Prof. Pillay requires it. Proposed instead: Coac and mayari as the state-of-the-art comparison, with PPO discussed from the literature.
+- **Java adapter forward pass:** dropped. Evaluate the adapter through the Python bridge and report measured inference time against the 100 ms budget.
+- **Team 2×2:** best effort. If the GP + adapter design isn't aligned in time, report it with the differences stated.
+
+**Final test evaluation (run once, on the TEST maps):**
+- Bots: ordinary 8242 (pruned), SBGP 5242 (pruned), SBGP + adapter s3/270, and the teammates' GP + adapter if available.
+- Opponents: the full scripted panel plus Coac and mayari (plus TMA, if Prof. Pillay confirms it is TiamatBot).
+
+**Open questions sent to Prof. Pillay:**
+1. Is Coac + mayari acceptable as the state-of-the-art comparison without PPO?
+2. Is TMA the TiamatBot jar in `lib/bots/`?
+3. The exact submission date, and whether she wants a draft first.
+
+## 2. Reproduction test result (one-hot τ 0.2, 3 training seeds)
+
+The pre-declared rule: the best 3-consecutive-checkpoint window (every 10th checkpoint, 48 validation games against WR + WR++ + WD) must average above 34W.
+
+| Run | Best 3-window | Centre | Max single | Run mean |
+|---|---|---|---|---|
+| seed 1 (`tau0.2-500`) | 34.7 | 400 | 39 | 28.4 |
+| seed 2 | 33.7 | 430 | 37 | 26.8 |
+| **seed 3** | **40.7** | **270** | 42 | 31.6 |
+
+- **Evaluation is deterministic:** seed 1's 380–420 reproduced 21 / 36 / 38 / 30 / 36 exactly.
+- **Reading:** by the letter of the rule, 2 of 3 seeds pass. But the threshold (the null maximum over 10 single evaluations) is lenient for a maximum over about 48 windows: chance alone plausibly gives 33–35. So the result is **one clear signal (seed 3), one marginal (seed 1) and one miss (seed 2)**.
+- **Seed 3's window:** 240–300 scored 33, 35, 38, **42, 42**, 33, 27. The good checkpoints play shorter games (about 14k decisions against 22–40k) with fewer draws.
+- **All run means sit at or below the null mean.** Most of training is neutral to harmful.
+
+## 3. Matched off-tie null (`random_ties.py --mode offtie`)
+
+At each decision with an off-tie legal option, with probability `rate`, a uniformly random off-tie legal action replaces the base pick. 5 RNG seeds per rate, the same 48 validation games.
+
+| Rate | Realised off-tie change | Wins: mean | sd | min | max |
+|---|---|---|---|---|---|
+| 0.005 | 0.14% | 32.0 | 1.6 | 30 | 34 |
+| 0.01 | 0.25% | 32.2 | 1.8 | 30 | 34 |
+| 0.02 | 0.54% | 31.0 | 3.0 | 27 | 34 |
+| 0.04 | 1.10% | 30.2 | 2.4 | 27 | 33 |
+| 0.08 | 1.82% | 25.8 | 2.5 | 22 | 29 |
+
+The rate brackets matching checkpoints 270 / 280 (0.23% / 0.63% off-tie) give a mean of 31–32 and a maximum of 34. **The adapter's 42 is about 4 sd above the matched null.**
+
+Findings:
+- Random off-tie perturbation never helps; it hurts more as the rate rises.
+- Seed 3's effect is learned. Seeds 1 and 2 are consistent with the null.
+
+Regression check: ties mode is unchanged (seeds 1 and 2 still give 28W and 34W).
+
+## 4. What the adapter learned (`eval_adapter.py --breakdown --log-overrides`, `first_wait.py`)
+
+**Overrides of checkpoint 270:** about one per game. Every one at t = 0 is the base's cycle-0 `NONE` becoming **`PRODUCE:Worker/left`**. The only other overrides are two at t = 100: one change of produce direction, one NONE→MOVE. Checkpoint 280 adds about 56 NONE→MOVE overrides without changing a single result.
+
+**Why there is a cycle-0 NONE:** in base tree 1, `if> gameTimeK aProducesCombat ...` is false at cycle 0 (0 > 0), so waiting is the only action scoring above zero. From cycle 1 on, every action ties and list order trains workers (see the 2026-10-14 notes, section 2).
+
+**Games flipped against the base:** 8x8B s1 L→W, 8x8G s0 L→W, 8x8K s1 T→W, 16x16 s1 L→W, 16x16E s1 T→L. They are identical against WR, WR++ and WD, which play the same opening.
+
+**Rule ablations** (`first_wait.py`, the 48 validation games):
+
+| Rule at cycle 0 | Wins |
+|---|---|
+| Base (wait) | 34 |
+| Produce first-legal direction (≈ up), both sides | 21 |
+| … side 0 only / side 1 only | 25 / 30 |
+| Produce up / right / down / left, both sides | 21 / 24 / 18 / 33 |
+| **Adapter s3/270** | **42** |
+
+**The adapter's choice is state-dependent and nearly optimal:**
+- Producing left is legal for the side-0 base on most maps, yet the adapter applied it on side 0 only on 8x8B and 8x8G.
+- Per game against WorkerRush, it picked the winning option of {wait, left} on **15 of 16 games**, on maps it never trained on. Its only miss is 16x16E side 1.
+- Its overrides fit a simple post-hoc pattern: as player 1, always left; as player 0, left only on 8x8 maps. **Do not present this as a method;** it is fitted to validation outcomes.
+
+**Findings for the write-up:**
+1. **The adapter learned one opening decision:** the state-dependent placement of the first worker. The GP tree had left this decision to a one-cycle wait followed by engine list order.
+2. **Extreme sensitivity:** against deterministic worker bots, one opening decision moves the result between 18 and 42 of 48. This also accounts for the large GP seed variance and the ±3 noise floor.
+3. **Limits:** 1 of 3 adapter seeds; transient (overfits within about 20 iterations); selected on validation, so the unbiased estimate comes from the test maps.
+4. **For the 2×2:** ordinary 8242 has no cycle-0 wait, but its base tree scores a constant, so its first production direction is also decided by list order (a tie). The placement lever exists for GP + adapter as well; only the wait doesn't.
+
+## 5. Code added or changed
+
+| File | New / replaced | What |
+|---|---|---|
+| `adapter\random_ties.py` | replaced | `--mode ties` (unchanged, reproduces earlier numbers) / `--mode offtie` (matched null), `--rate`, `--rates` sweep; reports realised change and eligible share |
+| `adapter\eval_adapter.py` | replaced, then patched | `--breakdown` (per-side override counts in the grid; transition table base type → adapter type); `--log-overrides` (every override with map, side, cycle and decoded code); helpers `ctype()` and `cname()`; unchanged without the flags (base-only regression: 34W 4T 10L, identical grids) |
+| `adapter\first_wait.py` | new | Rule ablation of the cycle-0 wait: `--sides both/0/1/none`, `--dir first/up/right/down/left` |
+
+Backups: `adapter\random_ties.py.bak-20261018` and `adapter\eval_adapter.py.bak-20261018`. Delete them once committed.
+
+**Result files:**
+- `results\adapter\null-offtie-sweep.txt`
+- `results\adapter\fullpanel-s3-0270.txt`
+- `results\adapter\breakdown-s3-0270.txt`, `results\adapter\breakdown-s3-0280.txt`
+- `results\adapter\grid-*.txt` (three runs)
+- eval CSVs beside the checkpoints
+
+## 6. Next steps (in deadline order)
+
+1. **Team message:** the selection rule, both nulls, the placement finding, and a request for their GP + adapter design and status.
+2. **Unit-table version check:** which `UnitTypeTable` version the 2025 benchmark used. If it was VERSION_ORIGINAL_FINETUNED, the Coac/mayari comparison must use it.
+3. **8242 list-order ablation:** `python adapter\random_ties.py --base <8242 pruned .ind>`.
+4. **Test-map mode:** an explicit, deliberately awkward flag in Bench and eval_adapter, run once per bot.
+5. **Freeze on 2026-10-21,** then drafting.
+6. **Commit** today's files and results; keep `.pt` checkpoints out of git except `adapter-0270.pt` (the selected one).
+
 *Keep this file current: when a decision is made, a file is added, or a milestone is hit, update the relevant section so the next session starts from truth.*
