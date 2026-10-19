@@ -78,11 +78,14 @@ public final class Bots {
         // competition panel (lib/bots/*.jar)
         ALIASES.put("coac", "ai.coac.CoacAI");
         ALIASES.put("mayari", "mayariBot.mayari");
-        ALIASES.put("izanagi", "Izanagi.Izanagi");
-        ALIASES.put("tiamat", "TiamatBot.TiamatBot");
-        ALIASES.put("droplet", "Droplet.Droplet");
-        ALIASES.put("grojoa3n", "GRojoA3N.GRojoA3N");
-        ALIASES.put("mixedbot", "MixedBot.MixedBot");
+        ALIASES.put("izanagi", "ai.competition.IzanagiBot.Izanagi");
+        ALIASES.put("tiamat", "ai.competition.tiamat.Tiamat");
+        ALIASES.put("improvedtiamat", "ai.JZ.competition.tiamat.ImprovedTiamat");   // lives in MixedBot.jar
+        ALIASES.put("droplet", "GNS.Droplet");
+        ALIASES.put("economylightrush", "GNS.EconomyLightRush");                      // lives in Droplet.jar
+        ALIASES.put("grojoa3n", "ai.competition.GRojoA3N.GuidedRojoA3N");
+        ALIASES.put("rojo", "ai.competition.rojobot.Rojo");
+        ALIASES.put("mixedbot", "ai.JZ.MixedBot");
 
         // search bots, whose packages are awkward to type
         ALIASES.put("naivemcts", "ai.mcts.naivemcts.NaiveMCTS");
@@ -116,6 +119,7 @@ public final class Bots {
                   + "\nIf it is a competition bot, is lib/bots/* on the classpath?"
                   + "\nKnown names: " + available());
         }
+        checkCmabClash(c);
         return construct(c, utt);
     }
 
@@ -172,6 +176,36 @@ public final class Bots {
                   + sb, e);
         } catch (ReflectiveOperationException e) {
             throw new IllegalArgumentException("Could not construct " + c.getName() + ": " + e, e);
+        }
+    }
+
+    /**
+     * 2026-10-19: GRojoA3N.jar and Izanagi.jar both ship ai.CMAB.* classes with the same
+     * names but DIFFERENT bytecode (11 classes differ in size). With lib/bots/* on the
+     * classpath, whichever jar comes first supplies ai.CMAB for BOTH bots, so one of them
+     * silently runs the other's MCTS code. Refuse to build either unless its ai.CMAB
+     * classes come from its own jar. Fix: put that jar first, e.g.
+     *   -cp "out;lib/*;lib/bots/Izanagi.jar;lib/bots/*"
+     * and evaluate Izanagi and Rojo in separate JVM runs.
+     */
+    private static void checkCmabClash(Class<?> c) {
+        String n = c.getName();
+        String home = n.startsWith("ai.competition.IzanagiBot.") ? "Izanagi.jar"
+                    : (n.startsWith("ai.competition.rojobot.") || n.startsWith("ai.competition.GRojoA3N.")) ? "GRojoA3N.jar"
+                    : null;
+        if (home == null) return;
+        String loc;
+        try {
+            Class<?> cmab = Class.forName("ai.CMAB.CmabNaiveMCTSNode", false, c.getClassLoader());
+            loc = String.valueOf(cmab.getProtectionDomain().getCodeSource().getLocation());
+        } catch (Throwable e) {
+            throw new IllegalArgumentException(n + ": cannot locate ai.CMAB classes (" + e + ")", e);
+        }
+        if (!loc.endsWith(home)) {
+            throw new IllegalArgumentException(n + " would run with ai.CMAB classes from " + loc
+                  + " instead of " + home + " (the two jars ship different versions)."
+                  + " Put lib/bots/" + home + " BEFORE lib/bots/* on the classpath and run this bot"
+                  + " in its own JVM.");
         }
     }
 

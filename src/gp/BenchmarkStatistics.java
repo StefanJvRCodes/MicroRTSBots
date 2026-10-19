@@ -7,6 +7,7 @@ import ec.Individual;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 import ec.gp.GPTree;
+import ec.gp.koza.KozaFitness;
 import ec.simple.SimpleStatistics;
 import ec.util.Parameter;
 import eval.Panel;
@@ -128,6 +129,11 @@ public class BenchmarkStatistics extends SimpleStatistics {
     public int maxCycles;
     public String resultsDir;
 
+    // 2026-10-19 (team protocol): training time and per-generation population spread.
+    private long runStartNanos = -1;
+    private long evolutionNanos = -1;
+    private final List<String> genRows = new ArrayList<>();
+
     @Override
     public void setup(final EvolutionState state, final Parameter base) {
         super.setup(state, base);
@@ -147,6 +153,12 @@ public class BenchmarkStatistics extends SimpleStatistics {
     @Override
     public void finalStatistics(final EvolutionState state, final int result) {
         super.finalStatistics(state, result);
+
+        // Training time = wall clock from initialisation to the end of evolution, measured
+        // BEFORE the benchmark below so benchmark games are not counted as training.
+        evolutionNanos = runStartNanos < 0 ? -1 : System.nanoTime() - runStartNanos;
+        state.output.message("Training time (wall clock, evolution only): " + fmtDuration(evolutionNanos)
+                + "   eval threads " + state.evalthreads + ", cpus " + Runtime.getRuntime().availableProcessors());
 
         if (benchMaps.length == 0) return;
 
@@ -350,7 +362,16 @@ public class BenchmarkStatistics extends SimpleStatistics {
         pw.println("# Written by gp.BenchmarkStatistics via ParameterDatabase.list(pw, false):");
         pw.println("# the params file, its parents inside the ECJ jar, and all -p overrides.");
         pw.println("# gp.IndividualLoader uses this automatically for the .ind beside it.");
-        state.parameters.list(pw, false);
+        StringWriter raw = new StringWriter();
+        PrintWriter rpw = new PrintWriter(raw);
+        state.parameters.list(rpw, false);
+        rpw.flush();
+        for (String line : raw.toString().split("\r?\n")) {
+            // 2026-10-19: a relative parent.N (e.g. microrts-stage7.params) resolves from the
+            // snapshot's own folder and breaks loading. The snapshot is already flattened, so
+            // parent lines are redundant: comment them out.
+            pw.println(line.trim().startsWith("parent.") ? "# " + line : line);
+        }
         pw.flush();
         return sw.toString();
     }
@@ -382,6 +403,9 @@ public class BenchmarkStatistics extends SimpleStatistics {
                .append('\n');
             txt.append("tree              : ").append(describeTrees(best)).append('\n');
             txt.append("worst cycle (ms)  : ").append(worstCycleMs).append("   (G1 gate 100)\n");
+            txt.append("training time     : ").append(fmtDuration(evolutionNanos))
+               .append("   (wall clock, evolution only; eval threads ").append(state.evalthreads)
+               .append(", cpus ").append(Runtime.getRuntime().availableProcessors()).append(")\n");
             txt.append("benchmark maps    : ").append(join(benchMaps)).append('\n');
 
             txt.append("\nEvolved scoring function\n------------------------\n");
@@ -402,6 +426,9 @@ public class BenchmarkStatistics extends SimpleStatistics {
             write(dir.resolve("best-" + stamp + ".ind"), reloadableForm(state, best));
             write(dir.resolve("best-" + stamp + ".params"), paramsSnapshot(state, stamp));
             write(dir.resolve("bench-" + stamp + ".csv"), String.join("\n", csv) + "\n");
+            write(dir.resolve("gens-" + stamp + ".csv"),
+                    "generation,best_fitness,mean_fitness,sd_fitness,worst_fitness,mean_hits,sd_hits,mean_nodes,elapsed_s\n"
+                    + String.join("\n", genRows) + "\n");
 
             state.output.message("");
             state.output.message("Wrote " + new File(resultsDir).getAbsolutePath()
@@ -413,6 +440,55 @@ public class BenchmarkStatistics extends SimpleStatistics {
             state.output.warning("Could not write results to '" + resultsDir + "': " + e
                     + " -- the table above is still valid, but this run was not archived.");
         }
+    }
+
+    @Override
+    public void preInitializationStatistics(final EvolutionState state) {
+        super.preInitializationStatistics(state);
+        runStartNanos = System.nanoTime();
+    }
+
+    /**
+     * 2026-10-19: per-generation population spread (team protocol "SD over population").
+     * Population SD (divide by n) of standardized fitness and of hits (games won), plus
+     * mean tree size and elapsed wall clock. Printed every generation and written to
+     * gens-<stamp>.csv at the end of the run.
+     */
+    @Override
+    public void postEvaluationStatistics(final EvolutionState state) {
+        super.postEvaluationStatistics(state);
+        List<Individual> inds = state.population.subpops.get(0).individuals;
+        int n = inds.size();
+        if (n == 0) return;
+        double sf = 0, sf2 = 0, sh = 0, sh2 = 0, nodes = 0;
+        double best = Double.POSITIVE_INFINITY, worst = Double.NEGATIVE_INFINITY;
+        for (Individual ind : inds) {
+            KozaFitness f = (KozaFitness) ind.fitness;
+            double v = f.standardizedFitness();
+            sf += v; sf2 += v * v;
+            sh += f.hits; sh2 += (double) f.hits * f.hits;
+            best = Math.min(best, v); worst = Math.max(worst, v);
+            if (ind instanceof GPIndividual) {
+                for (GPTree t : ((GPIndividual) ind).trees) {
+                    if (t != null && t.child != null) nodes += t.child.numNodes(GPNode.NODESEARCH_ALL);
+                }
+            }
+        }
+        double mf = sf / n, mh = sh / n;
+        double sdf = Math.sqrt(Math.max(0, sf2 / n - mf * mf));
+        double sdh = Math.sqrt(Math.max(0, sh2 / n - mh * mh));
+        long el = runStartNanos < 0 ? -1 : System.nanoTime() - runStartNanos;
+        genRows.add(String.format(Locale.ROOT, "%d,%.6f,%.6f,%.6f,%.6f,%.3f,%.3f,%.1f,%.1f",
+                state.generation, best, mf, sdf, worst, mh, sdh, nodes / n, el < 0 ? -1.0 : el / 1e9));
+        state.output.message(String.format(Locale.ROOT,
+                "population generation %d: fitness best %.4f mean %.4f sd %.4f | hits mean %.2f sd %.2f | mean size %.1f | elapsed %s",
+                state.generation, best, mf, sdf, mh, sdh, nodes / n, fmtDuration(el)));
+    }
+
+    private static String fmtDuration(long nanos) {
+        if (nanos < 0) return "n/a";
+        long s = nanos / 1_000_000_000L;
+        return String.format(Locale.ROOT, "%dh %02dm %02ds (%d s)", s / 3600, (s % 3600) / 60, s % 60, s);
     }
 
     private static String join(String[] a) {
