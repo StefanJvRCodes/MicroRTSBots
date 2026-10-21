@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4603339889372540589|0.5733935356815515|i72|
+Tree 0:
+ (max movesTowardEnemy aProducesCombat)
+Tree 1:
+ tgtKillable
+Tree 2:
+ (max (/ (if> uIsWorker aProducesHeavy tgtIsWorker uHpFrac) (min tgtWounded aIsAttack)) (- (* enemyUnitCount mapArea) (+ uHpFrac mapArea)))
+Tree 3:
+ tgtWounded
