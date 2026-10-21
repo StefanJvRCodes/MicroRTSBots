@@ -1,0 +1,40 @@
+#!/bin/bash
+#PBS -P CSCI0806
+#PBS -q serial
+#PBS -l select=1:ncpus=8
+#PBS -l walltime=12:00:00
+#PBS -N mrts
+#PBS -j oe
+#PBS -o /mnt/lustre/users/hniebuhr/microrts/pbs-logs/
+
+# One evolution run per job. Seed index from the array (-J 8-53) or SEEDIDX.
+# qsub -v METHOD=team -J 8-53 run_seed.pbs        (ordinary GP)
+# qsub -v METHOD=team-sbgp -J 8-53 run_seed.pbs   (SBGP)
+# qsub -v METHOD=team,SEEDIDX=99,CHECK=1 -l walltime=00:30:00 run_seed.pbs   (2-generation check)
+
+module load chpc/java/24.0.1
+cd /mnt/lustre/users/hniebuhr/microrts || exit 1
+mkdir -p results pbs-logs
+
+S=${PBS_ARRAY_INDEX:-$SEEDIDX}
+if [ -z "$S" ] || [ -z "$METHOD" ]; then echo "need METHOD and an array index or SEEDIDX"; exit 1; fi
+B=$((S*1000+242))
+TAG="${METHOD}-seed${B}"
+EXTRA=()
+if [ "${CHECK:-0}" = "1" ]; then
+  EXTRA=(-p generations=2 -p pop.subpop.0.size=50 -p stat.bench-games=2)
+  TAG="check-${TAG}"
+fi
+SEEDS=()
+for i in 0 1 2 3 4 5 6 7; do SEEDS+=(-p "seed.$i=$((B+i))"); done
+
+if grep -q "best fitness of run" "results/${TAG}.log" 2>/dev/null; then
+  echo "$TAG already finished, skipping"; exit 0
+fi
+
+echo "start $(date)  host $(hostname)  tag $TAG"
+java -Xmx8g -cp "out-team:lib/*:lib/bots/*" ec.Evolve -file "config/microrts-${METHOD}.params" \
+  "${SEEDS[@]}" "${EXTRA[@]}" -p "stat.file=\$results/${TAG}.stat" > "results/${TAG}.log" 2>&1
+rc=$?
+echo "end $(date)  exit $rc"
+exit $rc

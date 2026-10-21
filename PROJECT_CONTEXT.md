@@ -1946,4 +1946,143 @@ Backups: `adapter\random_ties.py.bak-20261018` and `adapter\eval_adapter.py.bak-
 5. **Freeze on 2026-10-21,** then drafting.
 6. **Commit** today's files and results; keep `.pt` checkpoints out of git except `adapter-0270.pt` (the selected one).
 
+## Session update 2026-10-19: team protocol adopted; configs built; first team run started
+
+**Team protocol (agreed by team; research freeze 2026-10-25):**
+- Training: pop 1200, 200 generations, max depth 15, 2000-cycle cap; record training time.
+- Evaluation: 9 maps (8x8A, basesWorkersBarracks8x8, 8x8Obstacle, 12x12, 12x12F, SixBasesWorkers12x12, melee16x16Mixed12, TwoBasesBarracks16x16, EightBasesWorkers16x16) vs 13 bots (RandomBiasedAI, WorkerRush, LightRush, HeavyRush, RangedRush, mayari, Rojo, EconomyLightRush, Droplet, Izanagi, Tiamat, ImprovedTiamat, Coac).
+- Metrics: win rate, SD over population, SD per run, SD across 50 runs, training time.
+- Adapter parameters and training setup are our choice. The old map split is superseded for the team comparison.
+- Prof. Pillay: no PPO needed. Compare with about 3 best published results from the literature, without reimplementing them.
+
+**Our training split** (`config\microrts-team.params`; duplicates checked by size + terrain + units):
+- **TRAIN:** 8x8C, 8x8E, TwoBases8x8, FourBases8x8, melee8x8Mixed4, melee16x16Mixed8, 16x16B, 16x16D.
+- **VALIDATION** (selection only): 8x8B, 8x8G, ThreeBases8x8, melee8x8Mixed6, melee8x8light4, 16x16C, 16x16E.
+- **Excluded:** basesWorkers8x8 (≡ eval map 8x8A).
+- All 9 eval maps are unseen. Barracks starts, obstacles and 12x12 are pure transfer.
+- **Opponents:** WR, WR++, WD, LightRush, RandomBiasedAI (×2 repeats), EconomyLightRush; 112 games per individual. All competition bots held out.
+- `microrts-team-sbgp.params` = the team config + the frozen SBGP settings (Dg 2).
+
+**Timing:** generation 0 took 229 s on the laptop (8 threads), so about 8–13 h per run. 50 runs per configuration needs the CHPC cluster.
+
+**Code changes (built, tested):**
+- **`BenchmarkStatistics`:** training time (wall clock, evolution only), per-generation population stats (`gens-<stamp>.csv`: best/mean/SD fitness, mean/SD hits, mean size, elapsed), and `parent.*` lines commented out in `.params` snapshots, so SBGP snapshots load directly.
+- **`Bots`:** aliases fixed. The old ones for Droplet, Izanagi, Tiamat, GRojoA3N and MixedBot pointed to non-existent classes. Added:
+  - `rojo` → `ai.competition.rojobot.Rojo`
+  - `improvedtiamat` → `ai.JZ.competition.tiamat.ImprovedTiamat` (in MixedBot.jar)
+  - `economylightrush` → `GNS.EconomyLightRush` (in Droplet.jar)
+- **New `eval.ProbeBots`:** builds bots by name and plays 300 cycles. All 13 panel bots verified.
+- **CMAB classpath clash:** GRojoA3N.jar and Izanagi.jar ship different `ai.CMAB` classes. With `lib/bots/*`, Izanagi silently ran Rojo's MCTS code. `Bots` now refuses unless the classes come from the bot's own jar. **Izanagi must run in its own JVM** with `-cp "out;lib/*;lib/bots/Izanagi.jar;lib/bots/*"`.
+- **New maps:** `maps\12x12\` (3 maps).
+
+**CHPC:** registered under programme **CSCI0806** (`#PBS -P CSCI0806`). Since June 2026, access needs portal MFA, then the WireGuard VPN, then SSH keys only. The VPN setup page showed "VPN server connection issue", so the cluster is not reachable yet. If it persists, log a helpdesk ticket and ask for the cluster username and DTN access.
+
+**Running:** team SBGP seed 4242 (`results\team-sbgp-seed4242.log`, snapshot `out-team`).
+
+**Open:**
+- Team answers: Rojo vs GuidedRojoA3N; SD definitions; meaning of "50 runs".
+- Bench and adapter scripts for the new split, cycle cap and stochastic competition bots (needs `Panel.java`).
+- PBS job script.
+- Literature comparison papers.
+- Unit-table version.
+
+### Update 2026-10-19 (evening)
+
+- **First team run finished:** SBGP seed 4242 (`results\team-sbgp-seed4242.log`, `best-seed4242-20261019-185206.*`).
+  - Training time **2h 56m** (8 threads). Gen 0 took 216 s; later generations about 45 s once parsimony shrank the trees, so **about 3 h per run**, not the 8–13 h estimated.
+  - Best fitness 0.3247 at gen 23 (first LOCAL phase). The 8 later areas never beat it; they settled around 0.36. Best-of-run is the gen-23 individual.
+  - Every GLOBAL phase starts at 100% rejection with back-fill, then escapes in 1–2 gens. Same as the October pilots; expected.
+  - Trees are 8–10 nodes; about 87/112 training games won in converged phases.
+- **Running:** ordinary GP seed 4242 (`config\microrts-team.params`, `results\team-seed4242.log`).
+- **Team removed ImprovedTiamat, Tiamat and Izanagi** from the evaluation panel. None were training opponents, so no rerun is needed.
+  - **Eval panel is now 10 bots:** RandomBiasedAI, WorkerRush, LightRush, HeavyRush, RangedRush, EconomyLightRush, mayari, Rojo, Droplet, Coac.
+  - With Izanagi gone there's no CMAB clash; all bots run in one JVM with `lib/bots/*`. The guard stays in `Bots.java`.
+  - Still open: **plain `Rojo` or `GuidedRojoA3N`?**
+- **CHPC:** the VPN page failure was cluster maintenance. Next: WireGuard profile, upload SSH key, find cluster username, `ssh`, module checks. Then write the PBS job and setup scripts (one `qsub` per seed).
+- **Budget:** at about 3 h per run, the laptop can do about 6–7 runs per day; 50 runs per configuration still needs the cluster.
+
+# Session update 2026-10-21: team evaluation harness built; CHPC access set up (blocked on group sync)
+
+## Current status (supersedes earlier "Current status" paragraphs)
+
+Team protocol in force (research freeze **Sun 25 Oct 2026**).
+- **Laptop:** evolving seeds 5242, 6242, 7242 for both methods (`team` then `team-sbgp` per seed), started 2026-10-21 ~13:35 from the `out-team` snapshot. Expected done Thu 22 Oct morning. Logs `results\team-seed<B>.log` / `results\team-sbgp-seed<B>.log`. Seed 4242 done for both methods (19 Oct).
+- **Evaluation harness `gp.TeamEval`:** built and verified. 9 eval maps × 10-bot panel, both sides, 2000-cycle cap, per-game CSV, resumable.
+- **CHPC:** login works; everything is unpacked and ready. **Blocked:** the portal lists hniebuhr as a CSCI0806 member, but the cluster group isn't synced (`groups` shows only `hniebuhr`; qsub says "not a member of project CSCI0806"). Helpdesk ticket logged (due 22 Oct); Prof. Pillay emailed.
+- **Next:** when `groups` shows the programme, submit the check job, then the two arrays (section 3).
+
+## Instructions for the next assistant session (additions)
+
+- **Three terminals:** laptop PowerShell (repo root), a second laptop PowerShell for monitoring, and the **ssh window** (`ssh lengau`, prompt `[hniebuhr@login2 ...]$`). Always say which terminal a command goes in.
+- `ssh lengau` is an alias in `~\.ssh\config` pointing at **10.128.15.127**, because `ssh` can't resolve the hostname on this laptop even though `nslookup` can. WireGuard must be **Active**; only one VPN connection per user is allowed.
+- Cluster commands must be single lines where possible. Files go laptop → cluster with `scp <file> lengau:/mnt/lustre/users/hniebuhr/`.
+- **Windows `tar` archives mark folders read-only.** Always extract on the cluster with `tar xzf X -C dir --delay-directory-restore --warning=no-unknown-keyword && chmod -R u+w dir`.
+- Job scripts written on Windows need LF line endings (`.Replace("`r`n","`n")`).
+
+## 1. gp.TeamEval (new file `src\gp\TeamEval.java`)
+
+- **Usage:** `java -cp "out;lib/*;lib/bots/*" gp.TeamEval -method <name> -inds a.ind,b.ind|'@list.txt' -csv results/teameval-<name>.csv [-threads N] [-reps N] [-maxcycles 2000] [-maps ...] [-opponents ...] [-deterministic a,b|none] [-utt original|finetuned] [-dry]`
+- **Defaults:**
+  - Maps: 8x8A, basesWorkersBarracks8x8, 8x8Obstacle, 12x12, 12x12F, SixBasesWorkers12x12, melee16x16Mixed12, TwoBasesBarracks16x16, EightBasesWorkers16x16. Names are resolved by searching `maps/`, and all 9 resolve.
+  - Panel: RandomBiasedAI, WorkerRush, LightRush, HeavyRush, RangedRush, EconomyLightRush, mayari, Rojo, Droplet, Coac.
+  - 2000 cycles, 5 reps for stochastic opponents.
+- **CSV columns:** method, run, seed, opponent, map, side, rep, result, cycles, worst_ms, game_s, error. Rerunning with the same `-csv` resumes; error rows are retried.
+- **Summary:** per run, the *macro* win rate (each opponent weighted equally; draws are non-wins). Across runs: mean, sd, median, min and max, plus a per-opponent table and `-summary.csv`.
+- **Startup checks:** every opponent must construct (otherwise nothing runs); deterministic opponents are checked by replaying one game twice.
+- **Fixed during the session:** the `-deterministic` parser skipped its value (so the next option was read as unknown); a `game_s` column was added.
+
+## 2. Determinism and cost (measured 2026-10-21)
+
+**Deterministic:** only WorkerRush, LightRush, HeavyRush and RangedRush, confirmed by replay.
+
+**Stochastic:** RandomBiasedAI, EconomyLightRush, mayari, Droplet, GRojoA3N, and **also Coac and Rojo**. Coac and Rojo varied on 5–6 of 18 (map, side) pairs over 3 reps, all on the multi-base 12x12 and 16x16 maps. The variation is identical with `-threads 1`, so it's genuine randomness, not thread interference. The defaults in TeamEval reflect this.
+
+**Statistics note:** the 4 engine rushes give only 18 distinct games per run (9 maps × 2 sides). Rows for stochastic opponents are independent samples.
+
+**Cost per game** (measured next to a running evolution, so upper bounds):
+
+| Opponent | Mean time per game |
+|---|---|
+| Droplet | 7.5 s (max 13.7 s) |
+| mayari | 0.4 s |
+| Rojo | 0.2 s |
+| everything else | ≤ 0.1 s |
+
+At 5 reps that's about 612 games and ~13 min per run on one thread, so 100 runs is an overnight job.
+
+**Rojo** costs ~0.3 ms per cycle, so it isn't doing time-budgeted search: probably scripted. The search bot is likely **GRojoA3N** (alias `grojoa3n`; it constructs fine with `lib/bots/*`). Which one the protocol means is still open with the team.
+
+**Final evaluation rule:** one JVM per run, each `-threads 1`, several processes in parallel, each with its own CSV, then merge. This avoids static-state sharing between competition bots and gives time-budgeted bots (Droplet) a full core. **Never run the evaluation while evolution is running** on the same machine.
+
+**Discipline:** the timing and determinism runs played on the eval maps. Their win rates were not used for anything, and the CSVs were deleted.
+
+## 3. CHPC (Lengau)
+
+- **Account and paths:**
+  - Username hniebuhr; programme CSCI0806.
+  - Login node login2.
+  - Scratch `/mnt/lustre/users/hniebuhr/microrts/` (contains `out-team/`, `lib/`, `maps/`, `config/`, `run_seed.pbs`).
+- **Java:** no JDK 21 module; we use `chpc/java/24.0.1`, which runs our Java-21 classes. **Methods note:** laptop JDK 21.0.9, cluster 24.0.1. Runs include RandomBiasedAI, so they're reproducible only in distribution either way.
+- **Queues:**
+  - `serial`: ≤ 24 cpus, 48 h walltime, max 10 running jobs per user, 240 cpus.
+  - `smp`: full 24-core node, 96 h, max 5 per user.
+  - Nodes have 24 cores.
+- **`run_seed.pbs`:** serial queue, `select=1:ncpus=8`, walltime 12 h, `-Xmx8g`. Seed base B = idx × 1000 + 242, with `seed.0–7 = B..B+7`. Writes `results/<METHOD>-seed<B>.{log,stat}` plus BenchmarkStatistics' best-* files. Skips runs that already finished. Supports `CHECK=1` (2 generations, pop 50, prefix `check-`). PBS logs go to `pbs-logs/`.
+- **Commands** (ssh window, in `/mnt/lustre/users/hniebuhr/microrts`):
+  - check job: `qsub -v METHOD=team-sbgp,SEEDIDX=99,CHECK=1 -l walltime=00:30:00 run_seed.pbs`
+  - real runs: `qsub -v METHOD=team -J 8-53 run_seed.pbs` and `qsub -v METHOD=team-sbgp -J 8-53 run_seed.pbs`
+  - seeds 8242–53242 give 46 per method, which with the laptop's 4242–7242 makes **50 per method**.
+- **Throughput:** 10 concurrent jobs means 92 runs take about 2 days if each run is ~4–5 h on Haswell (not yet measured). `smp` (5 nodes × 3 seeds) is an optional booster.
+- **Training time is not comparable across machines** (laptop vs Haswell). Report it per platform. `team-seed5242`'s laptop training time is inflated by the test runs that shared its CPU (generations 0–~15).
+
+## 4. Open items
+
+- **CHPC group sync:** helpdesk ticket and email to Prof. Pillay.
+- **Team:** Rojo vs GRojoA3N; SD definitions; meaning of "50 runs"; fallback n if CHPC isn't ready by Sunday.
+- **Adapter on the team protocol:** `eval_adapter.py` still uses the old validation maps and panel.
+- **Literature comparison:** about 3 papers.
+- **Housekeeping:**
+  - delete the stray `lib\bots\EvolvedBot.java` on the laptop (already removed on the cluster);
+  - delete `microrts-cluster.tgz` after confirming the cluster copy;
+  - commit `src\gp\TeamEval.java` and `run_seed.pbs`.
 *Keep this file current: when a decision is made, a file is added, or a milestone is hit, update the relevant section so the next session starts from truth.*
