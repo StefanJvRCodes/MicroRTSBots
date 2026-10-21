@@ -1,0 +1,46 @@
+# =====================================================================
+# microrts-team.params -- ordinary GP under the TEAM PROTOCOL (2026-10-19)
+#
+#   java -cp "out;lib/*;lib/bots/*" ec.Evolve -file config/microrts-team.params
+#
+# Team-agreed: population 1200, 200 generations, max depth 15, 2000-cycle cap, training
+# time recorded (gp.BenchmarkStatistics). Evaluation: the 9 team maps vs the 13-bot panel.
+# Training maps and opponents are our choice. Everything else is inherited unchanged from
+# microrts-stage7.params: function set (55), 4 role trees, banded fitness, parsimony,
+# none-duration 1, repeats 2, seeds.
+#
+# MAP SPLIT (duplicates checked 2026-10-19 by size + terrain + starting units)
+#   EVALUATION  basesWorkers8x8A, basesWorkersBarracks8x8, basesWorkers8x8Obstacle,
+#               basesWorkers12x12, basesWorkers12x12F, SixBasesWorkers12x12,
+#               melee16x16Mixed12, TwoBasesBarracks16x16, EightBasesWorkers16x16
+#               -- NEVER used for training or for selection.
+#   TRAIN       8x8C, 8x8E, TwoBasesWorkers8x8, FourBasesWorkers8x8, melee8x8Mixed4,
+#               melee16x16Mixed8, 16x16B, 16x16D
+#   VALIDATION  8x8B, 8x8G, ThreeBasesWorkers8x8, melee8x8Mixed6, melee8x8light4,
+#               16x16C, 16x16E -- for choosing seeds and settings; never reported.
+#   EXCLUDED    basesWorkers8x8 (identical to the eval map 8x8A).
+# Not coverable in training (no such maps outside the eval set): barracks starts,
+# obstacle terrain, 12x12. Those eval maps measure pure transfer.
+#
+# OPPONENTS: cheap scripted eval-panel bots plus WR++ / WorkerDefense. All competition
+# bots (Coac, mayari, Rojo, Droplet, Izanagi, Tiamat, ImprovedTiamat) are held out:
+# too slow to train against, and they give a clean never-seen subset.
+# 8 maps x (5 deterministic x 2 sides + RandomBiasedAI x 2 sides x 2 repeats) = 112 games.
+# =====================================================================
+
+parent.0 = microrts-stage7.params
+
+generations = 200
+pop.subpop.0.size = 1200
+gp.koza.xover.maxdepth = 15
+gp.koza.mutate.maxdepth = 15
+
+eval.problem.maps = maps/8x8/basesWorkers8x8C.xml, maps/8x8/basesWorkers8x8E.xml, maps/8x8/TwoBasesWorkers8x8.xml, maps/8x8/FourBasesWorkers8x8.xml, maps/8x8/melee8x8Mixed4.xml, maps/16x16/melee16x16Mixed8.xml, maps/16x16/basesWorkers16x16B.xml, maps/16x16/basesWorkers16x16D.xml
+eval.problem.opponents = WorkerRush, WorkerRushPlusPlus, WorkerDefense, LightRush, RandomBiasedAI, EconomyLightRush
+eval.problem.stochastic-opponents = RandomBiasedAI
+eval.problem.max-cycles = 2000
+
+stat.file = $results/team.stat
+stat.bench-maps = maps/8x8/basesWorkers8x8B.xml, maps/8x8/basesWorkers8x8G.xml, maps/8x8/ThreeBasesWorkers8x8.xml, maps/8x8/melee8x8Mixed6.xml, maps/8x8/melee8x8light4.xml, maps/16x16/basesWorkers16x16C.xml, maps/16x16/basesWorkers16x16E.xml
+stat.bench-games = 4
+stat.bench-max-cycles = 2000

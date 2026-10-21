@@ -1,0 +1,30 @@
+# =====================================================================
+# microrts-team-sbgp.params -- SBGP (Scheepers & Pillay) under the TEAM PROTOCOL
+#
+#   java -cp "out;lib/*;lib/bots/*" ec.Evolve -file config/microrts-team-sbgp.params
+#
+# Inherits EVERYTHING from microrts-team.params and adds ONLY the frozen SBGP breeder and
+# node selectors (values copied from microrts-sbgp.params, frozen 2026-10-12, Dg = 2).
+# Ordinary GP vs SBGP therefore differ in the search method alone.
+# =====================================================================
+
+parent.0 = microrts-team.params
+
+breed = gp.sbgp.SBGPBreeder
+breed.clone-pipeline-and-population = true
+breed.sbgp.sg = 10
+breed.sbgp.dg = 2
+breed.sbgp.tg = 6
+breed.sbgp.wg = 10
+breed.sbgp.count-terminals = true
+breed.sbgp.erc-by-value = false
+breed.sbgp.combine = any
+breed.sbgp.trees = 0,1
+breed.sbgp.max-rounds = 20
+breed.sbgp.min-improvement = 0.001
+
+gp.koza.xover.ns.0 = gp.sbgp.SBGPNodeSelector
+gp.koza.xover.ns.1 = same
+gp.koza.mutate.ns.0 = gp.sbgp.SBGPNodeSelector
+
+stat.file = $results/team-sbgp.stat

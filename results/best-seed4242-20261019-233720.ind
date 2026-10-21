@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4596502599142447604|0.20357545793304122|i97|
+Tree 0:
+ (+ movesTowardEnemy (max (+ movesTowardEnemy (max (+ (+ movesTowardEnemyMajor movesTowardEnemy) movesTowardEnemyBase) tgtKillable)) tgtKillable))
+Tree 1:
+ (if> threatAtDest aProducesWorker uHpFrac aProducesBuilding)
+Tree 2:
+ (max (if> movesTowardEnemy threatAtDest enemyCombatCount movesTowardEnemyMajor) (max (+ movesTowardEnemyMajor movesTowardEnemy) (if> threatAtDest aProducesWorker uHpFrac aProducesBuilding)))
+Tree 3:
+ (max (if> threatAtDest aProducesWorker uHpFrac aProducesBuilding) (if> movesTowardEnemy threatAtDest enemyCombatCount movesTowardEnemyMajor))
