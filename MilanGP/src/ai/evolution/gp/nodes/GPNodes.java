@@ -33,7 +33,6 @@ public final class GPNodes {
     private static final int[] WORKER_RANKS = {1, 2, 3};
 
     private static final List<Spec> CONDITIONS = List.of(
-            constant(True.NAME, new True()),
             constant(CanHarvest.NAME, new CanHarvest()),
             constant(CanAttack.NAME, new CanAttack()),
             constant(IsMilitary.NAME, new IsMilitary()),
@@ -55,7 +54,8 @@ public final class GPNodes {
             withDouble(EnemyWorkersAtLeast.NAME, EnemyWorkersAtLeast::new, ENEMY_WORKERS),
             withInt(OwnWorkersAtLeast.NAME, OwnWorkersAtLeast::new, OWN_WORKERS),
             withInt(GameTimeAtLeast.NAME, GameTimeAtLeast::new, GAME_CYCLES),
-            withInt(WorkerAttackRankAtMost.NAME, WorkerAttackRankAtMost::new, WORKER_RANKS));
+            withInt(WorkerAttackRankAtMost.NAME, WorkerAttackRankAtMost::new, WORKER_RANKS),
+            withInt(WorkerHarvestRankAtMost.NAME, WorkerHarvestRankAtMost::new, WORKER_RANKS));
 
     private static final List<Spec> ACTIONS = List.of(
             constant(Idle.NAME, new Idle()),
@@ -83,6 +83,8 @@ public final class GPNodes {
         legacyTrain("TrainRanged", "Ranged");
         legacyTrain("TrainMilitary", "Cheapest");
         BY_NAME.put("TechAndTrain", BY_NAME.get(TrainOrSave.NAME));
+        // Not generated, since (If (True) a b) is just a, but still read so older trees load.
+        BY_NAME.put(True.NAME, constant(True.NAME, new True()));
     }
 
     private static void legacyTrain(String legacyName, String type) {

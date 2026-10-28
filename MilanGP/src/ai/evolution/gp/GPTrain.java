@@ -21,6 +21,7 @@ import java.util.Random;
 public class GPTrain {
 
     public static void main(String[] args) throws Exception {
+        long trainingStarted = System.nanoTime();
         GPConfig cfg = GPConfig.fromArgs(args);
         UnitTypeTable utt = new UnitTypeTable(cfg.unitTypeTableVersion, cfg.conflictPolicy);
         List<PhysicalGameState> maps = new ArrayList<>();
@@ -59,6 +60,9 @@ public class GPTrain {
                         population.meanCombatScore(), distinct, cfg.populationSize,
                         population.reusedEvaluations(), (System.currentTimeMillis() - started) / 1000,
                         structure == null ? "" : " | " + structure.describe());
+                double[] popWinRates = population.winRates();
+                System.out.printf("  population win rate %.4f +- %.4f%n",
+                        GPStats.mean(popWinRates), GPStats.std(popWinRates));
                 System.out.println("  weakest: " + weakestCases(best, cfg));
                 appendMetrics(metricsPath, gen, best, population.meanCombatScore(), distinct, population,
                         structure, System.currentTimeMillis() - started);
@@ -98,6 +102,7 @@ public class GPTrain {
                 System.out.println("Published to " + cfg.publishBotFile);
             }
             GPCheckpoint.save(runDir.resolve("checkpoint-final.properties"), population, cfg);
+            writeSummary(runDir, cfg, population, best, (System.nanoTime() - trainingStarted) / 1e9);
         }
     }
 
@@ -112,6 +117,28 @@ public class GPTrain {
         population.initialize();
         if (cfg.structureBased) population.useStructureSearch(new GPStructure(cfg));
         return population;
+    }
+
+    /** One file per run, read back by GPStats to compare runs. */
+    private static void writeSummary(Path runDir, GPConfig cfg, GPPopulation population, GPIndividual best,
+                                     double seconds) throws IOException {
+        double[] matchupWinRates = best.matchups.stream().mapToDouble(GPMatch.MatchupResult::rawScore).toArray();
+        double[] popWinRates = population.winRates();
+        java.util.Properties p = new java.util.Properties();
+        p.setProperty("randomSeed", String.valueOf(cfg.randomSeed));
+        p.setProperty("generations", String.valueOf(population.getGeneration() + 1));
+        p.setProperty("winRate", String.valueOf(best.winRate));
+        p.setProperty("worstCase", String.valueOf(best.worstCase));
+        p.setProperty("matchupWinRateStd", String.valueOf(GPStats.std(matchupWinRates)));
+        p.setProperty("populationWinRateMean", String.valueOf(GPStats.mean(popWinRates)));
+        p.setProperty("populationWinRateStd", String.valueOf(GPStats.std(popWinRates)));
+        p.setProperty("trainingSeconds", String.valueOf(seconds));
+        try (BufferedWriter w = Files.newBufferedWriter(runDir.resolve("summary.properties"), StandardCharsets.UTF_8)) {
+            p.store(w, "GP run summary");
+        }
+        System.out.printf("Run summary | win rate %.4f | matchup std %.4f | population %.4f +- %.4f | %.0fs%n",
+                best.winRate, GPStats.std(matchupWinRates), GPStats.mean(popWinRates), GPStats.std(popWinRates),
+                seconds);
     }
 
     private static String weakestCases(GPIndividual best, GPConfig cfg) {
@@ -129,13 +156,15 @@ public class GPTrain {
     private static void appendMetrics(Path path, int generation, GPIndividual best, double meanCombat,
                                       int distinct, GPPopulation population, GPStructure structure,
                                       long millis) throws IOException {
+        double[] popWinRates = population.winRates();
         String phase = structure == null ? ""
                 : String.format(",\"phase\":\"%s\",\"areasExplored\":%d",
                 structure.phase().name().toLowerCase(), structure.areasExplored());
         String json = String.format("{\"generation\":%d,\"bestCombat\":%.6f,\"winRate\":%.6f,\"worstCase\":%.4f,"
-                        + "\"bestSize\":%d,\"meanCombat\":%.6f,\"distinct\":%d,\"reused\":%d,"
+                        + "\"bestSize\":%d,\"meanCombat\":%.6f,\"popWinRate\":%.6f,\"popWinRateStd\":%.6f,\"distinct\":%d,\"reused\":%d,"
                         + "\"archive\":%d,\"seconds\":%.1f%s}%n",
                 generation, best.combatScore, best.winRate, best.worstCase, best.size(), meanCombat,
+                GPStats.mean(popWinRates), GPStats.std(popWinRates),
                 distinct, population.reusedEvaluations(), population.archiveSize(), millis / 1000.0, phase);
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {

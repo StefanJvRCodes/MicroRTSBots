@@ -39,7 +39,10 @@ subtree with one of the same type, so every tree is always valid.
 
 **One tree, many units.** `GPTreeAI.getAction` runs the same root for each idle unit. The
 tree must tell units apart itself (`CanHarvest`, `IsMilitary`, `IsUnitType`,
-`WorkerAttackRankAtMost`).
+`WorkerAttackRankAtMost`, `WorkerHarvestRankAtMost`). The two ranks number a player's workers by
+distance to their nearest enemy or nearest resource, so "the two workers closest to the minerals harvest,
+the rest fight" is two nodes rather than a combination evolution has to stumble on. `True` is still read
+from older files but no longer generated: `(If (True) a b)` is just `a`.
 
 **What a unit knows about itself.** `CanAttack`, `CanHarvest`, `IsMilitary`,
 `IsCarryingResources`, `IsUnitType`, `HPBelow`, `StrongerThanNearestEnemy`, and the two ranges
@@ -61,14 +64,23 @@ map size (`GPUtil.absoluteRange`, `absoluteCount`) so a threshold evolved on 8x8
 something on 24x24. `OwnWorkersAtLeast` and `GameTimeAtLeast` are deliberately absolute.
 
 **Fitness.** Every individual plays every (map, opponent) case, once from each side.
-A win scores 1, a timed-out draw `0.5 + drawMarginWeight * materialMargin`, a loss
-`lossMarginWeight * (1 + materialMargin) / 2`, a crash 0. The combat score is the harmonic mean of
+A win scores 1, a timed-out draw `0.5 + drawMarginWeight * exchangeMargin`, a loss
+`lossMarginWeight * ((1 + exchangeMargin) / 2 + gatheredShare) / 2`, a crash 0. `exchangeMargin`
+compares the cost of enemy units destroyed with the cost of own units destroyed over the whole game
+(-1 to 1), so a loss that traded evenly scores above a wipeout. `gatheredShare` is the candidate's share
+of all resources delivered to a base (0.5 when neither side mined), so of two losses that traded alike,
+the one that kept its economy going scores higher; without it an all-in rush that loses to a scripted
+economy scored the same whatever it did. The end-of-game material count could not do either: the
+loser has no units left, so it only measured unspent resources. The combat score is the harmonic mean of
 those shaped scores (plus `harmonicMeanEpsilon`), so the worst matchup dominates and a weakness
-cannot be averaged away. Ranking is combat score, then smaller tree, then material margin.
+cannot be averaged away. Ranking is combat score, then smaller tree, then exchange margin.
 `winRate` and `worstCase` are the plain unshaped numbers and are what gets reported.
 
-**Reproduction.** The top `eliteSize` distinct trees are copied through. Each other slot is filled
-by exactly one operator: crossover (`crossoverRate`), mutation (`mutationRate`) or a plain copy.
+**Reproduction.** The top `eliteSize` distinct trees (by the ranking above) are copied through.
+Parents are chosen by epsilon-lexicase selection on the per-case shaped scores, not by combat score:
+cases are taken in random order and each keeps only the trees within that case's epsilon (its median
+absolute deviation over the population) of the best, so a tree that is best on one hard matchup can
+breed even when its average is poor. Each other slot is filled by exactly one operator: crossover (`crossoverRate`), mutation (`mutationRate`) or a plain copy.
 Mutation on a parameterised terminal nudges the constant with probability `ercPerturbRate`
 instead of replacing the node. `maxDepth` is the only hard structural limit.
 
@@ -81,13 +93,15 @@ alternates two phases so a run leaves an area once it is spent:
 
 | Phase | Lasts | Operators may change | Offspring rejected when |
 |---|---|---|---|
-| Explore | `globalAreaGenerations` (Sg) | levels `0..globalAreaDepth` | it shares `globalSimilarityThreshold` (Tg) or more nodes with a spent area |
+| Explore | at least `globalAreaGenerations` (Sg), until the best tree is deeper than `globalAreaDepth` | levels `0..globalAreaDepth` | it shares `globalSimilarityThreshold` (Tg) or more nodes with a spent area |
 | Exploit | until best combat score is flat for `globalAreaWindow` (Wg) | levels below `globalAreaDepth` | it does not contain the current area |
 
 The area is the first `globalAreaDepth` (Dg) levels of the best tree at the end of an explore phase.
 One generation then seeds the new area: only the best tree survives as elite and every offspring is
 bred from it. After that the area holds by construction, because the operators cannot reach it. When
 an area stops paying it goes to memory and is never visited again.
+Explore runs past Sg while the best tree is no deeper than the area: exploit could not touch such a tree,
+and seeding would fill the population with copies of it.
 
 Structure means the node *symbols*, so `EnemyInRange` matches `EnemyInRange` whatever threshold each
 carries. The constant is contents, not structure. Defaults for Dg, Sg, Wg and Tg are the tuned values

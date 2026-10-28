@@ -50,7 +50,10 @@ public class GPStructure {
     public void afterGeneration(GPIndividual best) {
         generationsInPhase++;
         if (phase == Phase.EXPLORE) {
-            if (generationsInPhase >= cfg.globalAreaGenerations) enterExploit(best);
+            // Exploit only varies levels below the area, so a best tree no deeper than the area would be
+            // copied 1500 times with nothing to vary. Keep exploring until the best tree reaches below it.
+            if (generationsInPhase >= cfg.globalAreaGenerations
+                    && GPTreeOps.depth(best.root) > cfg.globalAreaDepth) enterExploit(best);
             return;
         }
         seeding = false;

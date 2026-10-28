@@ -1,6 +1,8 @@
 package ai.evolution.gp;
 
 import ai.PassiveAI;
+import GNS.Droplet;
+import GNS.EconomyLightRush;
 import ai.RandomAI;
 import ai.RandomBiasedAI;
 import ai.RandomBiasedSingleUnitAI;
@@ -20,6 +22,7 @@ import ai.abstraction.WorkerRush;
 import ai.abstraction.WorkerRushPlusPlus;
 import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.coac.CoacAI;
+import ai.competition.rojobot.Rojo;
 import ai.core.AI;
 import ai.evaluation.SimpleSqrtEvaluationFunction3;
 import ai.mcts.naivemcts.NaiveMCTS;
@@ -50,8 +53,11 @@ public class GPOpponents {
             case "RandomBiasedAI" -> new RandomBiasedAI(utt);
             case "RandomBiasedSingleUnitAI" -> new RandomBiasedSingleUnitAI(utt);
             case "PassiveAI" -> new PassiveAI(utt);
-            case "mayariBot" -> new mayari(utt, seed);
+            case "mayariBot" -> new mayari(utt);
             case "Coacai" -> new CoacAI(utt);
+            case "Rojo" -> new Rojo(utt);
+            case "EconomyLightRush" -> new EconomyLightRush(utt);
+            case "Droplet" -> new Droplet(utt);
             case "NaiveMCTS" -> new NaiveMCTS(-1, 200, 100, 10, 0.3f, 0.0f, 0.4f,
                     new RandomBiasedAI(), new SimpleSqrtEvaluationFunction3(), true);
             default -> throw new IllegalArgumentException("Unknown GP opponent: " + name);

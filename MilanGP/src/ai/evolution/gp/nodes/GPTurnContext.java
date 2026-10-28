@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class GPTurnContext {
     public final AbstractionLayerAI ai;
@@ -25,6 +26,7 @@ public class GPTurnContext {
 
     private final Map<Long, Unit> nearestEnemyByUnit = new HashMap<>();
     private Map<Long, Integer> workerAttackRanks;
+    private Map<Long, Integer> workerHarvestRanks;
 
     public GPTurnContext(AbstractionLayerAI ai, GameState gs, int playerID, UnitTypeTable utt) {
         this.ai = ai;
@@ -43,21 +45,27 @@ public class GPTurnContext {
     }
 
     public int workerAttackRank(Unit u) {
-        if (workerAttackRanks == null) workerAttackRanks = computeWorkerAttackRanks();
+        if (workerAttackRanks == null) workerAttackRanks = rankWorkersByDistanceTo(this::nearestEnemy);
         return workerAttackRanks.getOrDefault(u.getID(), Integer.MAX_VALUE);
     }
 
-    private Map<Long, Integer> computeWorkerAttackRanks() {
+    public int workerHarvestRank(Unit u) {
+        if (workerHarvestRanks == null) workerHarvestRanks = rankWorkersByDistanceTo(w -> GPUtil.nearestResource(pgs, w));
+        return workerHarvestRanks.getOrDefault(u.getID(), Integer.MAX_VALUE);
+    }
+
+    /** Own workers numbered 1, 2, ... by distance to their own target (ties by ID); workers with no target are unranked. */
+    private Map<Long, Integer> rankWorkersByDistanceTo(Function<Unit, Unit> targetOf) {
         List<Unit> workers = new ArrayList<>();
-        Map<Long, Integer> distanceToEnemy = new HashMap<>();
+        Map<Long, Integer> distance = new HashMap<>();
         for (Unit w : pgs.getUnits()) {
             if (w.getPlayer() != playerID || !w.getType().canHarvest) continue;
-            Unit enemy = nearestEnemy(w);
-            if (enemy == null) continue;
+            Unit target = targetOf.apply(w);
+            if (target == null) continue;
             workers.add(w);
-            distanceToEnemy.put(w.getID(), GPUtil.manhattan(w, enemy));
+            distance.put(w.getID(), GPUtil.manhattan(w, target));
         }
-        workers.sort(Comparator.comparingInt((Unit w) -> distanceToEnemy.get(w.getID()))
+        workers.sort(Comparator.comparingInt((Unit w) -> distance.get(w.getID()))
                 .thenComparingLong(Unit::getID));
         Map<Long, Integer> ranks = new HashMap<>();
         for (int i = 0; i < workers.size(); i++) ranks.put(workers.get(i).getID(), i + 1);

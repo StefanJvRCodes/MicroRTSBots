@@ -13,18 +13,18 @@ import java.util.Properties;
 import java.util.TreeMap;
 
 public class GPConfig {
-
-    public int populationSize = 1500;
+    
+    public int populationSize = 1200;
     public int generations = 200;
-    public int tournamentSize = 3;
     public int eliteSize = 5;
+    public int maxDepth = 15;
     public double crossoverRate = 0.6;
     public double mutationRate = 0.3;
     public double ercPerturbRate = 0.5;
     public int maxDuplicateRetries = 5;
     public int minInitDepth = 2;
     public int maxInitDepth = 6;
-    public int maxDepth = 10;
+
     public double terminalProbability = 0.35;
     public double harvestSeedFraction = 0.5;
 
@@ -35,14 +35,22 @@ public class GPConfig {
     public int globalSimilarityThreshold = 6;
 
     public String[] maps = {
+            "maps/8x8/basesWorkersBarracks8x8.xml",
             "maps/8x8/basesWorkers8x8A.xml",
-            "maps/12x12/basesWorkers12x12A.xml",
+            "maps/8x8/basesWorkers8x8Obstacle.xml",
+            "maps/12x12/basesWorkers12x12.xml",
+            "maps/12x12/SixBasesWorkers12x12.xml",
+            "maps/12x12/basesWorkers12x12F.xml",
+            "maps/16x16/melee16x16Mixed12.xml",
+            "maps/16x16/TwoBasesBarracks16x16.xml",
+            "maps/16x16/EightBasesWorkers16x16.xml",
     };
     public String[] opponents = {
-            "WorkerRush", "LightRush", "HeavyRush", "RangedRush", "mayariBot", "EconomyRushBurster"
+            "RandomBiasedAI", "WorkerRush", "LightRush", "HeavyRush", "RangedRush",
+            "mayariBot", "Rojo", "EconomyLightRush"
     };
 
-    public int maxCycles = 100000;
+    public int maxCycles = 2000;
     public int maxInactiveCycles = 300;
     public int unitTypeTableVersion = 2;
     public int conflictPolicy = 1;
@@ -64,8 +72,8 @@ public class GPConfig {
     public String resumeCheckpoint = "";
     public int weakestCasesToLog = 5;
 
-    public String playBotFile = "./models/best_v3.txt";
-    public String playMap = "maps/12x12/basesWorkers12x12A.xml";
+    public String playBotFile = "./models/best_run7.txt";
+    public String playMap = "maps/8x8/basesWorkersBarracks8x8.xml";
     public String[] playOpponents = {
             "WorkerRush", "LightRush", "HeavyRush", "RangedRush", "WorkerRushPlusPlus",
             "EconomyRush", "EconomyRushBurster", "EconomyMilitaryRush", "EMRDeterministico", "SimpleEconomyRush",
@@ -78,12 +86,11 @@ public class GPConfig {
     public int playVisualDelayMillis = 50;
     public boolean playHoldout = false;
     public String[] holdoutMaps = {
-            "maps/8x8/basesWorkersBarracks8x8.xml",
             "maps/10x10/basesWorkers10x10.xml",
-            "maps/16x16/basesWorkers16x16C.xml",
+            "maps/12x12/basesWorkers12x12A.xml",
             "maps/24x24/basesWorkers24x24.xml",
     };
-    public String[] holdoutOpponents = {"Coacai"};
+    public String[] holdoutOpponents = {"Coacai", "WorkerRushPlusPlus", "EconomyRushBurster", "EconomyMilitaryRush"};
 
     public static GPConfig fromArgs(String[] args) throws IOException {
         GPConfig cfg = new GPConfig();

@@ -10,7 +10,9 @@ import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,7 +26,8 @@ public final class GPMatch {
         }
     }
 
-    public record GameResult(double score, double margin, int cycles, boolean endedByLimit, boolean crashed) {
+    public record GameResult(double score, double margin, double gatheredShare, int cycles, boolean endedByLimit,
+                             boolean crashed) {
     }
 
     public record MatchupResult(EvaluationCase evaluationCase, double score, double rawScore, double margin,
@@ -35,27 +38,31 @@ public final class GPMatch {
                                                List<PhysicalGameState> maps, List<EvaluationCase> cases,
                                                GPConfig cfg) throws Exception {
         List<MatchupResult> results = new ArrayList<>(cases.size());
-        for (EvaluationCase c : cases) {
-            PhysicalGameState map = maps.get(c.mapIndex());
-            long seed = mixSeed(cfg.evaluationSeed, c.opponentName(), c.mapIndex());
-            GameResult asP0 = playOneGame(new GPTreeAI(utt, individual.root),
-                    GPOpponents.build(c.opponentName(), utt, seed), map, utt, cfg, 0, false);
-            GameResult asP1 = playOneGame(GPOpponents.build(c.opponentName(), utt, seed ^ 0x9E3779B97F4A7C15L),
-                    new GPTreeAI(utt, individual.root), map, utt, cfg, 1, false);
-            results.add(new MatchupResult(c,
-                    (shapedScore(asP0, cfg) + shapedScore(asP1, cfg)) / 2,
-                    (asP0.score() + asP1.score()) / 2,
-                    (asP0.margin() + asP1.margin()) / 2,
-                    asP0.score(), asP1.score(),
-                    (asP0.endedByLimit() ? 1 : 0) + (asP1.endedByLimit() ? 1 : 0)));
-        }
+        for (EvaluationCase c : cases) results.add(evaluateCase(individual, utt, maps, c, cfg));
         return results;
+    }
+
+    private static MatchupResult evaluateCase(GPIndividual individual, UnitTypeTable utt,
+                                              List<PhysicalGameState> maps, EvaluationCase c,
+                                              GPConfig cfg) throws Exception {
+        PhysicalGameState map = maps.get(c.mapIndex());
+        long seed = mixSeed(cfg.evaluationSeed, c.opponentName(), c.mapIndex());
+        GameResult asP0 = playOneGame(new GPTreeAI(utt, individual.root),
+                GPOpponents.build(c.opponentName(), utt, seed), map, utt, cfg, 0, false);
+        GameResult asP1 = playOneGame(GPOpponents.build(c.opponentName(), utt, seed ^ 0x9E3779B97F4A7C15L),
+                new GPTreeAI(utt, individual.root), map, utt, cfg, 1, false);
+        return new MatchupResult(c,
+                (shapedScore(asP0, cfg) + shapedScore(asP1, cfg)) / 2,
+                (asP0.score() + asP1.score()) / 2,
+                (asP0.margin() + asP1.margin()) / 2,
+                asP0.score(), asP1.score(),
+                (asP0.endedByLimit() ? 1 : 0) + (asP1.endedByLimit() ? 1 : 0));
     }
 
     static double shapedScore(GameResult r, GPConfig cfg) {
         if (r.crashed()) return 0.0;
         if (r.score() == 1.0) return 1.0;
-        if (r.score() == 0.0) return cfg.lossMarginWeight * (1 + r.margin()) / 2;
+        if (r.score() == 0.0) return cfg.lossMarginWeight * ((1 + r.margin()) / 2 + r.gatheredShare()) / 2;
         if (r.endedByLimit()) return Math.clamp(0.5 + cfg.drawMarginWeight * r.margin(), 0, 1);
         return 0.5;
     }
@@ -68,6 +75,7 @@ public final class GPMatch {
         PhysicalGameStateJFrame window = visualize ? PhysicalGameStatePanel.newVisualizer(gs, 600, 600, false) : null;
         int lastActionTime = 0;
         boolean gameover;
+        Tally tally = new Tally(gs);
         try {
             do {
                 PlayerAction pa1, pa2;
@@ -76,11 +84,12 @@ public final class GPMatch {
                     pa2 = ai2.getAction(1, gs);
                 } catch (RuntimeException e) {
                     reportCrash(ai1, ai2, gs, e);
-                    return new GameResult(0.0, 0.0, gs.getTime(), false, true);
+                    return new GameResult(0.0, 0.0, 0.0, gs.getTime(), false, true);
                 }
                 if (gs.issueSafe(pa1)) lastActionTime = gs.getTime();
                 if (gs.issueSafe(pa2)) lastActionTime = gs.getTime();
                 gameover = gs.cycle();
+                tally.update(gs);
                 if (window != null) {
                     window.setStateCloning(gs);
                     window.repaint();
@@ -95,7 +104,8 @@ public final class GPMatch {
         ai1.gameOver(winner);
         ai2.gameOver(winner);
         double score = winner == -1 ? 0.5 : winner == candidatePlayer ? 1.0 : 0.0;
-        return new GameResult(score, materialMargin(gs, candidatePlayer), gs.getTime(), !gameover, false);
+        return new GameResult(score, tally.exchangeMargin(candidatePlayer), tally.gatheredShare(candidatePlayer),
+                gs.getTime(), !gameover, false);
     }
 
     private static final Set<String> reportedCrashes = ConcurrentHashMap.newKeySet();
@@ -110,18 +120,53 @@ public final class GPMatch {
         e.printStackTrace(System.out);
     }
 
-    private static double materialMargin(GameState gs, int candidatePlayer) {
-        double mine = materialValue(gs, candidatePlayer);
-        double theirs = materialValue(gs, 1 - candidatePlayer);
-        return (mine - theirs) / (mine + theirs + 1e-6);
-    }
+    /**
+     * Tracks the cost of every unit each player has had destroyed, and the resources each player's workers
+     * delivered. The end-of-game material count cannot rank losses, because the loser has no units left: it
+     * only measures unspent resources. Losses that trade evenly still differ in how much the loser mined.
+     */
+    private static final class Tally {
+        private final double[] lost = new double[2];
+        private final double[] gathered = new double[2];
+        private Map<Long, Unit> alive = new HashMap<>();
+        private Map<Long, Integer> carried = new HashMap<>();
 
-    private static double materialValue(GameState gs, int player) {
-        double value = gs.getPlayer(player).getResources();
-        for (Unit u : gs.getPhysicalGameState().getUnits()) {
-            if (u.getPlayer() == player) value += u.getType().cost;
+        Tally(GameState gs) {
+            update(gs);
         }
-        return value;
+
+        void update(GameState gs) {
+            Map<Long, Unit> now = new HashMap<>();
+            Map<Long, Integer> carrying = new HashMap<>();
+            for (Unit u : gs.getPhysicalGameState().getUnits()) {
+                if (u.getPlayer() < 0) continue;
+                now.put(u.getID(), u);
+                if (u.getType().canHarvest) carrying.put(u.getID(), u.getResources());
+            }
+            for (Map.Entry<Long, Unit> e : alive.entrySet()) {
+                if (!now.containsKey(e.getKey())) lost[e.getValue().getPlayer()] += e.getValue().getType().cost;
+            }
+            // A worker that was carrying and now carries nothing, while still alive, has delivered its load.
+            for (Map.Entry<Long, Integer> e : carrying.entrySet()) {
+                int before = carried.getOrDefault(e.getKey(), 0);
+                if (before > 0 && e.getValue() == 0) gathered[now.get(e.getKey()).getPlayer()] += before;
+            }
+            alive = now;
+            carried = carrying;
+        }
+
+        /** The candidate's share of all resources delivered; 0.5 when neither side mined. */
+        double gatheredShare(int candidatePlayer) {
+            double total = gathered[0] + gathered[1];
+            return total == 0 ? 0.5 : gathered[candidatePlayer] / total;
+        }
+
+        /** -1 when only the candidate lost units, +1 when only the opponent did, 0 for an even trade or no fighting. */
+        double exchangeMargin(int candidatePlayer) {
+            double killed = lost[1 - candidatePlayer];
+            double suffered = lost[candidatePlayer];
+            return (killed - suffered) / (killed + suffered + 1e-6);
+        }
     }
 
     private static long mixSeed(long seed, String opponentName, int mapIndex) {

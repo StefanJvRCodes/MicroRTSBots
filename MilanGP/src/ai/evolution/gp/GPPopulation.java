@@ -8,6 +8,8 @@ import rts.PhysicalGameState;
 import rts.units.UnitTypeTable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +37,10 @@ public class GPPopulation implements AutoCloseable {
     private int reusedEvaluations;
     private GPIndividual bestEver;
     private int bestEverGeneration;
+
+    /** Each parent's shaped score per case, and the tolerance per case, for the generation being bred from. */
+    private double[][] caseScores;
+    private double[] caseEpsilon;
 
     public GPPopulation(GPConfig cfg, UnitTypeTable utt, Random rnd) {
         this.cfg = cfg;
@@ -139,6 +145,10 @@ public class GPPopulation implements AutoCloseable {
         return distinct.size();
     }
 
+    public double[] winRates() {
+        return individuals.stream().mapToDouble(i -> i.winRate).toArray();
+    }
+
     public double meanCombatScore() {
         return individuals.stream().mapToDouble(i -> i.combatScore).average().orElse(0);
     }
@@ -149,6 +159,7 @@ public class GPPopulation implements AutoCloseable {
         GPIndividual best = ranked.getFirst();
         boolean seeding = structure != null && structure.seeding();
 
+        prepareLexicase();
         List<GPIndividual> next = new ArrayList<>(cfg.populationSize);
         Set<String> seen = new HashSet<>();
         int eliteBudget = seeding ? 1 : cfg.eliteSize;
@@ -187,11 +198,11 @@ public class GPPopulation implements AutoCloseable {
     private GPIndividual produceOffspring(GPIndividual best) {
         double r = rnd.nextDouble();
         boolean seeding = structure != null && structure.seeding();
-        GPIndividual parent = seeding ? best : tournamentSelect();
+        GPIndividual parent = seeding ? best : lexicaseSelect();
         int minLevel = structure == null ? 0 : structure.minLevel();
         int maxLevel = structure == null ? Integer.MAX_VALUE : structure.maxLevel();
         if (r < cfg.crossoverRate) {
-            return new GPIndividual(GPTreeOps.crossover(parent.root, tournamentSelect().root, rnd,
+            return new GPIndividual(GPTreeOps.crossover(parent.root, lexicaseSelect().root, rnd,
                     cfg.maxDepth, minLevel, maxLevel));
         }
         if (r < cfg.crossoverRate + cfg.mutationRate) {
@@ -201,13 +212,58 @@ public class GPPopulation implements AutoCloseable {
         return parent.copy();
     }
 
-    private GPIndividual tournamentSelect() {
-        GPIndividual best = null;
-        for (int i = 0; i < cfg.tournamentSize; i++) {
-            GPIndividual candidate = individuals.get(rnd.nextInt(individuals.size()));
-            if (best == null || RANKING.compare(candidate, best) > 0) best = candidate;
+    private void prepareLexicase() {
+        int n = individuals.size(), cases = individuals.getFirst().matchups.size();
+        caseScores = new double[n][cases];
+        for (int i = 0; i < n; i++) {
+            for (int c = 0; c < cases; c++) caseScores[i][c] = individuals.get(i).matchups.get(c).score();
         }
-        return best;
+        caseEpsilon = new double[cases];
+        double[] column = new double[n];
+        for (int c = 0; c < cases; c++) {
+            for (int i = 0; i < n; i++) column[i] = caseScores[i][c];
+            caseEpsilon[c] = medianAbsoluteDeviation(column);
+        }
+    }
+
+    /**
+     * Epsilon-lexicase selection (La Cava, Spector and McPhee 2016). Cases are taken in a fresh random order,
+     * and each one keeps only the candidates within that case's epsilon of the best remaining score, until one
+     * candidate is left or the cases run out. A tree that is best on one hard matchup can be picked even when it
+     * is poor on the others, where an average would have buried it. Epsilon is the case's median absolute
+     * deviation over the population, so it needs no setting.
+     */
+    private GPIndividual lexicaseSelect() {
+        int[] pool = new int[individuals.size()];
+        for (int i = 0; i < pool.length; i++) pool[i] = i;
+        int remaining = pool.length;
+        List<Integer> order = new ArrayList<>();
+        for (int c = 0; c < caseEpsilon.length; c++) order.add(c);
+        Collections.shuffle(order, rnd);
+        for (int c : order) {
+            if (remaining == 1) break;
+            double best = Double.NEGATIVE_INFINITY;
+            for (int k = 0; k < remaining; k++) best = Math.max(best, caseScores[pool[k]][c]);
+            int kept = 0;
+            for (int k = 0; k < remaining; k++) {
+                if (caseScores[pool[k]][c] >= best - caseEpsilon[c]) pool[kept++] = pool[k];
+            }
+            remaining = kept;
+        }
+        return individuals.get(pool[rnd.nextInt(remaining)]);
+    }
+
+    private static double medianAbsoluteDeviation(double[] values) {
+        double median = median(values.clone());
+        double[] deviations = new double[values.length];
+        for (int i = 0; i < values.length; i++) deviations[i] = Math.abs(values[i] - median);
+        return median(deviations);
+    }
+
+    private static double median(double[] values) {
+        Arrays.sort(values);
+        int mid = values.length / 2;
+        return values.length % 2 == 1 ? values[mid] : (values[mid - 1] + values[mid]) / 2;
     }
 
     public List<GPIndividual> getIndividuals() { return individuals; }
