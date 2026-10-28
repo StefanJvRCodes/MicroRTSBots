@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4595045083895480881|0.16312128328492428|i102|
+Tree 0:
+ (+ enemyUnitCount (+ (+ movesTowardEnemy (if> threatAtDest aIsAttack gameTimeK aIsAttack)) (+ (+ tgtKillable (+ (if> threatAtDest aIsMove placesTowardEnemy movesTowardEnemyMajor) movesTowardEnemy)) (if> threatAtDest aIsMove placesTowardEnemy threatAtDest))))
+Tree 1:
+ enemyUnitCount
+Tree 2:
+ (if> threatAtDest aProducesRanged placesTowardEnemy movesTowardEnemyMajor)
+Tree 3:
+ (max (if> threatAtDest aIsMove (if> threatAtDest aIsMove placesTowardEnemy threatAtDest) movesTowardEnemyMajor) (if> threatAtDest aIsAttack gameTimeK aIsAttack))

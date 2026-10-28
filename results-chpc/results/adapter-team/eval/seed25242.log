@@ -1,0 +1,67 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jpype.JPypeContext in an unnamed module (file:/mnt/lustre/users/hniebuhr/venv-adapter/lib/python3.11/site-packages/org.jpype.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+| ECJ
+| An evolutionary computation system (version 27)
+| By Sean Luke
+| Contributors: E. Scott, L. Panait, G. Balan, S. Paus, Z. Skolicki,
+|               R. Kicinger, E. Popovici, K. Sullivan, J. Harrison, J. Bassett,
+|               R. Hubley, A. Desai, A. Chircop, J. Compton, W. Haddon,
+|               S. Donnelly, B. Jamil, J. Zelibor, E. Kangas, F. Abidi,
+|               H. Mooers, J. O'Beirne, L. Manzoni, K. Talukder, S. McKay,
+|               J. McDermott, J. Zou, A. Rutherford, D. Freelan, E. Wei,
+|               S. Rajendran, A. Dhawan, B. Brumbac, J. Hilty, A. Kabir
+| URL: http://cs.gmu.edu/~eclab/projects/ecj/
+| Mail: ecj-help@cs.gmu.edu
+|       (better: join ECJ-INTEREST at URL above)
+| Date: July 1, 2017
+| Current Java: 24.0.1 / Java HotSpot(TM) 64-Bit Server VM-24.0.1+9-30
+| Required Minimum Java: 1.5
+
+
+Threads:  breed/1 eval/1
+Seed: 25242 
+Processing GP Types
+Processing GP Node Constraints
+Processing GP Function Sets
+Processing GP Tree Constraints
+SBGP: Sg=10 Dg=2 Tg=6 Wg=10 combine=any count-terminals=true erc-by-value=false max-rounds=20 tg-cap=true trees=0,1 min-improvement=0.001
+microRTS fitness: 112 games per individual (8 maps x 6 opponents x 2 sides, 2 repeats on stochastic opponents), cap 2000 cycles.
+Stochastic opponents this run: RandomBiasedAI
+Unit NONE (wait) action lasts 1 cycle(s).
+Banded fitness: win 0-1, draw 1-2, loss 2-3. Loss band split 0.67 survival / 0.33 quality. Win reward: fitness x (1 - 0.5 x win fraction). meanEval mapped from [0.05, 1.0].
+
+=== Adapter eval (argmax, validation maps) ===
+ckpt  : results/adapter-team/sbgp-seed25242/adapter-final-0300.pt
+base  : results/best-seed25242-20261023-075126.ind
+tau   : 0.2
+dist  : onehot
+maps  : 8x8A, Barracks8x8, 8x8Obstacle, 12x12, 12x12F, SixBasesWorkers12x12, melee16x16Mixed12, TwoBasesBarracks16x16, EightBasesWorkers16x16
+
+vs RandomBiasedAI             84W   3T   3L  ( 93%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWWWWWL 8x8Obstacle:WWWWWWWWWW 12x12:WWWWWWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:WWWWWWWWWW melee16x16Mixed12:WWWWWWWWWW TwoBasesBarracks16x16:WWWTWWWWWW EightBasesWorkers16x16:WWWWWLLTTW
+vs WorkerRush                  8W   1T   9L  ( 44%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:LT 12x12:LL 12x12F:LW SixBasesWorkers12x12:WL melee16x16Mixed12:LW TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WL
+vs LightRush                  15W   0T   3L  ( 83%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:WW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LW TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+vs HeavyRush                  15W   0T   3L  ( 83%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:WW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LW TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+vs RangedRush                 15W   0T   3L  ( 83%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:WW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LW TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+vs EconomyLightRush           64W   5T  21L  ( 71%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWTTTTT 8x8Obstacle:WWWWWWWWWW 12x12:WWWWWWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:WWWWWWWWWW melee16x16Mixed12:WWLWLWLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:WWLWLWLWLL
+vs mayari                     42W   5T  43L  ( 47%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWWWWWW 8x8Obstacle:LLLLLLLLLL 12x12:TTTTTWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:LWLWLLLLLL melee16x16Mixed12:LLLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:WWWWWLLLLL
+vs Rojo                       45W   7T  38L  ( 50%)
+    8x8A:WWWWWLLLLL Barracks8x8:WWWWWWWWWW 8x8Obstacle:LLLLLLLLLL 12x12:TWWTTWWTWW 12x12F:LWTTTWWWWW SixBasesWorkers12x12:WWWWLWWWWL melee16x16Mixed12:WWWWWWWWWW TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LLLLLLLLLL
+vs Droplet                    37W   2T  51L  ( 41%)
+    8x8A:TWWLWLLLWW Barracks8x8:WWWWWWWWWW 8x8Obstacle:LLWLWLWLWW 12x12:LLLWLLLWWL 12x12F:LLLLLWWWLW SixBasesWorkers12x12:WWWWWLLLLL melee16x16Mixed12:LTLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:WWWWWLLLLL
+vs Coac                       25W   0T  65L  ( 28%)
+    8x8A:LLLLLLLLLL Barracks8x8:WWWWWWWWWW 8x8Obstacle:LLLLLLLLLL 12x12:LLLLLWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:LLLLLLLLLL melee16x16Mixed12:LLLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LLLLLLLLLL
+
+TOTAL 350W 23T 239L.  argmax differs from base on 5.03% of 718525 decisions (outside the tie set: 5.00%); tied decisions 3.3%.  1187s
+MACRO win rate (each opponent weighted equally): 62.4%
+wrote /mnt/lustre/users/hniebuhr/microrts/results/adapter-team/sbgp-seed25242/eval-adapter-final-0300-team-20261024-113928.csv

@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4587934999049698914|0.053944196428571414|i112|
+Tree 0:
+ (max (- (/ (+ (min aProducesBuilding movesTowardMyBase) movesTowardEnemy) (/ movesTowardEnemy (if> aIsNone threatAtDest myBarracksCount tgtKillable))) (* movesTowardEnemyBaseMajor tgtKillable)) (if> (max movesTowardEnemy gameTimeK) (if> uCarrying gameTimeK tgtIsCombat (* (+ movesTowardEnemyBase tgtKillable) (- enemyUnitCount uHpFrac))) (* movesTowardEnemy (max (* movesTowardEnemyBaseMajor tgtKillable) (max (+ aProducesCombat (+ (* movesTowardEnemy gameTimeK) (* movesTowardEnemyMajor ERC[d4613150117464840418|2.650190584684524|]))) (min (max movesTowardEnemy gameTimeK) (/ (/ movesTowardMyBase myResources) (min aIsMove movesTowardMyBase)))))) (if> enemyUnitCount (if> gameTimeK gameTimeK placesTowardEnemy aIsNone) movesTowardEnemyMajor (max movesTowardEnemy gameTimeK))))
+Tree 1:
+ (if> (max movesTowardEnemy gameTimeK) tgtWounded placesTowardEnemy aIsNone)
+Tree 2:
+ (if> gameTimeK movesTowardEnemyBaseMajor (* movesTowardEnemy gameTimeK) aIsNone)
+Tree 3:
+ (if> gameTimeK (if> uCarrying gameTimeK tgtIsCombat (* (+ movesTowardEnemyBase tgtKillable) (max movesTowardEnemy gameTimeK))) (* movesTowardEnemy (max (* movesTowardEnemyBaseMajor (* movesTowardEnemy gameTimeK)) (max (+ aProducesCombat (+ (* movesTowardEnemy gameTimeK) (* movesTowardEnemyMajor ERC[d4613150117464840418|2.650190584684524|]))) (min (max movesTowardEnemy gameTimeK) (/ (/ movesTowardMyBase myResources) (* placesTowardEnemy gameTimeK)))))) (if> enemyUnitCount myCombatCount movesTowardEnemyMajor (* movesTowardEnemy gameTimeK)))

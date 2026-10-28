@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4588037616784065427|0.05465624999999998|i112|
+Tree 0:
+ (+ (+ (/ enemyUnitCount gameTimeK) (+ (/ (max (- aIsNone threatAtDest) (max ERC[d-4609535041825723315|-2.9552254994392|] movesTowardEnemy)) (/ (max (/ (max ERC[d-4609535041825723315|-2.9552254994392|] movesTowardEnemy) distNearestEnemy) movesTowardEnemy) distNearestEnemy)) (if> movesTowardEnemyMajor tgtWounded distNearestEnemy tgtKillable))) (+ (if> mapArea movesTowardEnemyBase (+ aProducesLight aProducesBarracks) distNearestResource) uIsWorker))
+Tree 1:
+ (/ aIsNone (/ tgtWounded (- enemyCombatCount gameTimeK)))
+Tree 2:
+ (max (if> movesTowardEnemyMajor tgtWounded distNearestEnemy tgtKillable) gameTimeK)
+Tree 3:
+ (/ (max (if> movesTowardEnemyMajor tgtWounded distNearestEnemy tgtKillable) gameTimeK) (/ gameTimeK (/ (- enemyCombatCount gameTimeK) (if> aIsNone (max (- aIsNone gameTimeK) aIsNone) placesTowardEnemy movesTowardEnemy))))

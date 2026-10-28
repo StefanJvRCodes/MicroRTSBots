@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4594858399809979750|0.1579397590335631|i103|
+Tree 0:
+ (+ (max (max (* tgtIsWorker mapArea) (+ threatAtDest movesTowardEnemyMajor)) (if> (/ (* (/ tgtKillable aProducesBuilding) distEnemyBase) aProducesBuilding) (+ uIsWorker movesTowardEnemy) placesTowardEnemy (/ enemiesNearMyBase aProducesLight))) (+ movesTowardEnemyMajor (/ (* (* tgtIsWorker mapArea) distEnemyBase) aProducesBuilding)))
+Tree 1:
+ (if> (+ enemiesNearMyBase distNearestEnemy) (if> (+ (* movesTowardEnemy distEnemyBase) distNearestEnemy) (* mapArea enemiesNearMyBase) placesTowardEnemy distEnemyBase) placesTowardEnemy distEnemyBase)
+Tree 2:
+ (/ (+ gameTimeK movesTowardEnemy) aProducesLight)
+Tree 3:
+ (/ (if> gameTimeK (+ (max enemiesNearMyBase tgtIsBuilding) (+ threatAtDest movesTowardEnemyMajor)) (+ (+ placesTowardEnemy movesTowardEnemy) movesTowardEnemy) (if> aProducesBuilding distEnemyBase placesTowardEnemy (+ (/ (max aIsReturn (+ placesTowardEnemy movesTowardEnemy)) gameTimeK) distNearestEnemy))) (/ (+ gameTimeK movesTowardEnemy) aProducesLight))

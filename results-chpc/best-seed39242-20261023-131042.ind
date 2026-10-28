@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4595047000248043220|0.1631744727533745|i102|
+Tree 0:
+ (if> (/ movesTowardEnemyBaseMajor threatAtDest) (/ (- movesTowardEnemyMajor movesTowardEnemy) distNearestEnemy) (if> (/ movesTowardEnemyBaseMajor threatAtDest) movesTowardEnemyMajor (min movesTowardEnemy myResources) (max myResources movesTowardEnemyMajor)) (min enemyWorkerCount (- tgtIsWorker uIsBarracks)))
+Tree 1:
+ (max (/ uIsBarracks enemyWorkerCount) (/ enemyWorkerCount placesTowardEnemy))
+Tree 2:
+ (max (/ enemyWorkerCount (- tgtIsWorker uIsBarracks)) (/ (min movesTowardEnemy myResources) placesTowardEnemy))
+Tree 3:
+ (- (max movesTowardEnemy enemyWorkerCount) (- (- (max myResources movesTowardEnemyMajor) movesTowardEnemy) threatAtDest))

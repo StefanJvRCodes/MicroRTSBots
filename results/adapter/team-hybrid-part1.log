@@ -1,0 +1,20 @@
+
+=== Adapter eval (argmax, validation maps) ===
+ckpt  : results\adapter\onehot-tau0.2-s3-500\adapter-0270.pt
+base  : results/best-seed5242-20261012-160727-pruned.ind
+tau   : 0.2
+dist  : onehot
+maps  : 8x8A, Barracks8x8, 8x8Obstacle, 12x12, 12x12F, SixBasesWorkers12x12, melee16x16Mixed12, TwoBasesBarracks16x16, EightBasesWorkers16x16
+
+vs WorkerRush                  8W   1T   9L  ( 44%)
+    8x8A:LW Barracks8x8:WW 8x8Obstacle:LT 12x12:LL 12x12F:LW SixBasesWorkers12x12:WW melee16x16Mixed12:LL TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+vs LightRush                  11W   1T   6L  ( 61%)
+    8x8A:WW Barracks8x8:TL 8x8Obstacle:LW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LL TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+vs HeavyRush                  14W   0T   4L  ( 78%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:WW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LL TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+vs RangedRush                 13W   0T   5L  ( 72%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:LW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LL TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+
+TOTAL 46W 2T 24L.  argmax differs from base on 13.63% of 85379 decisions (outside the tie set: 13.42%); tied decisions 5.9%.  87s
+MACRO win rate (each opponent weighted equally): 63.9%
+wrote C:\Users\heinr\OneDrive\Documents\GitHub\MicroRTSBots\results\adapter\onehot-tau0.2-s3-500\eval-adapter-0270-team-20261023-211238.csv

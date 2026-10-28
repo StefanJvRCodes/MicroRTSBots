@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4588524005543821441|0.058031249999999986|i112|
+Tree 0:
+ (+ (+ threatAtDest (* threatAtDest aIsAttack)) (+ (min movesTowardEnemy gameTimeK) (+ (+ threatAtDest (/ aProducesHeavy gameTimeK)) (+ (if> tgtIsCombat tgtWounded enemiesNearMyBase tgtKillable) (* movesTowardEnemyMajor enemyWorkerCount)))))
+Tree 1:
+ (min (max (+ threatAtDest (min myWorkerCount enemyWorkerCount)) (min movesTowardEnemy (/ placesTowardEnemy (min placesTowardEnemy movesTowardMyBase)))) (min (max movesTowardEnemy (/ (+ (+ threatAtDest (if> uHpFrac uIsBarracks uIsWorker aProducesRanged)) (+ (min (min myWorkerCount enemyWorkerCount) (* uIsCombat ERC[d-4610587020435662695|-2.4880531497720537|])) (+ threatAtDest (* threatAtDest aIsAttack)))) gameTimeK)) (/ aIsNone placesTowardEnemy)))
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (min (max (+ threatAtDest placesTowardEnemy) (min movesTowardEnemy (/ placesTowardEnemy (min aIsMove movesTowardMyBase)))) (min (max movesTowardEnemy (/ (+ (+ threatAtDest (if> uHpFrac (- aIsNone uIsBarracks) uIsWorker aProducesRanged)) (+ (min (min myWorkerCount enemyWorkerCount) (* uIsCombat ERC[d-4610587020435662695|-2.4880531497720537|])) (+ (/ aIsNone aProducesHeavy) (* threatAtDest aIsAttack)))) gameTimeK)) (/ aIsNone aProducesHeavy)))

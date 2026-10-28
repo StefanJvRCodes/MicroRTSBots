@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4598829582119345372|0.28632441980921697|i92|
+Tree 0:
+ (+ movesTowardEnemyMajor (if> aIsAttack placesTowardEnemy distNearestResource threatAtDest))
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aProducesBuilding
+Tree 3:
+ (max movesTowardEnemy (* (+ movesTowardEnemyMajor (if> aIsAttack placesTowardEnemy distNearestResource threatAtDest)) distNearestResource))

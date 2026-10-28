@@ -1,0 +1,73 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jpype.JPypeContext in an unnamed module (file:/mnt/lustre/users/hniebuhr/venv-adapter/lib/python3.11/site-packages/org.jpype.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+| ECJ
+| An evolutionary computation system (version 27)
+| By Sean Luke
+| Contributors: E. Scott, L. Panait, G. Balan, S. Paus, Z. Skolicki,
+|               R. Kicinger, E. Popovici, K. Sullivan, J. Harrison, J. Bassett,
+|               R. Hubley, A. Desai, A. Chircop, J. Compton, W. Haddon,
+|               S. Donnelly, B. Jamil, J. Zelibor, E. Kangas, F. Abidi,
+|               H. Mooers, J. O'Beirne, L. Manzoni, K. Talukder, S. McKay,
+|               J. McDermott, J. Zou, A. Rutherford, D. Freelan, E. Wei,
+|               S. Rajendran, A. Dhawan, B. Brumbac, J. Hilty, A. Kabir
+| URL: http://cs.gmu.edu/~eclab/projects/ecj/
+| Mail: ecj-help@cs.gmu.edu
+|       (better: join ECJ-INTEREST at URL above)
+| Date: July 1, 2017
+| Current Java: 24.0.1 / Java HotSpot(TM) 64-Bit Server VM-24.0.1+9-30
+| Required Minimum Java: 1.5
+
+
+Threads:  breed/1 eval/1
+Seed: 21242 
+Processing GP Types
+Processing GP Node Constraints
+Processing GP Function Sets
+Processing GP Tree Constraints
+SBGP: Sg=10 Dg=2 Tg=6 Wg=10 combine=any count-terminals=true erc-by-value=false max-rounds=20 tg-cap=true trees=0,1 min-improvement=0.001
+microRTS fitness: 112 games per individual (8 maps x 6 opponents x 2 sides, 2 repeats on stochastic opponents), cap 2000 cycles.
+Stochastic opponents this run: RandomBiasedAI
+Unit NONE (wait) action lasts 1 cycle(s).
+Banded fitness: win 0-1, draw 1-2, loss 2-3. Loss band split 0.67 survival / 0.33 quality. Win reward: fitness x (1 - 0.5 x win fraction). meanEval mapped from [0.05, 1.0].
+
+=== Adapter eval (argmax, validation maps) ===
+ckpt  : (none: base only)
+base  : results/best-seed21242-20261023-061119.ind
+tau   : 0.1
+dist  : onehot
+maps  : 8x8A, Barracks8x8, 8x8Obstacle, 12x12, 12x12F, SixBasesWorkers12x12, melee16x16Mixed12, TwoBasesBarracks16x16, EightBasesWorkers16x16
+
+vs RandomBiasedAI             86W   2T   2L  ( 96%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWWWWWW 8x8Obstacle:WWWWWWWWWW 12x12:WWWWWWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:WWWWWWTWWW melee16x16Mixed12:WWWWWWWLWW TwoBasesBarracks16x16:WWWWWWTWWW EightBasesWorkers16x16:WWWWWWLWWW
+vs WorkerRush                  5W   2T  11L  ( 28%)
+    8x8A:WT Barracks8x8:WW 8x8Obstacle:TL 12x12:LL 12x12F:LW SixBasesWorkers12x12:LL melee16x16Mixed12:LL TwoBasesBarracks16x16:WL EightBasesWorkers16x16:LL
+vs LightRush                  13W   0T   5L  ( 72%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:LW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LL TwoBasesBarracks16x16:LL EightBasesWorkers16x16:WW
+vs HeavyRush                  16W   0T   2L  ( 89%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:WW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LL TwoBasesBarracks16x16:WW EightBasesWorkers16x16:WW
+vs RangedRush                 14W   0T   4L  ( 78%)
+    8x8A:WW Barracks8x8:WW 8x8Obstacle:LW 12x12:WW 12x12F:WW SixBasesWorkers12x12:WW melee16x16Mixed12:LL TwoBasesBarracks16x16:LW EightBasesWorkers16x16:WW
+vs EconomyLightRush           62W   1T  27L  ( 69%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWWWWWW 8x8Obstacle:LWWTWWWWWW 12x12:WWWWWWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:WWWWWWWWWW melee16x16Mixed12:LLLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LLLLWWWLWL
+vs mayari                     41W   0T  49L  ( 46%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWWWWWW 8x8Obstacle:LLLLLLLLLL 12x12:WWWWWWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:LLLLLLLLLL melee16x16Mixed12:LLLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LLWLLLLLLL
+vs Rojo                       41W   9T  40L  ( 46%)
+    8x8A:WWWWWLLLLL Barracks8x8:WWWWWWWWWW 8x8Obstacle:TTTTTLLLLL 12x12:LTWLLTTLWW 12x12F:WWTLWLWLWW SixBasesWorkers12x12:WWWLWWWWLL melee16x16Mixed12:WWWWWWWWWW TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LLLLLLLLLL
+vs Droplet                    25W   0T  65L  ( 28%)
+    8x8A:WLWLLLWWWW Barracks8x8:LLWWWWWWWW 8x8Obstacle:LLLLLLLLLL 12x12:WLLLWWWLWL 12x12F:LLLLWWWWWW SixBasesWorkers12x12:LLLLLLLLLL melee16x16Mixed12:LLLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LLLLLLLLLL
+vs Coac                       25W   0T  65L  ( 28%)
+    8x8A:LLLLLLLLLL Barracks8x8:WWWWWWWWWW 8x8Obstacle:LLLLLLLLLL 12x12:LLLLLWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:LLLLLLLLLL melee16x16Mixed12:LLLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LLLLLLLLLL
+
+TOTAL 328W 14T 270L.  argmax differs from base on 0.00% of 800467 decisions (outside the tie set: 0.00%); tied decisions 2.7%.  1370s
+MACRO win rate (each opponent weighted equally): 57.8%
+Traceback (most recent call last):
+  File "/mnt/lustre/users/hniebuhr/microrts/adapter/eval_adapter.py", line 213, in <module>
+    main()
+  File "/mnt/lustre/users/hniebuhr/microrts/adapter/eval_adapter.py", line 205, in main
+    with open(path, "w", newline="") as fh:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/mnt/lustre/users/hniebuhr/microrts/results/adapter/eval-base-only-onehot-team-20261026-093817.csv'

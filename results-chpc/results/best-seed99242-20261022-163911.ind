@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4603732688675864730|0.6170030187422697|i70|
+Tree 0:
+ (min movesTowardEnemyMajor mapArea)
+Tree 1:
+ (min (min (* (* uCarrying uIsBase) (* distEnemyBase aProducesCombat)) (min (min uIsCombat enemyWorkerCount) (max enemyCombatCount tgtKillable))) (+ (if> (- aProducesWorker aProducesBuilding) (if> uIsBarracks movesTowardResource uIsCombat uIsBarracks) (if> myResources uCarrying myBarracksCount uIsWorker) (min movesTowardResource aIsMove)) (/ (/ myBarracksCount placesTowardResource) (max enemyCombatCount myBarracksCount))))
+Tree 2:
+ placesTowardResource
+Tree 3:
+ (max distNearestEnemy placesTowardResource)

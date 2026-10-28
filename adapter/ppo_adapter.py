@@ -50,6 +50,10 @@ TRAIN_OPPONENTS = ["PassiveAI", "RandomBiasedAI", "WorkerRush", "WorkerRushPlusP
 SHORT = {"PassiveAI": "Pas", "RandomBiasedAI": "RBA", "WorkerRush": "WR",
          "WorkerRushPlusPlus": "WR++", "WorkerDefense": "WD", "LightRush": "LR"}
 
+TEAM_TRAIN_MAPS = ["maps/8x8/basesWorkers8x8C.xml", "maps/8x8/basesWorkers8x8E.xml", "maps/8x8/TwoBasesWorkers8x8.xml", "maps/8x8/FourBasesWorkers8x8.xml", "maps/8x8/melee8x8Mixed4.xml", "maps/16x16/melee16x16Mixed8.xml", "maps/16x16/basesWorkers16x16B.xml", "maps/16x16/basesWorkers16x16D.xml"]
+TEAM_TRAIN_OPPONENTS = ["WorkerRush", "WorkerRushPlusPlus", "WorkerDefense", "LightRush", "RandomBiasedAI", "EconomyLightRush"]
+SHORT["EconomyLightRush"] = "ELR"
+
 C, A, P = 29, 86, 16          # obs channels, action codes, padded board side
 C_WALL = 18
 DEFAULT_BASE = "results/best-seed5242-20261012-160727-pruned.ind"
@@ -80,6 +84,11 @@ def parse_args():
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--save-every", type=int, default=10)
     p.add_argument("--run", default=None)
+    p.add_argument("--split", choices=["stage7", "team"], default="stage7")
+    p.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
+    p.add_argument("--threads", type=int, default=0)
+    p.add_argument("--classes", default=os.environ.get("MRTS_CLASSES", "out"))
+    p.add_argument("--out-root", default="results/adapter")
     p.add_argument("--smoke", action="store_true", help="tiny run to check everything works")
     a = p.parse_args()
     if a.base_dist == "ties" and a.pick_bonus <= 0:
@@ -189,15 +198,20 @@ class Slot:
 
 def main():
     args = parse_args()
+    global TRAIN_MAPS, TRAIN_OPPONENTS
+    if args.split == "team":
+        TRAIN_MAPS, TRAIN_OPPONENTS = TEAM_TRAIN_MAPS, TEAM_TRAIN_OPPONENTS
+    if args.threads > 0:
+        torch.set_num_threads(args.threads)
     os.chdir(ROOT)
     rng = np.random.default_rng(args.seed)
     torch.manual_seed(args.seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device(args.device if args.device != "auto" else ("cuda" if torch.cuda.is_available() else "cpu"))
     use_ties = args.base_dist == "ties"
 
-    cp = [os.path.join(ROOT, "out")]
+    cp = [os.path.join(ROOT, args.classes)]
     cp += glob.glob(os.path.join(ROOT, "lib", "*.jar"))
-    cp += glob.glob(os.path.join(ROOT, "lib", "bots", "*.jar"))
+    cp += sorted(glob.glob(os.path.join(ROOT, "lib", "bots", "*.jar")), key=lambda q: (0 if "GRojoA3N" in q else 1, q))
     jpype.startJVM(classpath=cp)
     AdapterEnv = jpype.JClass("rl.AdapterEnv")
     JIntArray = jpype.JArray(jpype.JInt)
@@ -206,7 +220,7 @@ def main():
     run = args.run or f"{os.path.basename(args.base)[:-4]}-{args.base_dist}-tau{args.tau:g}-s{args.seed}-{stamp}"
     if args.smoke:
         run = "smoke-" + run
-    out = os.path.join(ROOT, "results", "adapter", run)
+    out = os.path.join(ROOT, args.out_root, run)
     os.makedirs(out, exist_ok=True)
     with open(os.path.join(out, "args.json"), "w") as fh:
         json.dump(vars(args), fh, indent=2)

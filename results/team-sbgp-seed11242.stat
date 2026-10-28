@@ -1,0 +1,3048 @@
+
+Generation: 0
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4718521714888862 Adjusted=0.6794160577882131 Hits=78
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ (max (/ (if> tgtWounded aProducesHeavy
+     tgtKillable tgtKillable) (if> aProducesCombat
+     movesTowardEnemyBaseMajor distNearestEnemy
+     distNearestResource)) (max (if> enemiesNearMyBase
+     movesTowardMyBase distNearestResource distNearestResource)
+     (if> distEnemyBase aProducesLight aIsAttack
+         distNearestEnemy))) (/ (min (* gameTimeK
+     enemiesNearMyBase) (- placesTowardEnemy movesTowardEnemyBase))
+     (/ (if> placesTowardResource uIsBase enemyUnitCount
+         aProducesWorker) (if> myWorkerCount aIsHarvest
+         movesTowardEnemyMajor aProducesHeavy))))
+Tree 2:
+ movesTowardEnemyBase
+Tree 3:
+ (/ (/ (max (- (/ placesTowardResource distNearestEnemy)
+     (+ aProducesBase aProducesWorker)) (min (+
+     myBarracksCount gameTimeK) (min enemyWorkerCount
+     tgtWounded))) (max (+ (- 6.1438 aProducesLight)
+     (if> uIsCombat enemyUnitCount uCarrying enemiesNearMyBase))
+     (- (max aProducesLight aProducesHeavy) (min
+         placesTowardEnemy uCarrying)))) (/ (+ (*
+     (if> uIsWorker myCombatCount tgtWounded enemiesNearMyBase)
+     (/ aProducesLight movesTowardEnemyBase))
+     (* (/ aProducesRanged aIsReturn) (+ enemyCombatCount
+         aIsNone))) (min (* (- aProducesBase aProducesWorker)
+     (max aProducesBuilding movesTowardMyBase))
+     (* (if> uIsWorker tgtKillable aIsAttack tgtIsWorker)
+         (- uIsWorker uCarrying)))))
+
+Generation: 1
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.488205006970094 Adjusted=0.6719504337886529 Hits=76
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ (max (/ (if> tgtWounded aProducesHeavy
+     tgtKillable tgtKillable) (if> aProducesCombat
+     movesTowardEnemyBaseMajor distNearestEnemy
+     distNearestResource)) (max (if> enemiesNearMyBase
+     movesTowardMyBase distNearestResource distNearestResource)
+     (if> distEnemyBase aProducesLight aIsAttack
+         distNearestEnemy))) (/ (min (* gameTimeK
+     enemiesNearMyBase) (- placesTowardEnemy movesTowardEnemyBase))
+     (/ (if> placesTowardResource uIsBase enemyUnitCount
+         aProducesWorker) (if> myWorkerCount aIsHarvest
+         movesTowardEnemyMajor aProducesHeavy))))
+Tree 2:
+ (min (+ (- (if> (+ tgtWounded tgtKillable)
+     (+ tgtIsBuilding distNearestResource) (max
+     enemyCombatCount 4.3041) (min aIsHarvest
+     uIsBarracks)) (* (* myResources aProducesWorker)
+     (max enemyCombatCount placesTowardEnemy)))
+     (/ (- (/ uIsWorker aProducesWorker) (/ myWorkerCount
+         tgtKillable)) (min (- myResources aProducesRanged)
+         (- myWorkerCount myCombatCount)))) (min (/
+     (max (- aProducesWorker distNearestEnemy)
+         (min tgtIsWorker movesTowardEnemyBaseMajor))
+     (* (* aIsProduce movesTowardEnemy) (- aProducesBase
+         aIsMove))) (+ (max (/ movesTowardMyBase tgtIsCombat)
+     (+ myCombatCount distNearestEnemy)) (* (+
+     movesTowardMyBase aProducesBuilding) (min
+     tgtIsWorker aIsReturn)))))
+Tree 3:
+ (/ (/ (max (- (/ placesTowardResource distNearestEnemy)
+     (+ aProducesBase aProducesWorker)) (min (+
+     myBarracksCount gameTimeK) (min enemyWorkerCount
+     tgtWounded))) (max (+ (- 6.1438 aProducesLight)
+     (if> uIsCombat enemyUnitCount uCarrying enemiesNearMyBase))
+     (- (max aProducesLight aProducesHeavy) (min
+         placesTowardEnemy uCarrying)))) (/ (+ (*
+     (if> uIsWorker myCombatCount tgtWounded enemiesNearMyBase)
+     (/ aProducesLight movesTowardEnemyBase))
+     (* (/ aProducesRanged aIsReturn) (+ enemyCombatCount
+         aIsNone))) (min (* (- aProducesBase aProducesWorker)
+     (max aProducesBuilding movesTowardMyBase))
+     (* (if> uIsWorker tgtKillable aIsAttack tgtIsWorker)
+         (- uIsWorker uCarrying)))))
+
+Generation: 2
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4724650551244202 Adjusted=0.6791332646705847 Hits=77
+Tree 0:
+ (+ (- (+ (min placesTowardEnemy myCombatCount)
+     (min tgtIsCombat mapArea)) (+ (max aIsProduce
+     3.2786) (+ aProducesBase enemiesNearMyBase)))
+     (min (* (/ enemyUnitCount placesTowardEnemy)
+         (if> aProducesWorker enemyWorkerCount aIsProduce
+             movesTowardEnemyMajor)) movesTowardEnemyMajor))
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (if> gameTimeK
+     enemyWorkerCount movesTowardEnemyBaseMajor
+     aIsHarvest))
+Tree 2:
+ (* (min aIsHarvest uIsBase) (max movesTowardEnemyBaseMajor
+     aIsReturn))
+Tree 3:
+ (max (max (min (+ (max movesTowardEnemyBase
+     tgtWounded) (- tgtWounded aIsAttack)) (min
+     (max aIsMove aIsAttack) (/ uIsWorker mapArea)))
+     (+ (min (* movesTowardEnemyBaseMajor myWorkerCount)
+         (if> movesTowardEnemyMajor tgtIsCombat myCombatCount
+             myBarracksCount)) (/ (if> aIsMove myWorkerCount
+         tgtIsBuilding distNearestEnemy) (/ aIsMove
+         movesTowardEnemyMajor)))) (/ (max (if> (max
+     movesTowardMyBase myResources) (min myBarracksCount
+     placesTowardResource) (min aIsReturn distEnemyBase)
+     (+ tgtIsBuilding uIsBarracks)) (/ (/ enemyWorkerCount
+     movesTowardEnemy) (min gameTimeK uIsBase)))
+     (max (/ (min distNearestResource uIsBarracks)
+         (- aProducesWorker aIsAttack)) (min (min
+         aIsHarvest distNearestEnemy) (max aProducesBarracks
+         enemiesNearMyBase)))))
+
+Generation: 3
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4195702535128286 Adjusted=0.7044385422457452 Hits=84
+Tree 0:
+ (+ (min aProducesCombat enemiesNearMyBase)
+     (+ movesTowardEnemy movesTowardEnemyBase))
+Tree 1:
+ (min (/ tgtIsBuilding aIsMove) (+ (if> aProducesWorker
+     aProducesBase gameTimeK 9.7198) uHpFrac))
+Tree 2:
+ (if> uHpFrac uIsBarracks uIsCombat tgtWounded)
+Tree 3:
+ (* (max tgtKillable movesTowardEnemy) (*
+     uHpFrac mapArea))
+
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36574563970631896 Adjusted=0.7322007633976656 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (- placesTowardEnemy movesTowardEnemyBase)
+Tree 2:
+ (/ movesTowardEnemyMajor enemyWorkerCount)
+Tree 3:
+ (+ (+ (max distNearestEnemy aIsMove) (max
+     gameTimeK movesTowardEnemy)) tgtIsWorker)
+
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.32858632196163384 Adjusted=0.7526797344439901 Hits=85
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max (min (+ (max movesTowardEnemyBase
+     tgtWounded) (- tgtWounded aIsAttack)) (min
+     (max aIsMove aIsAttack) (/ uIsWorker mapArea)))
+     (+ (min (* movesTowardEnemyBaseMajor myWorkerCount)
+         (if> movesTowardEnemyMajor tgtIsCombat myCombatCount
+             myBarracksCount)) (/ (if> aIsMove myWorkerCount
+         tgtIsBuilding distNearestEnemy) (/ aIsMove
+         movesTowardEnemyMajor)))) (min (min gameTimeK
+     myWorkerCount) (* distNearestResource aIsMove)))
+
+Generation: 6
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.32858632196163384 Adjusted=0.7526797344439901 Hits=85
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max (min (+ (max movesTowardEnemyBase
+     tgtWounded) (- tgtWounded aIsAttack)) (min
+     (max aIsMove aIsAttack) (/ uIsWorker mapArea)))
+     (+ (min (* movesTowardEnemyBaseMajor myWorkerCount)
+         (if> movesTowardEnemyMajor tgtIsCombat myCombatCount
+             myBarracksCount)) (/ (if> aIsMove myWorkerCount
+         tgtIsBuilding distNearestEnemy) (/ aIsMove
+         movesTowardEnemyMajor)))) (min (min gameTimeK
+     myWorkerCount) (* distNearestResource aIsMove)))
+
+Generation: 7
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30732534124369226 Adjusted=0.764920535425921 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max (min (+ (max movesTowardEnemyBase
+     tgtWounded) (- tgtWounded aIsAttack)) (min
+     (max aIsMove aIsAttack) (/ uIsWorker mapArea)))
+     movesTowardEnemy) (- placesTowardEnemy movesTowardEnemyBase))
+
+Generation: 8
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3076169149044064 Adjusted=0.7647499727189635 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max (min (+ (max movesTowardEnemyBase
+     tgtWounded) (- tgtWounded aIsAttack)) (min
+     (max aIsMove aIsAttack) (+ aProducesLight
+     uHpFrac))) movesTowardEnemy) movesTowardEnemy)
+
+Generation: 9
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3064426682526208 Adjusted=0.7654373393495401 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max (min (+ (max movesTowardEnemyBase
+     tgtWounded) (- tgtWounded aIsAttack)) (min
+     (max aIsMove aIsAttack) (+ aProducesLight
+     uHpFrac))) movesTowardEnemy) movesTowardEnemy)
+
+Generation: 10
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.306384353520478 Adjusted=0.7654715071450254 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 11
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30536119503833503 Adjusted=0.7660714933161719 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max (max gameTimeK movesTowardEnemy)
+     (max gameTimeK movesTowardEnemy)) movesTowardEnemy)
+
+Generation: 12
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30578265151154926 Adjusted=0.7658242348697303 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 13
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30544601646690644 Adjusted=0.766021717777673 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max myBarracksCount movesTowardEnemy)
+     movesTowardEnemy)
+
+Generation: 14
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3062120599936922 Adjusted=0.7655724752723758 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max myWorkerCount (max gameTimeK movesTowardEnemy))
+     movesTowardEnemy)
+
+Generation: 15
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3056342140115494 Adjusted=0.7659113013954414 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max aProducesHeavy tgtIsCombat) movesTowardEnemy)
+
+Generation: 16
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3059443423597636 Adjusted=0.7657294170692295 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 17
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3059443423597636 Adjusted=0.7657294170692295 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 18
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30594169169012075 Adjusted=0.7657309712701048 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 19
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30594169169012075 Adjusted=0.7657309712701048 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 20
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3058595209311922 Adjusted=0.7657791546267644 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemyMajor aIsReturn)
+     movesTowardEnemy)
+
+Generation: 21
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30581976088654933 Adjusted=0.7658024713311723 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 22
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.49160038872264405 Adjusted=0.6704208496864003 Hits=80
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max myBarracksCount movesTowardEnemyMajor)
+     movesTowardEnemy)
+
+Generation: 23
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4221009718840229 Adjusted=0.70318494943097 Hits=87
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemyMajor movesTowardEnemyMajor)
+     movesTowardEnemy)
+
+Generation: 24
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.41102657469187925 Adjusted=0.7087038741409717 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy movesTowardEnemyMajor)
+     movesTowardEnemy)
+
+Generation: 25
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.411826160151063 Adjusted=0.7083025008496808 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max myBarracksCount movesTowardEnemyMajor)
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+
+Generation: 26
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4111593871918793 Adjusted=0.7086371738559871 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max (max movesTowardEnemy aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max (max movesTowardEnemyMajor movesTowardEnemyMajor)
+     movesTowardEnemy)
+
+Generation: 27
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4100047315796344 Adjusted=0.709217478213492 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max (max movesTowardEnemy movesTowardEnemyMajor)
+     movesTowardEnemy)
+
+Generation: 28
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40959274178371596 Adjusted=0.7094247652939726 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 29
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40967676601840997 Adjusted=0.709382479803842 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max tgtIsCombat movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 30
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40967676601840997 Adjusted=0.709382479803842 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max tgtIsCombat movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 31
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40967676601840997 Adjusted=0.709382479803842 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max tgtIsCombat movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 32
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4088826014775936 Adjusted=0.7097823473376916 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 33
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.41009959765106296 Adjusted=0.7091697647923558 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 34
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4102459624469814 Adjusted=0.7090961623920233 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max aProducesLight uHpFrac) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 35
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40959816270208355 Adjusted=0.7094220370457084 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max (+ aProducesLight uHpFrac) aIsReturn)
+     movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 36
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40959816270208355 Adjusted=0.7094220370457084 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max (+ aProducesLight uHpFrac) aIsReturn)
+     movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 37
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40808301601840996 Adjusted=0.7101854000253957 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK (+ aProducesLight uHpFrac))
+     movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 38
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40915093693677723 Adjusted=0.7096471880959803 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 39
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40915093693677723 Adjusted=0.7096471880959803 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 40
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40915093693677723 Adjusted=0.7096471880959803 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 41
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4099017341306548 Adjusted=0.7092692886264161 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max (max movesTowardEnemy aIsReturn)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 42
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.409709291528614 Adjusted=0.7093661125803129 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (+ aProducesLight uHpFrac)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 43
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4097228438245323 Adjusted=0.7093592931267485 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 44
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4105901907633078 Adjusted=0.7089231206541097 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max (max
+     aIsReturn aIsReturn) movesTowardEnemy))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 45
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4105712175490222 Adjusted=0.708932656188447 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max movesTowardEnemy
+     aIsReturn))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 46
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4057966735343446 Adjusted=0.7113404227126799 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max gameTimeK
+     (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) aIsReturn)
+
+Generation: 47
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40450649496291624 Adjusted=0.7119938594704779 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max gameTimeK
+     (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max (max movesTowardEnemy aIsReturn) aIsReturn)
+
+Generation: 48
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.403362681187406 Adjusted=0.712574171598952 Hits=88
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max (max
+     gameTimeK gameTimeK) movesTowardEnemy))
+Tree 1:
+ (max movesTowardEnemy (max placesTowardResource
+     aIsReturn))
+Tree 2:
+ (max (max gameTimeK aIsReturn) movesTowardEnemy)
+Tree 3:
+ (max (max enemyWorkerCount aIsReturn) movesTowardEnemy)
+
+Generation: 49
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39423175406726335 Adjusted=0.7172408726761477 Hits=88
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max (max gameTimeK (max movesTowardEnemy
+     aIsReturn)) myBarracksCount)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 50
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3739579102250092 Adjusted=0.7278243333059837 Hits=90
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max (max
+     tgtIsWorker movesTowardEnemyMajor) movesTowardEnemy))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 51
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37264397527602955 Adjusted=0.7285210280392675 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max (max gameTimeK (max movesTowardEnemy
+     aIsReturn)) (max movesTowardEnemy aIsReturn))
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 52
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3722647501484785 Adjusted=0.7287223546999954 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 53
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37175466564592746 Adjusted=0.7289933287955126 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max (max gameTimeK aIsReturn) movesTowardEnemy))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 54
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3723181621382744 Adjusted=0.7286939921000917 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 55
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3722380441535806 Adjusted=0.7287365368279209 Hits=90
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max (max
+     tgtIsWorker movesTowardEnemyMajor) movesTowardEnemy))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 56
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37184813662807037 Adjusted=0.728943658776945 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max (max gameTimeK aIsReturn) movesTowardEnemy))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 57
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37184813662807037 Adjusted=0.728943658776945 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max (max gameTimeK aIsReturn) movesTowardEnemy))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 58
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37203507859235607 Adjusted=0.7288443390426674 Hits=90
+Tree 0:
+ (max (max gameTimeK aIsReturn) (max (max
+     tgtIsWorker movesTowardEnemyMajor) movesTowardEnemy))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 59
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3720350785923559 Adjusted=0.7288443390426675 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 60
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3712792989367438 Adjusted=0.7292460411058312 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 61
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3712792989367438 Adjusted=0.7292460411058312 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 62
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3712792989367438 Adjusted=0.7292460411058312 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 63
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3716932418576622 Adjusted=0.7290259727792462 Hits=90
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     (max gameTimeK (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 64
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3997993954924132 Adjusted=0.714388078191894 Hits=86
+Tree 0:
+ (max tgtIsWorker movesTowardEnemy)
+Tree 1:
+ (max placesTowardResource aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 65
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3908297926082476 Adjusted=0.7189952396149657 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 66
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3886719880801864 Adjusted=0.7201124589417849 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 67
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3889033736031456 Adjusted=0.7199924912024386 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 68
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3882630276210027 Adjusted=0.7203245927492936 Hits=89
+Tree 0:
+ (max gameTimeK (max tgtIsWorker movesTowardEnemyMajor))
+Tree 1:
+ enemiesNearMyBase
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 69
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3876253721681965 Adjusted=0.7206556034915079 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max placesTowardResource aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 70
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.374982816025959 Adjusted=0.7272818164304393 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ gameTimeK
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 71
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3749534394315713 Adjusted=0.7272973551841994 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 72
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3736768928754488 Adjusted=0.727973226590971 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ gameTimeK
+Tree 2:
+ aIsReturn
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 73
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3736475162810612 Adjusted=0.7279887949037653 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 74
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3729745252096325 Adjusted=0.7283456332500526 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 75
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3721412981688163 Adjusted=0.7287879180770556 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 76
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3721412981688163 Adjusted=0.7287879180770556 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 77
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3724003463193264 Adjusted=0.7286503553295685 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 78
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3724003463193264 Adjusted=0.7286503553295685 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 79
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3718582146228979 Adjusted=0.7289383037844652 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 80
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3717033198524896 Adjusted=0.7290206165773063 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 81
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3718582146228979 Adjusted=0.7289383037844652 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 82
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3718582146228979 Adjusted=0.7289383037844652 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 83
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3718582146228979 Adjusted=0.7289383037844652 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 84
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37195435620453043 Adjusted=0.7288872224338929 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 85
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37265405327085704 Adjusted=0.7285156792544555 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 86
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3876657301082476 Adjusted=0.7206346444269349 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ aProducesRanged
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 87
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3876657301082476 Adjusted=0.7206346444269349 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ aProducesRanged
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 88
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.38769801646028845 Adjusted=0.7206178780530215 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 89
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.387568871052125 Adjusted=0.7206849482301728 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ uIsBase
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 90
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.387568871052125 Adjusted=0.7206849482301728 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ uIsBase
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 91
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3876549679909007 Adjusted=0.7206402333916173 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 92
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.38745317829064563 Adjusted=0.7207450425332613 Hits=89
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) tgtIsWorker)
+Tree 1:
+ movesTowardEnemyBase
+Tree 2:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 93
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3871787442982985 Adjusted=0.7208876319005652 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 94
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3877356838710027 Adjusted=0.7205983182694863 Hits=89
+Tree 0:
+ (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max (max movesTowardEnemy aIsReturn) gameTimeK)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 95
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3735780806943263 Adjusted=0.7280255953811615 Hits=90
+Tree 0:
+ (max (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 96
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37248046430402026 Adjusted=0.7286078206636597 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 97
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3722374397504486 Adjusted=0.7287368578005402 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 98
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3722374397504486 Adjusted=0.7287368578005402 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 99
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3714549540999387 Adjusted=0.7291526396915327 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 100
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37250449969942845 Adjusted=0.7285950612322182 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 101
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3724190405157551 Adjusted=0.7286404301299988 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 102
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37228283994177547 Adjusted=0.7287127484902668 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 103
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3723442637300407 Adjusted=0.7286801325507009 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 104
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3720237917912652 Adjusted=0.7288503347995414 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 105
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3720237917912652 Adjusted=0.7288503347995414 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 106
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.37211993337289784 Adjusted=0.7287992657768877 Hits=90
+Tree 0:
+ (max (max (max tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK) enemyCombatCount)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 107
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.42990717844097487 Adjusted=0.6993460939823367 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 108
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3666102761859108 Adjusted=0.7317375095341097 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 109
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3641546001655026 Adjusted=0.7330547431197882 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aProducesBuilding
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 110
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3618832353695843 Adjusted=0.7342773403981456 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 111
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3639838412369312 Adjusted=0.73314651520589 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 112
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3634607226144822 Adjusted=0.7334278013395693 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 113
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3626231907267272 Adjusted=0.7338786003390053 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy myResources)
+
+Generation: 114
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36335230424713527 Adjusted=0.7334861259887009 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 115
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3631896766961147 Adjusted=0.7335736303576206 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 116
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36310565246142107 Adjusted=0.7336188491290129 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 117
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3628535797573393 Adjusted=0.7337545388977541 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 118
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36242261674713533 Adjusted=0.7339866409349246 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 119
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36306228511448224 Adjusted=0.7336421900309648 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 120
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36218680679815585 Adjusted=0.7341137023273024 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 121
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3624957991450944 Adjusted=0.7339472170317557 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 122
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3619645491450945 Adjusted=0.734233501619187 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 123
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3619645491450945 Adjusted=0.734233501619187 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 124
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36273703001244145 Adjusted=0.7338172941487252 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 125
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3628373170022373 Adjusted=0.733763294800034 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 126
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3619916537369313 Adjusted=0.7342188898560974 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 127
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3619916537369313 Adjusted=0.7342188898560974 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 128
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4473806940738764 Adjusted=0.6909032323661479 Hits=82
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 129
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4293891419294954 Adjusted=0.699599549672055 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 130
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.411476510916369 Adjusted=0.7084779606787596 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 131
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4122164662735118 Adjusted=0.7081067413402645 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 132
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4110970466306549 Adjusted=0.7086684805894454 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 133
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4104329841306547 Adjusted=0.7090021371106602 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max gameTimeK aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 134
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4093786155082058 Adjusted=0.7095325478877168 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (max (max movesTowardEnemy aIsReturn) aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 135
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.41036793311024655 Adjusted=0.7090348387280239 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ myResources
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 136
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4092647762224915 Adjusted=0.7095898633615763 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 2:
+ aProducesHeavy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 137
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4085817405082058 Adjusted=0.7099339507547553 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 138
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.41012128132453246 Adjusted=0.7091588597689243 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 139
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40998304790616485 Adjusted=0.7092283850398112 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 140
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4098529458653487 Adjusted=0.7092938330431431 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK (max
+     movesTowardEnemy aIsReturn)))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 141
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40920514612045067 Adjusted=0.7096198894483216 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 142
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4098122889775936 Adjusted=0.709314288021427 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 143
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40993968055922625 Adjusted=0.7092501996988755 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 144
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.409302722651063 Adjusted=0.7095707571747845 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 145
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.409302722651063 Adjusted=0.7095707571747845 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 146
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.409302722651063 Adjusted=0.7095707571747845 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 147
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.409302722651063 Adjusted=0.7095707571747845 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 148
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.409302722651063 Adjusted=0.7095707571747845 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ aIsReturn
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 149
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40979873668167505 Adjusted=0.7093211066096979 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 150
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4301842033134239 Adjusted=0.699210631527896 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ aProducesLight
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 151
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4300512313746484 Adjusted=0.6992756469561876 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 152
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4297908279945463 Adjusted=0.6994030038663909 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ aIsReturn
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 153
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4297243420251587 Adjusted=0.6994355279588597 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 154
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4297243420251587 Adjusted=0.6994355279588597 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 155
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4296079915787299 Adjusted=0.699492452399969 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 156
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4299321106794954 Adjusted=0.6993339002120919 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ aProducesBase
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 157
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.42998751565398513 Adjusted=0.699306804467215 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 158
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4296550858070464 Adjusted=0.6994694104385993 Hits=85
+Tree 0:
+ (max movesTowardEnemy aIsReturn)
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ aProducesRanged
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 159
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40996949561024654 Adjusted=0.7092352019766156 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 160
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40998575836534873 Adjusted=0.7092270216681754 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 161
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4099017341306548 Adjusted=0.7092692886264161 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 162
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40940300964085885 Adjusted=0.7095202672050615 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 163
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40940300964085885 Adjusted=0.7095202672050615 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 164
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40940300964085885 Adjusted=0.7095202672050615 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 165
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4093515109163691 Adjusted=0.7095461935892726 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 166
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4100887558143283 Adjusted=0.7091752174298409 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max (max gameTimeK
+     aIsReturn) aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 167
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40943553515106296 Adjusted=0.7095038936227901 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK (max
+     movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 168
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4093325377020832 Adjusted=0.709555745892662 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK (max
+     movesTowardEnemy aIsReturn)))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 169
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4100616512224915 Adjusted=0.7091888493903956 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ (max gameTimeK aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 170
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.41026493566126704 Adjusted=0.7090866224587116 Hits=88
+Tree 0:
+ (max movesTowardEnemy (max gameTimeK aIsReturn))
+Tree 1:
+ enemyWorkerCount
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 171
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.41155240377351204 Adjusted=0.708439868988706 Hits=88
+Tree 0:
+ (max (min gameTimeK gameTimeK) (max gameTimeK
+     (max movesTowardEnemy aIsReturn)))
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 172
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40944740620775155 Adjusted=0.7094979178333389 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK (max movesTowardEnemy
+     aIsReturn)))
+Tree 1:
+ aProducesBase
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 173
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4091031778914248 Adjusted=0.7096712403249245 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK (max movesTowardEnemy
+     aIsReturn)))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 174
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40885381564652706 Adjusted=0.7097968496760589 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK (max movesTowardEnemy
+     aIsReturn)))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 175
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4081057289118332 Adjusted=0.7101739446602405 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK (max movesTowardEnemy
+     aIsReturn)))
+Tree 1:
+ (max gameTimeK (max movesTowardEnemy aIsReturn))
+Tree 2:
+ aIsReturn
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 176
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4072790388608128 Adjusted=0.7105911282594647 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK (max movesTowardEnemy
+     aIsReturn)))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ aIsReturn
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 177
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40655263579958817 Adjusted=0.7109581074664343 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK (max movesTowardEnemy
+     aIsReturn)))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 178
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4070703335036698 Adjusted=0.7106965275218006 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK (max movesTowardEnemy
+     aIsReturn)))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max movesTowardEnemy aIsReturn)
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 179
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4067965771261189 Adjusted=0.7108348259155242 Hits=88
+Tree 0:
+ (max tgtKillable (max tgtKillable (max gameTimeK
+     (max movesTowardEnemy aIsReturn))))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ (max gameTimeK (max movesTowardEnemy aIsReturn))
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 180
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.40653615399961557 Adjusted=0.7109664384782486 Hits=88
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 181
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.39045849955977835 Adjusted=0.7191872323529266 Hits=89
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 182
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3891804981248293 Adjusted=0.7198488615049229 Hits=89
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 183
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.38810697691947205 Adjusted=0.7204055714922127 Hits=89
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 184
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3879105682778905 Adjusted=0.7205075188964033 Hits=89
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 185
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.38661642366692106 Adjusted=0.7211799766192657 Hits=89
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 186
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.38752851311207415 Adjusted=0.7207059102209796 Hits=89
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 187
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3875957763454926 Adjusted=0.7206709742470516 Hits=89
+Tree 0:
+ (max tgtKillable (max gameTimeK movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 188
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33061477342659656 Adjusted=0.7515323142135285 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 189
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.35579228611785646 Adjusted=0.737576109732396 Hits=90
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 190
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3320248499572087 Adjusted=0.7507367449129233 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 191
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3334270342684333 Adjusted=0.7499472969277516 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 192
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33128298133475975 Adjusted=0.7511550992692692 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 193
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3296861222786374 Adjusted=0.7520571834549453 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 194
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.32998076513578023 Adjusted=0.7518905733181097 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 195
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.32939147942149455 Adjusted=0.7522238674458525 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 196
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3297808289112905 Adjusted=0.7520036221447962 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 197
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.32906263694700477 Adjusted=0.7524099859560449 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 198
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3290258065898619 Adjusted=0.7524308369646283 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ (max movesTowardEnemy aIsReturn)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Generation: 199
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3295624775082292 Adjusted=0.7521271222049892 Hits=92
+Tree 0:
+ (max tgtKillable (max (* gameTimeK movesTowardEnemy)
+     movesTowardEnemyMajor))
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (max movesTowardEnemy aIsReturn)
+
+Best Individual of Run:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.30536119503833503 Adjusted=0.7660714933161719 Hits=91
+Tree 0:
+ movesTowardEnemyMajor
+Tree 1:
+ (/ (max aIsMove distEnemyBase) (+ movesTowardEnemy
+     (+ aIsNone gameTimeK)))
+Tree 2:
+ (+ aProducesLight uHpFrac)
+Tree 3:
+ (max (max (max gameTimeK movesTowardEnemy)
+     (max gameTimeK movesTowardEnemy)) movesTowardEnemy)

@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4595215074415785568|0.16783946802518113|i102|
+Tree 0:
+ (+ (/ tgtIsWorker (/ (/ (/ enemiesNearMyBase movesTowardEnemy) (max aProducesWorker movesTowardEnemyMajor)) movesTowardEnemy)) (+ (/ tgtIsWorker enemiesNearMyBase) (+ threatAtDest movesTowardEnemy)))
+Tree 1:
+ (min placesTowardEnemy (/ enemiesNearMyBase (- (+ threatAtDest movesTowardEnemy) (- (- myResources (+ threatAtDest movesTowardEnemy)) aProducesHeavy))))
+Tree 2:
+ (if> gameTimeK aProducesHeavy enemiesNearMyBase myWorkerCount)
+Tree 3:
+ (- (+ threatAtDest movesTowardEnemy) (- (max aProducesWorker movesTowardEnemyMajor) (if> gameTimeK aProducesHeavy enemiesNearMyBase myWorkerCount)))

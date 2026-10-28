@@ -1,0 +1,52 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed12242-20261023-151300
+generations       : 200
+population        : 1200
+training maps     : maps/8x8/basesWorkers8x8C.xml, maps/8x8/basesWorkers8x8E.xml, maps/8x8/TwoBasesWorkers8x8.xml, maps/8x8/FourBasesWorkers8x8.xml, maps/8x8/melee8x8Mixed4.xml, maps/16x16/melee16x16Mixed8.xml, maps/16x16/basesWorkers16x16B.xml, maps/16x16/basesWorkers16x16D.xml
+training opponents: WorkerRush, WorkerRushPlusPlus, WorkerDefense, LightRush, RandomBiasedAI, EconomyLightRush
+repeats           : 2  (stochastic opponents only)
+cycle cap         : 2000
+win bonus         : 0.5
+eval range        : [0.05, 1.0]
+fitness           : Fitness: Standardized=0.11930648432232169 Adjusted=0.8934103518621576 Hits=106
+tree              : 4 tree(s), 100 nodes, depth 9 [81, 9, 3, 7 per tree]
+worst cycle (ms)  : 13   (G1 gate 100)
+training time     : 3h 55m 32s (14132 s)   (wall clock, evolution only; eval threads 8, cpus 12)
+benchmark maps    : maps/8x8/basesWorkers8x8B.xml, maps/8x8/basesWorkers8x8G.xml, maps/8x8/ThreeBasesWorkers8x8.xml, maps/8x8/melee8x8Mixed6.xml, maps/8x8/melee8x8light4.xml, maps/16x16/basesWorkers16x16C.xml, maps/16x16/basesWorkers16x16E.xml
+
+Evolved scoring function
+------------------------
+tree 0 (worker):
+(- (- (if> threatAtDest (+ (/ aProducesBase uIsCombat) uHpFrac) uIsCombat (if> (if> (- (min enemiesNearMyBase uHpFrac) (min aIsNone (if> aProducesBase distEnemyBase enemyCombatCount uIsWorker))) aProducesBase uIsWorker myResources) (/ movesTowardResource distEnemyBase) (/ enemyWorkerCount aProducesLight) (/ gameTimeK mapArea))) (- (/ aIsNone (* enemyCombatCount movesTowardEnemyBase)) (min (+ movesTowardEnemyMajor threatAtDest) (if> aProducesBase distEnemyBase enemyCombatCount uIsWorker)))) (+ (if> (min movesTowardEnemy myWorkerCount) (* (min aProducesRanged tgtWounded) (/ movesTowardResource distEnemyBase)) (min (* enemyWorkerCount uCarrying) placesTowardEnemy) (/ (/ enemyWorkerCount aProducesLight) (/ enemyUnitCount tgtIsWorker))) (min (- (min aIsMove aProducesLight) aIsAttack) aIsAttack)))
+tree 1 (base):
+(* (- (/ uHpFrac enemyWorkerCount) (min threatAtDest aProducesWorker)) placesTowardEnemy)
+tree 2 (barracks):
+(min enemiesNearMyBase uHpFrac)
+tree 3 (combat):
+(+ (max movesTowardEnemyMajor threatAtDest) (+ aIsAttack aIsNone))
+
+
+Benchmark
+---------
+vs WorkerRush              :  12W   0T  16L /  28 games,  14 distinct  (win rate 43%)   [TRAINING OPPONENT]
+vs LightRush               :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)   [TRAINING OPPONENT]
+vs HeavyRush               :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs RangedRush              :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs WorkerRushPlusPlus      :  12W   0T  16L /  28 games,  14 distinct  (win rate 43%)   [TRAINING OPPONENT]
+vs EconomyRush             :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs EconomyRushBurster      :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs EconomyMilitaryRush     :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs EMRDeterministico       :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs SimpleEconomyRush       :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs LightDefense            :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs HeavyDefense            :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs RangedDefense           :  24W   0T   4L /  28 games,  14 distinct  (win rate 86%)
+vs WorkerDefense           :  10W   6T  12L /  28 games,  14 distinct  (win rate 36%)   [TRAINING OPPONENT]
+vs RandomAI                :  28W   0T   0L /  28 games,  14 distinct  (win rate 100%)
+vs RandomBiasedAI          :  27W   1T   0L /  28 games,  28 distinct  (win rate 96%)   [TRAINING OPPONENT]
+vs RandomBiasedSingleUnitAI:  28W   0T   0L /  28 games,  14 distinct  (win rate 100%)
+vs PassiveAI               :  22W   6T   0L /  28 games,  14 distinct  (win rate 79%)
+
+NOTE: rows marked [TRAINING OPPONENT] are an opponent seen in training. 'distinct' counts independent games.

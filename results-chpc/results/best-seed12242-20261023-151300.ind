@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4593261358876555198|0.11930648432232169|i106|
+Tree 0:
+ (- (- (if> threatAtDest (+ (/ aProducesBase uIsCombat) uHpFrac) uIsCombat (if> (if> (- (min enemiesNearMyBase uHpFrac) (min aIsNone (if> aProducesBase distEnemyBase enemyCombatCount uIsWorker))) aProducesBase uIsWorker myResources) (/ movesTowardResource distEnemyBase) (/ enemyWorkerCount aProducesLight) (/ gameTimeK mapArea))) (- (/ aIsNone (* enemyCombatCount movesTowardEnemyBase)) (min (+ movesTowardEnemyMajor threatAtDest) (if> aProducesBase distEnemyBase enemyCombatCount uIsWorker)))) (+ (if> (min movesTowardEnemy myWorkerCount) (* (min aProducesRanged tgtWounded) (/ movesTowardResource distEnemyBase)) (min (* enemyWorkerCount uCarrying) placesTowardEnemy) (/ (/ enemyWorkerCount aProducesLight) (/ enemyUnitCount tgtIsWorker))) (min (- (min aIsMove aProducesLight) aIsAttack) aIsAttack)))
+Tree 1:
+ (* (- (/ uHpFrac enemyWorkerCount) (min threatAtDest aProducesWorker)) placesTowardEnemy)
+Tree 2:
+ (min enemiesNearMyBase uHpFrac)
+Tree 3:
+ (+ (max movesTowardEnemyMajor threatAtDest) (+ aIsAttack aIsNone))

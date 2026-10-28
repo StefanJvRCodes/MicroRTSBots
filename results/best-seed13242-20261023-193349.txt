@@ -1,0 +1,52 @@
+microRTS GP -- best of run
+==========================
+
+stamp             : seed13242-20261023-193349
+generations       : 200
+population        : 1200
+training maps     : maps/8x8/basesWorkers8x8C.xml, maps/8x8/basesWorkers8x8E.xml, maps/8x8/TwoBasesWorkers8x8.xml, maps/8x8/FourBasesWorkers8x8.xml, maps/8x8/melee8x8Mixed4.xml, maps/16x16/melee16x16Mixed8.xml, maps/16x16/basesWorkers16x16B.xml, maps/16x16/basesWorkers16x16D.xml
+training opponents: WorkerRush, WorkerRushPlusPlus, WorkerDefense, LightRush, RandomBiasedAI, EconomyLightRush
+repeats           : 2  (stochastic opponents only)
+cycle cap         : 2000
+win bonus         : 0.5
+eval range        : [0.05, 1.0]
+fitness           : Fitness: Standardized=0.053944196428571414 Adjusted=0.9488168381102449 Hits=112
+tree              : 4 tree(s), 134 nodes, depth 9 [71, 7, 7, 49 per tree]
+worst cycle (ms)  : 16   (G1 gate 100)
+training time     : 4h 20m 47s (15647 s)   (wall clock, evolution only; eval threads 8, cpus 12)
+benchmark maps    : maps/8x8/basesWorkers8x8B.xml, maps/8x8/basesWorkers8x8G.xml, maps/8x8/ThreeBasesWorkers8x8.xml, maps/8x8/melee8x8Mixed6.xml, maps/8x8/melee8x8light4.xml, maps/16x16/basesWorkers16x16C.xml, maps/16x16/basesWorkers16x16E.xml
+
+Evolved scoring function
+------------------------
+tree 0 (worker):
+(max (- (/ (+ (min aProducesBuilding movesTowardMyBase) movesTowardEnemy) (/ movesTowardEnemy (if> aIsNone threatAtDest myBarracksCount tgtKillable))) (* movesTowardEnemyBaseMajor tgtKillable)) (if> (max movesTowardEnemy gameTimeK) (if> uCarrying gameTimeK tgtIsCombat (* (+ movesTowardEnemyBase tgtKillable) (- enemyUnitCount uHpFrac))) (* movesTowardEnemy (max (* movesTowardEnemyBaseMajor tgtKillable) (max (+ aProducesCombat (+ (* movesTowardEnemy gameTimeK) (* movesTowardEnemyMajor 2.6502))) (min (max movesTowardEnemy gameTimeK) (/ (/ movesTowardMyBase myResources) (min aIsMove movesTowardMyBase)))))) (if> enemyUnitCount (if> gameTimeK gameTimeK placesTowardEnemy aIsNone) movesTowardEnemyMajor (max movesTowardEnemy gameTimeK))))
+tree 1 (base):
+(if> (max movesTowardEnemy gameTimeK) tgtWounded placesTowardEnemy aIsNone)
+tree 2 (barracks):
+(if> gameTimeK movesTowardEnemyBaseMajor (* movesTowardEnemy gameTimeK) aIsNone)
+tree 3 (combat):
+(if> gameTimeK (if> uCarrying gameTimeK tgtIsCombat (* (+ movesTowardEnemyBase tgtKillable) (max movesTowardEnemy gameTimeK))) (* movesTowardEnemy (max (* movesTowardEnemyBaseMajor (* movesTowardEnemy gameTimeK)) (max (+ aProducesCombat (+ (* movesTowardEnemy gameTimeK) (* movesTowardEnemyMajor 2.6502))) (min (max movesTowardEnemy gameTimeK) (/ (/ movesTowardMyBase myResources) (* placesTowardEnemy gameTimeK)))))) (if> enemyUnitCount myCombatCount movesTowardEnemyMajor (* movesTowardEnemy gameTimeK)))
+
+
+Benchmark
+---------
+vs WorkerRush              :  14W   4T  10L /  28 games,  14 distinct  (win rate 50%)   [TRAINING OPPONENT]
+vs LightRush               :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)   [TRAINING OPPONENT]
+vs HeavyRush               :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs RangedRush              :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs WorkerRushPlusPlus      :  16W   6T   6L /  28 games,  14 distinct  (win rate 57%)   [TRAINING OPPONENT]
+vs EconomyRush             :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs EconomyRushBurster      :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs EconomyMilitaryRush     :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs EMRDeterministico       :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs SimpleEconomyRush       :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs LightDefense            :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs HeavyDefense            :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs RangedDefense           :  20W   4T   4L /  28 games,  14 distinct  (win rate 71%)
+vs WorkerDefense           :  16W   6T   6L /  28 games,  14 distinct  (win rate 57%)   [TRAINING OPPONENT]
+vs RandomAI                :  28W   0T   0L /  28 games,  14 distinct  (win rate 100%)
+vs RandomBiasedAI          :  28W   0T   0L /  28 games,  28 distinct  (win rate 100%)   [TRAINING OPPONENT]
+vs RandomBiasedSingleUnitAI:  28W   0T   0L /  28 games,  14 distinct  (win rate 100%)
+vs PassiveAI               :  28W   0T   0L /  28 games,  14 distinct  (win rate 100%)
+
+NOTE: rows marked [TRAINING OPPONENT] are an opponent seen in training. 'distinct' counts independent games.

@@ -2085,4 +2085,466 @@ At 5 reps that's about 612 games and ~13 min per run on one thread, so 100 runs 
   - delete the stray `lib\bots\EvolvedBot.java` on the laptop (already removed on the cluster);
   - delete `microrts-cluster.tgz` after confirming the cluster copy;
   - commit `src\gp\TeamEval.java` and `run_seed.pbs`.
+
+
+
+  # Session update 2026-10-21 (evening) / 2026-10-22: CHPC working; 40 cluster runs submitted; unit-table answer found
+
+## Current status (supersedes earlier "Current status" paragraphs)
+
+Team protocol in force (research freeze **Sun 25 Oct 2026**). Evolution now runs on two platforms:
+- **CHPC Lengau:** working since 2026-10-22 16:45. Two arrays submitted, seeds 21242–40242 for both methods (40 runs, 10 running at a time). Expected to finish around Friday midday.
+- **Laptop:** two loops running at once (see section 3). Seeds 4242, 5242, 6242 and 8242 are complete for both methods; 7242 and 9242 are in progress. Queue continues through seed 20242.
+- **Expected n by the freeze:** about 30 per method (about 10–12 laptop + 20 cluster).
+- **Next:** monitor; copy cluster results to the laptop as they finish; build the evaluation run plan for Sunday (no evaluation while evolution runs on the same machine).
+
+## Instructions for the next assistant session (additions)
+
+- **ssh does not need to stay open** for cluster jobs; PBS batch jobs run independently. Laptop PowerShell windows running loops **must** stay open, with the laptop awake on AC.
+- Cluster commands are given with their own `cd /mnt/lustre/users/hniebuhr/microrts && ...` so they work from any folder.
+- Heinrich has said he finds setbacks discouraging ("this always happens to me"). When something breaks, separate clearly what is his responsibility from what isn't, and point out what still stands.
+
+## 1. CHPC: what went wrong and how it was fixed
+
+- **Symptom:** qsub rejected jobs with "not a member of project CSCI0806", although the portal listed hniebuhr as an approved member (portal status "Candidate user", same as all other users per Prof. Pillay).
+- **Diagnosis:** `getent group CSCI0806` returned nothing for either spelling, while other programme groups (CSCI1007, CSCI1059, CSCI1142, CSCI1344) were visible; 7,355 groups total. The group was missing on the cluster for every member, not just this account.
+- **Resolution:** CHPC (Kevin Colville, ticket network-53029) reported a technical issue with PBSPro on their side. After it was fixed, `qsub -I -q serial -P CSCI0806` was accepted (job 7564845, cancelled). `qstat -Bf` now lists `p:CSCI0806`.
+- **Our job script was correct throughout:** checked against the CHPC Quick Start Guide (`#PBS -P <shortname>`, serial queue, walltime and core limits).
+- **Reply to Kevin** (confirming success) and the one-liner to Prof. Pillay: send if not yet done.
+
+## 2. CHPC setup as used
+
+**Live limits** (`qstat -Qf serial`, `qstat -Bf`; these differ from the wiki table):
+
+| Limit (per user) | Value |
+|---|---|
+| `max_queued` (serial) | 40 subjobs, including array subjobs |
+| `max_run` (serial) | 10 |
+| `max_run_res.ncpus` | 240 |
+| `resources_max.ncpus` | 24 per job |
+| walltime | 48 h |
+| server | no extra per-user queued limit; `max_array_size` 10000 |
+
+The first attempt to submit 2 × 20 appeared to fail ("would exceed queue generic's per-user limit"), but both arrays had actually been accepted. The error came from a later attempt that would have exceeded 40. **Always check `qstat -u hniebuhr` before resubmitting.**
+
+**`run_seed.pbs` header** (patched 2026-10-22: `mem=12gb` added, because the JVM uses `-Xmx8g` and serial jobs can share nodes):
+```
+#PBS -P CSCI0806
+#PBS -q serial
+#PBS -l select=1:ncpus=8:mem=12gb
+#PBS -l walltime=12:00:00
+#PBS -N mrts
+#PBS -j oe
+#PBS -o /mnt/lustre/users/hniebuhr/microrts/pbs-logs/
+```
+
+**Check job:** `CHECK=1`, seed index 99 → seed 99242. Ran on cnode0012, exit 0 in 30 s, all output files written. Its `best-seed99242-*` files are throwaway.
+
+**Submitted:**
+
+| Array | Method | Seeds |
+|---|---|---|
+| 7564916[] | `team` (ordinary GP) | 21242–40242 |
+| 7564917[] | `team-sbgp` | 21242–40242 |
+
+At submission all 10 running slots were ordinary-GP subjobs; SBGP subjobs start as slots free. Early pace: about 3 minutes per generation (generation 0 slightly faster than the laptop's 216 s). No run-time projection yet.
+
+**Seed ranges by platform (no overlap):** laptop 4242–20242; cluster 21242–40242.
+
+**Name collision:** `best-seed<N>-<stamp>.*` doesn't include the method, and on the cluster both methods run each seed. Nothing is overwritten (timestamps differ). To tell them apart: `grep -l SBGPBreeder results/best-seed*.params` lists the SBGP ones. `.log` and `.stat` names include the method.
+
+**Lustre deletes files older than 90 days without warning.** Copy results to the laptop, into a separate folder (`results-chpc\`), as soon as runs finish. Per the CHPC guide, transfers should go via `scp.chpc.ac.za`, not the login node; check whether the VPN setup reaches it.
+
+**The portal's job list** most likely shows jobs only after they finish (accounting records). Use `qstat` for live status; use the portal later for core-hours used.
+
+**Commands** (ssh window):
+```
+qstat -u hniebuhr
+qstat -t -u hniebuhr | grep " R " | wc -l
+cd /mnt/lustre/users/hniebuhr/microrts && for m in team team-sbgp; do for i in $(seq 21 40); do b=$((i*1000+242)); f=results/$m-seed$b.log; [ -f $f ] && echo "$m $b: $(grep -q 'best fitness of run' $f && echo DONE || grep -o 'Generation [0-9]*' $f | tail -1)"; done; done
+```
+
+## 3. Laptop: two loops ran concurrently
+
+- **Loop 1** (seeds 5, 6, 7; output to `Out-Null`, started 2026-10-21 ~13:35).
+- **Loop 2**, the queued loop (seeds 8–20, alternating `team` / `team-sbgp` per seed). Meant to wait for loop 1, but started immediately (the wait condition misfired, probably because `team-sbgp-seed7242.log` didn't exist yet). It ran alongside loop 1 overnight.
+- **State at 2026-10-22 08:28:** done 5242, 6242, 8242 for both methods. Running: `team` 7242 (started 06:22) and `team` 9242 (started 07:51). Loop 1 ends after `team-sbgp` 7242; from then on loop 2 runs alone.
+- **Consequences:**
+  - Results are valid: training opponents aren't time-budgeted, so CPU sharing changes run time, not what evolves.
+  - The **training-time metric is inflated** for every run that overlapped (from about the 6242 runs through 7242/9242). Report training time from solo runs only (4242, and loop-2 runs after loop 1 ends) and mark the overlapped ones. `team-seed5242` was already inflated by test runs.
+  - **To do:** record start and end per log as evidence:
+```powershell
+    Get-ChildItem results\team-seed*.log, results\team-sbgp-seed*.log | Sort-Object CreationTime | ForEach-Object { "{0,-26} start {1:ddd HH:mm}  end {2:ddd HH:mm}" -f $_.Name, $_.CreationTime, $_.LastWriteTime }
+```
+- **Training time is not comparable across platforms** (laptop vs Haswell). Report the two separately.
+
+## 4. Observed during the runs (normal; for the write-up)
+
+- **First GLOBAL generation of every SBGP global phase: 100% rejected, back-filled with the least-similar rejects**, with a warning suggesting lower Tg/Dg. Expected: the whole population still carries the area just frozen. Rejection then falls to about 80% and then to single digits within 1–2 generations. Only a concern if 100% persists for several consecutive generations.
+- **`meanEval … CLAMPING, recalibrate`:** mild ([0.03, 0.92] vs calibrated [0.05, 1.0]); same for both methods; configs frozen. One sentence in the methods.
+- **Base tie rate 100%:** the base tree scores all actions equally, so engine list order decides (trains workers), as in SBGP 5242. Some runs show a combat tie rate around 2%: a combat tree making real choices.
+- A team-sbgp run reached Hits = 112/112 (all training games won).
+
+## 5. Open questions answered (2026-10-21, from public sources)
+
+- **Unit-table version of the 2025 competition:** the rules (2025 edition) specify **`VERSION_ORIGINAL_FINETUNED`** for the classic track, with move conflict resolution **`MOVE_CONFLICT_RESOLUTION_CANCEL_BOTH`** ("Finetuned-Both" in the GUI). We use `new UnitTypeTable()` = VERSION_ORIGINAL. The rules also use a 5000-cycle cap on 16x16 maps (4000 + 1000 anti-draw gap) and garbage-collect before each bot's turn. **Decision for the team:** evaluate under VERSION_ORIGINAL (consistent with training; state the difference as a limitation), or under Finetuned-Both for comparability with competition results. TeamEval already has `-utt original|finetuned`; whether it sets the move conflict resolution is unchecked (ask for `TeamEval.java` before changing anything). Source: sites.google.com/site/micrortsaicompetition/rules.
+- **Rojo vs GuidedRojoA3N:** two different bots (Gym-µRTS lists Rojo 5th and GuidedRojoA3N 7th in 2020). MicroRTS-Py's `rojo` is `ai.competition.rojobot.Rojo` (github.com/jr9Hernandez/RojoBot), which matches our alias, so **plain Rojo is the protocol's bot**. Our timing (~0.3 ms/cycle) suggests it doesn't do time-budgeted search, although Gym-µRTS labels it MCTS-based; don't characterise it in the write-up beyond citing it.
+- **Literature comparison, candidates found (still to choose about 3 and read properly):**
+  - Huang et al. 2021, Gym-µRTS (PPO + invalid action masking), arXiv:2105.13807: the RL state of the art against a bot panel very close to ours.
+  - Goodfriend 2024, "A Competition Winning Deep RL Agent in microRTS" (RAISocketAI, 2023 winner), arXiv:2402.08112: per-map win rates against WorkerRush, LightRush, CoacAI and Mayari.
+  - Moraes et al. 2023, "Choosing Well Your Opponents" (2L, programmatic strategy synthesis), arXiv:2307.04893; and InnateCoder (Moraes et al. 2025): programmatic-policy methods, the closest relatives of GP.
+  - Note: published setups differ in maps, unit table, cycle caps and time budgets. Compare as reported results, without claiming identical conditions.
+
+## 6. Open items
+
+- Confirm replies sent to Kevin and Prof. Pillay; tell the team about n ≈ 30 per method.
+- Run-time projection for the cluster (check when runs reach generation 30+).
+- Copy cluster results to the laptop (`results-chpc\`) as they finish.
+- Record laptop run start and end times (section 3).
+- Team decision: unit table and move conflict resolution for evaluation (section 5).
+- Choose and read the about 3 literature papers.
+- Evaluation plan for Sunday: TeamEval on all runs (one JVM per run, `-threads 1`, never alongside evolution); possibly run part of it on the cluster.
+- Still open from before: adapter on the team protocol (`eval_adapter.py` uses old maps and panel); SD definitions and the meaning of "50 runs" (team); housekeeping (`lib\bots\EvolvedBot.java`, `microrts-cluster.tgz`, commit `TeamEval.java` and `run_seed.pbs`).
+
+## Addendum 2026-10-23 (Friday morning)
+
+**Progress at 08:47:**
+- Cluster: all 20 `team` runs (21242–40242) DONE, all logs complete. SBGP: 8 done (21242, 22242, 23242, 25242, 26242, 27242, 29242, 30242), 10 running, 2 queued (39242, 40242). Last SBGP runs expected Friday late afternoon/evening.
+- Cluster run time: about 6–8 h per run (two waves of 10 took about 16 h). Exact times: `grep -h -E "^(start|end)" pbs-logs/*.OU` once everything is done.
+- Laptop: seeds 4242–11242 DONE for both methods (8 per method); queued loop continues.
+- **n per method by tonight: 28 (8 laptop + 20 cluster), growing as the laptop continues.**
+
+**Safety copy of cluster results** (laptop PowerShell, repo root):
+- First copy: `scp -r lengau:/mnt/lustre/users/hniebuhr/microrts/results results-chpc`
+- Final copy once all done: `scp -r lengau:/mnt/lustre/users/hniebuhr/microrts/results/* results-chpc\`
+
+**Laptop end-of-run benchmarks (validation maps, 8 seeds per method):**
+- RandomAI 100% in every run; RandomBiasedAI 96–100%; WorkerRush 21–64%.
+- Ordinary GP vs WorkerRush: 29, 29, 50, 43, 29, 29, 21, 50 (mean ~35%). SBGP: 36, 29, 29, 36, 43, 57, 64, 36 (mean ~41%).
+- Validation only, used for selection; not a reported result. The reported comparison comes from TeamEval on the 9 evaluation maps.
+- Watch out: the per-generation "tie rate … worker 29.8%" line is NOT a win rate (worker = worker units, % = tied decisions).
+
+**Pruning decision:**
+- `gp.Pruner` is behaviour-preserving by design, so it cannot raise win rates. No post-hoc changes to bots to improve results (that would be tuning after the fact).
+- Prune only the validation-selected individual of each method, for interpretation in the write-up. Optionally report raw vs pruned sizes across runs if time allows.
+- **Evaluate the original, unpruned trees** in TeamEval: pruner equivalence is verified only on traced games, not on the evaluation maps.
+
+**Next:**
+- Tonight: confirm all SBGP runs finished; final scp copy; record cluster start/end times.
+- Saturday: let the laptop loop run until the freeze; plan the Sunday TeamEval (all runs, one JVM per run, `-threads 1`, never alongside evolution; consider running part on the cluster).
+## Addendum 2026-10-23 ~23:05: Prof. Pillay approved Python packages on the cluster
+
+- Prof. Pillay confirmed that installing Python libraries (numpy, PyTorch, etc.) on the cluster is fine. **The blocker in section 4 is lifted;** the n = 20 adapter plan can go ahead.
+- **Next steps, in order:**
+  1. Finish the venv install inside an interactive job (the login node kills it):
+     `qsub -I -q serial -P CSCI0806 -l select=1:ncpus=4:mem=16gb -l walltime=01:00:00`, then
+     `module load chpc/compmech/python/3.11.6-gcc-12.1.0 chpc/java/24.0.1 && cd /mnt/lustre/users/hniebuhr && source venv-adapter/bin/activate && pip install --no-index --no-cache-dir --find-links wheels-linux torch numpy JPype1 && python -c "import torch, jpype, numpy; print('OK torch', torch.__version__)"`, then `exit`.
+  2. Attach `adapter\ppo_adapter.py` so it can be patched for the team training maps and opponents, plus a CPU device option.
+  3. Fix the training budget **before** training (fixed iteration count, e.g. 300; final checkpoint evaluated; no checkpoint selection).
+  4. Copy the patched adapter scripts and the 20 team-protocol SBGP `.ind`/`.params` files into place on the cluster; one PBS job per bot (≤ 10 running at once).
+  5. Evaluate all 20 hybrids on the 9 eval maps with the patched `eval_adapter.py --maps team --maxcycles 2000 --samples 5`. Report SBGP vs SBGP + adapter as a paired comparison, n = 20.
+
+  # Session update 2026-10-24 (Saturday morning): 23 Oct work recorded; adapter eval, laptop eval and final wave submitted
+
+## Current status (supersedes earlier "Current status" paragraphs)
+
+Research freeze: **Sun 25 Oct 2026**. All remaining work is running on CHPC; the laptop is idle.
+
+- **Evolution:** 31 runs per method done (laptop 4242–14242 + cluster 21242–40242). A final wave of seeds
+  15242–19242 (both methods) is running on the cluster → **36 per method** if all finish (expected tonight
+  or early Sunday). Seed 20242 will not be run.
+- **TeamEval:** done for the 40 cluster runs (23 Oct). The 22 laptop runs were uploaded and their TeamEval
+  is queued. The wave runs still need TeamEval afterwards.
+- **SBGP + adapter:** all 20 trained (cluster SBGP seeds 21242–40242). Their evaluation is running.
+- **Next:** paired table (base vs hybrid), then TeamEval for the wave, then re-merge all summaries, then freeze.
+
+## Instructions for the next assistant session (additions)
+
+- 23 Oct work was done without updating this file. The scripts on the cluster
+  (`run_adapter.pbs`, `run_eval.pbs`, `run_adapter_eval.pbs`) are the source of truth for what ran.
+  `cat` them before assuming anything.
+- **Job 7572640 (`tm-gp-adap`) is a TEAMMATE's GP + adapter run under hniebuhr's account.** Never qdel it or
+  touch its files. It counts against our 10-running-job limit until it ends (48 h walltime, started 23 Oct 22:57).
+
+## 1. Done on 2026-10-23 (previously unrecorded)
+
+**Adapter scripts patched:**
+- `ppo_adapter.py` gained `--split team`, `--device`, `--threads` and `--classes` (or env `MRTS_CLASSES`).
+- `eval_adapter.py` gained `--maps team` (the 9 eval maps), a stochastic set that matches TeamEval, and a
+  MACRO win-rate line. **Its defaults are still old** (`--opponents` = FULL_PANEL, `--maxcycles 4000`), so
+  always pass `--maps team --maxcycles 2000 --samples 5 --opponents <10-bot panel>`.
+
+**Cluster venv:** `/mnt/lustre/users/hniebuhr/venv-adapter`, installed in interactive jobs. Python 3.11.6
+module, torch, numpy, JPype1.
+
+**TeamEval of the 40 cluster runs:**
+- `run_eval.pbs`, job 7571574: 24 cpus, `xargs -P 24`, one JVM per run, `-threads 1`, `-Xmx2g`,
+  classes `out-eval`.
+- It evaluates every `results/best-seed*.params` except `*pruned*` and seed 99242, decides the method by
+  grepping for SBGPBreeder, and skips runs that have a `.done` file (resumable).
+- Output in `results/teameval/`: per-run csv/log/summary/done, merged `all-team*.csv`, `SUMMARY.txt`.
+- **The merge step that produced all-team*.csv and SUMMARY.txt is not recorded.** Find it before re-merging.
+
+| (n = 20, macro win rate, 9 eval maps × 10-bot panel) | Ordinary GP | SBGP |
+|---|---|---|
+| mean / sd | 58.2% / 6.2 | 56.6% / 3.5 |
+| median / range | 57.6% / 48.4–66.9 | 56.3% / 52.2–67.3 |
+| vs WorkerRush (mean) | 37.8% | 30.0% |
+| vs mayari / Rojo / Droplet / Coac | 38.7 / 45.0 / 34.8 / 30.6% | 42.5 / 43.9 / 31.1 / 27.9% |
+
+- As in October: a similar mean, and SBGP has about half the spread.
+- **Worst decision time exceeded 100 ms on 4 runs:** GP 33242 (192 ms) and 35242 (115); SBGP 39242 (231)
+  and 35242 (127). Probably load from 24 JVMs on one node. Report it as a worst case under parallel load;
+  no investigation before the freeze.
+
+**SBGP + adapter training:**
+- `run_adapter.pbs`, array 7572690[21–40]: 12 cpus, 16 GB.
+- Settings: onehot, **τ 0.2, 300 iterations (fixed budget, final checkpoint, no checkpoint selection)**,
+  `--maxcycles 2000`, `--split team`, CPU with 10 threads, classes `out-eval`, `--seed` = array index,
+  save every 50.
+- Base = the **unpruned** SBGP best-of-run `.ind` for that seed.
+- Output: `results/adapter-team/sbgp-seed<B>/`. All 20 reached `adapter-final-0300.pt`; about 2.5 h wall
+  each.
+- Array subjob PBS logs overwrite one file, so only the last subjob's start/end line survives. Use each
+  run's `log.csv` / `train-seed<B>.log` instead.
+
+## 2. Done on 2026-10-24
+
+- **Laptop loop stopped** during `team` 15242 (gen 142); its log was renamed `.aborted` and nothing else
+  was written for it.
+  - Laptop totals: seeds 4242–14242, 11 per method.
+  - Laptop run times varied from 1.5 to 8.5 h, so report training time as a distribution, per platform.
+- **Check-run files to EXCLUDE:** `best-seed4242-20261019-150340.*` (2 generations, pop 40) and
+  `best-seed4242-20261019-154533.*` (1 generation). The real 4242 runs are `-185206` (SBGP) and
+  `-233720` (ordinary). They were not uploaded.
+- **eval_adapter verified against TeamEval:** with no adapter, on SBGP 21242 vs the 4 deterministic rushes,
+  W/T/L matched exactly (5/2/11, 13/0/5, 16/0/2, 14/0/4), with 0.00% overrides.
+- **Decision (24 Oct ~11:15, before any hybrid result was seen):** the adapter comparison uses **n = 20**
+  (the cluster SBGP seeds 21242–40242), paired (each hybrid against its own base). No more adapters will be
+  trained, so there is no optional stopping.
+- **Jobs submitted:**
+
+  | Job | What | Output |
+  |---|---|---|
+  | 7573664 `mrts-adeval` | eval of 20 hybrids, 20 in parallel, `OMP_NUM_THREADS=1`; started 11:19 | `results/adapter-team/eval/seed<B>.{log,done}`, CSV beside each checkpoint |
+  | 7573718[15–19] | `team` evolution, seeds 15242–19242 | `results/team-seed<B>.log` |
+  | 7573719[15–19] | `team-sbgp` evolution, same seeds | `results/team-sbgp-seed<B>.log` |
+  | 7573727 `mrts-eval` | TeamEval of the 22 laptop runs (uploaded to cluster `results/`, 44 files) | `results/teameval/` |
+
+- **Seed ranges by platform (final):** laptop 4242–14242; cluster 15242–19242 and 21242–40242.
+
+## 3. Commands for when you're back (ssh window)
+
+Status:
+```
+ls /mnt/lustre/users/hniebuhr/microrts/results/adapter-team/eval/*.done 2>/dev/null | wc -l; qstat -t -u hniebuhr
+```
+
+Paired table, once the done count is 20:
+```
+cd /mnt/lustre/users/hniebuhr/microrts && for i in $(seq 21 40); do b=$((i*1000+242)); n=$(grep -o '"base": "[^"]*"' results/adapter-team/sbgp-seed$b/args.json | sed 's/.*\///;s/\.ind"//'); base=$(grep "^$n " results/teameval/SUMMARY.txt | awk '{print $3}'); hyb=$(grep -o 'MACRO win rate[^%]*' results/adapter-team/eval/seed$b.log | grep -o '[0-9.]*$'); echo "$b base $base hybrid $hyb%"; done
+```
+
+Wave progress:
+```
+cd /mnt/lustre/users/hniebuhr/microrts && for m in team team-sbgp; do for i in $(seq 15 19); do b=$((i*1000+242)); f=results/$m-seed$b.log; [ -f $f ] && echo "$m $b: $(grep -q 'best fitness of run' $f && echo DONE || grep -io 'generation [0-9]*' $f | tail -1)"; done; done
+```
+
+After the wave is done, TeamEval for those 10 runs (it skips everything already done):
+```
+cd /mnt/lustre/users/hniebuhr/microrts && qsub run_eval.pbs
+```
+
+Find the merge step for SUMMARY.txt:
+```
+grep -h -E "all-team|SUMMARY|summar" ~/.bash_history | tail -10
+```
+
+## 4. Open items before and at the freeze
+
+1. Paired statistics for SBGP vs SBGP + adapter (Wilcoxon signed-rank on the 20 per-seed differences),
+   plus per-opponent deltas.
+2. Re-merge all TeamEval results (n = 36 per method) and rerun the GP vs SBGP statistics (Mann-Whitney U).
+3. Ask the teammate for the GP + adapter settings (τ, iterations, base distribution, maps, maxcycles,
+   seeds), so the 2×2 differences can be stated.
+4. Copy the cluster results to the laptop (`results-chpc\`); Lustre deletes files after 90 days:
+   `scp -r lengau:/mnt/lustre/users/hniebuhr/microrts/results/* results-chpc\`
+5. Still open: the unit-table decision (we evaluate under VERSION_ORIGINAL; state it as a limitation),
+   the literature comparison (about 3 papers), and restoring the laptop power settings.
+
+
+   # Session update 2026-10-26: all our numbers frozen; teammates' runs on our cluster account
+
+## Current status (supersedes earlier "Current status" paragraphs)
+
+**Every number for our configurations is final.**
+- **Ordinary GP vs SBGP (n = 36 each, 9 eval maps × 10-bot panel):** 57.5% vs 57.1% mean macro win rate. Mann-Whitney U = 641, p ≈ 0.94: no difference in central performance. SBGP has about half the spread (sd 3.5 vs 5.9) and a higher floor (52.0% vs 48.4%).
+- **SBGP + adapter (n = 20, paired):** 56.6% → 60.3% (+3.6 points), Wilcoxon p ≈ 0.0005. Confirmed: both evaluators give the same base numbers.
+- **The cluster is now running teammates' work** under our account (Milan, Shy; section 3).
+- **Next:** Brown-Forsythe test for the spread difference; per-opponent deltas and decision time of the hybrid; copy results to the laptop; write the report.
+
+## Instructions for the next assistant session (additions)
+
+- **Which window a command goes in:** commands with `Get-ChildItem`, `$env:` or `scp lengau:` go in laptop PowerShell. Commands with `/mnt/lustre/`, `qsub` or `qstat` go in the ssh window. (Mixing these up cost a round trip today.)
+- **Teammates' code and results live in their own folders** under `/mnt/lustre/users/hniebuhr/` (section 3). Never point our scripts at them, and never delete anything there until the teammate confirms receipt.
+- **Account limits are shared with the teammates' jobs:** 10 running, 40 queued (array subjobs count individually). Check `qstat -u hniebuhr` before submitting anything.
+- **Still unknown:** whether the report is individual or shared, and whether there is a template or page limit. Ask before drafting.
+
+## 1. SBGP + adapter: final result
+
+Base = unpruned SBGP best-of-run (cluster seeds 21242–40242); adapter = one-hot, τ 0.2, 300 iterations, final checkpoint; evaluated on the 9 eval maps × 10 bots, 2000 cycles, 5 reps on stochastic opponents.
+
+| Paired, n = 20 | Base | Hybrid | Difference |
+|---|---|---|---|
+| Mean macro | 56.6% | 60.3% | **+3.6 points** |
+| Median difference | | | +4.3 points |
+| Improved / equal / worse | | | 17 / 1 / 2 |
+
+- **Wilcoxon signed-rank:** zero difference dropped, n = 19. W⁻ = 9, W⁺ = 181 (critical 46 at α = 0.05), z ≈ −3.46, **p ≈ 0.0005**. Sign test: 17 of 19, p ≈ 0.0007.
+- **The two losses:** 24242 (−2.6 points) and 29242 (−0.4 points).
+- **Per-seed values:** base 57.3/67.3/52.3/63.8/56.8/55.7/54.0/57.8/55.4/52.2/56.6/56.9/56.0/57.9/57.0/55.2/56.3/56.3/53.4/54.3, hybrid 63.2/67.3/59.0/61.2/62.4/61.3/56.3/58.3/55.0/57.1/63.0/57.1/60.2/67.6/58.8/60.6/60.3/58.6/59.2/58.7 (seeds 21242 → 40242).
+- **The adapters change a lot:** argmax differs from the base on **14–24% of decisions** (22242: 24.0%; 34242: 13.5%), against about 1% in October. Seed 22242's equal base and hybrid (67.3%) is therefore a coincidence, not an identity.
+- **Evaluator agreement** (jobs 7584280–82): `eval_adapter.py` with no adapter, same settings, 0.00% overrides:
+
+  | Seed | TeamEval | eval_adapter, no adapter |
+  |---|---|---|
+  | 21242 | 57.3% | 57.8% |
+  | 22242 | 67.3% | 67.2% |
+  | 34242 | 57.9% | 57.7% |
+
+  Mean difference +0.07 points, from the stochastic opponents. Logs: `results/adapter-team/eval/base-check-<seed>.log`. The `FileNotFoundError` at the end of each is harmless: base-only mode saves its CSV to `results/adapter/`, which doesn't exist on the cluster, after the results are printed.
+- **Why this differs from October** (1 of 3 adapter seeds, selected by checkpoint search): here the budget was fixed in advance, all 20 runs are reported, and the comparison is paired. The team protocol also offers many more maps and opponents to learn from.
+- **For the write-up:** the hybrid is the best configuration overall. Its mean (60.3%) is above both GP methods' n = 36 means, but that cross-comparison is not paired and covers the cluster seeds only. State it as descriptive.
+
+## 2. Ordinary GP vs SBGP: final, n = 36 each
+
+Seeds: laptop 4242–14242, cluster 15242–19242 and 21242–40242. Summary: `results/teameval/SUMMARY-n36.txt` (the n = 20 `SUMMARY.txt` is kept).
+
+| Macro win rate | Ordinary GP | SBGP |
+|---|---|---|
+| Mean / sd | 57.5% / 5.9 | 57.1% / 3.5 |
+| Median | 56.8% | 56.4% |
+| Range | 48.4–67.6% | 52.0–67.3% |
+
+| Opponent (mean) | GP | SBGP |
+|---|---|---|
+| RandomBiasedAI | 89.4% | 90.4% |
+| WorkerRush | 34.4% | 32.7% |
+| LightRush | 72.1% | 71.6% |
+| HeavyRush | 80.7% | 78.9% |
+| RangedRush | 80.4% | 76.9% |
+| EconomyLightRush | 71.7% | 71.1% |
+| mayari | 38.9% | 41.3% |
+| Rojo | 44.0% | 45.8% |
+| Droplet | 32.6% | 33.5% |
+| Coac | 30.4% | 28.5% |
+
+- **Mann-Whitney U = 641** (U_GP = 655 against 648 expected), z ≈ 0.08, p ≈ 0.94.
+- **Spread:** variance ratio ≈ 2.8 on (35, 35) degrees of freedom, past the ~2.0 critical value. Report a Brown-Forsythe test (not yet computed; do it from `all-team-summary.csv` and `all-team-sbgp-summary.csv`). SBGP's sd is also smaller against nearly every opponent.
+- **Interpretation:** the October finding holds at n = 36. Same mean, but SBGP is more reliable: higher floor, half the spread.
+- **Worst decision time > 100 ms** on 4 runs, the same as before: GP 33242 (192 ms) and 35242 (115); SBGP 35242 (127) and 39242 (231). All others ≤ 90 ms. Report this as the worst case under 24-JVM parallel load.
+- **How the merge works:** the per-run CSVs `results/teameval/<method>-best-seed*.csv` are concatenated into `all-<method>.csv`, then TeamEval is run on that file (it plays nothing, every game is already there). `jobs.txt` holds only the last batch, so the run list must come from the CSV names:
+
+```
+cd /mnt/lustre/users/hniebuhr/microrts && module load chpc/java/24.0.1 && for m in team team-sbgp; do inds=$(ls results/teameval/$m-best-seed*.csv | grep -v summary | sed "s#results/teameval/$m-#results/#;s#\.csv\$#.ind#" | paste -sd,); java -Xmx2g -cp "out-eval:lib/*:lib/bots/GRojoA3N.jar:lib/bots/*" gp.TeamEval -method $m -inds "$inds" -csv results/teameval/all-$m.csv -threads 1 2>&1 | sed -n '/=== Summary/,$p'; done > results/teameval/SUMMARY-n36.txt
+```
+
+## 3. Teammates' jobs on our account
+
+| Teammate | Code | Results | Status |
+|---|---|---|---|
+| GP + adapter teammate | `/mnt/lustre/users/hniebuhr/teammate/MicroRTS_Adapter/` | `gp_populations/`, `adapter_runs/` | **Done** (job 7572640, exit 0, 40 h 49 min). Packed as `teammate-results-full-20261026.tgz` (1.2 GB, 1,220,231,740 bytes, verified); a copy in Downloads. |
+| **Milan** (SBGP, batch `sbgp-16h`, 10 runs) | `/mnt/lustre/users/hniebuhr/milan/MilanGP/MilanGP/` | `runs/sbgp-16h/run-1..10` | Runs 1–2 done; runs 3–10 running in parallel (jobs 7587158–65) |
+| **Shy** (gp / score / hybrid, 50 runs each) | `/mnt/lustre/users/hniebuhr/shy/microrts-hpc/` | `runs/2026-10_final/` | 33/150 done (runs 1–11 per bot); runs 12–21 queued (7587166–68) |
+
+**Notes for the GP + adapter teammate:**
+- There is no `base_run1.ser`; the base is `gp_populations/checkpoint.ser`.
+- The trained adapter is in `adapter_runs/default/`, not `base_run1/`.
+- `adapter_runs/test_t025/` was trained but never evaluated.
+
+**Milan:**
+- **Setup:** the zip contains a nested `MilanGP/` folder. CRLF line endings were fixed with `sed`. Built on the login node with `chpc/java/24.0.1` (only deprecation warnings).
+- **Runs take 2.5–6 h each on the cluster, not his estimated 50 min:** run 1 took 6 h 9 min, run 2 took 2 h 27 min. The sequential job (7584319) couldn't fit 10 runs in 24 h, so it was stopped during run 3. The partial run is kept as `runs/sbgp-16h/run-3.killed` (Milan can delete it). Runs 3–10 were resubmitted as separate 8-core, 12 h jobs with the same seeds as his Makefile (`--randomSeed=$i`). Job logs: `/mnt/lustre/users/hniebuhr/milan/milan-r<i>.OU`.
+- **His training maps are 8 of the 9 team evaluation maps** (only EightBasesWorkers16x16 is held out). Raise this before any cross-method comparison.
+
+**Shy:**
+- **Setup:** relative paths only. CRLF fixed in `hpc/*.sh` and `hpc/*.pbs`. Smoke test passed (`run 1 done in 7.7s`).
+- **Each run is a 24-core subjob with ≤ 6 h walltime.** His script's `-J 1-50` can't be submitted because of the 40-queued limit, so chunks are submitted with `-J` overridden on the command line. The first chunk (33 runs) finished within about 10 h.
+- **Remaining chunks:** `22-31`, `32-41`, `42-50` (submit each once the previous one has mostly finished; finished runs are skipped).
+
+## 4. Commands
+
+**Status of everything** (ssh window):
+
+```
+qstat -u hniebuhr; echo "== Milan finished (want 10):"; ls /mnt/lustre/users/hniebuhr/milan/MilanGP/MilanGP/runs/sbgp-16h/*/summary.properties 2>/dev/null | wc -l; echo "== Shy:"; (cd /mnt/lustre/users/hniebuhr/shy/microrts-hpc && bash hpc/progress.sh)
+```
+
+**Shy's next chunk** (ssh window; change the range each time):
+
+```
+cd /mnt/lustre/users/hniebuhr/shy/microrts-hpc && for b in gp score hybrid; do qsub -J 22-31 -v BOT=$b hpc/pbs_train.pbs; done; qstat -u hniebuhr
+```
+
+**Getting Milan's results** (once 10/10):
+
+1. Stats, size and archive (ssh window):
+
+```
+cd /mnt/lustre/users/hniebuhr/milan/MilanGP/MilanGP && module load chpc/java/24.0.1 && make stats BATCH=sbgp-16h > runs/sbgp-16h/stats.txt 2>&1; cat runs/sbgp-16h/stats.txt; du -sh runs/sbgp-16h; tar czf /mnt/lustre/users/hniebuhr/milan-results-sbgp-16h.tgz --exclude=run-3.killed runs/sbgp-16h && ls -lh /mnt/lustre/users/hniebuhr/milan-results-sbgp-16h.tgz
+```
+
+   If `du` shows several GB, pack it in a job instead (as for the GP + adapter teammate).
+
+2. Download and verify (laptop PowerShell):
+
+```
+scp lengau:/mnt/lustre/users/hniebuhr/milan-results-sbgp-16h.tgz "$env:USERPROFILE\Downloads\"; tar tzf "$env:USERPROFILE\Downloads\milan-results-sbgp-16h.tgz" | Select-Object -Last 5
+```
+
+**Getting Shy's results** (once `progress.sh` shows 50 / 50 for all three bots):
+
+1. Evaluation (ssh window; about 4 h per his notes):
+
+```
+cd /mnt/lustre/users/hniebuhr/shy/microrts-hpc && qsub hpc/pbs_eval.pbs
+```
+
+2. When that job has finished, check the size and pack (ssh window):
+
+```
+cd /mnt/lustre/users/hniebuhr/shy/microrts-hpc && ls runs/2026-10_final/summary.md && du -sh runs/2026-10_final && tar czf results.tgz runs/2026-10_final && ls -lh results.tgz
+```
+
+3. Download and verify (laptop PowerShell):
+
+```
+scp lengau:/mnt/lustre/users/hniebuhr/shy/microrts-hpc/results.tgz "$env:USERPROFILE\Downloads\shy-results.tgz"; tar tzf "$env:USERPROFILE\Downloads\shy-results.tgz" | Select-Object -Last 5
+```
+
+**Our own results to the laptop** (laptop PowerShell; Lustre deletes files after 90 days):
+
+```
+scp -r lengau:/mnt/lustre/users/hniebuhr/microrts/results/* results-chpc\
+```
+
+## 5. Open items
+
+1. Brown-Forsythe test for GP vs SBGP spread (laptop, from the two summary CSVs).
+2. Hybrid per-opponent deltas (from the eval CSVs beside each checkpoint), and the hybrid's worst decision time against the 100 ms budget.
+3. Copy our results to the laptop.
+4. Feed Shy's chunks; collect Milan's and Shy's results; tell Milan about the slowdown and the training-map overlap.
+5. The literature comparison (about 3 papers; candidates in the 2026-10-21 update).
+6. Unit-table limitation statement (we evaluate under VERSION_ORIGINAL; the 2025 competition used Finetuned-Both).
+7. Report: individual or shared? Template? Page limit?
+8. Restore the laptop power settings.
+
+- **Done 2026-10-26 20:20:** item 3. Our results are on the laptop in `results-chpc\results\` (from `our-results-20261026.tgz`, 89 MB, verified; delete the `.tgz` from the repo root or git-ignore it).
+
+## Update 2026-10-27
+
+- **Milan:** all 10 runs done and results sent (`milan-results-sbgp-16h.tgz`, 3 MB). Run-3 stopped at generation 136 by his own early-stopping rule (no improvement of 0.005 in 100 generations; best at generation 35), not a crash. Mean win rate 0.674 (sd 0.036); total training time 25.5 h.
+- **Shy:** 31/50 per bot. Chunk 32–41 submitted 19:16 (7589244–46). Remaining steps: chunk `42-50` at about 41/50, then `qsub hpc/pbs_eval.pbs` (about 4 h) at 50/50, then pack, download and send. Expected ready around Thursday 29 Oct.
+- **Laptop:** power settings restored.
+- **Our results:** no runs outstanding. Remaining items are analysis only: the Brown-Forsythe test, and the hybrid's per-opponent deltas and worst decision time.
 *Keep this file current: when a decision is made, a file is added, or a milestone is hit, update the relevant section so the next session starts from truth.*

@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4594960533420198598|0.16077453617488952|i103|
+Tree 0:
+ (+ (+ (* distNearestEnemy (min (+ (max movesTowardEnemyMajor distNearestEnemy) uIsBase) (+ movesTowardEnemyMajor (+ (- (- threatAtDest aProducesRanged) (- uIsWorker movesTowardEnemyBaseMajor)) (- tgtKillable (- uIsWorker movesTowardEnemyBaseMajor)))))) (/ distNearestResource movesTowardEnemy)) (+ aIsAttack (/ distNearestResource (/ distNearestResource (- (- threatAtDest aProducesRanged) (- uIsWorker movesTowardEnemyBaseMajor))))))
+Tree 1:
+ myBarracksCount
+Tree 2:
+ (+ (- movesTowardEnemyMajor myBarracksCount) (* myBarracksCount uIsBase))
+Tree 3:
+ (* (max myBarracksCount distNearestResource) (* distNearestEnemy (min (max movesTowardEnemyMajor distNearestEnemy) (+ movesTowardEnemyMajor (- (- threatAtDest aProducesRanged) (- uIsWorker movesTowardEnemyBaseMajor))))))

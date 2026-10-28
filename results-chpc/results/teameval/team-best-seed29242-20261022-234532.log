@@ -1,0 +1,90 @@
+
+| ECJ
+| An evolutionary computation system (version 27)
+| By Sean Luke
+| Contributors: E. Scott, L. Panait, G. Balan, S. Paus, Z. Skolicki,
+|               R. Kicinger, E. Popovici, K. Sullivan, J. Harrison, J. Bassett,
+|               R. Hubley, A. Desai, A. Chircop, J. Compton, W. Haddon,
+|               S. Donnelly, B. Jamil, J. Zelibor, E. Kangas, F. Abidi,
+|               H. Mooers, J. O'Beirne, L. Manzoni, K. Talukder, S. McKay,
+|               J. McDermott, J. Zou, A. Rutherford, D. Freelan, E. Wei,
+|               S. Rajendran, A. Dhawan, B. Brumbac, J. Hilty, A. Kabir
+| URL: http://cs.gmu.edu/~eclab/projects/ecj/
+| Mail: ecj-help@cs.gmu.edu
+|       (better: join ECJ-INTEREST at URL above)
+| Date: July 1, 2017
+| Current Java: 24.0.1 / Java HotSpot(TM) 64-Bit Server VM-24.0.1+9-30
+| Required Minimum Java: 1.5
+
+
+Threads:  breed/1 eval/1
+Seed: 29242 
+Processing GP Types
+Processing GP Node Constraints
+Processing GP Function Sets
+Processing GP Tree Constraints
+microRTS fitness: 112 games per individual (8 maps x 6 opponents x 2 sides, 2 repeats on stochastic opponents), cap 2000 cycles.
+Stochastic opponents this run: RandomBiasedAI
+Unit NONE (wait) action lasts 1 cycle(s).
+Banded fitness: win 0-1, draw 1-2, loss 2-3. Loss band split 0.67 survival / 0.33 quality. Win reward: fitness x (1 - 0.5 x win fraction). meanEval mapped from [0.05, 1.0].
+
+=== TeamEval ===
+method      : team   runs: 1
+  best-seed29242-20261022-234532   4 tree(s), 36 nodes, depth 6, fitness Fitness: Standardized=0.17469311799309187 Adjusted=0.851286165452687 Hits=101
+maps (9)    : maps/8x8/basesWorkers8x8A.xml, maps/8x8/basesWorkersBarracks8x8.xml, maps/8x8/basesWorkers8x8Obstacle.xml, maps/12x12/basesWorkers12x12.xml, maps/12x12/basesWorkers12x12F.xml, maps/12x12/SixBasesWorkers12x12.xml, maps/16x16/melee16x16Mixed12.xml, maps/16x16/TwoBasesBarracks16x16.xml, maps/16x16/EightBasesWorkers16x16.xml
+opponents   : RandomBiasedAI, WorkerRush, LightRush, HeavyRush, RangedRush, EconomyLightRush, mayari, Rojo, Droplet, Coac
+deterministic (1 game per map-side): WorkerRush, LightRush, HeavyRush, RangedRush   others: 5 per map-side
+cycle cap 2000, unit table original, threads 1
+games: 612 per run, 612 total, 0 already in results/teameval/team-best-seed29242-20261022-234532.csv, 612 to play
+determinism check WorkerRush: OK
+determinism check LightRush: OK
+determinism check HeavyRush: OK
+determinism check RangedRush: OK
+25/612 games  2 s elapsed  ETA 1 min
+50/612 games  3 s elapsed  ETA 0 min
+75/612 games  4 s elapsed  ETA 0 min
+100/612 games  5 s elapsed  ETA 0 min
+125/612 games  7 s elapsed  ETA 0 min
+150/612 games  8 s elapsed  ETA 0 min
+175/612 games  9 s elapsed  ETA 0 min
+200/612 games  9 s elapsed  ETA 0 min
+225/612 games  10 s elapsed  ETA 0 min
+250/612 games  12 s elapsed  ETA 0 min
+275/612 games  13 s elapsed  ETA 0 min
+300/612 games  15 s elapsed  ETA 0 min
+325/612 games  19 s elapsed  ETA 0 min
+350/612 games  29 s elapsed  ETA 0 min
+375/612 games  29 s elapsed  ETA 0 min
+400/612 games  31 s elapsed  ETA 0 min
+425/612 games  36 s elapsed  ETA 0 min
+450/612 games  179 s elapsed  ETA 1 min
+475/612 games  333 s elapsed  ETA 2 min
+500/612 games  528 s elapsed  ETA 2 min
+525/612 games  772 s elapsed  ETA 2 min
+550/612 games  774 s elapsed  ETA 1 min
+575/612 games  775 s elapsed  ETA 1 min
+600/612 games  776 s elapsed  ETA 0 min
+612/612 games  779 s elapsed  ETA 0 min
+
+=== Summary: team (1 runs) ===
+Win rate = W / (W+T+L); draws count as non-wins. Per run, each opponent is
+weighted equally (macro), so stochastic opponents' extra reps do not dominate.
+
+run                                          games   macro  worst ms
+best-seed29242-20261022-234532            612/612    56.3%        39
+
+Across runs (complete runs only): n=1  mean 56.3%  sd -  median 56.3%  min 56.3%  max 56.3%
+
+Per opponent, across runs:
+  RandomBiasedAI     n=1  mean 91.1%  sd -  median 91.1%  min 91.1%  max 91.1%
+  WorkerRush         n=1  mean 27.8%  sd -  median 27.8%  min 27.8%  max 27.8%
+  LightRush          n=1  mean 83.3%  sd -  median 83.3%  min 83.3%  max 83.3%
+  HeavyRush          n=1  mean 88.9%  sd -  median 88.9%  min 88.9%  max 88.9%
+  RangedRush         n=1  mean 83.3%  sd -  median 83.3%  min 83.3%  max 83.3%
+  EconomyLightRush   n=1  mean 75.6%  sd -  median 75.6%  min 75.6%  max 75.6%
+  mayari             n=1  mean 44.4%  sd -  median 44.4%  min 44.4%  max 44.4%
+  Rojo               n=1  mean 26.7%  sd -  median 26.7%  min 26.7%  max 26.7%
+  Droplet            n=1  mean 25.6%  sd -  median 25.6%  min 25.6%  max 25.6%
+  Coac               n=1  mean 16.7%  sd -  median 16.7%  min 16.7%  max 16.7%
+
+Wrote results/teameval/team-best-seed29242-20261022-234532-summary.csv

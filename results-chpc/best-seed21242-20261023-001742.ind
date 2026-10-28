@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4593417013769229490|0.12146662989410364|i106|
+Tree 0:
+ (+ (/ (if> (if> myWorkerCount threatAtDest (max uIsCombat uIsWorker) (* aProducesBase aProducesCombat)) threatAtDest uIsWorker (* aProducesBase aProducesCombat)) (if> (+ myWorkerCount movesTowardEnemyMajor) (max aIsNone myWorkerCount) movesTowardEnemyMajor (- placesTowardEnemy distNearestResource))) (max (min (+ (+ (- (if> aProducesBarracks aProducesCombat uHpFrac gameTimeK) distNearestResource) enemyWorkerCount) enemyWorkerCount) (max aProducesBuilding tgtKillable)) (* (/ aProducesRanged uIsBase) (+ movesTowardEnemy myBarracksCount))))
+Tree 1:
+ (if> myWorkerCount (- placesTowardEnemy tgtWounded) (if> gameTimeK threatAtDest (- placesTowardEnemy distNearestResource) enemyWorkerCount) (if> (+ myWorkerCount movesTowardEnemyMajor) (- placesTowardEnemy tgtWounded) (* distNearestEnemy (max uIsCombat uIsWorker)) (- placesTowardEnemy distNearestResource)))
+Tree 2:
+ (if> movesTowardEnemyBase gameTimeK (+ tgtKillable movesTowardEnemyMajor) movesTowardEnemy)
+Tree 3:
+ (/ (if> (if> aProducesBarracks movesTowardEnemy uHpFrac gameTimeK) threatAtDest uIsCombat movesTowardResource) (if> (+ myWorkerCount movesTowardEnemyMajor) (* aProducesBase aProducesCombat) (* distNearestEnemy distEnemyBase) (- aProducesBarracks distNearestResource)))

@@ -1,0 +1,16 @@
+
+=== Adapter eval (argmax, validation maps) ===
+ckpt  : results\adapter\onehot-tau0.2-s3-500\adapter-0270.pt
+base  : results/best-seed5242-20261012-160727-pruned.ind
+tau   : 0.2
+dist  : onehot
+maps  : 8x8A, Barracks8x8, 8x8Obstacle, 12x12, 12x12F, SixBasesWorkers12x12, melee16x16Mixed12, TwoBasesBarracks16x16, EightBasesWorkers16x16
+
+vs RandomBiasedAI             72W  15T   3L  ( 80%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWWWWWW 8x8Obstacle:LLWWWWLWWW 12x12:WWWWWWTWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:WWWWWWWWWW melee16x16Mixed12:TTTTTTTTTT TwoBasesBarracks16x16:WWTTWWWTWT EightBasesWorkers16x16:WWWWWWWWWW
+vs EconomyLightRush           61W   2T  27L  ( 68%)
+    8x8A:WWWWWWWWWW Barracks8x8:WWWWWLLLLL 8x8Obstacle:TWWTLWWWWW 12x12:WWWWWWWWWW 12x12F:WWWWWWWWWW SixBasesWorkers12x12:WWWWWWWWWW melee16x16Mixed12:LLLLLLLLLL TwoBasesBarracks16x16:LLLLLLLLLL EightBasesWorkers16x16:LWWWWWWWWW
+
+TOTAL 133W 17T 30L.  argmax differs from base on 13.08% of 262282 decisions (outside the tie set: 12.86%); tied decisions 12.7%.  259s
+MACRO win rate (each opponent weighted equally): 73.9%
+wrote C:\Users\heinr\OneDrive\Documents\GitHub\MicroRTSBots\results\adapter\onehot-tau0.2-s3-500\eval-adapter-0270-team-20261023-211534.csv

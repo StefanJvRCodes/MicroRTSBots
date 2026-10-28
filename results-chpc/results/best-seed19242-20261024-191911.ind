@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4598981598613953272|0.2947630304310418|i94|
+Tree 0:
+ (/ (/ (+ movesTowardEnemyMajor (max aIsHarvest mapArea)) (max movesTowardEnemy tgtKillable)) (/ (/ tgtKillable movesTowardEnemyBaseMajor) movesTowardEnemy))
+Tree 1:
+ (if> tgtKillable aProducesBase (if> movesTowardEnemy tgtKillable movesTowardEnemy movesTowardEnemy) aProducesBase)
+Tree 2:
+ (if> tgtKillable aProducesBuilding aProducesCombat aProducesBase)
+Tree 3:
+ (- tgtWounded (max (if> movesTowardEnemy tgtKillable aIsAttack distNearestEnemy) (if> movesTowardEnemy tgtKillable aIsAttack distNearestEnemy)))

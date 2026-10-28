@@ -1,0 +1,3128 @@
+
+Generation: 0
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.585851387347886 Adjusted=0.6305761107113319 Hits=71
+Tree 0:
+ (max (min movesTowardEnemyMajor distNearestEnemy)
+     (+ movesTowardEnemy placesTowardEnemy))
+Tree 1:
+ (* aProducesBase aIsReturn)
+Tree 2:
+ (+ (/ (* (if> aProducesLight tgtWounded tgtIsCombat
+     aProducesCombat) (- aProducesWorker movesTowardResource))
+     (- (if> movesTowardResource enemyWorkerCount
+         movesTowardResource movesTowardEnemyMajor)
+         (/ myBarracksCount tgtIsCombat))) (- (+ (*
+     aProducesLight tgtIsBuilding) (* tgtIsWorker
+     aIsProduce)) (/ (if> aIsAttack enemyWorkerCount
+     aIsHarvest aIsReturn) (* myWorkerCount aIsNone))))
+Tree 3:
+ aIsAttack
+
+Generation: 1
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.49345402319641224 Adjusted=0.6695887415802184 Hits=77
+Tree 0:
+ (min (- (max (+ (* movesTowardEnemy gameTimeK)
+     (if> aProducesBase tgtIsBuilding tgtWounded
+         aProducesBuilding)) (min (max uIsBase enemyUnitCount)
+     (if> uIsWorker movesTowardEnemy uIsBase uHpFrac)))
+     (min (* (if> movesTowardResource distNearestResource
+         tgtWounded movesTowardEnemyBase) (max aProducesLight
+         aProducesBase)) (* (min placesTowardEnemy
+         myBarracksCount) (if> tgtWounded myWorkerCount
+         aProducesBase -2.1535)))) (- (/ (- (* placesTowardResource
+     movesTowardEnemyBase) (/ aIsAttack myWorkerCount))
+     (min (+ aIsReturn enemiesNearMyBase) (* threatAtDest
+         enemyCombatCount))) (+ (- gameTimeK movesTowardEnemyBaseMajor)
+     (+ (min mapArea movesTowardEnemy) (min movesTowardMyBase
+         myCombatCount)))))
+Tree 1:
+ aProducesBuilding
+Tree 2:
+ (/ (- (- tgtWounded myCombatCount) (- enemyCombatCount
+     aProducesWorker)) (if> (min enemyWorkerCount
+     tgtWounded) (if> tgtIsWorker uIsBarracks
+     placesTowardResource enemyCombatCount) (max
+     aIsAttack uHpFrac) (/ tgtIsBuilding movesTowardMyBase)))
+Tree 3:
+ (+ (max (/ (max aProducesBarracks mapArea)
+     (if> aProducesLight uIsWorker movesTowardEnemyBaseMajor
+         movesTowardEnemyBaseMajor)) (min (* myCombatCount
+     tgtWounded) (min enemyUnitCount enemiesNearMyBase)))
+     (min (max (/ uHpFrac uIsBarracks) (if> enemyCombatCount
+         aProducesBuilding movesTowardMyBase distEnemyBase))
+         (- (min aIsAttack aProducesLight) (if> uIsBase
+             enemiesNearMyBase tgtWounded movesTowardEnemyBaseMajor))))
+
+Generation: 2
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4465916882870644 Adjusted=0.6912800675525229 Hits=83
+Tree 0:
+ (max (min movesTowardEnemyMajor distNearestEnemy)
+     (+ movesTowardEnemy placesTowardEnemy))
+Tree 1:
+ (* (max placesTowardResource uIsWorker) (/
+     myBarracksCount movesTowardEnemyMajor))
+Tree 2:
+ (+ (/ (* (if> aProducesLight tgtWounded tgtIsCombat
+     aProducesCombat) (- aProducesWorker movesTowardResource))
+     (- (if> movesTowardResource enemyWorkerCount
+         movesTowardResource movesTowardEnemyMajor)
+         (/ myBarracksCount tgtIsCombat))) (- (+ (*
+     aProducesLight tgtIsBuilding) (* tgtIsWorker
+     aIsProduce)) (/ (if> aIsAttack enemyWorkerCount
+     aIsHarvest aIsReturn) (* myWorkerCount aIsNone))))
+Tree 3:
+ (max movesTowardEnemy uCarrying)
+
+Generation: 3
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3944094809177888 Adjusted=0.7171494555113096 Hits=86
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ tgtIsCombat
+Tree 3:
+ (max movesTowardEnemy uCarrying)
+
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3644663029716251 Adjusted=0.7328872818787344 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (min uIsBarracks (+ movesTowardEnemy placesTowardEnemy))
+Tree 2:
+ tgtIsCombat
+Tree 3:
+ (max movesTowardEnemy uCarrying)
+
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3641871256757067 Adjusted=0.7330372653272782 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (+ (/ (max placesTowardResource myBarracksCount)
+     (- (if> movesTowardResource enemyWorkerCount
+         movesTowardResource movesTowardEnemyMajor)
+         (/ myBarracksCount tgtIsCombat))) (- (+ (*
+     aProducesLight tgtIsBuilding) (* tgtIsWorker
+     aIsProduce)) movesTowardEnemy))
+Tree 3:
+ (max movesTowardEnemy tgtIsCombat)
+
+Generation: 6
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36347156445121687 Adjusted=0.7334219693848104 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ aIsReturn
+Tree 3:
+ (max movesTowardEnemy uCarrying)
+
+Generation: 7
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3625635606246863 Adjusted=0.7339107171936522 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (/ myWorkerCount aProducesLight)
+Tree 3:
+ (max movesTowardEnemy uCarrying)
+
+Generation: 8
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3382220679420869 Adjusted=0.7472601326458443 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ aIsReturn
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 9
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3462060373737974 Adjusted=0.7428283429413359 Hits=87
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (max movesTowardEnemy tgtIsCombat)
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 10
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33619193401351555 Adjusted=0.7483954771350124 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy (+ movesTowardEnemy placesTowardEnemy))
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 11
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3362651164114747 Adjusted=0.7483544902268264 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy (+ movesTowardEnemy placesTowardEnemy))
+Tree 2:
+ aIsReturn
+Tree 3:
+ (if> placesTowardEnemy myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 12
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3363572720237197 Adjusted=0.748302883468913 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy (+ movesTowardEnemy placesTowardEnemy))
+Tree 2:
+ aIsReturn
+Tree 3:
+ (if> placesTowardEnemy myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 13
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.335489925084944 Adjusted=0.7487888760646358 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy (+ movesTowardEnemy placesTowardEnemy))
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max movesTowardEnemy uCarrying) movesTowardEnemy)))
+
+Generation: 14
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3343190067175971 Adjusted=0.749445968292083 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (max movesTowardEnemy uCarrying)
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 15
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3346334199829033 Adjusted=0.7492694136288075 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardResource
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 16
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3345439748298421 Adjusted=0.7493196319195871 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> movesTowardEnemyMajor uCarrying gameTimeK
+             (if> aIsProduce (min distEnemyBase aProducesRanged)
+                 (max enemyCombatCount uIsBarracks) movesTowardEnemy))))
+
+Generation: 17
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.334386768197189 Adjusted=0.7494079106847266 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         movesTowardEnemy))
+
+Generation: 18
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33374167891147477 Adjusted=0.7497703759367735 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             movesTowardEnemy movesTowardEnemy)))
+
+Generation: 19
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33414011641147473 Adjusted=0.7495464589504784 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 20
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3343244276359644 Adjusted=0.7494429235412483 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (min distEnemyBase aProducesRanged)
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (if> aIsProduce (min distEnemyBase aProducesRanged)
+             (max enemyCombatCount uIsBarracks) movesTowardEnemy)))
+
+Generation: 21
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3342431138604543 Adjusted=0.7494885974015887 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     (+ movesTowardEnemy placesTowardEnemy))
+
+Generation: 22
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3342431138604543 Adjusted=0.7494885974015887 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     (+ movesTowardEnemy placesTowardEnemy))
+
+Generation: 23
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3337443893706584 Adjusted=0.7497688522400163 Hits=88
+Tree 0:
+ (if> aIsProduce (min distEnemyBase aProducesRanged)
+     (+ movesTowardEnemy placesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 24
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33386364957473996 Adjusted=0.7497018157131864 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     (if> aIsProduce (min distEnemyBase aProducesRanged)
+         movesTowardEnemy movesTowardEnemy))
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     (if> aIsProduce (max movesTowardEnemy uCarrying)
+         (max enemyCombatCount uIsBarracks) movesTowardEnemy))
+
+Generation: 25
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33439761003392365 Adjusted=0.7494018218262378 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy (+ movesTowardEnemy placesTowardEnemy))
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     (if> movesTowardEnemyMajor (min distEnemyBase
+         (min distEnemyBase aProducesRanged)) (max
+         enemyCombatCount uIsBarracks) movesTowardEnemy))
+
+Generation: 26
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33434611130943387 Adjusted=0.7494307447853016 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     (if> aIsProduce (max movesTowardEnemy uCarrying)
+         (max enemyCombatCount uIsBarracks) movesTowardEnemy))
+
+Generation: 27
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3342946125849441 Adjusted=0.7494596699769991 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (min distEnemyBase aProducesRanged)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 28
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33420245697269924 Adjusted=0.7495114364194746 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (if> movesTowardEnemyMajor enemyWorkerCount
+     gameTimeK movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 29
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3342268511053522 Adjusted=0.7494977328417136 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying (+ placesTowardEnemy
+     placesTowardEnemy) movesTowardEnemy)
+Tree 3:
+ (if> placesTowardEnemy myResources tgtIsCombat
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (+ movesTowardEnemy placesTowardEnemy)))
+
+Generation: 30
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3341726419216788 Adjusted=0.7495281859172644 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ (+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     (if> movesTowardEnemyMajor movesTowardEnemy
+         movesTowardEnemy movesTowardEnemy)) placesTowardEnemy)
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     (if> movesTowardEnemyMajor (min distEnemyBase
+         aProducesRanged) movesTowardEnemy movesTowardEnemy))
+
+Generation: 31
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3344978970237196 Adjusted=0.7493455045753631 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+
+Generation: 32
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3342756393706584 Adjusted=0.74947032718942 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+Tree 3:
+ (if> (if> enemyWorkerCount movesTowardEnemyBaseMajor
+     aProducesHeavy aIsHarvest) myResources myWorkerCount
+     (if> movesTowardEnemyMajor uCarrying gameTimeK
+         (+ movesTowardEnemy placesTowardEnemy)))
+
+Generation: 33
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.334744548809434 Adjusted=0.7492070305827286 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 34
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3343488217686175 Adjusted=0.7494292224686393 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ placesTowardEnemy placesTowardEnemy)
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying (+ movesTowardEnemyBaseMajor
+     placesTowardResource) movesTowardEnemy)
+
+Generation: 35
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33405338171759713 Adjusted=0.749595191395188 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 36
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33406151309514814 Adjusted=0.7495906224593093 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aIsNone
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 37
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33406151309514814 Adjusted=0.7495906224593093 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aIsNone
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 38
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33406151309514814 Adjusted=0.7495906224593093 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aIsNone
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 39
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3345602375849439 Adjusted=0.749310500820575 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (+ movesTowardEnemy (if> movesTowardEnemyMajor
+     uCarrying gameTimeK movesTowardEnemy))
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 40
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33438676819718893 Adjusted=0.7494079106847267 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 41
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3340750653910665 Adjusted=0.7495830076899482 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 42
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33460089447269925 Adjusted=0.7492876740466294 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 43
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3340181457482095 Adjusted=0.7496149907609623 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 44
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3340181457482095 Adjusted=0.7496149907609623 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 45
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3340181457482095 Adjusted=0.7496149907609623 Hits=88
+Tree 0:
+ (+ movesTowardEnemy placesTowardEnemy)
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 46
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3338799123298421 Adjusted=0.7496926752973845 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 47
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3338799123298421 Adjusted=0.7496926752973845 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 48
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3338799123298421 Adjusted=0.7496926752973845 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 49
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33424582431963795 Adjusted=0.7494870748498857 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 50
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33432984855433184 Adjusted=0.7494398788151531 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 51
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33425395569718896 Adjusted=0.7494825072318929 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 52
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33425395569718896 Adjusted=0.7494825072318929 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 53
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3340750653910665 Adjusted=0.7495830076899482 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 54
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33425395569718896 Adjusted=0.7494825072318929 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 55
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339287005951481 Adjusted=0.7496652553872168 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 56
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339287005951481 Adjusted=0.7496652553872168 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 57
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33425395569718896 Adjusted=0.7494825072318929 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 58
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33456294804412773 Adjusted=0.7493089789923755 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 59
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3343813472788217 Adjusted=0.7494109551510749 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ tgtIsCombat
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 60
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3346849187073931 Adjusted=0.7492405031207466 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 61
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3342810602890257 Adjusted=0.7494672822406583 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 62
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3342810602890257 Adjusted=0.7494672822406583 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 63
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33347063299310736 Adjusted=0.7499227768934068 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 64
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33347063299310736 Adjusted=0.7499227768934068 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 65
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3344978970237196 Adjusted=0.7493455045753631 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 66
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3344707924318829 Adjusted=0.7493607246192646 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aIsProduce
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 67
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3344978970237196 Adjusted=0.7493455045753631 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 68
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3346198676869848 Adjusted=0.7492770220280693 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 69
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3346144467686175 Adjusted=0.7492800654310393 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 70
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33446808197269917 Adjusted=0.7493622466576599 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 71
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33423769294208705 Adjusted=0.7494916425235524 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+
+Generation: 72
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33423769294208705 Adjusted=0.7494916425235524 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+
+Generation: 73
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33288517380943394 Adjusted=0.7502521744929939 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 74
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33288517380943394 Adjusted=0.7502521744929939 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 75
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33405609217678084 Adjusted=0.7495936684103731 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 76
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33405609217678084 Adjusted=0.7495936684103731 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 77
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33420787789106654 Adjusted=0.749508391136667 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+
+Generation: 78
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339639365645358 Adjusted=0.7496454533661382 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 79
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33393954243188284 Adjusted=0.749659162346231 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 80
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33408861768698495 Adjusted=0.749575393075296 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 81
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33411572227882164 Adjusted=0.7495601643100991 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 82
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33411572227882164 Adjusted=0.7495601643100991 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 83
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33411572227882164 Adjusted=0.7495601643100991 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 84
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33411572227882164 Adjusted=0.7495601643100991 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 85
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339124378400461 Adjusted=0.7496743951344078 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 86
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339124378400461 Adjusted=0.7496743951344078 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 87
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339124378400461 Adjusted=0.7496743951344078 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 88
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.333722705697189 Adjusted=0.7497810419874804 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 89
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339612261053523 Adjusted=0.7496469765613885 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 90
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3336224187073931 Adjusted=0.7498374247256919 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 91
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33383383452371956 Adjusted=0.7497185737210484 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 92
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3337877567175971 Adjusted=0.7497444739341164 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aIsProduce
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 93
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3337877567175971 Adjusted=0.7497444739341164 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aIsProduce
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 94
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.334137405952291 Adjusted=0.7495479817434638 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 95
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3343569531461686 Adjusted=0.7494246555557594 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 96
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33362512916657666 Adjusted=0.7498359007564073 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+
+Generation: 97
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3340073039114747 Adjusted=0.7496210830839352 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+
+Generation: 98
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3340073039114747 Adjusted=0.7496210830839352 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+
+Generation: 99
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33372541615637263 Adjusted=0.7497795182473713 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 100
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3341590896257604 Adjusted=0.7495357995728275 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 101
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3341075909012707 Adjusted=0.7495647328746846 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 102
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33443826692167883 Adjusted=0.7493789894880857 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemyBaseMajor
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 103
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33405609217678084 Adjusted=0.7495936684103731 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 104
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33361699778902576 Adjusted=0.7498404726828451 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 105
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33409132814616854 Adjusted=0.7495738701709301 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 106
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33409132814616854 Adjusted=0.7495738701709301 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 107
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33409132814616854 Adjusted=0.7495738701709301 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 108
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3341807732992298 Adjusted=0.7495236177981708 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying uCarrying
+     movesTowardEnemy)
+
+Generation: 109
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33400188299310735 Adjusted=0.7496241292825574 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> movesTowardEnemyMajor placesTowardEnemy
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 110
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.334104880442087 Adjusted=0.7495662557419223 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 111
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3341048804420868 Adjusted=0.7495662557419224 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying uCarrying
+     movesTowardEnemy)
+
+Generation: 112
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33445452967678085 Adjusted=0.7493698569423798 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 113
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3337443893706584 Adjusted=0.7497688522400163 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 114
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.33437321590127067 Adjusted=0.7494155218969782 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying gameTimeK
+     movesTowardEnemy)
+
+Generation: 115
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339530947278011 Adjusted=0.749651546184279 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying uCarrying
+     movesTowardEnemy)
+
+Generation: 116
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339530947278011 Adjusted=0.749651546184279 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying uCarrying
+     movesTowardEnemy)
+
+Generation: 117
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3339530947278011 Adjusted=0.749651546184279 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying uCarrying
+     movesTowardEnemy)
+
+Generation: 118
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.334378636819638 Adjusted=0.7494124773935252 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor uCarrying uCarrying
+     movesTowardEnemy)
+
+Generation: 119
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31632868997263935 Adjusted=0.7596886762536381 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 120
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3176351312991698 Adjusted=0.7589354414176965 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 121
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31671357517672094 Adjusted=0.7594666135843449 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 122
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3160820381869251 Adjusted=0.759831052308586 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> placesTowardEnemy placesTowardEnemy
+     gameTimeK movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 123
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3159194106359047 Adjusted=0.7599249558274699 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 124
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.315293294564476 Adjusted=0.760286701173462 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 125
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31510085196243526 Adjusted=0.7603979561778614 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 126
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3147674654828434 Adjusted=0.760590770804291 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 127
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3145939960950883 Adjusted=0.7606911357958668 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 128
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3145939960950883 Adjusted=0.7606911357958668 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 129
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31523908538080264 Adjusted=0.7603180373175032 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 130
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31538816063590464 Adjusted=0.760231869136305 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 131
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3150330904828434 Adjusted=0.7604371382265582 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 132
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31542339660529234 Adjusted=0.7602115049653942 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 133
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3146861517073332 Adjusted=0.7606378135963004 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ threatAtDest
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 134
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31496532900325147 Adjusted=0.7604763243134355 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 135
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31496532900325147 Adjusted=0.7604763243134355 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 136
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3154206861461088 Adjusted=0.7602130714013464 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 137
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31528787364610866 Adjusted=0.7602898346716302 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 138
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3152201121665169 Adjusted=0.7603290055781874 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 139
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3152201121665169 Adjusted=0.7603290055781874 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 140
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3151713239012108 Adjusted=0.7603572111302475 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 141
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3151713239012108 Adjusted=0.7603572111302475 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 142
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31520384941141494 Adjusted=0.7603384071963627 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 143
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3152282435440679 Adjusted=0.760324304856288 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 144
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3150547741563128 Adjusted=0.7604245995316511 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 145
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31491654073794545 Adjusted=0.7605045407967786 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 146
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31522553308488416 Adjusted=0.7603258717571296 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 147
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31503038002365974 Adjusted=0.760438705592496 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 148
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3155128417583536 Adjusted=0.7601598162001749 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 149
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31547218487059847 Adjusted=0.7601833102220773 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ tgtWounded
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 150
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31536647696243514 Adjusted=0.7602444014760751 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 151
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3153258200746802 Adjusted=0.7602679007268504 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 152
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3153556351257005 Adjusted=0.760250667800907 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 153
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3151469297685577 Adjusted=0.7603713146910377 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     (if> movesTowardEnemyMajor threatAtDest uCarrying
+         movesTowardEnemy))
+
+Generation: 154
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3151469297685577 Adjusted=0.7603713146910377 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     (if> movesTowardEnemyMajor threatAtDest uCarrying
+         movesTowardEnemy))
+
+Generation: 155
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31537460833998626 Adjusted=0.760239701800241 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 156
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3152716108910067 Adjusted=0.7602992353211123 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 157
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3152716108910067 Adjusted=0.7602992353211123 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 158
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3150249591052924 Adjusted=0.7604418403437553 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ distNearestResource
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 159
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.315011406809374 Adjusted=0.760449677334975 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 160
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3153176886971291 Adjusted=0.7602726007513341 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aProducesBuilding
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 161
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3153176886971291 Adjusted=0.7602726007513341 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aProducesBuilding
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 162
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.315293294564476 Adjusted=0.760286701173462 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 163
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31533937237059856 Adjusted=0.7602600674818458 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 164
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31516319252365965 Adjusted=0.7603619122590446 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aIsAttack
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 165
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3152201121665169 Adjusted=0.7603290055781874 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ gameTimeK
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 166
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.314962618544068 Adjusted=0.7604778918409134 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 167
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.314962618544068 Adjusted=0.7604778918409134 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 168
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31514964022774133 Adjusted=0.7603697476028906 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 169
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31514964022774133 Adjusted=0.7603697476028906 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 170
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31495990808488417 Adjusted=0.7604794593748537 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 171
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31495990808488417 Adjusted=0.7604794593748537 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 172
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31491111981957814 Adjusted=0.7605076760908465 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 173
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3151062728808026 Adjusted=0.7603948217883963 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 174
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31533124099304755 Adjusted=0.7602647674094785 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ uIsCombat
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 175
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31498159175835355 Adjusted=0.7604669192842695 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 176
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3148433583399862 Adjusted=0.7605468694480217 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 177
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3149680394624354 Adjusted=0.7604747567924193 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 178
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31490027798284337 Adjusted=0.7605139467565372 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (min (if> movesTowardEnemyMajor threatAtDest
+     uCarrying movesTowardEnemy) aProducesBase)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 179
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3147837282379454 Adjusted=0.7605813629441444 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 180
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31478914915631273 Adjusted=0.7605782270424806 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 181
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31560770782978226 Adjusted=0.7601050024627731 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 182
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31527161089100664 Adjusted=0.7602992353211123 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 183
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31527161089100664 Adjusted=0.7602992353211123 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 184
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3154992894624352 Adjusted=0.7601676473794519 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 185
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31533124099304743 Adjusted=0.7602647674094786 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 186
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3147891491563128 Adjusted=0.7605782270424806 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 187
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31494093487059854 Adjusted=0.760490432293378 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aProducesCombat
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 188
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31494093487059854 Adjusted=0.760490432293378 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aProducesCombat
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 189
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31494093487059854 Adjusted=0.760490432293378 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ aProducesCombat
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 190
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3150385114012107 Adjusted=0.7604340035140658 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 191
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3150385114012107 Adjusted=0.7604340035140658 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 192
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31485691063590465 Adjusted=0.7605390304534123 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 193
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31527974226855765 Adjusted=0.7602945349673128 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 194
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31461025885019034 Adjusted=0.7606817254527127 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Generation: 195
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3154721848705986 Adjusted=0.7601833102220773 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 196
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3152634795134557 Adjusted=0.7603039357330301 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 197
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31481625374814953 Adjusted=0.7605625479220368 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 198
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3148379374216189 Adjusted=0.7605500050911125 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)
+
+Generation: 199
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.31523095400325146 Adjusted=0.7603227379619046 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest placesTowardEnemy
+     movesTowardEnemy)
+
+Best Individual of Run:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3145939960950883 Adjusted=0.7606911357958668 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> movesTowardEnemyMajor threatAtDest uCarrying
+     movesTowardEnemy)

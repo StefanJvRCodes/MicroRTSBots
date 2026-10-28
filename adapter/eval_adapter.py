@@ -33,7 +33,9 @@ VALIDATION_MAPS = [
     "maps/8x8/basesWorkers8x8G.xml", "maps/8x8/basesWorkers8x8K.xml", "maps/16x16/basesWorkers16x16.xml",
     "maps/16x16/basesWorkers16x16C.xml", "maps/16x16/basesWorkers16x16E.xml",
 ]
-STOCHASTIC = {"RandomAI", "RandomBiasedAI", "RandomBiasedSingleUnitAI"}
+STOCHASTIC = {"RandomAI", "RandomBiasedAI", "RandomBiasedSingleUnitAI", "EconomyLightRush", "mayari", "Rojo", "Droplet", "Coac"}
+TEAM_MAPS = ["maps/8x8/basesWorkers8x8A.xml", "maps/8x8/basesWorkersBarracks8x8.xml", "maps/8x8/basesWorkers8x8Obstacle.xml", "maps/12x12/basesWorkers12x12.xml", "maps/12x12/basesWorkers12x12F.xml", "maps/12x12/SixBasesWorkers12x12.xml", "maps/16x16/melee16x16Mixed12.xml", "maps/16x16/TwoBasesBarracks16x16.xml", "maps/16x16/EightBasesWorkers16x16.xml"]
+mname = lambda m: os.path.basename(m)[:-4].replace("basesWorkers", "") or os.path.basename(m)[:-4]
 PTYPES = ["Worker", "Light", "Heavy", "Ranged", "Base", "Barracks"]
 
 
@@ -74,10 +76,12 @@ def main():
     p.add_argument("--pick-bonus", type=float, default=None, help="override the pick bonus (default: from ckpt, else 1.0)")
     p.add_argument("--opponents", default=None, help="comma list; default: eval.Panel.FULL_PANEL")
     p.add_argument("--samples", type=int, default=5)
+    p.add_argument("--maps", choices=["validation", "team"], default="validation")
     p.add_argument("--maxcycles", type=int, default=4000)
     p.add_argument("--breakdown", action="store_true", help="per-game override counts and transition table")
     p.add_argument("--log-overrides", action="store_true", help="with --breakdown: print every override (map, side, cycle, codes)")
     a = p.parse_args()
+    MAPS = TEAM_MAPS if a.maps == "team" else VALIDATION_MAPS
 
     os.chdir(ROOT)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -103,9 +107,9 @@ def main():
     net.eval()
     use_ties = bdist == "ties"
 
-    cp = [os.path.join(ROOT, "out")]
+    cp = [os.path.join(ROOT, os.environ.get("MRTS_CLASSES", "out"))]
     cp += glob.glob(os.path.join(ROOT, "lib", "*.jar"))
-    cp += glob.glob(os.path.join(ROOT, "lib", "bots", "*.jar"))
+    cp += sorted(glob.glob(os.path.join(ROOT, "lib", "bots", "*.jar")), key=lambda q: (0 if "GRojoA3N" in q else 1, q))
     jpype.startJVM(classpath=cp)
     AdapterEnv = jpype.JClass("rl.AdapterEnv")
     JIntArray = jpype.JArray(jpype.JInt)
@@ -123,8 +127,8 @@ def main():
 
     print(f"\n=== Adapter eval (argmax, validation maps) ===\nckpt  : {a.ckpt or '(none: base only)'}"
           f"\nbase  : {base}\ntau   : {tau}\ndist  : {bdist}" + (f" (pick bonus {bonus:g})" if use_ties else "")
-          + f"\nmaps  : {', '.join(os.path.basename(m)[12:-4] for m in VALIDATION_MAPS)}\n")
-    rows, decisions, overrides, off_tie, tied = [], 0, 0, 0, 0
+          + f"\nmaps  : {', '.join(mname(m) for m in MAPS)}\n")
+    rows, decisions, overrides, off_tie, tied, rates = [], 0, 0, 0, 0, []
     totW = totT = totL = 0
     trans = collections.OrderedDict()
     t0 = time.perf_counter()
@@ -133,7 +137,7 @@ def main():
         W = T = L = 0
         grid = []
         tr = collections.Counter()
-        for m in VALIDATION_MAPS:
+        for m in MAPS:
             cell = ""
             ov_side = []
             for side in (0, 1):
@@ -158,7 +162,7 @@ def main():
                             for b_, a_ in zip(bse[ovm].tolist(), act[ovm].tolist()):
                                 tr[(ctype(b_), ctype(a_))] += 1
                                 if a.log_overrides:
-                                    print(f"    OV {opp} {os.path.basename(m)[12:-4]} side{side} t={int(env.time())}: {cname(b_)} -> {cname(a_)}", flush=True)
+                                    print(f"    OV {opp} {mname(m)} side{side} t={int(env.time())}: {cname(b_)} -> {cname(a_)}", flush=True)
                         h, w = env.height(), env.width()
                         codes = act[0].reshape(P, P)[:h, :w].reshape(-1).astype(np.int32)
                         codes[np.asarray(env.baseCode(), dtype=np.int32) < 0] = -1
@@ -170,13 +174,13 @@ def main():
                     side_ov += game_ov
                     rows.append({"opponent": opp, "map": m, "side": side, "result": res, "cycles": int(env.time())})
                 ov_side.append(side_ov)
-            g = f"{os.path.basename(m)[12:-4]}:{cell}"
+            g = f"{mname(m)}:{cell}"
             if a.breakdown:
                 g += f"[{ov_side[0]}/{ov_side[1]}]"
             grid.append(g)
         n = W + T + L
         totW += W; totT += T; totL += L
-        trans[opp] = tr
+        trans[opp] = tr; rates.append(W / n)
         print(f"vs {opp:<25} {W:3d}W {T:3d}T {L:3d}L  ({100.0 * W / n:3.0f}%)")
         print("    " + " ".join(grid), flush=True)
 
@@ -197,7 +201,7 @@ def main():
         print(f"  ALL: {tot} overrides")
         for (b_, a_), k in allt.most_common():
             print(f"      {b_:<18} -> {a_:<18} {k:6d}  ({100.0 * k / max(1, tot):4.1f}%)")
-    path = os.path.join(out_dir, f"eval-{label}-validation-{time.strftime('%Y%m%d-%H%M%S')}.csv")
+    print(f"MACRO win rate (each opponent weighted equally): {100.0 * sum(rates) / max(1, len(rates)):.1f}%"); path = os.path.join(out_dir, f"eval-{label}-{a.maps}-{time.strftime('%Y%m%d-%H%M%S')}.csv")
     with open(path, "w", newline="") as fh:
         wr = csv.DictWriter(fh, fieldnames=["opponent", "map", "side", "result", "cycles"])
         wr.writeheader()

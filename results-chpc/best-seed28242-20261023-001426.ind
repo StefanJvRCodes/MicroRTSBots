@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4598363959897722688|0.2604771942480859|i95|
+Tree 0:
+ (+ (if> movesTowardEnemy aIsNone aIsProduce gameTimeK) movesTowardEnemy)
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (max movesTowardEnemy placesTowardEnemy)
+Tree 3:
+ (- (/ (/ movesTowardEnemy enemyUnitCount) enemyCombatCount) (- (/ (if> uHpFrac aIsNone aIsProduce gameTimeK) (- aIsNone aIsProduce)) (if> (if> uHpFrac aIsNone aIsProduce gameTimeK) (max uIsBase aProducesRanged) placesTowardEnemy (- uIsCombat aProducesLight))))

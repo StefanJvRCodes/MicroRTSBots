@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4596784180765261154|0.2113909179570142|i97|
+Tree 0:
+ (+ (min movesTowardEnemy (if> movesTowardEnemyMajor movesTowardEnemyBase myResources movesTowardEnemy)) (max tgtKillable movesTowardEnemyMajor))
+Tree 1:
+ (min enemyUnitCount myCombatCount)
+Tree 2:
+ (+ movesTowardEnemy (min (if> movesTowardEnemyMajor movesTowardEnemyBase myResources movesTowardEnemy) gameTimeK))
+Tree 3:
+ (min (+ movesTowardEnemy (min (if> movesTowardEnemyMajor movesTowardEnemyBase myResources movesTowardEnemy) gameTimeK)) (max enemyUnitCount myCombatCount))

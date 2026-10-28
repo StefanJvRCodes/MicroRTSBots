@@ -1,0 +1,3405 @@
+
+Generation: 0
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.514594387527958 Adjusted=0.6602427740618714 Hits=75
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ (* (+ (min placesTowardEnemy enemyUnitCount)
+     (max tgtIsBuilding enemyUnitCount)) (/ (if>
+     distEnemyBase -8.8821 enemyUnitCount movesTowardEnemyBase)
+     (- uIsBase movesTowardEnemyBaseMajor))) (if>
+     (+ (max myBarracksCount distNearestResource)
+         (/ uIsCombat myBarracksCount)) (* (* aProducesLight
+     aIsHarvest) (/ uIsWorker uCarrying)) (/ (max
+     uIsCombat uIsBarracks) (- aProducesRanged
+     aIsNone)) (/ (* aIsReturn uIsBarracks) (min
+     uCarrying uIsCombat))))
+Tree 2:
+ (* (min (* (if> aProducesWorker myWorkerCount
+     tgtIsBuilding myWorkerCount) (* uIsBarracks
+     aIsAttack)) (+ (if> tgtIsCombat aProducesLight
+     distNearestEnemy myResources) (if> distNearestResource
+     aProducesBuilding uCarrying distEnemyBase)))
+     (if> (if> (- movesTowardResource distNearestResource)
+         (/ tgtIsWorker aIsAttack) (+ movesTowardEnemyBase
+         enemyCombatCount) (max uIsBase myBarracksCount))
+         (* (if> myResources tgtIsCombat enemiesNearMyBase
+             aIsAttack) (min aProducesBarracks movesTowardEnemy))
+         (max (/ enemyWorkerCount aProducesWorker)
+             (- enemyWorkerCount aProducesBuilding)) (if>
+         (- movesTowardEnemyMajor uCarrying) (- enemiesNearMyBase
+         aProducesLight) (* aProducesWorker uIsBarracks)
+         (max enemyCombatCount enemyCombatCount))))
+Tree 3:
+ (min (* (max (if> (/ uHpFrac enemyWorkerCount)
+     (* aProducesRanged myResources) (* movesTowardEnemyBase
+     uIsBarracks) (if> myBarracksCount aProducesBarracks
+     movesTowardEnemyBase movesTowardEnemyBaseMajor))
+     (+ (- distNearestResource uCarrying) (if>
+         tgtKillable uIsBase uIsCombat myCombatCount)))
+     (min (- (if> movesTowardResource uHpFrac
+         aProducesBuilding myWorkerCount) (/ uCarrying
+         aProducesRanged)) (max (/ 1.0170 distEnemyBase)
+         (+ uIsBarracks aProducesHeavy)))) (- (min
+     (min (min aProducesRanged tgtKillable) (min
+         aProducesLight uIsCombat)) (- (min aProducesWorker
+     aProducesHeavy) (+ mapArea myBarracksCount)))
+     (max (min (+ tgtIsWorker aProducesLight)
+         (if> uIsBarracks myBarracksCount uIsWorker
+             myWorkerCount)) (max (max distNearestResource
+         aIsReturn) (max distEnemyBase aIsHarvest)))))
+
+Generation: 1
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.4615665533409803 Adjusted=0.6841973755585129 Hits=79
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ (* (+ (min placesTowardEnemy enemyUnitCount)
+     (max tgtIsBuilding enemyUnitCount)) (/ (if>
+     distEnemyBase -8.8821 enemyUnitCount movesTowardEnemyBase)
+     (- uIsBase movesTowardEnemyBaseMajor))) (if>
+     (+ (max myBarracksCount distNearestResource)
+         (/ uIsCombat myBarracksCount)) (* (* aProducesLight
+     aIsHarvest) (/ uIsWorker uCarrying)) (/ (max
+     uIsCombat uIsBarracks) (- aProducesRanged
+     aIsNone)) (/ (* aIsReturn uIsBarracks) (min
+     uCarrying uIsCombat))))
+Tree 2:
+ (* (min (* (if> aProducesWorker myWorkerCount
+     tgtIsBuilding myWorkerCount) (* uIsBarracks
+     aIsAttack)) (+ (if> tgtIsCombat aProducesLight
+     distNearestEnemy myResources) (if> distNearestResource
+     aProducesBuilding uCarrying distEnemyBase)))
+     (if> (if> (- movesTowardResource distNearestResource)
+         (/ tgtIsWorker aIsAttack) (+ movesTowardEnemyBase
+         enemyCombatCount) (max uIsBase myBarracksCount))
+         (* (if> myResources tgtIsCombat enemiesNearMyBase
+             aIsAttack) (min aProducesBarracks movesTowardEnemy))
+         (max (/ enemyWorkerCount aProducesWorker)
+             (- enemyWorkerCount aProducesBuilding)) (if>
+         (- movesTowardEnemyMajor uCarrying) (- enemiesNearMyBase
+         aProducesLight) (* aProducesWorker uIsBarracks)
+         (max enemyCombatCount enemyCombatCount))))
+Tree 3:
+ (min (* movesTowardEnemyBaseMajor (min (-
+     (if> movesTowardResource uHpFrac aProducesBuilding
+         myWorkerCount) (/ uCarrying aProducesRanged))
+     (max (/ 1.0170 distEnemyBase) (+ uIsBarracks
+         aProducesHeavy)))) (- (min (min (min aProducesRanged
+     tgtKillable) (min aProducesLight uIsCombat))
+     (- (min aProducesWorker aProducesHeavy) (+
+         mapArea myBarracksCount))) (max (min (+ tgtIsWorker
+     aProducesLight) (if> uIsBarracks myBarracksCount
+     uIsWorker myWorkerCount)) (max (max distNearestResource
+     aIsReturn) (max distEnemyBase aIsHarvest)))))
+
+Generation: 2
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3996764931437854 Adjusted=0.7144508069531982 Hits=81
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ (if> uCarrying movesTowardEnemyBase aIsMove
+     placesTowardResource)
+Tree 3:
+ (/ (max enemyWorkerCount 0.7962) (- movesTowardEnemy
+     aProducesRanged))
+
+Generation: 3
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36531196623693113 Adjusted=0.7324333373831017 Hits=88
+Tree 0:
+ (if> (if> (/ uIsBarracks distNearestResource)
+     (+ uIsCombat tgtIsCombat) (* -8.3351 tgtWounded)
+     (* uHpFrac aProducesCombat)) (max (- distNearestEnemy
+     myWorkerCount) (max aProducesBuilding aIsNone))
+     (max (min distNearestEnemy uCarrying) (+
+         distEnemyBase uIsCombat)) (min (if> myWorkerCount
+     aIsAttack movesTowardEnemy distEnemyBase)
+     (+ aProducesRanged mapArea)))
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ enemiesNearMyBase
+Tree 3:
+ (- (if> (if> enemyUnitCount myWorkerCount
+     enemyCombatCount tgtIsBuilding) (* enemyCombatCount
+     movesTowardEnemy) (+ aProducesBuilding tgtIsBuilding)
+     (/ placesTowardEnemy tgtIsWorker)) (max aIsNone
+     aProducesHeavy))
+
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.365737508328768 Adjusted=0.7322051228011485 Hits=88
+Tree 0:
+ (if> (if> (/ uIsBarracks distNearestResource)
+     (+ uIsCombat tgtIsCombat) (* -8.3351 tgtWounded)
+     (* uHpFrac aProducesCombat)) (max (- distNearestEnemy
+     myWorkerCount) (max aProducesBuilding aIsNone))
+     (max (min distNearestEnemy uCarrying) (+
+         distEnemyBase uIsCombat)) (min (if> myWorkerCount
+     aIsAttack movesTowardEnemy distEnemyBase)
+     (+ aProducesRanged mapArea)))
+Tree 1:
+ placesTowardEnemy
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (- (if> (if> enemyUnitCount myWorkerCount
+     enemyCombatCount tgtIsBuilding) (* enemyCombatCount
+     movesTowardEnemy) (+ aProducesBuilding tgtIsBuilding)
+     (/ placesTowardEnemy tgtIsWorker)) (max aIsNone
+     aProducesHeavy))
+
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.36464790373693123 Adjusted=0.7327897527718432 Hits=88
+Tree 0:
+ movesTowardEnemy
+Tree 1:
+ (+ (* (+ (min placesTowardEnemy enemyUnitCount)
+     (max tgtIsBuilding enemyUnitCount)) (/ (if>
+     distEnemyBase -8.8821 enemyUnitCount movesTowardEnemyBase)
+     (- uIsBase movesTowardEnemyBaseMajor))) (if>
+     (+ (max myBarracksCount distNearestResource)
+         (/ uIsCombat myBarracksCount)) (* (* aProducesLight
+     aIsHarvest) (/ uIsWorker uCarrying)) (/ (max
+     uIsCombat uIsBarracks) (- aProducesRanged
+     aIsNone)) (/ (* aIsReturn uIsBarracks) (min
+     uCarrying uIsCombat))))
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (min (max aProducesRanged movesTowardEnemy)
+     distNearestEnemy)
+
+Generation: 6
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2919836380563736 Adjusted=0.7740036100645777 Hits=91
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (+ myBarracksCount uIsWorker)
+Tree 3:
+ (if> (* distEnemyBase gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 7
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.27803798559998527 Adjusted=0.7824493569575257 Hits=93
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (min placesTowardEnemy tgtIsCombat)
+Tree 3:
+ (if> (* distEnemyBase gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 8
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.27803798559998527 Adjusted=0.7824493569575257 Hits=93
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (min placesTowardEnemy tgtIsCombat)
+Tree 3:
+ (if> (* distEnemyBase gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 9
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.26737720972872175 Adjusted=0.7890310732461783 Hits=94
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (* distEnemyBase gameTimeK) (/ movesTowardEnemy
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 10
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24536064971118637 Adjusted=0.802980245306379 Hits=94
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 11
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24464815768312512 Adjusted=0.803439906954484 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (max aProducesRanged movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 12
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24449011399690068 Adjusted=0.8035419395886744 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (* distEnemyBase gameTimeK)
+Tree 2:
+ distNearestResource
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 13
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24373616788720684 Adjusted=0.8040290423480626 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (max aProducesRanged myBarracksCount)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount tgtIsCombat)
+     movesTowardEnemyMajor)
+
+Generation: 14
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24373616788720684 Adjusted=0.8040290423480626 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (max aProducesRanged myBarracksCount)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount tgtIsCombat)
+     movesTowardEnemyMajor)
+
+Generation: 15
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2432102192264925 Adjusted=0.8043691923817885 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (* -8.3351 tgtWounded)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     (+ myBarracksCount uIsWorker) movesTowardEnemyMajor)
+
+Generation: 16
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24355998804026802 Adjusted=0.8041429521835167 Hits=94
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ tgtIsCombat
+Tree 2:
+ (+ movesTowardEnemyMajor movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 17
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24356257892037006 Adjusted=0.8041412768050442 Hits=94
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ aIsProduce
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     (+ myBarracksCount uIsWorker) movesTowardEnemyMajor)
+
+Generation: 18
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24342267139485982 Adjusted=0.8042317572336118 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (/ myCombatCount aIsHarvest)
+Tree 2:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     (+ myBarracksCount uIsWorker) movesTowardEnemyMajor)
+
+Generation: 19
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24290190449434965 Adjusted=0.8045687245179903 Hits=94
+Tree 0:
+ (+ tgtIsWorker (+ movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 20
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24290190449434965 Adjusted=0.8045687245179903 Hits=94
+Tree 0:
+ (+ tgtIsWorker (+ movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ myCombatCount
+     aIsHarvest) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 21
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24325685506832925 Adjusted=0.8043390196670503 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ distNearestResource
+     tgtIsWorker) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 22
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24348485251730886 Adjusted=0.8041915411961807 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     (+ myBarracksCount uIsWorker) movesTowardEnemyMajor)
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     (+ myBarracksCount uIsWorker) movesTowardEnemyMajor)
+
+Generation: 23
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24279826929026796 Adjusted=0.8046358163751514 Hits=94
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (+ myBarracksCount uIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 24
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24364548708363534 Adjusted=0.8040876683796866 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ distNearestEnemy
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 25
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2435314883591456 Adjusted=0.8041613818074779 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 26
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24342785315506393 Adjusted=0.8042284057435323 Hits=94
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ (+ movesTowardEnemyMajor movesTowardEnemy)
+Tree 2:
+ uIsBarracks
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 27
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2435314883591456 Adjusted=0.8041613818074779 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 28
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24356516980047213 Adjusted=0.8041396014335527 Hits=94
+Tree 0:
+ (+ (/ distNearestResource tgtIsWorker) (+
+     movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 2:
+ (+ uIsWorker uIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) (/ distNearestResource
+     tgtIsWorker) (+ myBarracksCount uIsWorker)
+     movesTowardEnemyMajor)
+
+Generation: 29
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24366880500455373 Adjusted=0.8040725922978654 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aIsReturn movesTowardEnemyMajor)
+
+Generation: 30
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24391234773414547 Adjusted=0.8039151647795401 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (+ tgtIsWorker (+ movesTowardEnemyMajor movesTowardEnemy))
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 31
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24375430404792106 Adjusted=0.8040173181675845 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (+ movesTowardEnemyMajor movesTowardEnemy)
+Tree 2:
+ enemiesNearMyBase
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     tgtIsCombat movesTowardEnemyMajor)
+
+Generation: 32
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24297444913720675 Adjusted=0.8045217668747221 Hits=94
+Tree 0:
+ (+ (+ (/ (+ myBarracksCount distNearestResource)
+     tgtIsWorker) movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ aProducesHeavy
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 33
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24297444913720675 Adjusted=0.8045217668747221 Hits=94
+Tree 0:
+ (+ (+ (/ (+ myBarracksCount distNearestResource)
+     tgtIsWorker) movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ aProducesHeavy
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 34
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24297444913720675 Adjusted=0.8045217668747221 Hits=94
+Tree 0:
+ (+ (+ (/ (+ myBarracksCount distNearestResource)
+     tgtIsWorker) movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ aProducesHeavy
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 35
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24351076131832927 Adjusted=0.8041747857009559 Hits=94
+Tree 0:
+ (+ (+ (+ tgtIsWorker (+ movesTowardEnemyMajor
+     movesTowardEnemy)) movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     (+ movesTowardEnemyMajor movesTowardEnemy))
+     movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     tgtIsCombat movesTowardEnemyMajor)
+
+Generation: 36
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24351076131832927 Adjusted=0.8041747857009559 Hits=94
+Tree 0:
+ (+ (+ (+ tgtIsWorker (+ movesTowardEnemyMajor
+     movesTowardEnemy)) movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     (+ movesTowardEnemyMajor movesTowardEnemy))
+     movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     tgtIsCombat movesTowardEnemyMajor)
+
+Generation: 37
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24352630659894148 Adjusted=0.8041647327389569 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (if> (+ tgtIsWorker (+ movesTowardEnemyMajor
+     movesTowardEnemy)) movesTowardEnemy aProducesCombat
+     movesTowardEnemyMajor)
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     tgtIsCombat movesTowardEnemyMajor)
+
+Generation: 38
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24320244658618634 Adjusted=0.8043742213876619 Hits=94
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ (+ myBarracksCount uIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 39
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2435703515606762 Adjusted=0.8041362507115127 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     tgtIsCombat movesTowardEnemyMajor)
+
+Generation: 40
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24370248644588022 Adjusted=0.804050816733263 Hits=94
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+     movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 41
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2429329950555741 Adjusted=0.804548599142537 Hits=94
+Tree 0:
+ (+ (+ tgtIsWorker (+ movesTowardEnemyMajor
+     movesTowardEnemy)) (if> (- threatAtDest gameTimeK)
+     (- threatAtDest gameTimeK) aProducesCombat
+     movesTowardEnemyMajor))
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (+ myBarracksCount uIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 42
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24357812420098232 Adjusted=0.8041312246808098 Hits=94
+Tree 0:
+ (+ tgtIsWorker (+ movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ tgtWounded
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 43
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2435107613183292 Adjusted=0.804174785700956 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 44
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24345635283618636 Adjusted=0.8042099730473937 Hits=94
+Tree 0:
+ (+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (+ (- threatAtDest gameTimeK) movesTowardEnemy)
+Tree 2:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 45
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24239409199434966 Adjusted=0.8048975815674982 Hits=94
+Tree 0:
+ (+ tgtIsWorker (+ movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ (+ (- threatAtDest gameTimeK) movesTowardEnemyMajor)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 46
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24239409199434966 Adjusted=0.8048975815674982 Hits=94
+Tree 0:
+ (+ tgtIsWorker (+ movesTowardEnemyMajor movesTowardEnemy))
+Tree 1:
+ (+ (- threatAtDest gameTimeK) movesTowardEnemyMajor)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 47
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24278272400965575 Adjusted=0.8046458811188225 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ tgtWounded
+Tree 2:
+ gameTimeK
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     movesTowardEnemyBaseMajor movesTowardEnemyMajor)
+
+Generation: 48
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2434589437162884 Adjusted=0.8042082973896428 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 49
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2434589437162884 Adjusted=0.8042082973896428 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 50
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2434589437162884 Adjusted=0.8042082973896428 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 51
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2434589437162884 Adjusted=0.8042082973896428 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 52
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2434589437162884 Adjusted=0.8042082973896428 Hits=94
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemyMajor)
+
+Generation: 53
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24360662388210472 Adjusted=0.8041127964390782 Hits=94
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+     movesTowardEnemy)
+Tree 1:
+ (- movesTowardEnemyMajor gameTimeK)
+Tree 2:
+ distEnemyBase
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 54
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24360662388210472 Adjusted=0.8041127964390782 Hits=94
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+     movesTowardEnemy)
+Tree 1:
+ (- movesTowardEnemyMajor gameTimeK)
+Tree 2:
+ distEnemyBase
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 55
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2428267689713904 Adjusted=0.8046173649990153 Hits=94
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     tgtWounded movesTowardEnemyMajor)
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemy
+     aProducesCombat movesTowardEnemyMajor)
+
+Generation: 56
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.24346153459639047 Adjusted=0.8042066217388747 Hits=94
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+     movesTowardEnemy)
+Tree 1:
+ (+ movesTowardEnemyMajor movesTowardEnemy)
+Tree 2:
+ (+ movesTowardEnemyMajor movesTowardEnemy)
+Tree 3:
+ (if> (- (- threatAtDest gameTimeK) gameTimeK)
+     movesTowardEnemy aProducesCombat movesTowardEnemyMajor)
+
+Generation: 57
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21666262438823378 Adjusted=0.8219205389849329 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 58
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21926669804894802 Adjusted=0.8201651054688731 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (+ (- threatAtDest gameTimeK) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 59
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.215135838673948 Adjusted=0.8229532601814122 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 60
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21443271367394803 Adjusted=0.8234297287453348 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ uIsCombat
+Tree 2:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 61
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21443271367394803 Adjusted=0.8234297287453348 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ uIsCombat
+Tree 2:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 62
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21428957751323371 Adjusted=0.8235267917294643 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 2:
+ (+ (- threatAtDest gameTimeK) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 63
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2139430373346623 Adjusted=0.8237618811139636 Hits=98
+Tree 0:
+ (+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (- threatAtDest uIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 64
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21318717795966236 Adjusted=0.8242751144813445 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 65
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21318717795966236 Adjusted=0.8242751144813445 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 66
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2141966645668052 Adjusted=0.823589809774988 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 67
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2141313743882337 Adjusted=0.823634098496031 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 68
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21384007974537658 Adjusted=0.8238317523752938 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ enemiesNearMyBase
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 69
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21378232304894806 Adjusted=0.82387095363859 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ placesTowardEnemy
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 70
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2140259056382337 Adjusted=0.8237056518775712 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ aProducesWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 71
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21435235653109086 Adjusted=0.8234842174281212 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ aProducesWorker
+Tree 2:
+ aIsHarvest
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 72
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2144076020668052 Adjusted=0.8234467556840849 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (+ (/ distNearestResource tgtIsWorker) movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 73
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21411128510251948 Adjusted=0.8236477267531205 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 74
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21431971144180514 Adjusted=0.8235063555154386 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 75
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21434984537037668 Adjusted=0.8234859203156566 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ distNearestResource
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 76
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21434984537037668 Adjusted=0.8234859203156566 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ distNearestResource
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 77
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21430464447751946 Adjusted=0.8235165734956663 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 78
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21360151947751946 Adjusted=0.8239936947594798 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (+ (/ movesTowardEnemyMajor tgtIsWorker)
+     movesTowardEnemyMajor)
+Tree 2:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+
+Generation: 79
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21410375162037656 Adjusted=0.8236528374658033 Hits=98
+Tree 0:
+ (+ (+ (- tgtIsWorker gameTimeK) movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount aProducesBuilding) movesTowardEnemy)
+
+Generation: 80
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21410375162037656 Adjusted=0.8236528374658033 Hits=98
+Tree 0:
+ (+ (+ (- tgtIsWorker gameTimeK) movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount aProducesBuilding) movesTowardEnemy)
+
+Generation: 81
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21416904179894794 Adjusted=0.8236085467295157 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ threatAtDest
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount aProducesBuilding) movesTowardEnemy)
+
+Generation: 82
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.213307713673948 Adjusted=0.8241932271014389 Hits=98
+Tree 0:
+ (+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (/ distNearestResource tgtIsWorker)
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount aProducesBuilding) movesTowardEnemy)
+
+Generation: 83
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21350609537037651 Adjusted=0.8240584895412397 Hits=98
+Tree 0:
+ (+ (+ (- tgtIsWorker gameTimeK) movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ aProducesWorker
+Tree 2:
+ threatAtDest
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount aProducesBuilding) movesTowardEnemy)
+
+Generation: 84
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21378734537037658 Adjusted=0.8238675446849866 Hits=98
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+     movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ distNearestResource
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     enemyCombatCount movesTowardEnemy)
+
+Generation: 85
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21384761322751947 Adjusted=0.8238266394420659 Hits=98
+Tree 0:
+ (+ (+ (/ distNearestResource tgtIsWorker)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (if> movesTowardEnemyBase movesTowardEnemyMajor
+     placesTowardEnemy movesTowardEnemy)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount aProducesBuilding) movesTowardEnemy)
+
+Generation: 86
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21326753510251945 Adjusted=0.8242205210868857 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (- tgtIsWorker gameTimeK)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 87
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21326753510251945 Adjusted=0.8242205210868857 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (- tgtIsWorker gameTimeK)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 88
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21326753510251945 Adjusted=0.8242205210868857 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (- tgtIsWorker gameTimeK)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 89
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21326753510251945 Adjusted=0.8242205210868857 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (- tgtIsWorker gameTimeK)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 90
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128255708168052 Adjusted=0.8245208742808144 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardResource
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount aProducesBuilding) movesTowardEnemy)
+
+Generation: 91
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21336044804894805 Adjusted=0.8241574064887099 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 92
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21369443242394795 Adjusted=0.8239306148935981 Hits=98
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     (+ (+ tgtIsWorker movesTowardEnemyMajor)
+         movesTowardEnemy)) movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ distNearestResource
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     enemyCombatCount movesTowardEnemy)
+
+Generation: 93
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21369443242394795 Adjusted=0.8239306148935981 Hits=98
+Tree 0:
+ (+ (+ (+ (/ distNearestResource tgtIsWorker)
+     (+ (+ tgtIsWorker movesTowardEnemyMajor)
+         movesTowardEnemy)) movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ distNearestResource
+Tree 2:
+ (/ distNearestResource tgtIsWorker)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     enemyCombatCount movesTowardEnemy)
+
+Generation: 94
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21314951054894804 Adjusted=0.8243007076246536 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (- threatAtDest gameTimeK) movesTowardEnemy)
+Tree 2:
+ threatAtDest
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 95
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21324242349537656 Adjusted=0.8242375807457997 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (- tgtIsWorker gameTimeK)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 96
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21323740117394804 Adjusted=0.8242409927623267 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- (- threatAtDest gameTimeK) gameTimeK)
+     movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy)
+
+Generation: 97
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21311435429894807 Adjusted=0.8243245959923493 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (- (+ tgtIsWorker movesTowardEnemyMajor)
+     gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 98
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21277283644180514 Adjusted=0.8245567264962279 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (/ (+ tgtIsWorker movesTowardEnemyMajor)
+     uIsBase)
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 99
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21218773599537663 Adjusted=0.8249547246729562 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ tgtIsWorker
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 100
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128983944775195 Adjusted=0.8244713692038237 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ threatAtDest movesTowardEnemyMajor)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+         (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+     movesTowardEnemy)
+
+Generation: 101
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128983944775195 Adjusted=0.8244713692038237 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ threatAtDest movesTowardEnemyMajor)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+         (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+     movesTowardEnemy)
+
+Generation: 102
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21334286992394802 Adjusted=0.8241693463469891 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 103
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21287077170966232 Adjusted=0.824490146291843 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 104
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21272261322751948 Adjusted=0.8245908743621239 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     tgtIsWorker movesTowardEnemyMajor) movesTowardEnemy)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- (- threatAtDest gameTimeK) gameTimeK)
+     movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy)
+
+Generation: 105
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21272261322751948 Adjusted=0.8245908743621239 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     tgtIsWorker movesTowardEnemyMajor) movesTowardEnemy)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- (- threatAtDest gameTimeK) gameTimeK)
+     movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy)
+
+Generation: 106
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21316708867394807 Adjusted=0.8242887639599997 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ tgtIsWorker
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 107
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21292601724537655 Adjusted=0.8244525929710506 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (if> uIsBarracks movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+     movesTowardEnemyMajor)
+Tree 2:
+ aProducesBuilding
+Tree 3:
+ (if> (- threatAtDest tgtIsWorker) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 108
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21287077170966226 Adjusted=0.824490146291843 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 109
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21293606188823372 Adjusted=0.8244457654620754 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 110
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21282305965609086 Adjusted=0.8245225814584699 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker (+ tgtIsWorker movesTowardEnemyMajor))
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 111
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21282305965609086 Adjusted=0.8245225814584699 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker (+ tgtIsWorker movesTowardEnemyMajor))
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 112
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21281552617394797 Adjusted=0.8245277030338537 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 113
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21281552617394797 Adjusted=0.8245277030338537 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 114
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2131344435846623 Adjusted=0.8243109453269859 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ uCarrying
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 115
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128808163525194 Adjusted=0.8244833181608783 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 116
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21283310429894806 Adjusted=0.8245157527902641 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 117
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21283310429894806 Adjusted=0.8245157527902641 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 118
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21283310429894806 Adjusted=0.8245157527902641 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 119
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21283310429894806 Adjusted=0.8245157527902641 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 120
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21211240117394806 Adjusted=0.8250059969945739 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ tgtIsWorker
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 121
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21311184313823373 Adjusted=0.824326302357309 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (- threatAtDest gameTimeK)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 122
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21307417572751944 Adjusted=0.8243518986794587 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 123
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21311435429894807 Adjusted=0.8243245959923493 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ tgtWounded
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 124
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21314197706680515 Adjusted=0.8243058264440323 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ (+ (+ movesTowardEnemyMajor movesTowardEnemy)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 125
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128431489418052 Adjusted=0.8245089242351668 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 126
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128431489418052 Adjusted=0.8245089242351668 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 127
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128431489418052 Adjusted=0.8245089242351668 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 128
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128431489418052 Adjusted=0.8245089242351668 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ movesTowardEnemyMajor
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 129
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21314699938823378 Adjusted=0.8243024138907159 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 130
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2129862851025195 Adjusted=0.8244116296133404 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 131
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.213202244923948 Adjusted=0.8242648776690049 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 132
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.213219823048948 Adjusted=0.8242529350426336 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 133
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2128305931382337 Adjusted=0.8245174599467116 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyMajor
+Tree 2:
+ -9.9603
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 134
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21296870697751946 Adjusted=0.8244235768388487 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount (+ (+ (if> threatAtDest
+     movesTowardEnemyMajor (if> threatAtDest movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+     movesTowardEnemy) movesTowardEnemy) movesTowardEnemy))
+Tree 2:
+ movesTowardMyBase
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 135
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21311184313823375 Adjusted=0.824326302357309 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ movesTowardEnemyMajor movesTowardEnemy)
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (if>
+     threatAtDest movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy) movesTowardEnemy)
+
+Generation: 136
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21303399715609084 Adjusted=0.8243792031752281 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 137
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21340062662037657 Adjusted=0.824130116683102 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardResource
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 138
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21291346144180512 Adjusted=0.8244611275162926 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ aIsAttack
+Tree 2:
+ distNearestEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 139
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21352869581680514 Adjusted=0.8240431424877985 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount (+ tgtIsWorker movesTowardEnemyMajor))
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 140
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21315704403109087 Adjusted=0.8242955888688489 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 2:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 141
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21277032528109088 Adjusted=0.8245584338223515 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 142
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21248405295966233 Adjusted=0.8247531153576901 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     (+ enemyCombatCount movesTowardEnemy))
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ movesTowardMyBase
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 143
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21248405295966233 Adjusted=0.8247531153576901 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     (+ enemyCombatCount movesTowardEnemy))
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ movesTowardMyBase
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 144
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21316206635251944 Adjusted=0.8242921764002971 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 145
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.213079198048948 Adjusted=0.8243484857446627 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (+ enemyCombatCount movesTowardEnemy)
+     movesTowardEnemy)
+Tree 2:
+ distNearestEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 146
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21251418688823376 Adjusted=0.8247326182354823 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ myWorkerCount
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+     movesTowardEnemy)
+
+Generation: 147
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21304906412037658 Adjusted=0.8243689637773508 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ myCombatCount
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 148
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2132474458168052 Adjusted=0.8242341687575211 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ (- threatAtDest gameTimeK)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 149
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2133504034060909 Adjusted=0.824164229222508 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 2:
+ aIsAttack
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 150
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2131419770668052 Adjusted=0.8243058264440322 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 151
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21323991233466233 Adjusted=0.824239286750532 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 152
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2131972226025195 Adjusted=0.8242682899115328 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     (+ enemyCombatCount movesTowardEnemy)) movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ enemyCombatCount
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 153
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21303148599537655 Adjusted=0.8243809097662709 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     distNearestEnemy movesTowardEnemy) movesTowardEnemy)
+
+Generation: 154
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2129837739418052 Adjusted=0.8244133363386413 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemyMajor) movesTowardEnemy)
+Tree 1:
+ distEnemyBase
+Tree 2:
+ aProducesCombat
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (if>
+     threatAtDest movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy) movesTowardEnemy)
+
+Generation: 155
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21294359537037658 Adjusted=0.8244406449045526 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker (+ (+ tgtIsWorker (+ (+
+     tgtIsWorker movesTowardEnemyMajor) movesTowardEnemy))
+     movesTowardEnemy)) movesTowardEnemy)
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 156
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21281301501323377 Adjusted=0.8245294102397874 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ aProducesCombat
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 157
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2127351690310909 Adjusted=0.8245823371304928 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ movesTowardEnemy movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 158
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21297624045966226 Adjusted=0.8244184565569446 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (if>
+     threatAtDest movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy) movesTowardEnemy)
+
+Generation: 159
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21304153063823372 Adjusted=0.8243740834444939 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 160
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21304153063823372 Adjusted=0.8243740834444939 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 161
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21304153063823372 Adjusted=0.8243740834444939 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ threatAtDest
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 162
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21248154179894796 Adjusted=0.8247548234971965 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 163
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21283310429894806 Adjusted=0.8245157527902641 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 164
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21230324938823383 Adjusted=0.8248761194896008 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 165
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21230324938823383 Adjusted=0.8248761194896008 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ enemyCombatCount
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 166
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21323237885251947 Adjusted=0.8242444048071025 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (if>
+     threatAtDest movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy) movesTowardEnemy)
+
+Generation: 167
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21290341679894806 Adjusted=0.8244679552797078 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ aProducesCombat
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 168
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21317713331680513 Adjusted=0.8242819391641659 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (if>
+     threatAtDest movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy) movesTowardEnemy)
+
+Generation: 169
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2131595551918052 Adjusted=0.8242938826310411 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 170
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2133026913525195 Adjusted=0.8241966387507621 Hits=98
+Tree 0:
+ (+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 171
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21320475608466236 Adjusted=0.824263171558335 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyBaseMajor
+Tree 2:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 172
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21318717795966236 Adjusted=0.8242751144813445 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ uIsWorker movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 173
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21295364001323375 Adjusted=0.8244338175934652 Hits=98
+Tree 0:
+ (+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 174
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21298628510251952 Adjusted=0.8244116296133404 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)) movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ myCombatCount
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 175
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21264476724537662 Adjusted=0.8246438091441924 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ myResources
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 176
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21264476724537662 Adjusted=0.8246438091441924 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ myResources
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 177
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21264476724537662 Adjusted=0.8246438091441924 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ myResources
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 178
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21277785876323374 Adjusted=0.8245533118651915 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemy
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 179
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21305659760251944 Adjusted=0.8243638441737973 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ mapArea
+Tree 2:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 180
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2129712181382338 Adjusted=0.8244218700711471 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 181
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2129712181382338 Adjusted=0.8244218700711471 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 182
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21288834983466234 Adjusted=0.8244781971368735 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 2:
+ threatAtDest
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 183
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21330269135251942 Adjusted=0.8241966387507623 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 184
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2125895217096623 Adjusted=0.8246813798869657 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 185
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21307166456680512 Adjusted=0.8243536051574544 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemyMajor)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> (if> threatAtDest movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+     movesTowardEnemyMajor (+ enemyCombatCount
+     movesTowardEnemy) movesTowardEnemy)
+
+Generation: 186
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21314951054894804 Adjusted=0.8243007076246536 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 187
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21273014670966225 Adjusted=0.8245857520019318 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 188
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21307668688823367 Adjusted=0.8243501922085282 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     (+ enemyCombatCount movesTowardEnemy))
+Tree 1:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 2:
+ (+ aProducesBase movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 189
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21312188778109092 Adjusted=0.8243194769398563 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)) movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyBase
+Tree 2:
+ myResources
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 190
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21299632974537658 Adjusted=0.8244048027828021 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 2:
+ (if> threatAtDest movesTowardEnemyMajor aProducesRanged
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 191
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2132122895668052 Adjusted=0.8242580532687023 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 192
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2131570440310909 Adjusted=0.8242955888688489 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 193
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21312439894180513 Adjusted=0.824317770603154 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ aIsAttack
+Tree 2:
+ myResources
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 194
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21304404179894804 Adjusted=0.8243723768817139 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 195
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2127502359953766 Adjusted=0.8245720926858779 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ tgtIsWorker movesTowardEnemyMajor)
+Tree 2:
+ tgtIsWorker
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 196
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.2129084391203766 Adjusted=0.8244645413838643 Hits=98
+Tree 0:
+ (+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy) movesTowardEnemy)
+Tree 1:
+ distNearestEnemy
+Tree 2:
+ movesTowardEnemy
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 197
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21307668688823378 Adjusted=0.824350192208528 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 2:
+ aProducesBuilding
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 198
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21277534760251937 Adjusted=0.8245550191771747 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ movesTowardEnemyBase
+Tree 2:
+ (+ aProducesHeavy movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Generation: 199
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21286072706680517 Adjusted=0.8244969745359059 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> threatAtDest movesTowardEnemyMajor (+
+     enemyCombatCount movesTowardEnemy) movesTowardEnemy)
+
+Best Individual of Run:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.21211240117394806 Adjusted=0.8250059969945739 Hits=98
+Tree 0:
+ (+ (+ tgtIsWorker movesTowardEnemyMajor)
+     movesTowardEnemy)
+Tree 1:
+ tgtIsWorker
+Tree 2:
+ (+ enemyCombatCount movesTowardEnemy)
+Tree 3:
+ (if> (- threatAtDest gameTimeK) movesTowardEnemyMajor
+     (+ enemyCombatCount movesTowardEnemy) movesTowardEnemy)

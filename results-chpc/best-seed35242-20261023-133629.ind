@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4595903506130997129|0.18694728655293272|i101|
+Tree 0:
+ (+ (+ enemyUnitCount (if> gameTimeK movesTowardMyBase tgtIsWorker gameTimeK)) (+ movesTowardEnemyMajor (+ (if> gameTimeK movesTowardMyBase (/ (/ myCombatCount gameTimeK) gameTimeK) gameTimeK) (- movesTowardEnemy movesTowardMyBase))))
+Tree 1:
+ (- (- placesTowardEnemy gameTimeK) placesTowardEnemy)
+Tree 2:
+ (/ (/ (/ placesTowardEnemy (max tgtWounded movesTowardEnemy)) gameTimeK) gameTimeK)
+Tree 3:
+ (* (- (- placesTowardEnemy (/ aIsMove myCombatCount)) (/ uIsCombat gameTimeK)) (/ (/ (/ placesTowardEnemy (max tgtWounded movesTowardEnemy)) gameTimeK) gameTimeK))

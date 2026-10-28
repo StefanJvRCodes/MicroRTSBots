@@ -1,0 +1,10 @@
+Evaluated: T
+Fitness: d4598343297658929663|0.25933020958566994|i96|
+Tree 0:
+ (+ (+ movesTowardEnemy (+ tgtKillable movesTowardEnemyMajor)) (max (if> enemiesNearMyBase gameTimeK tgtIsWorker placesTowardEnemy) movesTowardEnemy))
+Tree 1:
+ (+ (+ (if> enemiesNearMyBase gameTimeK tgtIsWorker placesTowardEnemy) tgtKillable) (max tgtKillable movesTowardEnemyMajor))
+Tree 2:
+ (max (- distNearestEnemy (+ tgtKillable movesTowardEnemyMajor)) (if> (+ movesTowardEnemy (+ tgtKillable movesTowardEnemyMajor)) (max movesTowardEnemyMajor (+ tgtKillable movesTowardEnemyMajor)) tgtIsWorker tgtKillable))
+Tree 3:
+ (max movesTowardEnemyMajor movesTowardEnemy)
