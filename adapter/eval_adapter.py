@@ -66,6 +66,15 @@ def greedy(net, obs, base, mask, tau, ties=None, bonus=0.0):
     return (base_logits(base, tau, ties, bonus, adj.dtype) + adj).masked_fill(~legal, -1e9).argmax(-1)
 
 
+def report_timing(ms):
+    if not ms: return
+    s = sorted(ms); n = len(s); pct = lambda q: s[min(n - 1, int(q * n))]
+    warm = max(ms[1:]) if n > 1 else s[-1]
+    print(f"ADAPTER TIME per decision step (obs read + forward + argmax; excludes engine and opponent): "
+          f"n={n} mean={sum(s)/n:.2f}ms p50={pct(.5):.2f} p99={pct(.99):.2f} p99.9={pct(.999):.2f} "
+          f"max={s[-1]:.2f} max_excl_first={warm:.2f} over_100ms={sum(x > 100 for x in s)}")
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--ckpt", default=None, help="adapter .pt; omit to evaluate the bare base bot")
@@ -80,7 +89,7 @@ def main():
     p.add_argument("--maxcycles", type=int, default=4000)
     p.add_argument("--breakdown", action="store_true", help="per-game override counts and transition table")
     p.add_argument("--log-overrides", action="store_true", help="with --breakdown: print every override (map, side, cycle, codes)")
-    a = p.parse_args()
+    p.add_argument("--timing", action="store_true", help="tag the output csv -timing"); a = p.parse_args(); SUF = "-timing" if a.timing else ""
     MAPS = TEAM_MAPS if a.maps == "team" else VALIDATION_MAPS
 
     os.chdir(ROOT)
@@ -131,7 +140,7 @@ def main():
     rows, decisions, overrides, off_tie, tied, rates = [], 0, 0, 0, 0, []
     totW = totT = totL = 0
     trans = collections.OrderedDict()
-    t0 = time.perf_counter()
+    t0 = time.perf_counter(); step_ms = []
     for opp in opps:
         reps = a.samples if opp in STOCHASTIC else 1
         W = T = L = 0
@@ -146,7 +155,7 @@ def main():
                     env.reset(m, opp, side)
                     game_ov = 0
                     while not env.done():
-                        slot.read(obs, mask, bse, 0, tie)
+                        ts = time.perf_counter(); slot.read(obs, mask, bse, 0, tie)
                         with torch.no_grad():
                             act = greedy(net, tens(obs), tens(bse), tens(mask), tau,
                                          tens(tie) if use_ties else None, bonus).cpu().numpy()
@@ -166,7 +175,7 @@ def main():
                         h, w = env.height(), env.width()
                         codes = act[0].reshape(P, P)[:h, :w].reshape(-1).astype(np.int32)
                         codes[np.asarray(env.baseCode(), dtype=np.int32) < 0] = -1
-                        env.step(JIntArray(codes))
+                        step_ms.append(1000.0 * (time.perf_counter() - ts)); env.step(JIntArray(codes))
                     wnr = int(env.winner())
                     res = "W" if wnr == side else ("T" if wnr == -1 else "L")
                     W += res == "W"; T += res == "T"; L += res == "L"
@@ -201,7 +210,7 @@ def main():
         print(f"  ALL: {tot} overrides")
         for (b_, a_), k in allt.most_common():
             print(f"      {b_:<18} -> {a_:<18} {k:6d}  ({100.0 * k / max(1, tot):4.1f}%)")
-    print(f"MACRO win rate (each opponent weighted equally): {100.0 * sum(rates) / max(1, len(rates)):.1f}%"); path = os.path.join(out_dir, f"eval-{label}-{a.maps}-{time.strftime('%Y%m%d-%H%M%S')}.csv")
+    report_timing(step_ms); print(f"MACRO win rate (each opponent weighted equally): {100.0 * sum(rates) / max(1, len(rates)):.1f}%"); path = os.path.join(out_dir, f"eval-{label}{SUF}-{a.maps}-{time.strftime('%Y%m%d-%H%M%S')}.csv")
     with open(path, "w", newline="") as fh:
         wr = csv.DictWriter(fh, fieldnames=["opponent", "map", "side", "result", "cycles"])
         wr.writeheader()
