@@ -1,0 +1,33 @@
+seed: 42
+population size: 1200
+max depth: 15
+function probability: 70
+terminal probability: 30
+modi rate: 0.3
+tournament size: 4
+mutation rate: 25
+crossover rate: 70
+reproduction rate: 5
+full probability: 0
+grow probability: 100
+generations: 200
+tournament mode: transfer
+self play generations: 10
+self play population size: 200
+transfer target mode: opponents
+self play population file: gp_populations/self_play_final.ser
+skip self play: false
+seed tree: stefan
+seed fraction: 0.6
+builtin opponents: RandomBiasedAI, WorkerRush, LightRush, HeavyRush, RangedRush, Coac
+opponent classes: mayari, Rojo, EconomyLightRush, Droplet
+save traces: false
+resume: false
+checkpoint file: gp_populations/checkpoint.ser
+training maps folder: training_maps
+action selection: argmax
+temperature: 1.0
+self play opponents: all
+opponent time budget: 100
+final evaluation opponents: Coac, Rojo, mayari
+final evaluation games: 1

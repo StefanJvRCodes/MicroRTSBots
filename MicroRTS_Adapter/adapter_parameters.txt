@@ -1,0 +1,49 @@
+# Adapter-RL training (java -cp "bin;lib/*" ai.custom.adapter.AdapterTrainer adapter_parameters.txt)
+# The GP tree is frozen; the adapter only adds logits to the tree's 7 output cells.
+
+# Base agent: "stefan", or a .ser with a Tree, a Tree[] population or a GP checkpoint (best tree is used)
+base tree: stefan
+base selection: onehot          # onehot (paper eq. 1) or softmax
+temperature: 0.25               # 1/T is the base cell's logit; see README_ADAPTER.md for why not the paper's 1/100
+
+# Task the adapter is trained for
+maps folder: training_maps
+# maps: training_maps/basesWorkers8x8.xml   # overrides maps folder
+builtin opponents: WorkerRush, LightRush, Coac   # Coac = ai.coac.CoacAI from lib/Coac.jar
+opponent classes:               # classes from opponents/*.jar, e.g. mayari, Rojo
+max cycles: 2000
+player: 0
+
+# PPO (paper: gamma 0.99, lambda 0.95, clip 0.2, value coef 0.5, Adam 2.5e-4, 500 updates)
+updates: 500
+games per update: 16
+epochs: 4
+minibatches: 4
+learning rate: 0.00025
+anneal learning rate: true
+gamma: 0.99
+gae lambda: 0.95
+clip: 0.2
+value coef: 0.5
+entropy coef: 0.01
+max grad norm: 0.5
+hidden size: 256
+patch radius: 3
+
+# Shaped reward (gym-microrts weights)
+reward win: 10
+reward harvest: 1
+reward worker: 1
+reward building: 0.2
+reward attack: 1
+reward combat unit: 4
+
+# Run management
+run folder: adapter_runs/default
+resume: false                   # true continues from run folder/checkpoint.ser (e.g. after Ctrl+C)
+seed: 42
+baseline games: 4               # games per (map, opponent) with the base alone, logged as update 0
+
+# Final evaluation after the last update: adapter and base tree alone vs these opponents on every map
+final evaluation opponents: Coac, Rojo, mayari
+final evaluation games: 20      # per opponent per map, for each of base alone and adapter

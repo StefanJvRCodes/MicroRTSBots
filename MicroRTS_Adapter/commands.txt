@@ -1,0 +1,18 @@
+cd C:\MicroRTS_ResearchSetup\MicroRTS_Adapter
+
+javac -nowarn -cp "bin;lib/*" -d bin src/ai/custom/GP_bot/*.java src/ai/custom/adapter/*.java
+
+java -cp "bin;lib/*" ai.custom.GP_bot.Main
+
+Copy-Item gp_populations\checkpoint.ser gp_populations\base_run1.ser
+
+
+
+======Save the results from final_evaluation.txt
+
+
+
+java -cp "bin;lib/*" ai.custom.adapter.AdapterTrainer adapter_parameters.txt
+
+
+java -Dadapter.model=adapter_runs/base_run1/adapter_final.ser -cp "bin;lib/*" gui.frontend.FrontEnd
