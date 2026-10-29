@@ -1,0 +1,174 @@
+package ai.evolution.gp;
+
+import ai.evolution.gp.nodes.ActionNode;
+import ai.evolution.gp.nodes.GPSExpression;
+import rts.PhysicalGameState;
+import rts.units.UnitTypeTable;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+
+public class GPTrain {
+
+    public static void main(String[] args) throws Exception {
+        long trainingStarted = System.nanoTime();
+        GPConfig cfg = GPConfig.fromArgs(args);
+        UnitTypeTable utt = new UnitTypeTable(cfg.unitTypeTableVersion, cfg.conflictPolicy);
+        List<PhysicalGameState> maps = new ArrayList<>();
+        for (String mapPath : cfg.maps) maps.add(PhysicalGameState.load(mapPath, utt));
+        List<GPMatch.EvaluationCase> cases = new ArrayList<>();
+        for (int m = 0; m < cfg.maps.length; m++) {
+            for (String opponent : cfg.opponents) cases.add(new GPMatch.EvaluationCase(m, opponent));
+        }
+
+        Path runDir = Paths.get(cfg.outputDirectory, cfg.runId);
+        Files.createDirectories(runDir);
+        try (BufferedWriter w = Files.newBufferedWriter(runDir.resolve("manifest.properties"), StandardCharsets.UTF_8)) {
+            cfg.toProperties().store(w, "microRTS GP run manifest");
+        }
+        Path metricsPath = runDir.resolve("metrics.jsonl");
+        System.out.println("Training | " + cases.size() + " cases (" + cfg.maps.length + " maps x "
+                + cfg.opponents.length + " opponents) | population " + cfg.populationSize
+                + " | " + cfg.threads + " threads | "
+                + (cfg.structureBased ? "structure-based GP" : "ordinary GP") + " | " + runDir);
+
+        try (GPPopulation population = openPopulation(cfg, utt)) {
+            double bestCombatSoFar = Double.NEGATIVE_INFINITY;
+            int lastImprovement = population.getGeneration();
+
+            while (true) {
+                int gen = population.getGeneration();
+                long started = System.currentTimeMillis();
+                population.evaluate(maps, cases);
+                GPIndividual best = population.getBest();
+
+                GPStructure structure = population.getStructureSearch();
+                int distinct = population.distinctIndividuals();
+                System.out.printf("Generation %d | combat %.4f | win rate %.4f | worst case %.3f | size %d"
+                                + " | mean combat %.4f | distinct %d/%d | reused %d | %ds%s%n",
+                        gen, best.combatScore, best.winRate, best.worstCase, best.size(),
+                        population.meanCombatScore(), distinct, cfg.populationSize,
+                        population.reusedEvaluations(), (System.currentTimeMillis() - started) / 1000,
+                        structure == null ? "" : " | " + structure.describe());
+                double[] popWinRates = population.winRates();
+                System.out.printf("  population win rate %.4f +- %.4f%n",
+                        GPStats.mean(popWinRates), GPStats.std(popWinRates));
+                System.out.println("  weakest: " + weakestCases(best, cfg));
+                appendMetrics(metricsPath, gen, best, population.meanCombatScore(), distinct, population,
+                        structure, System.currentTimeMillis() - started);
+
+                if (best.combatScore > bestCombatSoFar + cfg.stagnationImprovementThreshold) {
+                    bestCombatSoFar = best.combatScore;
+                    lastImprovement = gen;
+                }
+                if (gen + 1 >= cfg.generations) break;
+                if (cfg.stagnationPatience > 0 && gen - lastImprovement >= cfg.stagnationPatience) {
+                    System.out.println("No combat improvement of " + cfg.stagnationImprovementThreshold
+                            + " in " + cfg.stagnationPatience + " generations, stopping.");
+                    break;
+                }
+
+                if (population.getStructureSearch() != null) population.getStructureSearch().afterGeneration(best);
+                population.nextGeneration();
+                if (cfg.checkpointInterval > 0 && population.getGeneration() % cfg.checkpointInterval == 0) {
+                    GPCheckpoint.save(runDir.resolve("checkpoint-" + population.getGeneration() + ".properties"),
+                            population, cfg);
+                }
+            }
+
+            GPIndividual best = population.getBestEver();
+            ActionNode reduced = GPTreeOps.reduce(best.root);
+            String expression = GPSExpression.write(reduced);
+            System.out.printf("Final | win rate %.4f | worst case %.3f | size %d -> %d after reduce()"
+                            + " | best of generation %d | %d genotypes evaluated%n",
+                    best.winRate, best.worstCase, best.size(), GPTreeOps.size(reduced),
+                    population.getBestEverGeneration(), population.archiveSize());
+            System.out.println(expression);
+
+            Path bestPath = runDir.resolve("best.txt");
+            Files.writeString(bestPath, expression, StandardCharsets.UTF_8);
+            if (!cfg.publishBotFile.isEmpty()) {
+                Files.copy(bestPath, Paths.get(cfg.publishBotFile), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Published to " + cfg.publishBotFile);
+            }
+            GPCheckpoint.save(runDir.resolve("checkpoint-final.properties"), population, cfg);
+            writeSummary(runDir, cfg, population, best, (System.nanoTime() - trainingStarted) / 1e9);
+        }
+    }
+
+    private static GPPopulation openPopulation(GPConfig cfg, UnitTypeTable utt) throws IOException {
+        if (!cfg.resumeCheckpoint.isEmpty()) {
+            GPPopulation population = GPCheckpoint.load(Paths.get(cfg.resumeCheckpoint), cfg, utt);
+            if (cfg.structureBased) population.useStructureSearch(new GPStructure(cfg));
+            System.out.println("Resumed from " + cfg.resumeCheckpoint + " at generation " + population.getGeneration());
+            return population;
+        }
+        GPPopulation population = new GPPopulation(cfg, utt, new Random(cfg.randomSeed));
+        population.initialize();
+        if (cfg.structureBased) population.useStructureSearch(new GPStructure(cfg));
+        return population;
+    }
+
+    /** One file per run, read back by GPStats to compare runs. */
+    private static void writeSummary(Path runDir, GPConfig cfg, GPPopulation population, GPIndividual best,
+                                     double seconds) throws IOException {
+        double[] matchupWinRates = best.matchups.stream().mapToDouble(GPMatch.MatchupResult::rawScore).toArray();
+        double[] popWinRates = population.winRates();
+        java.util.Properties p = new java.util.Properties();
+        p.setProperty("randomSeed", String.valueOf(cfg.randomSeed));
+        p.setProperty("generations", String.valueOf(population.getGeneration() + 1));
+        p.setProperty("winRate", String.valueOf(best.winRate));
+        p.setProperty("worstCase", String.valueOf(best.worstCase));
+        p.setProperty("matchupWinRateStd", String.valueOf(GPStats.std(matchupWinRates)));
+        p.setProperty("populationWinRateMean", String.valueOf(GPStats.mean(popWinRates)));
+        p.setProperty("populationWinRateStd", String.valueOf(GPStats.std(popWinRates)));
+        p.setProperty("trainingSeconds", String.valueOf(seconds));
+        try (BufferedWriter w = Files.newBufferedWriter(runDir.resolve("summary.properties"), StandardCharsets.UTF_8)) {
+            p.store(w, "GP run summary");
+        }
+        System.out.printf("Run summary | win rate %.4f | matchup std %.4f | population %.4f +- %.4f | %.0fs%n",
+                best.winRate, GPStats.std(matchupWinRates), GPStats.mean(popWinRates), GPStats.std(popWinRates),
+                seconds);
+    }
+
+    private static String weakestCases(GPIndividual best, GPConfig cfg) {
+        List<GPMatch.MatchupResult> sorted = new ArrayList<>(best.matchups);
+        sorted.sort(Comparator.comparingDouble(GPMatch.MatchupResult::rawScore));
+        List<String> parts = new ArrayList<>();
+        for (GPMatch.MatchupResult m : sorted.subList(0, Math.min(cfg.weakestCasesToLog, sorted.size()))) {
+            parts.add(String.format("%s=%.2f [p0=%.1f p1=%.1f shaped=%.2f limited=%d]",
+                    m.evaluationCase().describe(cfg.maps), m.rawScore(), m.asPlayer0(), m.asPlayer1(),
+                    m.score(), m.limitedGames()));
+        }
+        return String.join(", ", parts);
+    }
+
+    private static void appendMetrics(Path path, int generation, GPIndividual best, double meanCombat,
+                                      int distinct, GPPopulation population, GPStructure structure,
+                                      long millis) throws IOException {
+        double[] popWinRates = population.winRates();
+        String phase = structure == null ? ""
+                : String.format(",\"phase\":\"%s\",\"areasExplored\":%d",
+                structure.phase().name().toLowerCase(), structure.areasExplored());
+        String json = String.format("{\"generation\":%d,\"bestCombat\":%.6f,\"winRate\":%.6f,\"worstCase\":%.4f,"
+                        + "\"bestSize\":%d,\"meanCombat\":%.6f,\"popWinRate\":%.6f,\"popWinRateStd\":%.6f,\"distinct\":%d,\"reused\":%d,"
+                        + "\"archive\":%d,\"seconds\":%.1f%s}%n",
+                generation, best.combatScore, best.winRate, best.worstCase, best.size(), meanCombat,
+                GPStats.mean(popWinRates), GPStats.std(popWinRates),
+                distinct, population.reusedEvaluations(), population.archiveSize(), millis / 1000.0, phase);
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+            writer.write(json);
+        }
+    }
+}

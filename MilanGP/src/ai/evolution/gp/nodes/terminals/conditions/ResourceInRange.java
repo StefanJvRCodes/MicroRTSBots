@@ -1,0 +1,45 @@
+package ai.evolution.gp.nodes.terminals.conditions;
+
+import ai.evolution.gp.nodes.BoolTerminal;
+import ai.evolution.gp.nodes.GPNode;
+import ai.evolution.gp.nodes.GPTurnContext;
+import ai.evolution.gp.nodes.GPUtil;
+import ai.evolution.gp.nodes.PerturbableTerminal;
+import rts.units.Unit;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+public class ResourceInRange extends BoolTerminal implements PerturbableTerminal {
+    public static final String NAME = "ResourceInRange";
+    private static final double MIN = 0.03, MAX = 0.75, STEP = 0.05;
+
+    private final double rangeFraction;
+
+    public ResourceInRange(double rangeFraction) {
+        this.rangeFraction = rangeFraction;
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public List<String> getParams() {
+        return Collections.singletonList(String.valueOf(rangeFraction));
+    }
+
+    @Override
+    public boolean eval(GPTurnContext ctx) {
+        Unit target = GPUtil.nearestResource(ctx.pgs, ctx.unit);
+        return target != null
+                && GPUtil.manhattan(ctx.unit, target) <= GPUtil.absoluteRange(ctx.pgs, rangeFraction);
+    }
+
+    @Override
+    public GPNode perturb(Random rnd) {
+        return new ResourceInRange(GPUtil.perturb(rangeFraction, STEP, MIN, MAX, rnd));
+    }
+}
